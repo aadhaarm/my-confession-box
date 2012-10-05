@@ -1,0 +1,2 @@
+serviceClass: com.l3.CB.client.ConfessionService
+path: 2C5638FBC50287BBA99A1EF38725C548.gwt.rpc

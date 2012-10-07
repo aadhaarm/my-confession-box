@@ -4,8 +4,10 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
@@ -27,7 +29,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 
 	public ConfessionController(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService,
-			UserInfo userInfo) {
+			UserInfo userInfo, String confId) {
 		super();
 		this.eventBus = eventBus;
 		this.rpcService = rpcService;
@@ -38,6 +40,13 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 			@Override
 			public void onSuccess(UserInfo result) {
 				ConfessionController.userInfo = result;
+				
+				if(null != ConfessionBox.confId) {
+//					Window.alert("In controller:" + ConfessionController.userInfo.toString());
+					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+				} else {
+					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+				}
 			}
 			
 			@Override
@@ -62,6 +71,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 				presenter = new RegisterConfessionPresenter(eventBus, rpcService, userInfo, new RegisterConfessionView());
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 				presenter = new ConfessionFeedPresenter(eventBus, rpcService, userInfo, new ConfessionFeedView(rpcService, userInfo));
+			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
+				presenter = new ConfessionFeedPresenter(eventBus, rpcService, userInfo, new ConfessionFeedView(rpcService, userInfo), ConfessionBox.confId);
 			}
 			if (presenter != null) {
 				presenter.go(container);

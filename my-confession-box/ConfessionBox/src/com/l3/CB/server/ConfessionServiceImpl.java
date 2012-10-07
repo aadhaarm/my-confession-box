@@ -8,6 +8,7 @@ import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.DAO.ConfessionBasicDAO;
 import com.l3.CB.server.DAO.ConfessionOtherDAO;
 import com.l3.CB.server.utils.ServerUtils;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
@@ -36,10 +37,12 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public List<Confession> getConfessions(int page) {
-		List<Confession> confessions = ConfessionBasicDAO.getConfessions();
-		for (Confession confession : confessions) {
-			String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-			confession.setUserDetailsJSON(userDetailsJSON);
+		List<Confession> confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE);
+		if(confessions != null && !confessions.isEmpty()) {
+			for (Confession confession : confessions) {
+				String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+				confession.setUserDetailsJSON(userDetailsJSON);
+			}
 		}
 		return confessions;
 	}
@@ -52,5 +55,13 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public Map<String, Long> getUserActivity(Long userId, Long confId) {
 		return ConfessionOtherDAO.getUserActivity(userId, confId);
+	}
+
+	@Override
+	public Confession getConfession(Long confId) {
+		Confession confession = ConfessionBasicDAO.getConfession(confId);;
+		String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+		confession.setUserDetailsJSON(userDetailsJSON);
+		return confession;
 	}
 }

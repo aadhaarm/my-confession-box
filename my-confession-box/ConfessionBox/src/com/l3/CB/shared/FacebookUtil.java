@@ -32,11 +32,20 @@ public class FacebookUtil {
         return SECRET;
     }
  
+    public static String getAuthorizeUrl(String confId) {
+        final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
+        sb.append("authorize?client_id=").append(APPLICATION_ID);
+        sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
+//      sb.append("&scope=");
+        sb.append("&state=").append(confId);
+        return sb.toString();
+    }
+    
     public static String getAuthorizeUrl() {
         final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
         sb.append("authorize?client_id=").append(APPLICATION_ID);
         sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
-//        sb.append("&scope=");
+//      sb.append("&scope=");
         return sb.toString();
     }
         

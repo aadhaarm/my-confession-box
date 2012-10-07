@@ -7,18 +7,18 @@ div.container {
 
 div.header {
 	padding: 0.5em;
-	color: white;
-	background-color: #6FA9C7;
+	color: black;
 	clear: left;
 	text-align: center;
+	font-family: 'lucida grande';
 }
 
 div.footer {
 	padding: 0.5em;
-	color: white;
-	background-color: #6FA9C7;
+	color: black;
 	clear: left;
 	text-align: center;
+	font-family: 'lucida grande';
 }
 
 h1.header {
@@ -28,21 +28,21 @@ h1.header {
 
 div.left {
 	float: left;
-	width: 220px;
+	width: auto;
 	margin: 0;
 	padding: 1em;
 }
 
 div.right {
 	float: right;
-	width: 160px;
+	width: auto;
 	margin: 0;
 	padding: 1em;
 }
 
 div.content {
 	min-height: 100px;
-	margin-left: 220px;
+	margin-left: auto;
 	padding: 1em;
 }
 
@@ -54,7 +54,7 @@ div.content {
 }
 
 .formDromTable {
-	background-color: #6FA9C7;
+	background-color: #3B5998;
 }
 
 
@@ -74,7 +74,7 @@ img {
 
 .menubg {
 	clear: left;
-	background-color: #6FA9C7;
+	background-color: #3B5998;
 	width: 202px;
 }
 
@@ -132,8 +132,23 @@ img {
 }
 
 .activityButton {
-    border-radius: 30px 20px 24px 4px;
-    border-style: outset;
-    font-size: small;
-    padding: -34px -1px;
+    border-radius: 30px 20px 24px 4px !important;
+    border-style: outset !important;
+    font-size: small !important;
+    padding: 0px 0px !important;
+}
+
+.confessionScrollPanel {
+	height: auto;
+	width: auto;
+	max-width: 1400px;
+    min-width: 545px;
+    max-height: 685px;
+	min-height: 685px;
+}
+
+.loaderImage {
+	display: block;
+    margin-left: auto;
+    margin-right: auto
 }

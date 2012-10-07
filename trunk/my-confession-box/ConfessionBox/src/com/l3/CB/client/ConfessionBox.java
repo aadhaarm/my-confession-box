@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.UserInfo;
 
@@ -40,6 +41,7 @@ public class ConfessionBox implements EntryPoint {
 			.create(FacebookService.class);
 
 	public static UserInfo userInfo;
+	public static String confId;
 
 	/**
 	 * This is the entry point method.
@@ -56,33 +58,33 @@ public class ConfessionBox implements EntryPoint {
 		logger.log(Level.FINE, "Auth Token:" + authToken);
 		String error = Location.getParameter("error_reason");
 		logger.log(Level.FINE, "Error on load:" + error);
-
+		confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+		
 		if (null != error && error.equals("user_denied")) {
 			Window.alert("Error:" + error);
 			logger.log(Level.FINE, "UserDenied:");
 		} else if (authToken == null || "".equals(authToken)) {
-			//			Window.alert("Get Auth token:" + FacebookUtil.getAuthorizeUrl());
-			//			Window.Location.assign(FacebookUtil.getAuthorizeUrl());
-			CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+			if(null != confId){
+				CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+			} else {
+				CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+			}
 		} else {
-			//			Window.alert("Logging In");
+			confId = Location.getParameter("state");
 			facebookService.login(authToken, new AsyncCallback<String>() {
-
 				@Override
 				public void onSuccess(String result) {
 					if(result != null) {
-						//						Window.alert("Get Access token:" + result);
 						String accessToken = CommonUtils.processAccessToken(result);
 						if(accessToken != null && !"".equals(accessToken)) {
 							ConfessionBox.this.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
 								@Override
 								public void onSuccess(String result) {
 									if(result != null){
-										// Window.alert("User details:" + result);
 										// parse the response text into JSON
 										ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
-										logger.log(Level.FINE, userInfo.toString());
-										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, userInfo);
+										logger.log(Level.FINE, "User Info:" + userInfo.toString());
+										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, userInfo, confId);
 										confessionController.go(RootPanel.get());
 									}
 								}
@@ -97,7 +99,7 @@ public class ConfessionBox implements EntryPoint {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					logger.log(Level.FINE, "Error onload:" + caught.getStackTrace());
+					logger.log(Level.FINE, "Error onload:" + caught.getMessage());
 				}
 			});
 		}

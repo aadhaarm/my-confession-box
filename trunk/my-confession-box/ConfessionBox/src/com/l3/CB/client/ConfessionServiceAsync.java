@@ -25,4 +25,6 @@ public interface ConfessionServiceAsync {
 
 	void getUserActivity(Long userId, Long confId,
 			AsyncCallback<Map<String, Long>> callback);
+
+	void getConfession(Long confId, AsyncCallback<Confession> callback);
 }

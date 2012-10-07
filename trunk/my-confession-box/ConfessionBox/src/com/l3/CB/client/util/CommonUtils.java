@@ -1,10 +1,11 @@
 package com.l3.CB.client.util;
 
-import com.google.gwt.dom.client.Element;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.user.client.Element;
 import com.l3.CB.shared.TO.UserInfo;
+
 
 public class CommonUtils {
 
@@ -13,11 +14,13 @@ public class CommonUtils {
         $wnd.top.location = url;
     }-*/;
 
-	public static native void parseXFBMLJS(final Element element) /*-{
+	public static native void parseXFBMLJS(Element element) /*-{
+	  $wnd.FB.XFBML.parse(element);
+	}-*/;
+
+	public static native void parseXFBMLJS() /*-{
 	  $wnd.FB.XFBML.parse();
 	}-*/;
-	
-
 
 	public static String getString(JSONValue jsonValue) {
 		if(jsonValue != null) {
@@ -39,7 +42,7 @@ public class CommonUtils {
 		}
 		return accessToken;
 	}
-	
+
 	public static UserInfo getUserInfo(String jsonString) {
 		UserInfo userInfo = null;
 		if(jsonString != null) {

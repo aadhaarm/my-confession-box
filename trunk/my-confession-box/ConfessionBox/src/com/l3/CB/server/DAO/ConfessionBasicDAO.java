@@ -112,12 +112,12 @@ public class ConfessionBasicDAO {
 		return null;
 	}
 
-	public static List<Confession> getConfessions() {
+	public static List<Confession> getConfessions(int page, int pageSize) {
 		List<Confession> confessions = null;
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			Query query = pm.newQuery(ConfessionDO.class);
-			query.setRange(0, 4);
+			query.setRange((page*pageSize), ((page*pageSize)+pageSize));
 			query.setOrdering("timeStamp desc");
 			@SuppressWarnings("unchecked")
 			List<ConfessionDO> result = (List<ConfessionDO>) query.execute();
@@ -153,6 +153,33 @@ public class ConfessionBasicDAO {
 				confession.setFbId(userDO.getFbId());
 				confession.setGender(userDO.getGender());
 			}
+		}
+		return confession;
+	}
+
+	public static Confession getConfession(Long confId) {
+		Confession confession = null;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(ConfessionDO.class);
+			query.setFilter("confId == id");
+			query.declareParameters("String id");
+
+			@SuppressWarnings("unchecked")
+			List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
+			if (!result.isEmpty()) {
+				Iterator<ConfessionDO> it = result.iterator();
+				while (it.hasNext()) {
+					ConfessionDO confessionDO = it.next();
+					confession = getConfession(confessionDO);
+					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confession for DB:" + e.getMessage());
+		} finally {
+			pm.close();
 		}
 		return confession;
 	}

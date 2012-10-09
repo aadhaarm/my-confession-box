@@ -55,14 +55,14 @@ public class ConfessionBox implements EntryPoint {
 			FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
 
 		String authToken = Location.getParameter("code");
-		logger.log(Level.FINE, "Auth Token:" + authToken);
+		logger.log(Level.INFO, "Auth Token:" + authToken);
 		String error = Location.getParameter("error_reason");
-		logger.log(Level.FINE, "Error on load:" + error);
+		logger.log(Level.INFO, "Error on load:" + error);
 		confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 		
 		if (null != error && error.equals("user_denied")) {
 			Window.alert("Error:" + error);
-			logger.log(Level.FINE, "UserDenied:");
+			logger.log(Level.INFO, "UserDenied:");
 		} else if (authToken == null || "".equals(authToken)) {
 			if(null != confId){
 				CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
@@ -83,14 +83,14 @@ public class ConfessionBox implements EntryPoint {
 									if(result != null){
 										// parse the response text into JSON
 										ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
-										logger.log(Level.FINE, "User Info:" + userInfo.toString());
+										logger.log(Level.INFO, "User Info:" + userInfo.toString());
 										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, userInfo, confId);
 										confessionController.go(RootPanel.get());
 									}
 								}
 								@Override
 								public void onFailure(Throwable caught) {
-									logger.log(Level.FINE, "Error getUserDetails:" + caught.getStackTrace());
+									logger.log(Level.INFO, "Error getUserDetails:" + caught.getStackTrace());
 								}
 							});
 						}
@@ -99,7 +99,7 @@ public class ConfessionBox implements EntryPoint {
 
 				@Override
 				public void onFailure(Throwable caught) {
-					logger.log(Level.FINE, "Error onload:" + caught.getMessage());
+					logger.log(Level.INFO, "Error onload:" + caught.getMessage());
 				}
 			});
 		}

@@ -40,8 +40,10 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 		List<Confession> confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE);
 		if(confessions != null && !confessions.isEmpty()) {
 			for (Confession confession : confessions) {
-				String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-				confession.setUserDetailsJSON(userDetailsJSON);
+				if(!confession.isShareAsAnyn()) {
+					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+					confession.setUserDetailsJSON(userDetailsJSON);
+				}
 			}
 		}
 		return confessions;

@@ -6,11 +6,6 @@
 <html xmlns:fb="http://ogp.me/ns/fb#">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-<meta property="og:title" content="Confession Box" />
-<meta property="og:description" content="Confess" />
-<meta property="og:type" content="cause" />
-<meta property="og:url" content="http://apps.facebook.com/fbconfessalfa/" />
-<meta property="fb:admins" content="202435696462206" />
 <!--                                                               -->
 <!-- Consider inlining CSS to reduce the number of requested files -->
 <!--                                                               -->
@@ -37,6 +32,17 @@
 <!--                                           -->
 <body>
 
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
 	<div id="fb-root"></div>
 	<script>
 		(function(d, s, id) {
@@ -45,7 +51,7 @@
 				return;
 			js = d.createElement(s);
 			js.id = id;
-			js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=202435696462206";
+			js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=171485962909999";
 			fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 	</script>
@@ -66,8 +72,9 @@
 		<div class="header">
 			<h1 class="header">Confession Box</h1>
 		</div>
-
+<!-- 
 		<div id="rightHandStatusBarDiv" class="right"></div>
+ -->
 
 		<div id="leftHandMenuDiv" class="left"></div>
 

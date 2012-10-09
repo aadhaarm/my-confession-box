@@ -1,8 +1,11 @@
 div.container {
-	width: auto;
+	width: 750px;
 	margin: 0px;
-	border: 1px solid gray;
+	border: none !important;
 	line-height: 150%;
+	float:inherit;
+	margin-left:auto;
+	margin-right:auto;
 }
 
 div.header {
@@ -132,18 +135,30 @@ img {
 }
 
 .activityButton {
-    border-radius: 30px 20px 24px 4px !important;
-    border-style: outset !important;
-    font-size: small !important;
-    padding: 0px 0px !important;
+	height: 40px;
+	width: 44px;
+	float: left;
+}
+
+.btnWrapper {
+	position: absolute;
+    right: 3px;
+    text-align: right;
+    top: -2px;
+    z-index: 1;
+}
+
+.activityButtonContainer {
+	float: left;
+	width: 57px;	
 }
 
 .confessionScrollPanel {
 	height: auto;
-	width: auto;
+	width: 559;
 	max-width: 1400px;
     min-width: 545px;
-    max-height: 685px;
+    max-height: 750px;
 	min-height: 685px;
 }
 

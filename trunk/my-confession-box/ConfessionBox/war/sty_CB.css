@@ -167,3 +167,14 @@ img {
     margin-left: auto;
     margin-right: auto
 }
+
+.confessionRegisterPage {
+	width: 559;
+	height: auto;
+}
+
+.registerConfessionTextBox {
+	width: 500px !important;
+	height: 300px;
+	margin: 5px;
+}

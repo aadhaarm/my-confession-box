@@ -8,8 +8,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
+import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.view.ConfessionFeedView;
@@ -24,16 +26,19 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	private final ConfessionServiceAsync confessionService; 
 	private static UserInfo userInfo;
 	private HasWidgets container;
-
+	private String accessToken;
+	private FacebookServiceAsync facebookService;
 
 	public ConfessionController(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService,
-			UserInfo userInfo, String confId) {
+			FacebookServiceAsync facebookService, UserInfo userInfo, String confId, String accessToken) {
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
 		ConfessionController.userInfo = userInfo;
-
+		this.accessToken = accessToken;
+		this.facebookService = facebookService;
+		
 		rpcService.registerUser(userInfo, new AsyncCallback<UserInfo>() {
 			
 			@Override
@@ -66,11 +71,13 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if (token != null) {
 			Presenter presenter = null;
 			if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
-				presenter = new RegisterConfessionPresenter(eventBus, confessionService, userInfo, new RegisterConfessionView());
+				presenter = new RegisterConfessionPresenter(eventBus, confessionService, facebookService, userInfo, new RegisterConfessionView(), accessToken);
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
 				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo), ConfessionBox.confId);
+			} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
+				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo));
 			}
 			if (presenter != null) {
 				presenter.go(container);

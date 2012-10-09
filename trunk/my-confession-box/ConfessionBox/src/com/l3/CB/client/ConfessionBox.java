@@ -22,7 +22,7 @@ import com.l3.CB.shared.TO.UserInfo;
 public class ConfessionBox implements EntryPoint {
 
 	Logger logger = Logger.getLogger("CBLogger");
-
+	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -52,7 +52,7 @@ public class ConfessionBox implements EntryPoint {
 	}
 
 	private void checkUserLoginStatus(final ConfessionServiceAsync confessionService,
-			FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
+			final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
 
 		String authToken = Location.getParameter("code");
 		logger.log(Level.INFO, "Auth Token:" + authToken);
@@ -75,7 +75,7 @@ public class ConfessionBox implements EntryPoint {
 				@Override
 				public void onSuccess(String result) {
 					if(result != null) {
-						String accessToken = CommonUtils.processAccessToken(result);
+						final String accessToken = CommonUtils.processAccessToken(result);
 						if(accessToken != null && !"".equals(accessToken)) {
 							ConfessionBox.this.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
 								@Override
@@ -84,7 +84,7 @@ public class ConfessionBox implements EntryPoint {
 										// parse the response text into JSON
 										ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
 										logger.log(Level.INFO, "User Info:" + userInfo.toString());
-										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, userInfo, confId);
+										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken);
 										confessionController.go(RootPanel.get());
 									}
 								}

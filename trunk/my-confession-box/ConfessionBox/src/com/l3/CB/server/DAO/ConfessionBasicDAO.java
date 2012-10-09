@@ -140,6 +140,38 @@ public class ConfessionBasicDAO {
 		}
 		return confessions;
 	}
+	
+	public static List<Confession> getConfessions(Long userId, int page, int pageSize) {
+		List<Confession> confessions = null;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(ConfessionDO.class);
+			query.setFilter("userId == id");
+			query.declareParameters("String id");
+			query.setRange((page*pageSize), ((page*pageSize)+pageSize));
+			query.setOrdering("timeStamp desc");
+			@SuppressWarnings("unchecked")
+			List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
+
+			if (!result.isEmpty()) {
+				confessions = new ArrayList<Confession>();
+				Iterator<ConfessionDO> it = result.iterator();
+				while (it.hasNext()) {
+					ConfessionDO confessionDO = it.next();
+					Confession confession = getConfession(confessionDO);
+					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+					confessions.add(confession);
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confessions for DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return confessions;
+	}
+
 
 	private static Confession getConfession(ConfessionDO confessionDO) {
 		Confession confession = null;

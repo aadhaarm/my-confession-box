@@ -32,6 +32,9 @@ public class FacebookServiceImpl extends RemoteServiceServlet implements
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
+
+	@Override
+	public String getFriends(String accessToken) {
+		return ServerUtils.fetchURL(FacebookUtil.getFriendsListUrl(accessToken));
+	}
 }

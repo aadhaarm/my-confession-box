@@ -1,14 +1,20 @@
 package com.l3.CB.client.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Element;
 import com.l3.CB.shared.TO.UserInfo;
 
-
 public class CommonUtils {
 
+	Logger logger = Logger.getLogger("CBLogger");
+	
 	// redirect the browser to the given url
 	public static native void redirect(String url)/*-{
         $wnd.top.location = url;
@@ -64,4 +70,34 @@ public class CommonUtils {
 		}
 		return userInfo;
 	}
+	
+	public static List<UserInfo> getFriendsUserInfo(String jsonString) {
+		List<UserInfo> friends = null;
+		if(jsonString != null) {
+			// parse the response text into JSON
+			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
+			if(jsonValue != null) {
+				JSONObject jsonObject = jsonValue.isObject();
+				if(jsonObject != null) {
+					JSONArray jsonArray = jsonObject.get("data").isArray();
+					if(jsonArray != null) {
+						friends = new ArrayList<UserInfo>();
+						for (int i = 0; i < jsonArray.size(); i++) {
+							JSONValue userJSONValue = jsonArray.get(i);
+							if(userJSONValue != null) {
+								JSONObject friendJson = userJSONValue.isObject();
+								UserInfo userInfo = new UserInfo();
+								userInfo.setId(getString(friendJson.get("id")));
+								userInfo.setName(getString(friendJson.get("name")));
+								friends.add(userInfo);
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		return friends;
+	}
+
 }

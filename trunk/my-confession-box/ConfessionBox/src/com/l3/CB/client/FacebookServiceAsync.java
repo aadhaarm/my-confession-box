@@ -12,4 +12,6 @@ public interface FacebookServiceAsync {
 	void getUserDetails(String accessToken, AsyncCallback<String> callback);
 
 	void getAuthUrl(AsyncCallback<String> callback);
+
+	void getFriends(String accessToken, AsyncCallback<String> callback);
 }

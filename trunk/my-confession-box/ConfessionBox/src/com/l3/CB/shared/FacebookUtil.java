@@ -36,8 +36,15 @@ public class FacebookUtil {
         final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
         sb.append("authorize?client_id=").append(APPLICATION_ID);
         sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
-//      sb.append("&scope=");
         sb.append("&state=").append(confId);
+        return sb.toString();
+    }
+    
+    public static String getAuthorizeUrl(String permission, int a) {
+        final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
+        sb.append("authorize?client_id=").append(APPLICATION_ID);
+        sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
+        sb.append("&scope=").append(permission);
         return sb.toString();
     }
     
@@ -45,7 +52,6 @@ public class FacebookUtil {
         final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
         sb.append("authorize?client_id=").append(APPLICATION_ID);
         sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
-//      sb.append("&scope=");
         return sb.toString();
     }
         
@@ -118,5 +124,11 @@ public class FacebookUtil {
 			sb.append("/images/girl 50X50.png");
 		}
         return sb.toString();
+	}
+
+	public static String getFriendsListUrl(String accessToken) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(FB_GRAPH_URL).append("me/friends?access_token=").append(accessToken);
+		return sb.toString();
 	}
 }

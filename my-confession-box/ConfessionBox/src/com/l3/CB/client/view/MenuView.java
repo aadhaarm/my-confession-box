@@ -34,6 +34,15 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 				History.newItem(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 			}
 		});
+
+		menuBar.addItem("My confessions", new Command() {
+			
+			@Override
+			public void execute() {
+				History.newItem(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
+			}
+		});
+		
 		contentTableDecorator.add(menuBar);
 	}
 

@@ -4,7 +4,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
@@ -22,7 +21,7 @@ import com.l3.CB.shared.TO.UserInfo;
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
 	
 	private final HandlerManager eventBus;
-	private final ConfessionServiceAsync rpcService; 
+	private final ConfessionServiceAsync confessionService; 
 	private static UserInfo userInfo;
 	private HasWidgets container;
 
@@ -32,7 +31,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 			UserInfo userInfo, String confId) {
 		super();
 		this.eventBus = eventBus;
-		this.rpcService = rpcService;
+		this.confessionService = rpcService;
 		ConfessionController.userInfo = userInfo;
 
 		rpcService.registerUser(userInfo, new AsyncCallback<UserInfo>() {
@@ -42,7 +41,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 				ConfessionController.userInfo = result;
 				
 				if(null != ConfessionBox.confId) {
-//					Window.alert("In controller:" + ConfessionController.userInfo.toString());
 					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 				} else {
 					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
@@ -68,11 +66,11 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if (token != null) {
 			Presenter presenter = null;
 			if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
-				presenter = new RegisterConfessionPresenter(eventBus, rpcService, userInfo, new RegisterConfessionView());
+				presenter = new RegisterConfessionPresenter(eventBus, confessionService, userInfo, new RegisterConfessionView());
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
-				presenter = new ConfessionFeedPresenter(eventBus, rpcService, userInfo, new ConfessionFeedView(rpcService, userInfo));
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
-				presenter = new ConfessionFeedPresenter(eventBus, rpcService, userInfo, new ConfessionFeedView(rpcService, userInfo), ConfessionBox.confId);
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo), ConfessionBox.confId);
 			}
 			if (presenter != null) {
 				presenter.go(container);
@@ -83,7 +81,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	@Override
 	public void go(HasWidgets container) {
 		this.container = container;
-		Presenter presenter = new MenuPresenter(eventBus, rpcService, userInfo, new MenuView());
+		Presenter presenter = new MenuPresenter(eventBus, confessionService, userInfo, new MenuView());
 		presenter.go(container);
 	}
 }

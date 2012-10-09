@@ -150,7 +150,9 @@ public class ConfessionBasicDAO {
 	
 			UserDO userDO = getUser(confessionDO.getUserId());
 			if(userDO != null) {
-				confession.setFbId(userDO.getFbId());
+				if(!confession.isShareAsAnyn()) {
+					confession.setFbId(userDO.getFbId());
+				}
 				confession.setGender(userDO.getGender());
 			}
 		}

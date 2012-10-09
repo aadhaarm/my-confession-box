@@ -8,21 +8,21 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class FacebookUtil {
 
-    public static final String SECRET = "3b8b8583f2e3a3b239068120431ca82d"; // replace with real values from Facebook app configuration
-    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
-    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
-
-//    public static final String SECRET = "5542ac99210548f480795313bba6a831"; // replace with real values from Facebook app configuration
-//    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+//    public static final String SECRET = "3b8b8583f2e3a3b239068120431ca82d"; // replace with real values from Facebook app configuration
+//    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
 //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
 //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
 //    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
 //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
+//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
+
+    public static final String SECRET = "5542ac99210548f480795313bba6a831"; // replace with real values from Facebook app configuration
+    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
     
     public static String getApplicationId() {
         return APPLICATION_ID;

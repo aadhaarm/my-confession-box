@@ -35,6 +35,10 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 		return ConfessionBasicDAO.registerConfession(confession);
 	}
 
+	/**
+	 * Get confessions
+	 * @param oage - {@link Integer}
+	 */
 	@Override
 	public List<Confession> getConfessions(int page) {
 		List<Confession> confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE);
@@ -49,6 +53,25 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 		return confessions;
 	}
 
+	/**
+	 * Get confessions
+	 * @param oage - {@link Integer}
+	 * @param userId - {@link Long}
+	 */
+	@Override
+	public List<Confession> getConfessions(int page, Long userId) {
+		List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
+		if(confessions != null && !confessions.isEmpty()) {
+			for (Confession confession : confessions) {
+				if(!confession.isShareAsAnyn()) {
+					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+					confession.setUserDetailsJSON(userDetailsJSON);
+				}
+			}
+		}
+		return confessions;
+	}
+	
 	@Override
 	public Long userActivity(Long userId, Long confId, Activity activity) {
 		return ConfessionOtherDAO.updateActivityCount(userId, confId, activity);
@@ -59,6 +82,10 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 		return ConfessionOtherDAO.getUserActivity(userId, confId);
 	}
 
+	/**
+	 * Get confessions
+	 * @param confId - {@link Long}
+	 */
 	@Override
 	public Confession getConfession(Long confId) {
 		Confession confession = ConfessionBasicDAO.getConfession(confId);;

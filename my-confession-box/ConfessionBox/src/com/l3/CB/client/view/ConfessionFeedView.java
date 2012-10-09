@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
@@ -56,39 +55,6 @@ public class ConfessionFeedView extends Composite implements
 		contentScrollPanel = new ScrollPanel();
 		contentScrollPanel.addStyleName("confessionScrollPanel");
 //		contentScrollPanel.setAlwaysShowScrollBars(true);
-		contentScrollPanel.addScrollHandler(new ScrollHandler() {
-			boolean inEvent = false;
-
-			@Override
-			public void onScroll(ScrollEvent event) {
-				if (moreConfessions
-						&& !inEvent
-						&& contentScrollPanel
-								.getMaximumVerticalScrollPosition() <= contentScrollPanel
-								.getVerticalScrollPosition()) {
-					vpnlConfessionList.add(loaderImage);
-					inEvent = true;
-					confessionPagesLoaded++;
-					confessionService.getConfessions(confessionPagesLoaded,
-							new AsyncCallback<List<Confession>>() {
-
-								@Override
-								public void onSuccess(List<Confession> result) {
-									setConfessions(result);
-									inEvent = false;
-									vpnlConfessionList.remove(loaderImage);
-								}
-
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Constants.LOG_LEVEL,
-											"Exception in ConfessionFeedView.onFailure()"
-													+ caught.getCause());
-								}
-							});
-				}
-			}
-		});
 
 		vpnlConfessionList = new VerticalPanel();
 		contentScrollPanel.add(vpnlConfessionList);
@@ -203,9 +169,9 @@ public class ConfessionFeedView extends Composite implements
 
 					@Override
 					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-
-					}
+						logger.log(Constants.LOG_LEVEL,
+								"Exception in ConfessionFeedView.onFailure()"
+										+ caught.getCause());					}
 				});
 
 		return fPlaneUserActivity;
@@ -316,5 +282,50 @@ public class ConfessionFeedView extends Composite implements
 
 	public void setMoreConfessions(boolean moreConfessions) {
 		this.moreConfessions = moreConfessions;
+	}
+
+	public ScrollPanel getContentScrollPanel() {
+		return contentScrollPanel;
+	}
+
+	public int getConfessionPagesLoaded() {
+		return confessionPagesLoaded;
+	}
+
+	public Image getLoaderImage() {
+		return loaderImage;
+	}
+
+	public boolean isMoreConfessions() {
+		return moreConfessions;
+	}
+
+	public VerticalPanel getVpnlConfessionList() {
+		return vpnlConfessionList;
+	}
+
+	@Override
+	public int getMaximumVerticalScrollPosition() {
+		return contentScrollPanel.getMaximumVerticalScrollPosition();
+	}
+
+	@Override
+	public void addLoaderImage() {
+		vpnlConfessionList.add(loaderImage);
+	}
+
+	@Override
+	public void incrementConfessionPagesLoaded() {
+		confessionPagesLoaded++;
+	}
+
+	@Override
+	public void removeLoaderImage() {
+		vpnlConfessionList.remove(loaderImage);
+	}
+
+	@Override
+	public int getVerticalScrollPosition() {
+		return contentScrollPanel.getVerticalScrollPosition();
 	}
 }

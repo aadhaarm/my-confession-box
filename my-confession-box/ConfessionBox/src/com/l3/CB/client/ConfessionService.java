@@ -17,6 +17,7 @@ public interface ConfessionService extends RemoteService {
 	UserInfo registerUser(UserInfo userInfo);
 	Confession registerConfession(Confession confession);
 	List<Confession> getConfessions(int page);
+	List<Confession> getConfessions(int page, Long userId);
 	Confession getConfession(Long confId);
 	Long userActivity(Long userId, Long confId, Activity activity);
 	Map<String, Long> getUserActivity(Long userId, Long confId);

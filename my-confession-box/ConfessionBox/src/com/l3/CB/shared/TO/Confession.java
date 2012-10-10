@@ -13,12 +13,16 @@ public class Confession implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long confId;
+
+	private String confessionTitle;
 	
 	private String confession;
 
 	private Date timeStamp;
 
 	private Long userId;
+	
+	private String userIp;
 	
 	private boolean shareAsAnyn = true;
 	
@@ -141,5 +145,21 @@ public class Confession implements Serializable {
 
 	public void setActivityCount(Map<String, Long> activityCount) {
 		this.activityCount = activityCount;
+	}
+
+	public String getConfessionTitle() {
+		return confessionTitle;
+	}
+
+	public void setConfessionTitle(String confessionTitle) {
+		this.confessionTitle = confessionTitle;
+	}
+
+	public String getUserIp() {
+		return userIp;
+	}
+
+	public void setUserIp(String userIp) {
+		this.userIp = userIp;
 	}
 }

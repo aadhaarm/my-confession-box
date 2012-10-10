@@ -34,8 +34,11 @@ public class ConfessionDO implements Serializable {
 	private boolean shareAsAnyn = true;
 	
 	@Persistent
-	private List<ConfessionShareDO> confessedTo;
-
+	private String userIp;
+	
+	@Persistent
+	private String confessionTitle;
+	
 	public Long getConfId() {
 		return confId;
 	}
@@ -76,11 +79,19 @@ public class ConfessionDO implements Serializable {
 		this.userId = userId;
 	}
 
-	public List<ConfessionShareDO> getConfessedTo() {
-		return confessedTo;
+	public String getUserIp() {
+		return userIp;
 	}
 
-	public void setConfessedTo(List<ConfessionShareDO> confessedTo) {
-		this.confessedTo = confessedTo;
+	public void setUserIp(String userIp) {
+		this.userIp = userIp;
+	}
+
+	public String getConfessionTitle() {
+		return confessionTitle;
+	}
+
+	public void setConfessionTitle(String confessionTitle) {
+		this.confessionTitle = confessionTitle;
 	}
 }

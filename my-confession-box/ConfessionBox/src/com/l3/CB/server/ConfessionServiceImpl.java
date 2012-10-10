@@ -7,11 +7,13 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.DAO.ConfessionBasicDAO;
 import com.l3.CB.server.DAO.ConfessionOtherDAO;
+import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.utils.ServerUtils;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.UserInfo;
 
 /**
@@ -32,7 +34,22 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public Confession registerConfession(Confession confession) {
-		return ConfessionBasicDAO.registerConfession(confession);
+		confession.setUserIp(getThreadLocalRequest().getRemoteHost());
+		confession = ConfessionBasicDAO.registerConfession(confession);
+		
+		//Register confession Shared
+		if(confession.getConfessedTo() != null) {
+			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+				
+				UserInfo userSharedTo = new UserInfo();
+				userSharedTo.setId(confessionShare.getFbId());
+				userSharedTo = ConfessionBasicDAO.registerUser(userSharedTo);
+				
+				confessionShare.setUserId(userSharedTo.getUserId());
+				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
+			}
+		}
+		return confession;
 	}
 
 	/**

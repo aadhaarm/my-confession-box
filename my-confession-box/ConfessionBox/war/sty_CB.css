@@ -174,7 +174,10 @@ img {
 }
 
 .registerConfessionTextBox {
-	width: 500px !important;
+	width: 440px !important;
 	height: 300px;
-	margin: 5px;
+}
+
+.menuStyleName {
+	
 }

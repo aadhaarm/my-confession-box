@@ -19,6 +19,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		
 		menuBar = new MenuBar(true);
 		menuBar.setAnimationEnabled(true);
+		menuBar.addStyleName("menuStyleName");
 		menuBar.addItem("Feed", new Command() {
 			
 			@Override

@@ -26,6 +26,10 @@ public class UserInfo implements Serializable {
 	// User gender
 	private String gender;
 	
+	public UserInfo(Long userId) {
+		super();
+		this.userId = userId;
+	}
 	public String getId() {
 		return id;
 	}

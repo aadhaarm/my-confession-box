@@ -19,7 +19,7 @@ public class ConfessionShareDO implements Serializable {
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key shareId;
+	private Long shareId;
 	
 	@Persistent
 	private Long confId;
@@ -30,11 +30,16 @@ public class ConfessionShareDO implements Serializable {
 	@Persistent
 	private boolean pardon;
 
-	public Key getShareId() {
+	public ConfessionShareDO() {
+		super();
+		pardon = false;
+	}
+
+	public Long getShareId() {
 		return shareId;
 	}
 
-	public void setShareId(Key shareId) {
+	public void setShareId(Long shareId) {
 		this.shareId = shareId;
 	}
 

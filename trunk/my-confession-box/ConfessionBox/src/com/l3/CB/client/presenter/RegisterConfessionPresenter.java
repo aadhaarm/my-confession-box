@@ -1,7 +1,9 @@
 package com.l3.CB.client.presenter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,6 +14,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -24,6 +27,7 @@ import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class RegisterConfessionPresenter implements Presenter {
@@ -41,6 +45,9 @@ public class RegisterConfessionPresenter implements Presenter {
 		public boolean isFriendsOracleNull();
 		public RadioButton getRbIdentityAnyn();
 		public RadioButton getRbIdentityDisclose();
+		public String getConfessionTitle();
+		public String getSharedWith();
+		public void setProfilePictureTag(boolean isAnyn, String gender, String fbId);
 	}
 
 	@SuppressWarnings("unused")
@@ -49,8 +56,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	private UserInfo userInfo;
 	private final Display display;
 	private MultiWordSuggestOracle friendsOracle;
-	@SuppressWarnings("unused")
-	private List<UserInfo> userfriends;
+	private Map<String, UserInfo> userfriends;
 	private FacebookServiceAsync facebookService;
 	private String accessToken;
 
@@ -65,7 +71,7 @@ public class RegisterConfessionPresenter implements Presenter {
 		this.display = display;
 		this.accessToken = accessToken;
 		this.facebookService = facebookService;
-		
+		display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
 		friendsOracle = new MultiWordSuggestOracle();
 		bind();
 	}
@@ -80,15 +86,15 @@ public class RegisterConfessionPresenter implements Presenter {
 
 			@Override
 			public void onSuccess(String result) {
-				logger.log(Constants.LOG_LEVEL,
-						"In RegisterConfessionPresenter.onSuccess():"
-								+ result);
 				if(result != null) {
-					List<UserInfo> friends = CommonUtils.getFriendsUserInfo(result);
-					if(friends != null) {
-						userfriends = friends;
-						for (UserInfo userInfo : friends) {
-							friendsOracle.add(userInfo.getName());
+					userfriends = CommonUtils.getFriendsUserInfo(result);
+					logger.log(Constants.LOG_LEVEL,
+							"RegisterConfessionPresenter.onSuccess():"
+									+ result);
+					if(userfriends != null) {
+						//iterating over keys only
+						for (String friendsName : userfriends.keySet()) {
+							friendsOracle.add(friendsName);
 						}
 						display.setFriendsOracle(friendsOracle);
 					}
@@ -112,7 +118,17 @@ public class RegisterConfessionPresenter implements Presenter {
 			public void onClick(ClickEvent event) {
 				final Confession confession = new Confession(display.getConfession(), display.isAnynShare());
 				confession.setUserId(userInfo.getUserId());
+				confession.setConfessionTitle(display.getConfessionTitle());
 				confession.setTimeStamp(new Date());
+				
+				//Register Shared-To info
+				List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
+				String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
+				ConfessionShare userConfessedTo = new ConfessionShare();
+				userConfessedTo.setFbId(fbIdSharedUser);
+				confessedTo.add(userConfessedTo);
+				confession.setConfessedTo(confessedTo);
+								
 				rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
 
 					@Override
@@ -128,21 +144,21 @@ public class RegisterConfessionPresenter implements Presenter {
 			}
 		});
 		
-		this.display.getRbIdentityDiscloseToSome().addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-			@Override
-			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				if(display.getRbIdentityDiscloseToSome().isEnabled()) {
-					if(display.isFriendsOracleNull()) {
-						getMyFriends();
-					}
-					display.gethPanelShare().setVisible(true);
-				}
-			}
-		});
-		this.display.getRbIdentityAnyn().addClickHandler(new ClickHandler() {
+		this.display.getRbIdentityDiscloseToSome().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
+				if(display.isFriendsOracleNull()) {
+					getMyFriends();
+				}
+				display.gethPanelShare().setVisible(true);
+			}
+		});
+		this.display.getRbIdentityAnyn().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
 				display.gethPanelShare().setVisible(false);
 			}
 		});
@@ -150,6 +166,7 @@ public class RegisterConfessionPresenter implements Presenter {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				display.setProfilePictureTag(false, userInfo.getGender(), userInfo.getId());
 				display.gethPanelShare().setVisible(false);
 			}
 		});

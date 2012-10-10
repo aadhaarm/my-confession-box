@@ -10,43 +10,19 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.l3.CB.server.DO.ConfessionDO;
+import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.DO.UserDO;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionBasicDAO {
 
 	static Logger logger = Logger.getLogger("CBLogger");
 
-	private static UserDO getUser(long userId) {
+	private static UserDO getUserByFBId(UserInfo userInfo) {
 		UserDO userDO = null;
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			Query query = pm.newQuery(UserDO.class);
-			query.setFilter("userId == id");
-			query.declareParameters("String id");
-			@SuppressWarnings("unchecked")
-			List<UserDO> result = (List<UserDO>) query
-					.execute(userId);
-
-			if (!result.isEmpty()) {
-				Iterator<UserDO> it = result.iterator();
-				while (it.hasNext()) {
-					userDO = it.next();
-				}
-			}
-		} catch (Exception e) {
-			logger.log(Level.SEVERE,
-					"Error while getting user from DB:" + e.getMessage());
-		} finally {
-			pm.close();
-		}
-		return userDO;
-	}
-	
-	public static UserInfo registerUser(UserInfo userInfo) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		long userId = 0;
 		try {
 			Query query = pm.newQuery(UserDO.class);
 			query.setFilter("fbId == id");
@@ -58,11 +34,62 @@ public class ConfessionBasicDAO {
 			if (!result.isEmpty()) {
 				Iterator<UserDO> it = result.iterator();
 				while (it.hasNext()) {
-					UserDO userDO = it.next();
-					userInfo.setUserId(userDO.getUserId());
+					userDO = it.next();
 				}
+				if(userDO != null && userDO.getGender() == null && userInfo.getGender() != null) {
+					userDO.setGender(userInfo.getGender());
+					pm.makePersistent(userDO);
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting user from DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return userDO;
+	}
+
+	private static UserDO getUserByUserId(UserInfo userInfo) {
+		UserDO userDO = null;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(UserDO.class);
+			query.setFilter("userId == id");
+			query.declareParameters("String id");
+			@SuppressWarnings("unchecked")
+			List<UserDO> result = (List<UserDO>) query
+					.execute(userInfo.getUserId());
+
+			if (!result.isEmpty()) {
+				Iterator<UserDO> it = result.iterator();
+				while (it.hasNext()) {
+					userDO = it.next();
+				}
+				if(userDO != null && userDO.getGender() == null && userInfo.getGender() != null) {
+					userDO.setGender(userInfo.getGender());
+					pm.makePersistent(userDO);
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting user from DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return userDO;
+	}
+
+	
+	public static UserInfo registerUser(UserInfo userInfo) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		long userId = 0;
+		try {
+			UserDO userDO = getUserByFBId(userInfo);
+			if (userDO != null) {
+				userInfo.setUserId(userDO.getUserId());
 			} else {
-				UserDO userDO = getUserDO(userInfo);
+				userDO = getUserDO(userInfo);
 				pm.makePersistent(userDO);
 				userId = userDO.getUserId();
 				userInfo.setUserId(userId);
@@ -93,13 +120,40 @@ public class ConfessionBasicDAO {
 		return confession;
 	}
 
+	public static ConfessionShare registerConfessionShare(ConfessionShare confessedTo, Long confId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			ConfessionShareDO confessionShareDO = getConfessedTo(confessedTo);
+			confessionShareDO.setConfId(confId);
+			pm.makePersistent(confessionShareDO);
+			confessedTo.setShareId(confessionShareDO.getShareId());
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while registering confession share:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return confessedTo;
+	}
+
+	private static ConfessionShareDO getConfessedTo(ConfessionShare confessedTo) {
+		ConfessionShareDO confessionShareDO = null;
+		if(confessedTo != null) {
+			confessionShareDO = new ConfessionShareDO();
+			confessionShareDO.setUserId(confessedTo.getUserId());
+		}
+		return confessionShareDO;
+	}
+
 	private static ConfessionDO getConfessionDO(Confession confession) {
 		if (confession != null) {
 			ConfessionDO confessionDO = new ConfessionDO();
 			confessionDO.setUserId(confession.getUserId());
 			confessionDO.setShareAsAnyn(confession.isShareAsAnyn());
+			confessionDO.setConfessionTitle(confession.getConfessionTitle());
 			confessionDO.setConfession(confession.getConfession());
 			confessionDO.setTimeStamp(confession.getTimeStamp());
+			confessionDO.setUserIp(confession.getUserIp());
 			return confessionDO;
 		}
 		return null;
@@ -140,7 +194,7 @@ public class ConfessionBasicDAO {
 		}
 		return confessions;
 	}
-	
+
 	public static List<Confession> getConfessions(Long userId, int page, int pageSize) {
 		List<Confession> confessions = null;
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -172,15 +226,14 @@ public class ConfessionBasicDAO {
 		return confessions;
 	}
 
-
 	private static Confession getConfession(ConfessionDO confessionDO) {
 		Confession confession = null;
 		if (confessionDO != null) {
 			confession = new Confession(confessionDO.getConfId(),
-			confessionDO.getConfession(), confessionDO.getTimeStamp(),
-			confessionDO.getUserId(), confessionDO.isShareAsAnyn());
-	
-			UserDO userDO = getUser(confessionDO.getUserId());
+					confessionDO.getConfession(), confessionDO.getTimeStamp(),
+					confessionDO.getUserId(), confessionDO.isShareAsAnyn());
+
+			UserDO userDO = getUserByUserId(new UserInfo(confessionDO.getUserId()));
 			if(userDO != null) {
 				if(!confession.isShareAsAnyn()) {
 					confession.setFbId(userDO.getFbId());
@@ -216,5 +269,31 @@ public class ConfessionBasicDAO {
 			pm.close();
 		}
 		return confession;
+	}
+
+	public static Long getUserId(String fbId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		long userId = 0;
+		try {
+			Query query = pm.newQuery(UserDO.class);
+			query.setFilter("fbId == id");
+			query.declareParameters("String id");
+			@SuppressWarnings("unchecked")
+			List<UserDO> result = (List<UserDO>) query.execute(fbId);
+
+			if (!result.isEmpty()) {
+				Iterator<UserDO> it = result.iterator();
+				while (it.hasNext()) {
+					UserDO userDO = it.next();
+					userId = userDO.getUserId();
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while registering user:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return userId;
 	}
 }

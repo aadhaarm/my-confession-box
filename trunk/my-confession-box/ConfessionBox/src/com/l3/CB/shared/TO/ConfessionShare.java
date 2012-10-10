@@ -15,7 +15,13 @@ public class ConfessionShare implements Serializable {
 	
 	private Long userId;
 	
+	private String fbId;
+	
 	private boolean pardon;
+	
+	public ConfessionShare() {
+		super();
+	}
 
 	public Long getShareId() {
 		return shareId;
@@ -47,5 +53,13 @@ public class ConfessionShare implements Serializable {
 
 	public void setPardon(boolean pardon) {
 		this.pardon = pardon;
+	}
+
+	public String getFbId() {
+		return fbId;
+	}
+
+	public void setFbId(String fbId) {
+		this.fbId = fbId;
 	}
 }

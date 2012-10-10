@@ -1,7 +1,9 @@
 package com.l3.CB.client.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import com.google.gwt.json.client.JSONArray;
@@ -71,8 +73,8 @@ public class CommonUtils {
 		return userInfo;
 	}
 	
-	public static List<UserInfo> getFriendsUserInfo(String jsonString) {
-		List<UserInfo> friends = null;
+	public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
+		Map<String, UserInfo> friends = null;
 		if(jsonString != null) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
@@ -81,7 +83,7 @@ public class CommonUtils {
 				if(jsonObject != null) {
 					JSONArray jsonArray = jsonObject.get("data").isArray();
 					if(jsonArray != null) {
-						friends = new ArrayList<UserInfo>();
+						friends = new HashMap<String, UserInfo>();
 						for (int i = 0; i < jsonArray.size(); i++) {
 							JSONValue userJSONValue = jsonArray.get(i);
 							if(userJSONValue != null) {
@@ -89,7 +91,7 @@ public class CommonUtils {
 								UserInfo userInfo = new UserInfo();
 								userInfo.setId(getString(friendJson.get("id")));
 								userInfo.setName(getString(friendJson.get("name")));
-								friends.add(userInfo);
+								friends.put(userInfo.getName(), userInfo);
 							}
 						}
 					}

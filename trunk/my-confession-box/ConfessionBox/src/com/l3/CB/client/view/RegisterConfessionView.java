@@ -1,24 +1,29 @@
 package com.l3.CB.client.view;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
+import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.shared.FacebookUtil;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
-	private final VerticalPanel confessionFormPanel;
+	private final Grid grdConfessionForm;
 	
-	private final HorizontalPanel identityPanel;
+	private final VerticalPanel identityPanel;
 	private final RadioButton rbIdentityAnyn;
 	private final RadioButton rbIdentityDisclose;
 	private final RadioButton rbIdentityDiscloseToSome;
@@ -27,6 +32,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	private final HorizontalPanel hPanelShare;
 	private MultiWordSuggestOracle friendsOracle;
 	private SuggestBox friendsSuggestBox;
+	private final TextBox txtTitle;
 	
 	public RegisterConfessionView() {
 		super();
@@ -34,9 +40,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		contentTableDecorator.addStyleName("confessionRegisterPage");
 		initWidget(contentTableDecorator);
 		
-		confessionFormPanel = new VerticalPanel();
+		grdConfessionForm = new Grid(7, 2);
 		
-		identityPanel = new HorizontalPanel();
+		identityPanel = new VerticalPanel();
 		rbIdentityAnyn = new RadioButton("identity", "Hide my identity.");
 		rbIdentityAnyn.setTitle("Share confession as 'Anonymous'");
 		rbIdentityAnyn.setValue(true);
@@ -53,15 +59,18 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		
 		txtConfession = new TextArea();
 		txtConfession.addStyleName("registerConfessionTextBox");
+		txtTitle = new TextBox();
 		
 		btnSubmit = new Button("Register your confession");
 		
-		confessionFormPanel.add(identityPanel);
-		confessionFormPanel.add(hPanelShare);
-		confessionFormPanel.add(txtConfession);
-		confessionFormPanel.add(btnSubmit);
+		grdConfessionForm.setWidget(0, 0, new Label("Confess"));
+		grdConfessionForm.setWidget(1, 0, txtTitle);
+		grdConfessionForm.setWidget(2, 0, txtConfession);
+		grdConfessionForm.setWidget(3, 0, identityPanel);
+		grdConfessionForm.setWidget(4, 0, hPanelShare);
+		grdConfessionForm.setWidget(5, 0, btnSubmit);
 		
-		contentTableDecorator.add(confessionFormPanel);	
+		contentTableDecorator.add(grdConfessionForm);	
 	}
 	
 	public RadioButton getRbIdentityAnyn() {
@@ -112,4 +121,34 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	public boolean isFriendsOracleNull() {
 		return (friendsOracle == null);
 	}
+
+
+	public String getConfessionTitle() {
+		return txtTitle.getText();
+	}
+
+	public String getSharedWith() {
+		Window.alert(friendsSuggestBox.getValue());
+		Window.alert(friendsSuggestBox.getText());
+		return friendsSuggestBox.getValue();
+	}
+
+	public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
+		final StringBuilder sb = new StringBuilder();
+
+		if (isAnyn) {
+			sb.append("<img src=");
+			sb.append("'")
+					.append(FacebookUtil.getFaceIconImage(gender)).append("'");
+			sb.append("/>");
+		} else {
+			sb.append("<fb:profile-pic uid=\"")
+					.append(fbId)
+					.append("\" width=\"50\" height=\"50\" linked=\"true\"></fb:profile-pic>");
+		}
+
+		grdConfessionForm.setHTML(0, 1, sb.toString());
+		CommonUtils.parseXFBMLJS();
+	}
+
 }

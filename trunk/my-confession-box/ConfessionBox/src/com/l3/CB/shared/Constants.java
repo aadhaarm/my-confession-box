@@ -15,6 +15,7 @@ public class Constants {
 	public static final String HISTORY_ITEM_REGISTER_CONFESSION = "RegisterConfession";
 	public static final String HISTORY_ITEM_CONFESSION_FEED_WITH_ID = "Confession";
 	public static final String HISTORY_ITEM_MY_CONFESSION_FEED = "MyFeed";
+	public static final String HISTORY_ITEM_CONFESSION_FOR_ME_FEED = "FeedToMe";
 	//General settings
 	public static final int FEED_PAGE_SIZE = 5;
 	public static final Level LOG_LEVEL = Level.ALL;

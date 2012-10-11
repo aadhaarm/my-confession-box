@@ -1,13 +1,12 @@
 package com.l3.CB.server.DO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 public class ConfessionShareDO implements Serializable {
@@ -29,6 +28,9 @@ public class ConfessionShareDO implements Serializable {
 	
 	@Persistent
 	private boolean pardon;
+	
+	@Persistent
+	private Date timeStamp;
 
 	public ConfessionShareDO() {
 		super();
@@ -65,5 +67,13 @@ public class ConfessionShareDO implements Serializable {
 
 	public void setPardon(boolean pardon) {
 		this.pardon = pardon;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 }

@@ -122,12 +122,15 @@ public class RegisterConfessionPresenter implements Presenter {
 				confession.setTimeStamp(new Date());
 				
 				//Register Shared-To info
-				List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
-				String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
-				ConfessionShare userConfessedTo = new ConfessionShare();
-				userConfessedTo.setFbId(fbIdSharedUser);
-				confessedTo.add(userConfessedTo);
-				confession.setConfessedTo(confessedTo);
+				if(display.getRbIdentityDiscloseToSome().getValue()) {
+					List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
+					String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
+					ConfessionShare userConfessedTo = new ConfessionShare();
+					userConfessedTo.setTimeStamp(new Date());
+					userConfessedTo.setFbId(fbIdSharedUser);
+					confessedTo.add(userConfessedTo);
+					confession.setConfessedTo(confessedTo);
+				}
 								
 				rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
 

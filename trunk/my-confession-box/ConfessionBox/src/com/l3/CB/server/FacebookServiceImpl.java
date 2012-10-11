@@ -18,7 +18,7 @@ public class FacebookServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String login(String authToken) {
-		final String url = FacebookUtil.getAccessTokenUrl(authToken);
+		final String url = ServerUtils.getAccessTokenUrl(authToken);
         return ServerUtils.fetchURL(url);
 	}
 	

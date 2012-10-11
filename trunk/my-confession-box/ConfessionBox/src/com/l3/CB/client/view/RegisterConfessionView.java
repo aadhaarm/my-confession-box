@@ -128,8 +128,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	}
 
 	public String getSharedWith() {
-		Window.alert(friendsSuggestBox.getValue());
-		Window.alert(friendsSuggestBox.getText());
 		return friendsSuggestBox.getValue();
 	}
 

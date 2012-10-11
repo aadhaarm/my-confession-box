@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.api.datastore.Text;
 import com.l3.CB.server.DO.ConfessionDO;
 import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.DO.UserDO;
@@ -31,7 +32,7 @@ public class ConfessionBasicDAO {
 			List<UserDO> result = (List<UserDO>) query
 					.execute(userInfo.getId());
 
-			if (!result.isEmpty()) {
+			if (result != null && !result.isEmpty()) {
 				Iterator<UserDO> it = result.iterator();
 				while (it.hasNext()) {
 					userDO = it.next();
@@ -61,7 +62,7 @@ public class ConfessionBasicDAO {
 			List<UserDO> result = (List<UserDO>) query
 					.execute(userInfo.getUserId());
 
-			if (!result.isEmpty()) {
+			if (result != null &&  !result.isEmpty()) {
 				Iterator<UserDO> it = result.iterator();
 				while (it.hasNext()) {
 					userDO = it.next();
@@ -141,6 +142,7 @@ public class ConfessionBasicDAO {
 		if(confessedTo != null) {
 			confessionShareDO = new ConfessionShareDO();
 			confessionShareDO.setUserId(confessedTo.getUserId());
+			confessionShareDO.setTimeStamp(confessedTo.getTimeStamp());
 		}
 		return confessionShareDO;
 	}
@@ -151,7 +153,7 @@ public class ConfessionBasicDAO {
 			confessionDO.setUserId(confession.getUserId());
 			confessionDO.setShareAsAnyn(confession.isShareAsAnyn());
 			confessionDO.setConfessionTitle(confession.getConfessionTitle());
-			confessionDO.setConfession(confession.getConfession());
+			confessionDO.setConfession(new Text(confession.getConfession()));
 			confessionDO.setTimeStamp(confession.getTimeStamp());
 			confessionDO.setUserIp(confession.getUserIp());
 			return confessionDO;
@@ -176,7 +178,7 @@ public class ConfessionBasicDAO {
 			@SuppressWarnings("unchecked")
 			List<ConfessionDO> result = (List<ConfessionDO>) query.execute();
 
-			if (!result.isEmpty()) {
+			if (result != null && !result.isEmpty()) {
 				confessions = new ArrayList<Confession>();
 				Iterator<ConfessionDO> it = result.iterator();
 				while (it.hasNext()) {
@@ -207,7 +209,7 @@ public class ConfessionBasicDAO {
 			@SuppressWarnings("unchecked")
 			List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
 
-			if (!result.isEmpty()) {
+			if (result != null && !result.isEmpty()) {
 				confessions = new ArrayList<Confession>();
 				Iterator<ConfessionDO> it = result.iterator();
 				while (it.hasNext()) {
@@ -230,14 +232,12 @@ public class ConfessionBasicDAO {
 		Confession confession = null;
 		if (confessionDO != null) {
 			confession = new Confession(confessionDO.getConfId(),
-					confessionDO.getConfession(), confessionDO.getTimeStamp(),
+					confessionDO.getConfession().getValue(), confessionDO.getTimeStamp(),
 					confessionDO.getUserId(), confessionDO.isShareAsAnyn());
 
 			UserDO userDO = getUserByUserId(new UserInfo(confessionDO.getUserId()));
 			if(userDO != null) {
-				if(!confession.isShareAsAnyn()) {
-					confession.setFbId(userDO.getFbId());
-				}
+				confession.setFbId(userDO.getFbId());
 				confession.setGender(userDO.getGender());
 			}
 		}
@@ -254,7 +254,7 @@ public class ConfessionBasicDAO {
 
 			@SuppressWarnings("unchecked")
 			List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
-			if (!result.isEmpty()) {
+			if (result != null && !result.isEmpty()) {
 				Iterator<ConfessionDO> it = result.iterator();
 				while (it.hasNext()) {
 					ConfessionDO confessionDO = it.next();
@@ -281,7 +281,7 @@ public class ConfessionBasicDAO {
 			@SuppressWarnings("unchecked")
 			List<UserDO> result = (List<UserDO>) query.execute(fbId);
 
-			if (!result.isEmpty()) {
+			if (result != null && !result.isEmpty()) {
 				Iterator<UserDO> it = result.iterator();
 				while (it.hasNext()) {
 					UserDO userDO = it.next();
@@ -295,5 +295,105 @@ public class ConfessionBasicDAO {
 			pm.close();
 		}
 		return userId;
+	}
+
+	public static List<Confession> getConfessionsForMe(Long userId, int page, int pageSize) {
+		List<Confession> confessions = null;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query queryGetconfId = pm.newQuery(ConfessionShareDO.class);
+			queryGetconfId.setFilter("userId == id");
+			queryGetconfId.declareParameters("String id");
+			queryGetconfId.setRange((page*pageSize), ((page*pageSize)+pageSize));
+			queryGetconfId.setOrdering("timeStamp desc");
+			@SuppressWarnings("unchecked")
+			List<ConfessionShareDO> result = (List<ConfessionShareDO>) queryGetconfId.execute(userId);
+
+			if (result != null && !result.isEmpty()) {
+				confessions = new ArrayList<Confession>();
+				Iterator<ConfessionShareDO> it = result.iterator();
+				while (it.hasNext()) {
+					ConfessionShareDO confessionShareDO = it.next();
+					Confession confession = getConfession(confessionShareDO.getConfId());
+					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+					confessions.add(confession);
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confessions for DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		
+		return confessions;
+	}
+
+	public static List<ConfessionShare> getConfessionShare(Long confId, boolean allDetails) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<ConfessionShare> confessionShares = null;
+		try {
+			Query query = pm.newQuery(ConfessionShareDO.class);
+			query.setFilter("confId == id");
+			query.declareParameters("String id");
+			@SuppressWarnings("unchecked")
+			List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(confId);
+
+			if (result != null && !result.isEmpty()) {
+				confessionShares = new ArrayList<ConfessionShare>();
+				Iterator<ConfessionShareDO> it = result.iterator();
+				while (it.hasNext()) {
+					ConfessionShareDO confessionShareDO = it.next();
+					confessionShares.add(getConfessedShareTO(confessionShareDO, allDetails));
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confession share:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return confessionShares;
+	}
+
+	private static ConfessionShare getConfessedShareTO(
+			ConfessionShareDO confessionShareDO, boolean allDetails) {
+		ConfessionShare confessionShare = null;
+		if(confessionShareDO != null) {
+			confessionShare = new ConfessionShare();
+			if(allDetails) {
+				confessionShare.setConfId(confessionShareDO.getConfId());
+				confessionShare.setShareId(confessionShareDO.getShareId());
+				confessionShare.setUserId(confessionShareDO.getUserId());
+			}
+			confessionShare.setTimeStamp(confessionShareDO.getTimeStamp());
+			confessionShare.setPardon(confessionShareDO.isPardon());
+		}
+		return confessionShare;
+	}
+
+	public static void pardonConfession(Long userId, Long confId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(ConfessionShareDO.class);
+			query.setFilter("userId == user && confId == conf");
+			query.declareParameters("String user" + ", "  + "String conf");
+			@SuppressWarnings("unchecked")
+			List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(userId, confId);
+
+			if (result != null && !result.isEmpty()) {
+				Iterator<ConfessionShareDO> it = result.iterator();
+				while (it.hasNext()) {
+					ConfessionShareDO confessionShare = it.next();
+					confessionShare.setPardon(true);
+					pm.makePersistent(confessionShare);
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting user from DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
 	}
 }

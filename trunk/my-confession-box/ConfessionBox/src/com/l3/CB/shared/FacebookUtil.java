@@ -8,7 +8,6 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class FacebookUtil {
 
-//    public static final String SECRET = "3b8b8583f2e3a3b239068120431ca82d"; // replace with real values from Facebook app configuration
 //    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
 //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
 //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
@@ -16,7 +15,6 @@ public class FacebookUtil {
 //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
 //    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
 
-    public static final String SECRET = "5542ac99210548f480795313bba6a831"; // replace with real values from Facebook app configuration
     public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
     public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
     public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
@@ -28,10 +26,6 @@ public class FacebookUtil {
         return APPLICATION_ID;
     }
 
-    public static String getSecret() {
-        return SECRET;
-    }
- 
     public static String getAuthorizeUrl(String confId) {
         final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
         sb.append("authorize?client_id=").append(APPLICATION_ID);
@@ -52,16 +46,6 @@ public class FacebookUtil {
         final StringBuilder sb = new StringBuilder(FB_OAUTH_URL);
         sb.append("authorize?client_id=").append(APPLICATION_ID);
         sb.append("&display=popup&redirect_uri=").append(REDIRECT_URL);
-        return sb.toString();
-    }
-        
-    public static String getAccessTokenUrl(final String authCode) {
-        final StringBuilder sb = new StringBuilder(FB_GRAPH_URL);
-        sb.append("oauth/");
-        sb.append("access_token?client_id=").append(APPLICATION_ID);
-        sb.append("&redirect_uri=").append(REDIRECT_URL);
-        sb.append("&client_secret=").append(SECRET);
-        sb.append("&code=").append(authCode);
         return sb.toString();
     }
  

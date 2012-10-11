@@ -1,6 +1,7 @@
 package com.l3.CB.shared.TO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class ConfessionShare implements Serializable {
 
@@ -19,6 +20,8 @@ public class ConfessionShare implements Serializable {
 	
 	private boolean pardon;
 	
+	private Date timeStamp;
+
 	public ConfessionShare() {
 		super();
 	}
@@ -61,5 +64,13 @@ public class ConfessionShare implements Serializable {
 
 	public void setFbId(String fbId) {
 		this.fbId = fbId;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 }

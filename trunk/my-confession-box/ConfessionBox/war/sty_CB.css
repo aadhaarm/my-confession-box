@@ -181,3 +181,7 @@ img {
 .menuStyleName {
 	
 }
+
+.menuItemSelected {
+	background-color: #B4B9C4;
+}

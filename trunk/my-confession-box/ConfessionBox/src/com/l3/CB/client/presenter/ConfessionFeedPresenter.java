@@ -24,7 +24,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	public interface Display {
 		Widget asWidget();
 		public void setConfessionPagesLoaded(int confessionPagesLoaded);
-		public void setConfessions(List<Confession> confessions);
+		public void setConfessions(List<Confession> confessions, boolean isAnyn);
 		public ScrollPanel getContentScrollPanel();
 		public int getConfessionPagesLoaded();
 		public Image getLoaderImage();
@@ -37,8 +37,10 @@ public class ConfessionFeedPresenter implements Presenter {
 		int getVerticalScrollPosition();
 	}
 
+	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync rpcService; 
+	@SuppressWarnings("unused")
 	private UserInfo userInfo;
 	private final Display display;
 	Logger logger = Logger.getLogger("CBLogger");
@@ -83,7 +85,7 @@ public class ConfessionFeedPresenter implements Presenter {
 			public void onSuccess(Confession result) {
 				ArrayList<Confession> confessionList = new ArrayList<Confession>();
 				confessionList.add(result);
-				display.setConfessions(confessionList);
+				display.setConfessions(confessionList, true);
 			}
 			
 			@Override
@@ -102,7 +104,7 @@ public class ConfessionFeedPresenter implements Presenter {
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
-					display.setConfessions(result);
+					display.setConfessions(result, true);
 				}
 			}
 			
@@ -132,7 +134,7 @@ public class ConfessionFeedPresenter implements Presenter {
 
 								@Override
 								public void onSuccess(List<Confession> result) {
-									display.setConfessions(result);
+									display.setConfessions(result, true);
 									inEvent = false;
 									display.removeLoaderImage();
 								}

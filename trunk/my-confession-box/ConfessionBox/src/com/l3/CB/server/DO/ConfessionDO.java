@@ -8,6 +8,7 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
 public class ConfessionDO implements Serializable {
@@ -22,7 +23,7 @@ public class ConfessionDO implements Serializable {
 	private Long confId;
 	
 	@Persistent
-	private String confession;
+	private Text confession;
 
 	@Persistent
 	private Date timeStamp;
@@ -45,14 +46,6 @@ public class ConfessionDO implements Serializable {
 
 	public void setConfId(Long confId) {
 		this.confId = confId;
-	}
-
-	public String getConfession() {
-		return confession;
-	}
-
-	public void setConfession(String confession) {
-		this.confession = confession;
 	}
 
 	public Date getTimeStamp() {
@@ -93,5 +86,13 @@ public class ConfessionDO implements Serializable {
 
 	public void setConfessionTitle(String confessionTitle) {
 		this.confessionTitle = confessionTitle;
+	}
+
+	public Text getConfession() {
+		return confession;
+	}
+
+	public void setConfession(Text confession) {
+		this.confession = confession;
 	}
 }

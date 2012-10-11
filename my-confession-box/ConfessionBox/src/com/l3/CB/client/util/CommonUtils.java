@@ -1,8 +1,6 @@
 package com.l3.CB.client.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -23,13 +21,32 @@ public class CommonUtils {
     }-*/;
 
 	public static native void parseXFBMLJS(Element element) /*-{
-	  $wnd.FB.XFBML.parse(element);
+		if($wnd.FB) {
+	  		$wnd.FB.XFBML.parse(element);
+		}
 	}-*/;
 
 	public static native void parseXFBMLJS() /*-{
-	  $wnd.FB.XFBML.parse();
+		if($wnd.FB) {
+	  		$wnd.FB.XFBML.parse();
+		}
 	}-*/;
 
+	public static native String login() /*-{
+		$wnd.FB.login(function(response) {
+		   if (response.authResponse) {
+		     console.log('Welcome!  Fetching your information.... ');
+		     $wnd.FB.api('/me', function(response) {
+		       console.log('Good to see you, ' + response.name + '.');
+		     	return response;
+		     });
+		   } else {
+		     console.log('User cancelled login or did not fully authorize.');
+		     return null;
+		   }
+		 });
+	}-*/;
+	
 	public static String getString(JSONValue jsonValue) {
 		if(jsonValue != null) {
 			return jsonValue.isString().stringValue();

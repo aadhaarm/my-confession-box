@@ -15,8 +15,9 @@ import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
-public class MyConfessionFeedPresenter implements Presenter {
+public class ConfessionForMeFeedPresenter implements Presenter {
 
+	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync rpcService; 
 	private UserInfo userInfo;
@@ -24,7 +25,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 
 	Logger logger = Logger.getLogger("CBLogger");
 
-	public MyConfessionFeedPresenter(HandlerManager eventBus,
+	public ConfessionForMeFeedPresenter(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService, UserInfo userInfo,
 			Display display) {
 		super();
@@ -39,12 +40,12 @@ public class MyConfessionFeedPresenter implements Presenter {
 	
 	private void setConfessions() {
 		this.display.setConfessionPagesLoaded(0);
-		rpcService.getConfessions(0, userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+		rpcService.getConfessionsForMe(0, userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 			
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
-					display.setConfessions(result, true);
+					display.setConfessions(result, false);
 				}
 			}
 			
@@ -69,12 +70,12 @@ public class MyConfessionFeedPresenter implements Presenter {
 					display.addLoaderImage();
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
-					rpcService.getConfessions(display.getConfessionPagesLoaded(), userInfo.getUserId(),
+					rpcService.getConfessionsForMe(display.getConfessionPagesLoaded(), userInfo.getUserId(),
 							new AsyncCallback<List<Confession>>() {
 
 								@Override
 								public void onSuccess(List<Confession> result) {
-									display.setConfessions(result, true);
+									display.setConfessions(result, false);
 									inEvent = false;
 									display.removeLoaderImage();
 								}

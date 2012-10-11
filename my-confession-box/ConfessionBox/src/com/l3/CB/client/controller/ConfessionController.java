@@ -10,6 +10,7 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
+import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
@@ -78,6 +79,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo), ConfessionBox.confId);
 			} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
 				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo));
+			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
+				presenter = new ConfessionForMeFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo));
 			}
 			if (presenter != null) {
 				presenter.go(container);

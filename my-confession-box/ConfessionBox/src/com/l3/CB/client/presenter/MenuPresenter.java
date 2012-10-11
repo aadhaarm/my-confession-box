@@ -2,6 +2,7 @@ package com.l3.CB.client.presenter;
 
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
@@ -11,6 +12,7 @@ import com.l3.CB.shared.TO.UserInfo;
 public class MenuPresenter implements Presenter {
 
 	public interface Display {
+		public MenuItem setFeedItemSelected();
 		Widget asWidget();
 	}
 	
@@ -27,7 +29,9 @@ public class MenuPresenter implements Presenter {
 		this.rpcService = rpcService;
 		this.userInfo = userInfo;
 		this.display = display;
-		
+
+		this.display.setFeedItemSelected();
+
 		bind();
 	}
 

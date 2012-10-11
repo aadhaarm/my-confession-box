@@ -30,4 +30,9 @@ public interface ConfessionServiceAsync {
 
 	void getConfessions(int page, Long userId,
 			AsyncCallback<List<Confession>> callback);
+
+	void getConfessionsForMe(int page, Long userId,
+			AsyncCallback<List<Confession>> callback);
+
+	void pardonConfession(Long userId, Long confId, AsyncCallback<Void> callback);
 }

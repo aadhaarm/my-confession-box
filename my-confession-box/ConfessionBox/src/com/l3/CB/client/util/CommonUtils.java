@@ -1,3 +1,8 @@
+/**
+ * L3 Confession Box
+ * 
+ * Oct 13, 2012, 9:59:38 AM
+ */
 package com.l3.CB.client.util;
 
 import java.util.HashMap;
@@ -9,44 +14,51 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.shared.CBText;
+import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.FacebookUtil;
+import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class CommonUtils {
 
 	Logger logger = Logger.getLogger("CBLogger");
-	
+
 	// redirect the browser to the given url
 	public static native void redirect(String url)/*-{
         $wnd.top.location = url;
     }-*/;
 
+	// Parse the XFBML tags on page, in the given ELEMENT
 	public static native void parseXFBMLJS(Element element) /*-{
 		if($wnd.FB) {
 	  		$wnd.FB.XFBML.parse(element);
 		}
 	}-*/;
 
+	// Parse all the XFBML tags on the page
 	public static native void parseXFBMLJS() /*-{
 		if($wnd.FB) {
 	  		$wnd.FB.XFBML.parse();
 		}
 	}-*/;
 
-	public static native String login() /*-{
-		$wnd.FB.login(function(response) {
+	public static native String login(Element elementId) /*-{
+		if($wnd.FB) {
+	  		$wnd.FB.login(function(response) {
 		   if (response.authResponse) {
-		     console.log('Welcome!  Fetching your information.... ');
-		     $wnd.FB.api('/me', function(response) {
-		       console.log('Good to see you, ' + response.name + '.');
-		     	return response;
-		     });
+	   		 elementId.innerHTML = response.authResponse.accessToken;
 		   } else {
 		     console.log('User cancelled login or did not fully authorize.');
-		     return null;
 		   }
 		 });
+		}
 	}-*/;
-	
+
 	public static String getString(JSONValue jsonValue) {
 		if(jsonValue != null) {
 			return jsonValue.isString().stringValue();
@@ -84,23 +96,29 @@ public class CommonUtils {
 					userInfo.setName(getString(jsonObject.get("name")));
 					userInfo.setUsername(getString(jsonObject.get("username")));
 					userInfo.setGender(getString(jsonObject.get("gender")));
+					userInfo.setLocale(getString(jsonObject.get("locale")));
 				}
 			}
 		}
 		return userInfo;
 	}
-	
+
 	public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
 		Map<String, UserInfo> friends = null;
+
 		if(jsonString != null) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
+
 			if(jsonValue != null) {
 				JSONObject jsonObject = jsonValue.isObject();
+
 				if(jsonObject != null) {
 					JSONArray jsonArray = jsonObject.get("data").isArray();
+
 					if(jsonArray != null) {
 						friends = new HashMap<String, UserInfo>();
+
 						for (int i = 0; i < jsonArray.size(); i++) {
 							JSONValue userJSONValue = jsonArray.get(i);
 							if(userJSONValue != null) {
@@ -113,10 +131,50 @@ public class CommonUtils {
 						}
 					}
 				}
-				
+
 			}
 		}
 		return friends;
 	}
+	
+	// <fb:profile-pic uid="12345" width="32" height="32" linked="true"
+	// \><fb:profile-pic>
+	public static String getProfilePictureAndName(Confession confession, boolean isAnyn) {
+		final StringBuilder sb = new StringBuilder();
 
+		if (!confession.isShareAsAnyn() || !isAnyn) {
+			sb.append("<fb:profile-pic uid=\"")
+			.append(confession.getFbId())
+			.append("\"linked=\"true\"></fb:profile-pic>");
+		} else {
+			sb.append("<img src=");
+			sb.append("'")
+			.append(FacebookUtil.getFaceIconImage(confession
+					.getGender())).append("'");
+			sb.append("/>");
+		}
+		return sb.toString();
+	}
+	
+	public static Widget getConfessionWithName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
+		VerticalPanel pnlConfession = new VerticalPanel();
+
+		if (!confession.isShareAsAnyn() || ! isAnyn) {
+			if (userInfo != null) {
+				Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
+				ancUserName.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
+				pnlConfession.add(ancUserName);
+			}
+		} else {
+			Label lblConf = new Label();
+			lblConf.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
+			lblConf.setText(cbText.confessedByAnynName());
+			pnlConfession.add(lblConf);
+		}
+
+		pnlConfession.add(new Label(confession.getConfessionTitle()));
+		pnlConfession.add(new Label(confession.getConfession()));
+
+		return pnlConfession;
+	}
 }

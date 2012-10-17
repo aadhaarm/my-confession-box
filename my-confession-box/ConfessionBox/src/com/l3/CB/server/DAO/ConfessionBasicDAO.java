@@ -21,6 +21,11 @@ public class ConfessionBasicDAO {
 
 	static Logger logger = Logger.getLogger("CBLogger");
 
+	/**
+	 * 
+	 * @param userInfo
+	 * @return
+	 */
 	private static UserDO getUserByFBId(UserInfo userInfo) {
 		UserDO userDO = null;
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -156,6 +161,7 @@ public class ConfessionBasicDAO {
 			confessionDO.setConfession(new Text(confession.getConfession()));
 			confessionDO.setTimeStamp(confession.getTimeStamp());
 			confessionDO.setUserIp(confession.getUserIp());
+			confessionDO.setLocale(confession.getLocale());
 			return confessionDO;
 		}
 		return null;
@@ -231,7 +237,7 @@ public class ConfessionBasicDAO {
 	private static Confession getConfession(ConfessionDO confessionDO) {
 		Confession confession = null;
 		if (confessionDO != null) {
-			confession = new Confession(confessionDO.getConfId(),
+			confession = new Confession(confessionDO.getConfId(), confessionDO.getConfessionTitle(),
 					confessionDO.getConfession().getValue(), confessionDO.getTimeStamp(),
 					confessionDO.getUserId(), confessionDO.isShareAsAnyn());
 
@@ -372,7 +378,7 @@ public class ConfessionBasicDAO {
 		return confessionShare;
 	}
 
-	public static void pardonConfession(Long userId, Long confId) {
+	public static boolean pardonConfession(Long userId, Long confId) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			Query query = pm.newQuery(ConfessionShareDO.class);
@@ -392,8 +398,10 @@ public class ConfessionBasicDAO {
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,
 					"Error while getting user from DB:" + e.getMessage());
+			return false;
 		} finally {
 			pm.close();
 		}
+		return true;
 	}
 }

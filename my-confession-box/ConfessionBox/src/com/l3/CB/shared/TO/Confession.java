@@ -22,6 +22,8 @@ public class Confession implements Serializable {
 
 	private Long userId;
 	
+	private String locale;
+	
 	private String userIp;
 	
 	private boolean shareAsAnyn = true;
@@ -35,6 +37,10 @@ public class Confession implements Serializable {
 	private Map<String, Long> activityCount;
 
 	private List<ConfessionShare> confessedTo;
+	
+	private String userFullName;
+	
+	private String username;
 
 	public Confession() {
 		super();
@@ -46,7 +52,7 @@ public class Confession implements Serializable {
 		this.shareAsAnyn = shareAsAnyn;
 	}
 	
-	public Confession(Long confId, String confession, Date timeStamp,
+	public Confession(Long confId, String confessionTitle, String confession, Date timeStamp,
 			Long userId, boolean shareAsAnyn) {
 		super();
 		this.confId = confId;
@@ -54,6 +60,7 @@ public class Confession implements Serializable {
 		this.timeStamp = timeStamp;
 		this.userId = userId;
 		this.shareAsAnyn = shareAsAnyn;
+		this.confessionTitle = confessionTitle;
 	}
 
 	public Confession(Long confId, String confession, Date timeStamp,
@@ -161,5 +168,29 @@ public class Confession implements Serializable {
 
 	public void setUserIp(String userIp) {
 		this.userIp = userIp;
+	}
+
+	public String getUserFullName() {
+		return userFullName;
+	}
+
+	public void setUserFullName(String userFullName) {
+		this.userFullName = userFullName;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

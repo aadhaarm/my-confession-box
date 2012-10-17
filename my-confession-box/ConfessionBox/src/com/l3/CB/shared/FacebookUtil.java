@@ -57,6 +57,10 @@ public class FacebookUtil {
         return FB_USER_URL + "access_token=" + authToken;
     }
 
+    public static String getUserUrl(final String fbId, final String authToken) {
+        return FB_GRAPH_URL + fbId + "?access_token=" + authToken;
+    }
+    
 	public static String getUserImageUrl(String fbId) {
 		final StringBuilder sb = new StringBuilder(FB_GRAPH_URL);
         sb.append(fbId);

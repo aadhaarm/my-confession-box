@@ -47,6 +47,8 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 				
 				confessionShare.setUserId(userSharedTo.getUserId());
 				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
+			
+				MailManager.sendConfessionEmail(confessionShare.getUsername()+"@facebook.com", confession.getConfId(), confession.getUserFullName(), confessionShare.getUserFullName());
 			}
 		}
 		return confession;
@@ -139,8 +141,9 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public void pardonConfession(Long userId, Long confId) {
-		ConfessionBasicDAO.pardonConfession(userId, confId);
-		//TODO: Mail required ppl
+	public void pardonConfession(UserInfo pandonByUser, Long confId,
+			UserInfo pardonedToUser) {
+		ConfessionBasicDAO.pardonConfession(pandonByUser.getUserId(), confId);
+		MailManager.sendPardonMail(pandonByUser, confId, pardonedToUser);
 	}
 }

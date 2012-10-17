@@ -1,15 +1,14 @@
 package com.l3.CB.client.view;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -17,6 +16,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.shared.CBText;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
@@ -24,65 +25,53 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	private final Grid grdConfessionForm;
 	
 	private final VerticalPanel identityPanel;
-	private final RadioButton rbIdentityAnyn;
-	private final RadioButton rbIdentityDisclose;
-	private final RadioButton rbIdentityDiscloseToSome;
+	private final CheckBox cbHideIdentity;
+	private final CheckBox cbConfessTo;
+
+	private MultiWordSuggestOracle friendsOracle;
+	private final HorizontalPanel hPanelShare;
+	private SuggestBox friendsSuggestBox;
+
+	private final TextBox txtTitle;
 	private final TextArea txtConfession;
 	private final Button btnSubmit;
-	private final HorizontalPanel hPanelShare;
-	private MultiWordSuggestOracle friendsOracle;
-	private SuggestBox friendsSuggestBox;
-	private final TextBox txtTitle;
 	
-	public RegisterConfessionView() {
+
+	public RegisterConfessionView(CBText cbText) {
 		super();
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
-		contentTableDecorator.addStyleName("confessionRegisterPage");
+		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
 		initWidget(contentTableDecorator);
 		
 		grdConfessionForm = new Grid(7, 2);
 		
 		identityPanel = new VerticalPanel();
-		rbIdentityAnyn = new RadioButton("identity", "Hide my identity.");
-		rbIdentityAnyn.setTitle("Share confession as 'Anonymous'");
-		rbIdentityAnyn.setValue(true);
-		rbIdentityDisclose = new RadioButton("identity", "Disclose my identity!");
-		rbIdentityDiscloseToSome = new RadioButton("identity", "Only Disclose to some, hide from the rest!");
+		cbHideIdentity = new CheckBox(cbText.registerPageOptionHideID());
+		cbHideIdentity.setValue(true);
+		cbConfessTo = new CheckBox(cbText.registerPageOptionConfessToFriend());
 		
-		identityPanel.add(rbIdentityAnyn);
-		identityPanel.add(rbIdentityDisclose);
-		identityPanel.add(rbIdentityDiscloseToSome);
+		identityPanel.add(cbHideIdentity);
+		identityPanel.add(cbConfessTo);
 		
 		hPanelShare = new HorizontalPanel();
-		hPanelShare.add(new Label("Share with:"));
+		hPanelShare.add(new Label(cbText.registerPageChooseFriend()));
 		hPanelShare.setVisible(false);
 		
-		txtConfession = new TextArea();
-		txtConfession.addStyleName("registerConfessionTextBox");
 		txtTitle = new TextBox();
+		txtConfession = new TextArea();
+		txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 		
-		btnSubmit = new Button("Register your confession");
+		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
 		
-		grdConfessionForm.setWidget(0, 0, new Label("Confess"));
-		grdConfessionForm.setWidget(1, 0, txtTitle);
-		grdConfessionForm.setWidget(2, 0, txtConfession);
-		grdConfessionForm.setWidget(3, 0, identityPanel);
-		grdConfessionForm.setWidget(4, 0, hPanelShare);
+		grdConfessionForm.setWidget(0, 0, new Label(cbText.registerPageTitle()));
+		grdConfessionForm.setWidget(1, 0, identityPanel);
+		grdConfessionForm.setWidget(2, 0, hPanelShare);
+
+		grdConfessionForm.setWidget(3, 0, txtTitle);
+		grdConfessionForm.setWidget(4, 0, txtConfession);
 		grdConfessionForm.setWidget(5, 0, btnSubmit);
 		
 		contentTableDecorator.add(grdConfessionForm);	
-	}
-	
-	public RadioButton getRbIdentityAnyn() {
-		return rbIdentityAnyn;
-	}
-
-	public RadioButton getRbIdentityDisclose() {
-		return rbIdentityDisclose;
-	}
-
-	public RadioButton getRbIdentityDiscloseToSome() {
-		return rbIdentityDiscloseToSome;
 	}
 
 	public HorizontalPanel gethPanelShare() {
@@ -105,11 +94,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	}
 
 	@Override
-	public boolean isAnynShare() {
-		if(this.rbIdentityDisclose.getValue()){
-			return false;
-		}
-		return true;
+	public boolean isIdentityHidden() {
+		return cbHideIdentity.getValue();
 	}
 
 	public void setFriendsOracle(MultiWordSuggestOracle friendsOracle) {
@@ -122,7 +108,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		return (friendsOracle == null);
 	}
 
-
 	public String getConfessionTitle() {
 		return txtTitle.getText();
 	}
@@ -131,6 +116,11 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		return friendsSuggestBox.getValue();
 	}
 
+	/**
+	 * @param isAnyn -  Is Anonymous
+	 * @param gender - String
+	 * @param fbId - facebook id 
+	 */
 	public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
 		final StringBuilder sb = new StringBuilder();
 
@@ -149,4 +139,18 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		CommonUtils.parseXFBMLJS();
 	}
 
+	@Override
+	public boolean isShared() {
+		return cbConfessTo.getValue();
+	}
+
+	@Override
+	public HasClickHandlers getCbHideIdentity() {
+		return cbHideIdentity;
+	}
+
+	@Override
+	public HasClickHandlers getCbConfessTo() {
+		return cbConfessTo;
+	}
 }

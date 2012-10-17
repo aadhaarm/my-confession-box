@@ -1,19 +1,25 @@
+/**
+ * L3 Confession Box
+ * 
+ * Oct 13, 2012, 9:55:07 AM
+ */
 package com.l3.CB.client;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
-import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.UserInfo;
 
 /**
@@ -21,87 +27,78 @@ import com.l3.CB.shared.TO.UserInfo;
  */
 public class ConfessionBox implements EntryPoint {
 
-	Logger logger = Logger.getLogger("CBLogger");
-	
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+	//	Logger logger = Logger.getLogger("CBLogger");
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting
-	 * service.
-	 */
-	private final ConfessionServiceAsync confessionService = GWT
-			.create(ConfessionService.class);
-	private final FacebookServiceAsync facebookService = GWT
-			.create(FacebookService.class);
+	private final ConfessionServiceAsync confessionService = GWT.create(ConfessionService.class);
+	private final FacebookServiceAsync facebookService = GWT.create(FacebookService.class);
+
+	CBText cbText = GWT.create(CBText.class);
 
 	public static UserInfo userInfo;
 	public static String confId;
+	public static String accessToken;
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		HandlerManager confEventBus = new HandlerManager(null);
-		checkUserLoginStatus(confessionService, facebookService, confEventBus);
+
+		RootPanel.get("appTitle").add(new Label(cbText.applicationTitle()));
+		final HandlerManager confEventBus = new HandlerManager(null);
+
+		CommonUtils.login(DOM.getElementById("auth-id"));
+		Timer t = new Timer() {
+			public void run() {
+				accessToken = DOM.getElementById("auth-id").getInnerHTML();
+				if(accessToken != null && !"".equals(accessToken)) {
+					checkUserLoginStatus(confessionService, facebookService, confEventBus);
+					this.cancel();
+				} else {
+					this.schedule(2000);
+				}
+			}
+		};
+		t.schedule(2000);
+
 	}
 
 	private void checkUserLoginStatus(final ConfessionServiceAsync confessionService,
 			final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
-
-		String authToken = Location.getParameter("code");
-		logger.log(Level.INFO, "Auth Token:" + authToken);
-		String error = Location.getParameter("error_reason");
-		logger.log(Level.INFO, "Error on load:" + error);
 		confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
-		
-		if (null != error && error.equals("user_denied")) {
-			Window.alert("Error:" + error);
-			logger.log(Level.INFO, "UserDenied:");
-		} else if (authToken == null || "".equals(authToken)) {
-			if(null != confId){
-				CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
-			} else {
-				CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
-			}
-		} else {
-			confId = Location.getParameter("state");
-			facebookService.login(authToken, new AsyncCallback<String>() {
+		if(accessToken != null && !"".equals(accessToken)) {
+			// Get user details of the current logged in user
+			ConfessionBox.this.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
-					if(result != null) {
-						final String accessToken = CommonUtils.processAccessToken(result);
-						if(accessToken != null && !"".equals(accessToken)) {
-							ConfessionBox.this.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
-								@Override
-								public void onSuccess(String result) {
-									if(result != null){
-										// parse the response text into JSON
-										ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
-										logger.log(Level.INFO, "User Info:" + userInfo.toString());
-										ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken);
-										confessionController.go(RootPanel.get());
-									}
-								}
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Level.INFO, "Error getUserDetails:" + caught.getStackTrace());
-								}
-							});
-						}
+					if(result != null){
+						// parse the response text into JSON and get user info
+						ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
+//						String clientLocale = LocaleInfo.getCurrentLocale().getLocaleName();
+//						String userPrefferedLocale = ConfessionBox.userInfo.getLocale();
+//						Window.alert(clientLocale +"<<<<"+ userPrefferedLocale);
+//						if(userPrefferedLocale!= null && clientLocale != null && userPrefferedLocale.equalsIgnoreCase(clientLocale)) {
+							//  logger.log(Constants.LOG_LEVEL, "User Info:" + userInfo.toString());
+							ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken, cbText);
+							confessionController.go(RootPanel.get());
+//						} else {
+//							changeLocaleTo(userPrefferedLocale);
+//						}
 					}
 				}
-
 				@Override
 				public void onFailure(Throwable caught) {
-					logger.log(Level.INFO, "Error onload:" + caught.getMessage());
+					//	logger.log(Constants.LOG_LEVEL, "Error getUserDetails:" + caught.getStackTrace());
 				}
 			});
 		}
+	}
+
+	protected void changeLocaleTo(String userPrefferedLocale) {
+		
+		Window.alert(">>>>" + LocaleInfo.getLocaleQueryParam() + ">>>>" + userPrefferedLocale);
+		Window.Location.assign(Window.Location
+				.createUrlBuilder()
+				.setParameter(LocaleInfo.getLocaleQueryParam(),
+						userPrefferedLocale).buildString());		
 	}
 }

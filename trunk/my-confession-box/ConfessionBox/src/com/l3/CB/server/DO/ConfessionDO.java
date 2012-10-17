@@ -2,12 +2,12 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
 import com.google.appengine.api.datastore.Text;
 
 @PersistenceCapable
@@ -36,6 +36,9 @@ public class ConfessionDO implements Serializable {
 	
 	@Persistent
 	private String userIp;
+	
+	@Persistent
+	private String locale;
 	
 	@Persistent
 	private String confessionTitle;
@@ -94,5 +97,13 @@ public class ConfessionDO implements Serializable {
 
 	public void setConfession(Text confession) {
 		this.confession = confession;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
 	}
 }

@@ -4,22 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
@@ -35,19 +30,25 @@ public class RegisterConfessionPresenter implements Presenter {
 	Logger logger = Logger.getLogger("CBLogger");
 
 	public interface Display {
-		HasClickHandlers getSubmitBtn();
-		String getConfession();
-		boolean isAnynShare();
-		Widget asWidget();
-		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
-		public RadioButton getRbIdentityDiscloseToSome();
-		public HorizontalPanel gethPanelShare();
-		public boolean isFriendsOracleNull();
-		public RadioButton getRbIdentityAnyn();
-		public RadioButton getRbIdentityDisclose();
+		public HasClickHandlers getSubmitBtn();
+		public String getConfession();
 		public String getConfessionTitle();
+		
+		public boolean isIdentityHidden();
+		boolean isShared();
+		public HasClickHandlers getCbHideIdentity();
+		public HasClickHandlers getCbConfessTo();
+		
+
+		public boolean isFriendsOracleNull();
+		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
+		public HorizontalPanel gethPanelShare();
+
 		public String getSharedWith();
+		
 		public void setProfilePictureTag(boolean isAnyn, String gender, String fbId);
+		
+		Widget asWidget();
 	}
 
 	@SuppressWarnings("unused")
@@ -116,63 +117,98 @@ public class RegisterConfessionPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				final Confession confession = new Confession(display.getConfession(), display.isAnynShare());
+				// Get confession to be saved
+				final Confession confession = getConfessionToBeSaved();
+				
+				//Register Shared-To info
+				if(display.isShared()) {
+					final List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
+					String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
+					final ConfessionShare userConfessedTo = new ConfessionShare();
+					userConfessedTo.setTimeStamp(new Date());
+					userConfessedTo.setFbId(fbIdSharedUser);
+					userConfessedTo.setUserFullName(userfriends.get(display.getSharedWith()).getName());
+					
+					facebookService.getUserDetails(fbIdSharedUser, accessToken, new AsyncCallback<String>() {
+						
+						@Override
+						public void onSuccess(String result) {
+							UserInfo confessedToUser = CommonUtils.getUserInfo(result);
+							if(confessedToUser != null) {
+								userConfessedTo.setUserFullName(confessedToUser.getName());
+								userConfessedTo.setUsername(confessedToUser.getUsername());
+								confessedTo.add(userConfessedTo);
+								confession.setConfessedTo(confessedTo);
+								
+								//Finally register confession
+								finallyRegisterConfession(confession);
+							}
+						}
+
+						/**
+						 * @param confession
+						 */
+						private void finallyRegisterConfession(
+								final Confession confession) {
+							rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
+								@Override
+								public void onSuccess(Confession result) {
+									History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+								}
+								@Override
+								public void onFailure(Throwable caught) {
+									logger.log(Constants.LOG_LEVEL, "Exception when registering confession:" + caught.getMessage());
+								}
+							});
+						}
+						
+						@Override
+						public void onFailure(Throwable caught) {
+							logger.log(Constants.LOG_LEVEL, "Exception in RegisterConfessionPresenter.bind()" + caught.getCause());
+						}
+					});
+				}
+
+			}
+
+			/**
+			 * @return
+			 */
+			private Confession getConfessionToBeSaved() {
+				final Confession confession = new Confession(display.getConfession(), display.isIdentityHidden());
 				confession.setUserId(userInfo.getUserId());
 				confession.setConfessionTitle(display.getConfessionTitle());
 				confession.setTimeStamp(new Date());
-				
-				//Register Shared-To info
-				if(display.getRbIdentityDiscloseToSome().getValue()) {
-					List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
-					String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
-					ConfessionShare userConfessedTo = new ConfessionShare();
-					userConfessedTo.setTimeStamp(new Date());
-					userConfessedTo.setFbId(fbIdSharedUser);
-					confessedTo.add(userConfessedTo);
-					confession.setConfessedTo(confessedTo);
-				}
-								
-				rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
-
-					@Override
-					public void onSuccess(Confession result) {
-						History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
-					}
-
-					@Override
-					public void onFailure(Throwable caught) {
-						logger.log(Level.SEVERE, "Exception when registering confession:" + caught.getMessage());
-					}
-				});
+				confession.setUsername(userInfo.getUsername());
+				confession.setUserFullName(userInfo.getName());
+				confession.setLocale(userInfo.getLocale());
+				return confession;
 			}
 		});
 		
-		this.display.getRbIdentityDiscloseToSome().addClickHandler(new ClickHandler() {
+		display.getCbHideIdentity().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
-				if(display.isFriendsOracleNull()) {
-					getMyFriends();
+				display.setProfilePictureTag(display.isIdentityHidden(), userInfo.getGender(), userInfo.getId());
+			}
+		});
+		
+		display.getCbConfessTo().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				if(display.isShared()) {
+					if(display.isFriendsOracleNull()) {
+						getMyFriends();
+					}
+					display.gethPanelShare().setVisible(true);
+				} else {
+					display.gethPanelShare().setVisible(false);
 				}
-				display.gethPanelShare().setVisible(true);
 			}
 		});
-		this.display.getRbIdentityAnyn().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
-				display.gethPanelShare().setVisible(false);
-			}
-		});
-		this.display.getRbIdentityDisclose().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				display.setProfilePictureTag(false, userInfo.getGender(), userInfo.getId());
-				display.gethPanelShare().setVisible(false);
-			}
-		});
+		
 	}
 
 	@Override

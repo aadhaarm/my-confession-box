@@ -185,3 +185,15 @@ img {
 .menuItemSelected {
 	background-color: #B4B9C4;
 }
+
+#auth-id {
+	display: none;
+}
+
+.pardonModalPopupWindow {
+	width: 650px;
+}
+
+.confessionGridElement {
+	background-color: #E9E9E9;
+}

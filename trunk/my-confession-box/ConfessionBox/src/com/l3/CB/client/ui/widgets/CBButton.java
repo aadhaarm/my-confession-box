@@ -23,7 +23,7 @@ public class CBButton extends AbsolutePanel {
 	public CBButton(final Activity activity, final Confession confession,
 			final UserInfo userInfo,
 			final ConfessionServiceAsync confessionService, String titleText,
-			String btnStyleName, final String btnLabelText, Image buttonImage) {
+			String btnStyleName, Image buttonImage) {
 		super();
 		this.addStyleName("activityButtonContainer");
 		

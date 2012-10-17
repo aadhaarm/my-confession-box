@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 
 public class MenuView extends Composite implements MenuPresenter.Display {
@@ -19,60 +20,59 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	private final MenuItem conToMeItem;
 	private MenuItem selectedMenuItem;
 	
-	public MenuView() {
+	public MenuView(CBText cbText) {
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		initWidget(contentTableDecorator);
-		
 		menuBar = new MenuBar(true);
 		menuBar.setAnimationEnabled(true);
-		menuBar.addStyleName("menuStyleName");
+		menuBar.addStyleName(Constants.STYLE_CLASS_MENU);
 	
-		feedItem = new MenuItem("Feed", new Command() {
+		feedItem = new MenuItem(cbText.cbMenuConfessionFeed(), new Command() {
 			
 			@Override
 			public void execute() {
-				feedItem.addStyleName("menuItemSelected");
+				feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
-					selectedMenuItem.removeStyleName("menuItemSelected");
+					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = feedItem;
 				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
 			}
 		});
 		
-		confessItem = new MenuItem("Confess", new Command() {
+		confessItem = new MenuItem(cbText.cbMenuConfessionConfess(), new Command() {
 			
 			@Override
 			public void execute() {
-				confessItem.addStyleName("menuItemSelected");
+				confessItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
-					selectedMenuItem.removeStyleName("menuItemSelected");
+					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = confessItem;
 				History.newItem(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 			}
 		});
 
-		myConItem = new MenuItem("I confessed", new Command() {
+		myConItem = new MenuItem(cbText.cbMenuConfessionMyConfessions(), new Command() {
 			
 			@Override
 			public void execute() {
-				myConItem.addStyleName("menuItemSelected");
+				myConItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
-					selectedMenuItem.removeStyleName("menuItemSelected");
+					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = myConItem;
 				History.newItem(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 			}
 		});
 
-		conToMeItem = new MenuItem("Confessed to me", new Command() {
+		conToMeItem = new MenuItem(cbText.cbMenuConfessionConfessToMe(), new Command() {
 			
 			@Override
 			public void execute() {
-				conToMeItem.addStyleName("menuItemSelected");
+				conToMeItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
-					selectedMenuItem.removeStyleName("menuItemSelected");
+					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = conToMeItem;
 				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
@@ -93,7 +93,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 
 	@Override
 	public MenuItem setFeedItemSelected() {
-		feedItem.addStyleName("menuItemSelected");
+		feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		selectedMenuItem = feedItem;
 		return feedItem;
 	}

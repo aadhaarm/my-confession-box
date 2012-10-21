@@ -50,6 +50,12 @@ public class Constants {
 	public static final String STYLE_CLASS_REGISTER_CONFESSION_PAGE = "confessionRegisterPage";
 	public static final String STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX = "registerConfessionTextBox";
 	public static final String STYLE_CLASS_PARDON_MODAL = "pardonModalPopupWindow";
-	public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
+	public static final String STYLE_CLASS_PARDON_STATUS_PANEL = "pardonStatusPanel";
+	public static final String STYLE_CLASS_DATE_TIME_STAMP = "dateTimeStamp";
 	public static final String STYLE_CLASS_CONFESSION_GRID = "confessionGridElement";
+
+	public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
+
+	public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
+	public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
 }

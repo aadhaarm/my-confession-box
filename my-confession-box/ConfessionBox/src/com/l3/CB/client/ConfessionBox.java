@@ -42,7 +42,6 @@ public class ConfessionBox implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-
 		RootPanel.get("appTitle").add(new Label(cbText.applicationTitle()));
 		final HandlerManager confEventBus = new HandlerManager(null);
 

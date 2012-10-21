@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import sun.security.krb5.internal.PAData;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -21,13 +19,13 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
-import com.l3.CB.client.ui.widgets.CBButton;
+import com.l3.CB.client.ui.widgets.ActivityButton;
 import com.l3.CB.client.ui.widgets.PardonPopupPanel;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
@@ -36,8 +34,9 @@ import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.Filters;
+import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
-import com.sun.xml.internal.xsom.impl.Const;
 
 public class ConfessionFeedView extends Composite implements
 ConfessionFeedPresenter.Display {
@@ -46,56 +45,69 @@ ConfessionFeedPresenter.Display {
 
 	private VerticalPanel vpnlConfessionList;
 	private ConfessionServiceAsync confessionService;
-	private FacebookServiceAsync facebookService;
+//	private FacebookServiceAsync facebookService;
 	private UserInfo loggedInUserInfo;
-	private String accessToken;
+//	private String accessToken;
 	
 	private DecoratorPanel contentTableDecorator;
-	private ScrollPanel contentScrollPanel;
+//	private ScrollPanel contentScrollPanel;
 	private int confessionPagesLoaded;
 	private Image loaderImage;
 	private boolean moreConfessions;
 
+	private final ListBox lstFilterOptions;
+	
 	CBText cbText;
 	
 	public ConfessionFeedView(ConfessionServiceAsync confessionService,
 			UserInfo userInfo, FacebookServiceAsync facebookService, String accessToken, CBText cbText) {
 		super();
 		this.confessionService = confessionService;
-		this.facebookService = facebookService;
+//		this.facebookService = facebookService;
 		this.loggedInUserInfo = userInfo;
-		this.accessToken = accessToken;
+//		this.accessToken = accessToken;
 		this.cbText = cbText;
+		
+		lstFilterOptions = new ListBox();
+		lstFilterOptions.setVisible(false);
+		lstFilterOptions.addItem("All confessions", Filters.ALL.name());
+		lstFilterOptions.addItem("Where people hide identity and confessed", Filters.CLOSED .name());
+		lstFilterOptions.addItem("From your language & country", Filters.LOCALE_SPECIFIC.name());
+//		lstFilterOptions.addItem("'Most same boats' voted confessions", Filters.MOST_SAME_BOATS.name());
+		lstFilterOptions.addItem("Where people dared to open identity and confess", Filters.OPEN.name());
 		
 		confessionPagesLoaded = 1;
 		getMeLoaderImage();
 		moreConfessions = true;
 
-		contentScrollPanel = new ScrollPanel();
-		contentScrollPanel.addStyleName("confessionScrollPanel");
-		//		contentScrollPanel.setAlwaysShowScrollBars(true);
+//		contentScrollPanel = new ScrollPanel();
+//		contentScrollPanel.addStyleName("confessionScrollPanel");
+//		contentScrollPanel.setAlwaysShowScrollBars(true);
+
 
 		vpnlConfessionList = new VerticalPanel();
-		contentScrollPanel.add(vpnlConfessionList);
+		vpnlConfessionList.add(lstFilterOptions);
+		
+//		contentScrollPanel.add(vpnlConfessionList);
 
 		contentTableDecorator = new DecoratorPanel();
-		contentTableDecorator.add(contentScrollPanel);
+		contentTableDecorator.add(vpnlConfessionList);
 
 		initWidget(contentTableDecorator);
 	}
 
 	private void getMeLoaderImage() {
 		loaderImage = new Image(Constants.LOADER_IMAGE_PATH);
-		loaderImage.addStyleName("loaderImage");
+		loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
 	}
 
-	public void setConfessions(List<Confession> confessions, boolean isAnyn) {
+	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls) {
 
 		if (confessions != null && !confessions.isEmpty()) {
 			for (Confession confession : confessions) {
 				UserInfo confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 
-				Grid grid = new Grid(5, 2);
+				Grid grid = new Grid(6, 2);
 				grid.getElement().setId("confession-id-" + confession.getConfId());
 				grid.addStyleName(Constants.STYLE_CLASS_CONFESSION_GRID);
 				int row = 0;
@@ -103,12 +115,16 @@ ConfessionFeedPresenter.Display {
 				if(confessedByUserInfo != null) {
 					confession.setFbId(confessedByUserInfo.getId());
 				}
+				if(showUserControls) {
+					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, loggedInUserInfo, confessionService));
+					row++;
+				}
 				grid.setHTML(row, 0, CommonUtils.getProfilePictureAndName(confession, isAnyn));
 				grid.setWidget(row, 1, CommonUtils.getConfessionWithName(confession, confessedByUserInfo, isAnyn, cbText));
 				
 				if(confession.getConfessedTo() != null) {
 					row++;
-					grid.setWidget(row, 0, getPardonWidget(confession, isAnyn, confessedByUserInfo));
+					grid.setWidget(row, 1, getPardonWidget(confession, isAnyn, confessedByUserInfo));
 				}
 				row++;
 				grid.setWidget(row, 1, getUserActivityButtons(confession));
@@ -127,14 +143,16 @@ ConfessionFeedPresenter.Display {
 
 	private Widget getPardonWidget(final Confession confession, boolean anynView, final UserInfo confessionByUser) {
 		HorizontalPanel pardonPanel = new HorizontalPanel();
+		pardonPanel.addStyleName(Constants.STYLE_CLASS_PARDON_STATUS_PANEL);
 		List<ConfessionShare> confessionShares = confession.getConfessedTo();
 		for (ConfessionShare confessionShare : confessionShares) {
 			if(anynView) {
 				Label confStatus = new Label();
+				
 				if(confessionShare.isPardon()) {
-					confStatus.setText("Pardoned");
+					confStatus.setText(cbText.pardonedStatus());
 				} else {
-					confStatus.setText("Yet to be pardoned");
+					confStatus.setText(cbText.yetToBePardonedStatus());
 				}
 				pardonPanel.add(confStatus);
 			} else {
@@ -143,7 +161,7 @@ ConfessionFeedPresenter.Display {
 					btnPardon.setEnabled(false);
 				}
 
-				final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, loggedInUserInfo, confessionByUser, cbText);
+				final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, loggedInUserInfo, confessionByUser, cbText, confessionService, btnPardon);
 				pardonPopupPanel.setAnimationEnabled(true);
 				pardonPopupPanel.setGlassEnabled(true);
 				pardonPopupPanel.addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
@@ -160,72 +178,48 @@ ConfessionFeedPresenter.Display {
 						}
 					}
 				});
-				
-				if(pardonPopupPanel != null) {
-					pardonPopupPanel.getBtnCancel().addClickHandler(new ClickHandler() {
-						@Override
-						public void onClick(ClickEvent event) {
-							pardonPopupPanel.hide();
-						}
-					});
-					pardonPopupPanel.getBtnPardon().addClickHandler(new ClickHandler() {
-						
-						@Override
-						public void onClick(ClickEvent event) {
-							facebookService.getUserDetails(confession.getFbId(), accessToken, new AsyncCallback<String>() {
-								
-								@Override
-								public void onSuccess(String result) {
-									UserInfo confessedByUser = CommonUtils.getUserInfo(result);
-									if(confessedByUser != null) {
-										confessionService.pardonConfession(loggedInUserInfo, confession.getConfId(), confessedByUser, new AsyncCallback<Void>() {
-											
-											@Override
-											public void onSuccess(Void result) {
-												btnPardon.setEnabled(false);
-												pardonPopupPanel.hide();
-											}
-											
-											@Override
-											public void onFailure(Throwable caught) {
-												btnPardon.setEnabled(true);
-												logger.log(Constants.LOG_LEVEL,
-														"Exception in ConfessionFeedView.onFailure()"
-																+ caught.getCause());
-											}
-										});
-										
-									}
-								}
-								
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Constants.LOG_LEVEL,
-											"Exception in ConfessionFeedView.onFailure()"
-													+ caught.getCause());
-								}
-							});
-						}
-					});
-				}
 			}
+			if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty())
+			pardonPanel.add(showPardonConditionStatus(confessionShare.getPardonConditions()));
 		}
 		return pardonPanel;
 	}
 
+	private Widget showPardonConditionStatus(List<PardonCondition> pardonConditions) {
+		VerticalPanel vPnlPardonCondition = new VerticalPanel();
+		for (PardonCondition pardonCondition : pardonConditions) {
+			if(Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
+				if(pardonCondition.isFulfil()) {
+					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionFulfilled()));
+				} else {
+					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionYetToBoFulfilled()));
+				}
+			} else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
+				if(pardonCondition.isFulfil()) {
+					vPnlPardonCondition.add(new Label(cbText.pardonPopupPardonActivityConditionFulfilled()));
+				} else {
+					vPnlPardonCondition.add(new Label(cbText.pardonPopupPardonActivityConditionYetToBoFulfilled()));
+				}
+			}
+		}
+		return vPnlPardonCondition;
+	}
+
 	private FlowPanel getUserActivityButtons(final Confession confession) {
 		final FlowPanel fPlaneUserActivity = new FlowPanel();
-		final CBButton btnSB = (CBButton) getSBButton(confession);
-		final CBButton btnSY = (CBButton) getSYButton(confession);
-		final CBButton btnLM = (CBButton) getLMButton(confession);
-		final CBButton btnSP = (CBButton) getSPButton(confession);
-		final CBButton btnSNP = (CBButton) getSNPButton(confession);
-		final CBButton btnAB = (CBButton) getABButton(confession);
+		final ActivityButton btnSB = (ActivityButton) getSBButton(confession);
+		final ActivityButton btnSY = (ActivityButton) getSYButton(confession);
+		final ActivityButton btnLM = (ActivityButton) getLMButton(confession);
+		final ActivityButton btnSP = (ActivityButton) getSPButton(confession);
+		final ActivityButton btnSNP = (ActivityButton) getSNPButton(confession);
+		final ActivityButton btnAB = (ActivityButton) getABButton(confession);
 
 		if (confession.getTimeStamp() != null) {
-			fPlaneUserActivity.add(new Label(DateTimeFormat.getFormat(
+			Label lblDateTimeStamp = new Label(DateTimeFormat.getFormat(
 					PredefinedFormat.DATE_TIME_SHORT).format(
-							confession.getTimeStamp())));
+							confession.getTimeStamp()));
+			lblDateTimeStamp.addStyleName(Constants.STYLE_CLASS_DATE_TIME_STAMP);
+			fPlaneUserActivity.add(lblDateTimeStamp);
 		}
 		confessionService.getUserActivity(loggedInUserInfo.getUserId(),
 				confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
@@ -287,37 +281,37 @@ ConfessionFeedPresenter.Display {
 	}
 
 	private Widget getABButton(final Confession confession) {
-		return new CBButton(Activity.ABUSE, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.ABUSE, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleReportAbuse(),
 				Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSNPButton(final Confession confession) {
-		return new CBButton(Activity.SHOULD_NOT_BE_PARDONED, confession,
+		return new ActivityButton(Activity.SHOULD_NOT_BE_PARDONED, confession,
 				loggedInUserInfo, confessionService, cbText.buttonTitleShouldNotBePardoned(),
 				Constants.STYLE_CLASS_SNP_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSPButton(final Confession confession) {
-		return new CBButton(Activity.SHOULD_BE_PARDONED, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SHOULD_BE_PARDONED, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleShouldBePardoned(),
 				Constants.STYLE_CLASS_SP_ACTIVITY, new Image("/images/shouldBepardoned.png",0,0,37,40));
 	}
 
 	private Widget getLMButton(final Confession confession) {
-		return new CBButton(Activity.LAME, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.LAME, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleLameConfession(),
 				Constants.STYLE_CLASS_LAME_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSYButton(final Confession confession) {
-		return new CBButton(Activity.SYMPATHY, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SYMPATHY, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleSympathy(),
 				Constants.STYLE_CLASS_SYM_ACTIVITY, new Image("/images/sympathies.png",0,0,37,40));
 	}
 
 	private Widget getSBButton(final Confession confession) {
-		return new CBButton(Activity.SAME_BOAT, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SAME_BOAT, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleSameBoat(),
 						Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,37,40));
 	}
@@ -346,10 +340,6 @@ ConfessionFeedPresenter.Display {
 		this.moreConfessions = moreConfessions;
 	}
 
-	public ScrollPanel getContentScrollPanel() {
-		return contentScrollPanel;
-	}
-
 	public int getConfessionPagesLoaded() {
 		return confessionPagesLoaded;
 	}
@@ -367,11 +357,6 @@ ConfessionFeedPresenter.Display {
 	}
 
 	@Override
-	public int getMaximumVerticalScrollPosition() {
-		return contentScrollPanel.getMaximumVerticalScrollPosition();
-	}
-
-	@Override
 	public void addLoaderImage() {
 		vpnlConfessionList.add(loaderImage);
 	}
@@ -386,8 +371,17 @@ ConfessionFeedPresenter.Display {
 		vpnlConfessionList.remove(loaderImage);
 	}
 
+	public void showConfessionFilters() {
+		lstFilterOptions.setVisible(true);
+	}
+
 	@Override
-	public int getVerticalScrollPosition() {
-		return contentScrollPanel.getVerticalScrollPosition();
+	public HasChangeHandlers getConfessionFilterListBox() {
+		return lstFilterOptions;
+	}
+	
+	public void clearConfessions() {
+		vpnlConfessionList.clear();
+		vpnlConfessionList.add(lstFilterOptions);
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.jdo.annotations.Persistent;
+
 public class Confession implements Serializable {
 
 	/**
@@ -42,6 +44,20 @@ public class Confession implements Serializable {
 	
 	private String username;
 
+	private boolean isVisibleOnPublicWall = true;
+	
+	private long numOfSameBoatVote;
+	
+	private long numOfSympathyVote;
+	
+	private long numOfLameVote;
+	
+	private long numOfShouldBePardonedVote;
+	
+	private long numOfAbuseVote;
+	
+	private long numOfShouldNotBePardonedVote;
+	
 	public Confession() {
 		super();
 	}
@@ -192,5 +208,61 @@ public class Confession implements Serializable {
 
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+
+	public boolean isVisibleOnPublicWall() {
+		return isVisibleOnPublicWall;
+	}
+
+	public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
+		this.isVisibleOnPublicWall = isVisibleOnPublicWall;
+	}
+
+	public long getNumOfSameBoatVote() {
+		return numOfSameBoatVote;
+	}
+
+	public void setNumOfSameBoatVote(long numOfSameBoatVote) {
+		this.numOfSameBoatVote = numOfSameBoatVote;
+	}
+
+	public long getNumOfSympathyVote() {
+		return numOfSympathyVote;
+	}
+
+	public void setNumOfSympathyVote(long numOfSympathyVote) {
+		this.numOfSympathyVote = numOfSympathyVote;
+	}
+
+	public long getNumOfLameVote() {
+		return numOfLameVote;
+	}
+
+	public void setNumOfLameVote(long numOfLameVote) {
+		this.numOfLameVote = numOfLameVote;
+	}
+
+	public long getNumOfShouldBePardonedVote() {
+		return numOfShouldBePardonedVote;
+	}
+
+	public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
+		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+	}
+
+	public long getNumOfAbuseVote() {
+		return numOfAbuseVote;
+	}
+
+	public void setNumOfAbuseVote(long numOfAbuseVote) {
+		this.numOfAbuseVote = numOfAbuseVote;
+	}
+
+	public long getNumOfShouldNotBePardonedVote() {
+		return numOfShouldNotBePardonedVote;
+	}
+
+	public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
+		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
 	}
 }

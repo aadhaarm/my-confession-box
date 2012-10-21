@@ -2,6 +2,7 @@ package com.l3.CB.shared.TO;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class ConfessionShare implements Serializable {
 
@@ -19,6 +20,8 @@ public class ConfessionShare implements Serializable {
 	private String fbId;
 	
 	private boolean pardon;
+	
+	List<PardonCondition> pardonConditions;
 	
 	private Date timeStamp;
 	
@@ -92,5 +95,13 @@ public class ConfessionShare implements Serializable {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public List<PardonCondition> getPardonConditions() {
+		return pardonConditions;
+	}
+
+	public void setPardonConditions(List<PardonCondition> pardonConditions) {
+		this.pardonConditions = pardonConditions;
 	}
 }

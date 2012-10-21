@@ -1,5 +1,12 @@
 package com.l3.CB.client.ui.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Grid;
@@ -8,17 +15,23 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class PardonPopupPanel extends PopupPanel{
 
 	Button btnPardon;
 	Button btnCancel;
+	final CheckBox cbPardonActivityCondition;
+	final CheckBox cbOpenIdentityCondition;
+	final ListBox lbPardonActivityCondition;
 	
-	public PardonPopupPanel(Confession confession, UserInfo loggedInUser, UserInfo confessionByUser, CBText cbText) {
+	public PardonPopupPanel(Confession confession, UserInfo loggedInUser, UserInfo confessionByUser, CBText cbText, ConfessionServiceAsync confessionService, Button btnPardonHome) {
 		super();
 		Grid grid = new Grid(5, 2);
 		int row = 0;
@@ -30,20 +43,23 @@ public class PardonPopupPanel extends PopupPanel{
 		VerticalPanel vPnlPardonConditions = new VerticalPanel();
 
 		HorizontalPanel hPnlPardonActivityCondition = new HorizontalPanel();
-		ListBox lbPardonActivityCondition = new ListBox();
+		lbPardonActivityCondition = new ListBox();
 		lbPardonActivityCondition.addItem("5");
+		lbPardonActivityCondition.addItem("10");
 		lbPardonActivityCondition.addItem("20");
 		lbPardonActivityCondition.addItem("50");
 		lbPardonActivityCondition.addItem("100");
 		lbPardonActivityCondition.addItem("200");
-		final CheckBox cbPardonActivityCondition = new CheckBox(cbText.pardonPopupPardonActivityConditionPartOne());
+		cbPardonActivityCondition = new CheckBox(cbText.pardonPopupPardonActivityConditionPartOne());
 		hPnlPardonActivityCondition.add(cbPardonActivityCondition);
 		hPnlPardonActivityCondition.add(lbPardonActivityCondition);
 		hPnlPardonActivityCondition.add(new Label(cbText.pardonPopupPardonActivityConditionPartTwo()));
-		
-		CheckBox cbOpenIdentityCondition = new CheckBox(cbText.pardonPopupOpenIdentityCondition());
 		vPnlPardonConditions.add(hPnlPardonActivityCondition);
-		vPnlPardonConditions.add(cbOpenIdentityCondition);
+		
+		cbOpenIdentityCondition = new CheckBox(cbText.pardonPopupOpenIdentityCondition());
+		if(confession.isShareAsAnyn()) {
+			vPnlPardonConditions.add(cbOpenIdentityCondition);
+		}
 		
 		grid.setWidget(row, 1, vPnlPardonConditions);
 		row++;
@@ -55,6 +71,55 @@ public class PardonPopupPanel extends PopupPanel{
 		grid.setWidget(row, 0, btnPardon);
 		grid.setWidget(row, 1, btnCancel);
 		setWidget(grid);
+		
+		bind(confessionService, confession, confessionByUser, loggedInUser, btnPardonHome);
+	}
+
+	private void bind(final ConfessionServiceAsync confessionService, final Confession confession, final UserInfo confessedByUser, final UserInfo loggedInUserInfo, final Button btnPardonHome) {
+		
+		btnCancel.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				hide();
+			}
+		});
+
+		btnPardon.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+
+				if(confessedByUser != null) {
+					confessionService.pardonConfession(loggedInUserInfo, confession.getConfId(), confessedByUser, getPardonConditions(), new AsyncCallback<Void>() {
+						@Override
+						public void onSuccess(Void result) {
+							btnPardon.setEnabled(false);
+							btnPardonHome.setEnabled(false);
+							hide();
+						}
+
+						@Override
+						public void onFailure(Throwable caught) {
+							btnPardon.setEnabled(true);
+						}
+					});
+
+				}
+			}
+		});
+	}
+
+	protected List<PardonCondition> getPardonConditions() {
+		List<PardonCondition> pardonConditions = new ArrayList<PardonCondition>();
+		if(cbOpenIdentityCondition != null && cbOpenIdentityCondition.getValue()) {
+			PardonCondition unHideIdentityCondition = new PardonCondition(Constants.pardonConditionUnhide, 0);
+			pardonConditions.add(unHideIdentityCondition);
+		}
+		if(cbPardonActivityCondition != null && cbPardonActivityCondition.getValue()) {
+			int count = Integer.parseInt(lbPardonActivityCondition.getValue(lbPardonActivityCondition.getSelectedIndex()));
+			PardonCondition activitySPCondition = new PardonCondition(Constants.pardonConditionSPVotes, count);
+			pardonConditions.add(activitySPCondition);
+		}
+		return pardonConditions;
 	}
 
 	public Button getBtnPardon() {

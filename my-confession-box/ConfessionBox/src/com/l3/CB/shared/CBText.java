@@ -73,4 +73,21 @@ public interface CBText extends Constants {
 	@DefaultStringValue("Cancel")
 	String pardonPopupCancelButtonText();
 	
+	@DefaultStringValue("Pardoned")
+	String pardonedStatus();
+
+	@DefaultStringValue("Yet to be pardoned")
+	String yetToBePardonedStatus();
+
+	@DefaultStringValue("Un-Hide Identity to the world: Condition fulfilled")
+	String pardonPopupOpenIdentityConditionFulfilled();
+
+	@DefaultStringValue("Un-Hide Identity to the world: Yet to be fulfilled")
+	String pardonPopupOpenIdentityConditionYetToBoFulfilled();
+
+	@DefaultStringValue("Pardon when people give you 'Should be pardoned' vote: Condition fulfilled")
+	String pardonPopupPardonActivityConditionFulfilled();
+
+	@DefaultStringValue("Pardon when people give you 'Should be pardoned' vote: Yet to be fulfilled")
+	String pardonPopupPardonActivityConditionYetToBoFulfilled();
 }

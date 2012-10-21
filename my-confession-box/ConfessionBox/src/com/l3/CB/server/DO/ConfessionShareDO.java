@@ -2,6 +2,7 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -32,6 +33,9 @@ public class ConfessionShareDO implements Serializable {
 	@Persistent
 	private Date timeStamp;
 
+	@Persistent
+	private List<PardonConditionDO> pardonConditionDOs;
+	
 	public ConfessionShareDO() {
 		super();
 		pardon = false;
@@ -75,5 +79,13 @@ public class ConfessionShareDO implements Serializable {
 
 	public void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
+	}
+
+	public List<PardonConditionDO> getPardonConditionDOs() {
+		return pardonConditionDOs;
+	}
+
+	public void setPardonConditionDOs(List<PardonConditionDO> pardonConditionDOs) {
+		this.pardonConditionDOs = pardonConditionDOs;
 	}
 }

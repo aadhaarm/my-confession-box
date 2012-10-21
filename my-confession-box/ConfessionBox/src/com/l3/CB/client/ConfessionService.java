@@ -12,6 +12,8 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.Filters;
+import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
 
 /**
@@ -24,7 +26,7 @@ public interface ConfessionService extends RemoteService {
 	
 	Confession registerConfession(Confession confession);
 	
-	List<Confession> getConfessions(int page);
+	List<Confession> getConfessions(int page, Filters filter, String locale);
 	
 	List<Confession> getConfessions(int page, Long userId);
 	
@@ -36,5 +38,9 @@ public interface ConfessionService extends RemoteService {
 	
 	Map<String, Long> getUserActivity(Long userId, Long confId);
 	
-	void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser);
+	void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions);
+
+	boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn);
+
+	boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
 }

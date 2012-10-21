@@ -15,9 +15,14 @@ import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionServiceAsync;
+import com.l3.CB.client.ui.widgets.ChangeVisibilityButton;
+import com.l3.CB.client.ui.widgets.DeleteConfessionButton;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
@@ -176,5 +181,17 @@ public class CommonUtils {
 		pnlConfession.add(new Label(confession.getConfession()));
 
 		return pnlConfession;
+	}
+
+	public static Widget getUserControls(Confession confession, UserInfo loggedInUserInfo, ConfessionServiceAsync confessionService) {
+		HorizontalPanel hPnlControls = new HorizontalPanel();
+		
+		ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, loggedInUserInfo, confessionService, "",new Image("/images/sympathies.png",0,0,27,30), confession.isShareAsAnyn());
+		hPnlControls.add(btnChangeVisibility);
+
+		DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, loggedInUserInfo, confessionService, "",new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
+		hPnlControls.add(btnDeleteConfession);
+		
+		return hPnlControls;
 	}
 }

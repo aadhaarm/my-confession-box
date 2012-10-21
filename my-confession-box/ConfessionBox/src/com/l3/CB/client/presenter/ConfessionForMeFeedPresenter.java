@@ -3,9 +3,9 @@ package com.l3.CB.client.presenter;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -22,7 +22,8 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	private final ConfessionServiceAsync rpcService; 
 	private UserInfo userInfo;
 	private final Display display;
-
+	private final boolean showUserControls;
+	
 	Logger logger = Logger.getLogger("CBLogger");
 
 	public ConfessionForMeFeedPresenter(HandlerManager eventBus,
@@ -34,21 +35,22 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 		this.userInfo = userInfo;
 		this.display = display;
 		
+		showUserControls = false;
 		setConfessions();
 		bind();
 	}
-	
+
 	private void setConfessions() {
 		this.display.setConfessionPagesLoaded(0);
 		rpcService.getConfessionsForMe(0, userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
-			
+
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
-					display.setConfessions(result, false);
+					display.setConfessions(result, false, showUserControls);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				logger.log(Constants.LOG_LEVEL,
@@ -59,34 +61,32 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	}
 
 	private void bind() {
-		display.getContentScrollPanel().addScrollHandler(new ScrollHandler() {
+		Window.addWindowScrollHandler(new Window.ScrollHandler() {
 			boolean inEvent = false;
-
 			@Override
-			public void onScroll(ScrollEvent event) {
-				if (display.isMoreConfessions()
-						&& !inEvent
-						&& display.getMaximumVerticalScrollPosition() <= display.getVerticalScrollPosition()) {
+			public void onWindowScroll(
+					com.google.gwt.user.client.Window.ScrollEvent event) {
+				if(display.isMoreConfessions() && !inEvent && ((Window.getScrollTop() + Window.getClientHeight()) >= (Document.get().getBody().getAbsoluteBottom()))) {
 					display.addLoaderImage();
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
 					rpcService.getConfessionsForMe(display.getConfessionPagesLoaded(), userInfo.getUserId(),
 							new AsyncCallback<List<Confession>>() {
 
-								@Override
-								public void onSuccess(List<Confession> result) {
-									display.setConfessions(result, false);
-									inEvent = false;
-									display.removeLoaderImage();
-								}
+						@Override
+						public void onSuccess(List<Confession> result) {
+							display.setConfessions(result, false, showUserControls);
+							inEvent = false;
+							display.removeLoaderImage();
+						}
 
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Constants.LOG_LEVEL,
-											"Exception in ConfessionFeedPresenter.onFailure()"
-													+ caught.getCause());
-								}
-							});
+						@Override
+						public void onFailure(Throwable caught) {
+							logger.log(Constants.LOG_LEVEL,
+									"Exception in ConfessionFeedPresenter.onFailure()"
+											+ caught.getCause());
+						}
+					});
 				}
 			}
 		});

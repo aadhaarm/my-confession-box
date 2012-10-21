@@ -17,6 +17,16 @@ public class ConfessionDO implements Serializable {
 	 * Default serial ID
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	public ConfessionDO() {
+		super();
+		numOfAbuseVote = 0;
+		numOfLameVote = 0;
+		numOfSameBoatVote = 0;
+		numOfShouldBePardonedVote = 0;
+		numOfShouldNotBePardonedVote = 0;
+		numOfSympathyVote = 0;
+	}
 
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -42,6 +52,27 @@ public class ConfessionDO implements Serializable {
 	
 	@Persistent
 	private String confessionTitle;
+	
+	@Persistent
+	private boolean isVisibleOnPublicWall = true;
+
+	@Persistent
+	private long numOfSameBoatVote;
+	
+	@Persistent
+	private long numOfSympathyVote;
+	
+	@Persistent
+	private long numOfLameVote;
+	
+	@Persistent
+	private long numOfShouldBePardonedVote;
+	
+	@Persistent
+	private long numOfAbuseVote;
+	
+	@Persistent
+	private long numOfShouldNotBePardonedVote;
 	
 	public Long getConfId() {
 		return confId;
@@ -105,5 +136,115 @@ public class ConfessionDO implements Serializable {
 
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+
+	public boolean isVisibleOnPublicWall() {
+		return isVisibleOnPublicWall;
+	}
+
+	public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
+		this.isVisibleOnPublicWall = isVisibleOnPublicWall;
+	}
+
+	public Long getNumOfSameBoatVote() {
+		return numOfSameBoatVote;
+	}
+
+	public void setNumOfSameBoatVote(Long numOfSameBoatVote) {
+		this.numOfSameBoatVote = numOfSameBoatVote;
+	}
+
+	public Long getNumOfSympathyVote() {
+		return numOfSympathyVote;
+	}
+
+	public void setNumOfSympathyVote(Long numOfSympathyVote) {
+		this.numOfSympathyVote = numOfSympathyVote;
+	}
+
+	public Long getNumOfLameVote() {
+		return numOfLameVote;
+	}
+
+	public void setNumOfLameVote(Long numOfLameVote) {
+		this.numOfLameVote = numOfLameVote;
+	}
+
+	public Long getNumOfShouldBePardonedVote() {
+		return numOfShouldBePardonedVote;
+	}
+
+	public void setNumOfShouldBePardonedVote(Long numOfShouldBePardonedVote) {
+		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+	}
+
+	public Long getNumOfAbuseVote() {
+		return numOfAbuseVote;
+	}
+
+	public void setNumOfAbuseVote(Long numOfAbuseVote) {
+		this.numOfAbuseVote = numOfAbuseVote;
+	}
+
+	public Long getNumOfShouldNotBePardonedVote() {
+		return numOfShouldNotBePardonedVote;
+	}
+
+	public void setNumOfShouldNotBePardonedVote(Long numOfShouldNotBePardonedVote) {
+		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+	}
+
+	public void setNumOfSameBoatVote(long numOfSameBoatVote) {
+		this.numOfSameBoatVote = numOfSameBoatVote;
+	}
+
+	public void setNumOfSympathyVote(long numOfSympathyVote) {
+		this.numOfSympathyVote = numOfSympathyVote;
+	}
+
+	public void setNumOfLameVote(long numOfLameVote) {
+		this.numOfLameVote = numOfLameVote;
+	}
+
+	public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
+		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+	}
+
+	public void setNumOfAbuseVote(long numOfAbuseVote) {
+		this.numOfAbuseVote = numOfAbuseVote;
+	}
+
+	public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
+		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+	}
+
+	public long incrementAbuseVote() {
+		numOfAbuseVote++;
+		return numOfAbuseVote;
+	}
+
+	public long incrementSameBoatVote() {
+		numOfSameBoatVote++;
+		return numOfSameBoatVote;
+	}
+
+	public long incrementShouldBePardonedVote() {
+		numOfShouldBePardonedVote++;
+		return numOfShouldBePardonedVote;
+	}
+
+	public long incrementShouldNotBePardonedVote() {
+		numOfShouldNotBePardonedVote++;
+		return numOfShouldNotBePardonedVote;
+	}
+
+	public long incrementLameVote() {
+		numOfLameVote++;
+		return numOfLameVote;
+	}
+
+	public long incrementSympathyVote() {
+		numOfSympathyVote++;
+		return numOfSympathyVote;
 	}
 }

@@ -25,6 +25,12 @@ public class UserDO implements Serializable {
 	@Persistent
 	private String gender;
 	
+	@Persistent
+	private String name;
+	
+	@Persistent
+	private String userName;
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -58,5 +64,21 @@ public class UserDO implements Serializable {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

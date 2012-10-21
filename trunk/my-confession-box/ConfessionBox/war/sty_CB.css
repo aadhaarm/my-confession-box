@@ -153,14 +153,20 @@ img {
 	width: 57px;	
 }
 
+.userControlButtonContainer {
+	
+}
+
 .confessionScrollPanel {
 	height: auto;
 	width: 559;
 	max-width: 1400px;
     min-width: 545px;
-    max-height: 750px;
+/* 
+	max-height: 750px;
 	min-height: 685px;
-}
+*/
+ }
 
 .loaderImage {
 	display: block;
@@ -195,5 +201,13 @@ img {
 }
 
 .confessionGridElement {
-	background-color: #E9E9E9;
+	background-color: #F2F2F2;
+}
+
+.pardonStatusPanel {
+	
+}
+
+.dateTimeStamp {
+	
 }

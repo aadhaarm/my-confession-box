@@ -124,42 +124,21 @@ public class RegisterConfessionPresenter implements Presenter {
 				if(display.isShared()) {
 					final List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
 					String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
-					final ConfessionShare userConfessedTo = new ConfessionShare();
-					userConfessedTo.setTimeStamp(new Date());
-					userConfessedTo.setFbId(fbIdSharedUser);
-					userConfessedTo.setUserFullName(userfriends.get(display.getSharedWith()).getName());
+					final ConfessionShare confessToWithCondition = getConfessedToWithConditions(fbIdSharedUser);
+					
 					
 					facebookService.getUserDetails(fbIdSharedUser, accessToken, new AsyncCallback<String>() {
-						
 						@Override
 						public void onSuccess(String result) {
 							UserInfo confessedToUser = CommonUtils.getUserInfo(result);
 							if(confessedToUser != null) {
-								userConfessedTo.setUserFullName(confessedToUser.getName());
-								userConfessedTo.setUsername(confessedToUser.getUsername());
-								confessedTo.add(userConfessedTo);
+								confessToWithCondition.setUserFullName(confessedToUser.getName());
+								confessToWithCondition.setUsername(confessedToUser.getUsername());
+								confessedTo.add(confessToWithCondition);
 								confession.setConfessedTo(confessedTo);
-								
 								//Finally register confession
 								finallyRegisterConfession(confession);
 							}
-						}
-
-						/**
-						 * @param confession
-						 */
-						private void finallyRegisterConfession(
-								final Confession confession) {
-							rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
-								@Override
-								public void onSuccess(Confession result) {
-									History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
-								}
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Constants.LOG_LEVEL, "Exception when registering confession:" + caught.getMessage());
-								}
-							});
 						}
 						
 						@Override
@@ -167,23 +146,13 @@ public class RegisterConfessionPresenter implements Presenter {
 							logger.log(Constants.LOG_LEVEL, "Exception in RegisterConfessionPresenter.bind()" + caught.getCause());
 						}
 					});
+				} else  {
+					//Finally register confession
+					finallyRegisterConfession(confession);
 				}
 
 			}
 
-			/**
-			 * @return
-			 */
-			private Confession getConfessionToBeSaved() {
-				final Confession confession = new Confession(display.getConfession(), display.isIdentityHidden());
-				confession.setUserId(userInfo.getUserId());
-				confession.setConfessionTitle(display.getConfessionTitle());
-				confession.setTimeStamp(new Date());
-				confession.setUsername(userInfo.getUsername());
-				confession.setUserFullName(userInfo.getName());
-				confession.setLocale(userInfo.getLocale());
-				return confession;
-			}
 		});
 		
 		display.getCbHideIdentity().addClickHandler(new ClickHandler() {
@@ -209,6 +178,50 @@ public class RegisterConfessionPresenter implements Presenter {
 			}
 		});
 		
+	}
+
+	/**
+	 * @param confession
+	 */
+	private void finallyRegisterConfession(final Confession confession) {
+		rpcService.registerConfession(confession, new AsyncCallback<Confession>() {
+			@Override
+			public void onSuccess(Confession result) {
+				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				logger.log(Constants.LOG_LEVEL, "Exception when registering confession:" + caught.getMessage());
+			}
+		});
+	}
+
+	/**
+ 	 * @param fbIdSharedUser
+	 * @return
+	 */
+	private ConfessionShare getConfessedToWithConditions(
+			String fbIdSharedUser) {
+		final ConfessionShare confessToWithCondition = new ConfessionShare();
+		
+		confessToWithCondition.setTimeStamp(new Date());
+		confessToWithCondition.setFbId(fbIdSharedUser);
+		confessToWithCondition.setUserFullName(userfriends.get(display.getSharedWith()).getName());
+		return confessToWithCondition;
+	}
+	
+	/**
+	 * @return
+	 */
+	private Confession getConfessionToBeSaved() {
+		final Confession confession = new Confession(display.getConfession(), display.isIdentityHidden());
+		confession.setUserId(userInfo.getUserId());
+		confession.setConfessionTitle(display.getConfessionTitle());
+		confession.setTimeStamp(new Date());
+		confession.setUsername(userInfo.getUsername());
+		confession.setUserFullName(userInfo.getName());
+		confession.setLocale(userInfo.getLocale());
+		return confession;
 	}
 
 	@Override

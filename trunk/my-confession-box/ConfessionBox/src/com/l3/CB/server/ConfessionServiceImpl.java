@@ -5,14 +5,14 @@ import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
-import com.l3.CB.server.DAO.ConfessionBasicDAO;
-import com.l3.CB.server.DAO.ConfessionOtherDAO;
-import com.l3.CB.server.utils.ServerUtils;
-import com.l3.CB.shared.Constants;
-import com.l3.CB.shared.FacebookUtil;
+import com.l3.CB.server.manager.ActivityManager;
+import com.l3.CB.server.manager.ConfessionManager;
+import com.l3.CB.server.manager.PardonManager;
+import com.l3.CB.server.manager.UserManager;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
-import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.Filters;
+import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
 
 /**
@@ -28,53 +28,25 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public UserInfo registerUser(UserInfo userInfo) {
-		return ConfessionBasicDAO.registerUser(userInfo);
-	}
-
-	@Override
-	public Confession registerConfession(Confession confession) {
-		confession.setUserIp(getThreadLocalRequest().getRemoteHost());
-		confession = ConfessionBasicDAO.registerConfession(confession);
-		
-		//Register confession Shared
-		//TODO: Mail required ppl
-		if(confession.getConfessedTo() != null) {
-			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-
-				UserInfo userSharedTo = new UserInfo();
-				userSharedTo.setId(confessionShare.getFbId());
-				userSharedTo = ConfessionBasicDAO.registerUser(userSharedTo);
-				
-				confessionShare.setUserId(userSharedTo.getUserId());
-				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
-			
-				MailManager.sendConfessionEmail(confessionShare.getUsername()+"@facebook.com", confession.getConfId(), confession.getUserFullName(), confessionShare.getUserFullName());
-			}
-		}
-		return confession;
+		return UserManager.registerUser(userInfo);
 	}
 
 	/**
-	 * Get confessions
-	 * @param oage - {@link Integer}
+	 * Register confession.
+	 * @param confession - {@link Confession}
 	 */
 	@Override
-	public List<Confession> getConfessions(int page) {
-		List<Confession> confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE);
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				if(!confession.isShareAsAnyn()) {
-					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-					confession.setUserDetailsJSON(userDetailsJSON);
-				} else {
-					// MOST IMPORTANT CODE!!
-					confession.setFbId(null);
-				}
-				
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-			}
-		}
-		return confessions;
+	public Confession registerConfession(Confession confession) {
+		return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
+	}
+
+	/**
+	 * Get confessions.
+	 * @param page - {@link Integer}
+	 */
+	@Override
+	public List<Confession> getConfessions(int page, Filters filter, String locale) {
+		return ConfessionManager.getConfessionsByFilter(page, filter, locale);
 	}
 
 	/**
@@ -84,30 +56,17 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public List<Confession> getConfessions(int page, Long userId) {
-		List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				if(!confession.isShareAsAnyn()) {
-					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-					confession.setUserDetailsJSON(userDetailsJSON);
-				} else {
-					// MOST IMPORTANT CODE!!
-					confession.setFbId(null);
-				}
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-			}
-		}
-		return confessions;
+		return ConfessionManager.getConfessionsByUser(page, userId);
 	}
-	
+
 	@Override
 	public Long userActivity(Long userId, Long confId, Activity activity) {
-		return ConfessionOtherDAO.updateActivityCount(userId, confId, activity);
+		return ActivityManager.registerUserActivity(userId, confId, activity);
 	}
 
 	@Override
 	public Map<String, Long> getUserActivity(Long userId, Long confId) {
-		return ConfessionOtherDAO.getUserActivity(userId, confId);
+		return ActivityManager.getUserActivity(userId, confId);
 	}
 
 	/**
@@ -116,34 +75,27 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public Confession getConfession(Long confId) {
-		Confession confession = ConfessionBasicDAO.getConfession(confId);
-		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-		if(!confession.isShareAsAnyn()) {
-			String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-			confession.setUserDetailsJSON(userDetailsJSON);
-		} else {
-			// MOST IMPORTANT CODE!!
-			confession.setFbId(null);
-		}
-		return confession;
+		return ConfessionManager.getOneConfession(confId);
 	}
 
 	public List<Confession> getConfessionsForMe(int page, Long userId) {
-		List<Confession> confessions = ConfessionBasicDAO.getConfessionsForMe(userId, page, Constants.FEED_PAGE_SIZE);
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-				confession.setUserDetailsJSON(userDetailsJSON);
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), true));
-			}
-		}
-		return confessions;
+		return ConfessionManager.getConfessionsConfessedToMe(page, userId);
 	}
 
 	@Override
-	public void pardonConfession(UserInfo pandonByUser, Long confId,
-			UserInfo pardonedToUser) {
-		ConfessionBasicDAO.pardonConfession(pandonByUser.getUserId(), confId);
-		MailManager.sendPardonMail(pandonByUser, confId, pardonedToUser);
+	public void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions) {
+		PardonManager.pardonWithConditions(pandonByUser, confId, pardonedToUser, pardonConditions);
+	}
+
+	public boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn) {
+//		getThreadLocalRequest().getCookies()[0].
+		return ConfessionManager.changeIdentityVisibility(userId, fbId, confId, shareAnyn);
+	}
+
+	@Override
+	public boolean changeConfessionVisibility(Long userId, String fbId,
+			Long confId, boolean isVisible) {
+		// TODO Validate user
+		return ConfessionManager.changeConfessionVisibility(userId, fbId, confId, isVisible);
 	}
 }

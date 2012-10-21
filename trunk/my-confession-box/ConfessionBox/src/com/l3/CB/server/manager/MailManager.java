@@ -1,4 +1,4 @@
-package com.l3.CB.server;
+package com.l3.CB.server.manager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;

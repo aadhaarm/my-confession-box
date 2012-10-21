@@ -1,5 +1,6 @@
 package com.l3.CB.client.view;
 
+import com.claudiushauptmann.gwt.recaptcha.client.RecaptchaWidget;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -19,6 +20,7 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
+import com.l3.CB.shared.TO.UserInfo;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
@@ -37,7 +39,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	private final Button btnSubmit;
 	
 
-	public RegisterConfessionView(CBText cbText) {
+	public RegisterConfessionView(CBText cbText, UserInfo loggedInUserInfo) {
 		super();
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
@@ -60,6 +62,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		txtTitle = new TextBox();
 		txtConfession = new TextArea();
 		txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
+
+//		RecaptchaWidget captchaWidget = new RecaptchaWidget("6Ldp-dcSAAAAAMKTMgocX2J_4seHkDdzXIlslnW8");
 		
 		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
 		
@@ -69,7 +73,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 		grdConfessionForm.setWidget(3, 0, txtTitle);
 		grdConfessionForm.setWidget(4, 0, txtConfession);
-		grdConfessionForm.setWidget(5, 0, btnSubmit);
+//		grdConfessionForm.setWidget(5, 0, captchaWidget);
+		grdConfessionForm.setWidget(6, 0, btnSubmit);
 		
 		contentTableDecorator.add(grdConfessionForm);	
 	}

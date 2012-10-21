@@ -15,24 +15,25 @@ import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
-public class CBButton extends AbsolutePanel {
+public class ActivityButton extends AbsolutePanel {
 
 	Logger logger = Logger.getLogger("CBLogger");
 	final PushButton btn;
 
-	public CBButton(final Activity activity, final Confession confession,
+	public ActivityButton(final Activity activity, final Confession confession,
 			final UserInfo userInfo,
 			final ConfessionServiceAsync confessionService, String titleText,
 			String btnStyleName, Image buttonImage) {
 		super();
 		this.addStyleName("activityButtonContainer");
+		long count = getCount(confession, activity);
 		
 		btn = new PushButton(buttonImage);
 		// TODO: Button text
 		btn.addStyleName(btnStyleName);
 		// TODO: I18N
 		this.setTitle(titleText);
-		final Label btnCount = new Label(getCountToDisplay(confession.getActivityCount().get(activity.name()).toString()));
+		final Label btnCount = new Label(getCountToDisplay(Long.toOctalString(count)));
 
 		btn.addClickHandler(new ClickHandler() {
 
@@ -65,6 +66,32 @@ public class CBButton extends AbsolutePanel {
 	}
 
 	
+	private long getCount(Confession confession, Activity activity) {
+		long count = 0;
+		switch (activity) {
+		case ABUSE:
+			count = confession.getNumOfAbuseVote();
+			break;
+		case LAME:
+			count = confession.getNumOfLameVote();
+			break;
+		case SAME_BOAT:
+			count = confession.getNumOfSameBoatVote();
+			break;
+		case SHOULD_BE_PARDONED:
+			count = confession.getNumOfShouldBePardonedVote();
+			break;
+		case SHOULD_NOT_BE_PARDONED:
+			count = confession.getNumOfShouldNotBePardonedVote();
+			break;
+		case SYMPATHY:
+			count = confession.getNumOfSympathyVote();
+			break;
+		}
+		return count;
+	}
+
+
 	private String getCountToDisplay(String count) {
 		if(count == null) {
 			return "";

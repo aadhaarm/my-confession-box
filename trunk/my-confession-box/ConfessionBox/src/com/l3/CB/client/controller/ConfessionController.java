@@ -26,7 +26,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync confessionService; 
-	private static UserInfo userInfo;
+	private static UserInfo loggesInUserInfo;
 	private HasWidgets container;
 	private String accessToken;
 	private FacebookServiceAsync facebookService;
@@ -38,7 +38,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
-		ConfessionController.userInfo = userInfo;
+		ConfessionController.loggesInUserInfo = userInfo;
 		this.accessToken = accessToken;
 		this.facebookService = facebookService;
 		this.cbText = cbText;
@@ -46,7 +46,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 			
 			@Override
 			public void onSuccess(UserInfo result) {
-				ConfessionController.userInfo = result;
+				ConfessionController.loggesInUserInfo = result;
 				
 				if(null != ConfessionBox.confId) {
 					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
@@ -74,15 +74,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if (token != null) {
 			Presenter presenter = null;
 			if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
-				presenter = new RegisterConfessionPresenter(eventBus, confessionService, facebookService, userInfo, new RegisterConfessionView(cbText), accessToken);
+				presenter = new RegisterConfessionPresenter(eventBus, confessionService, facebookService, loggesInUserInfo, new RegisterConfessionView(cbText, loggesInUserInfo), accessToken);
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
-				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo, facebookService, accessToken, cbText));
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, loggesInUserInfo, new ConfessionFeedView(confessionService, loggesInUserInfo, facebookService, accessToken, cbText));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
-				presenter = new ConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo, facebookService, accessToken, cbText), ConfessionBox.confId);
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, loggesInUserInfo, new ConfessionFeedView(confessionService, loggesInUserInfo, facebookService, accessToken, cbText), ConfessionBox.confId);
 			} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
-				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo, facebookService, accessToken, cbText));
+				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, loggesInUserInfo, new ConfessionFeedView(confessionService, loggesInUserInfo, facebookService, accessToken, cbText));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
-				presenter = new ConfessionForMeFeedPresenter(eventBus, confessionService, userInfo, new ConfessionFeedView(confessionService, userInfo, facebookService, accessToken, cbText));
+				presenter = new ConfessionForMeFeedPresenter(eventBus, confessionService, loggesInUserInfo, new ConfessionFeedView(confessionService, loggesInUserInfo, facebookService, accessToken, cbText));
 			}
 			if (presenter != null) {
 				presenter.go(container);
@@ -93,7 +93,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	@Override
 	public void go(HasWidgets container) {
 		this.container = container;
-		Presenter presenter = new MenuPresenter(eventBus, confessionService, userInfo, new MenuView(cbText));
+		Presenter presenter = new MenuPresenter(eventBus, confessionService, loggesInUserInfo, new MenuView(cbText));
 		presenter.go(container);
 	}
 }

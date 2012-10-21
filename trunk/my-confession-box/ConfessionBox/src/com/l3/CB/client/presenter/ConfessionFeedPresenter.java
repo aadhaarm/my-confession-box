@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionFeedPresenter implements Presenter {
@@ -24,27 +28,27 @@ public class ConfessionFeedPresenter implements Presenter {
 	public interface Display {
 		Widget asWidget();
 		public void setConfessionPagesLoaded(int confessionPagesLoaded);
-		public void setConfessions(List<Confession> confessions, boolean isAnyn);
-		public ScrollPanel getContentScrollPanel();
+		public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls);
 		public int getConfessionPagesLoaded();
 		public Image getLoaderImage();
 		public boolean isMoreConfessions();
 		public VerticalPanel getVpnlConfessionList();
-		public int getMaximumVerticalScrollPosition();
 		public void addLoaderImage();
 		public void incrementConfessionPagesLoaded();
 		public void removeLoaderImage();
-		int getVerticalScrollPosition();
+		public void showConfessionFilters();
+		public HasChangeHandlers getConfessionFilterListBox();
+		public void clearConfessions();
 	}
 
 	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync rpcService; 
-	@SuppressWarnings("unused")
 	private UserInfo userInfo;
 	private final Display display;
 	Logger logger = Logger.getLogger("CBLogger");
-
+	boolean showUserControls = false;
+	Filters filter = Filters.ALL;
 
 	public ConfessionFeedPresenter(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService, UserInfo userInfo,
@@ -54,9 +58,11 @@ public class ConfessionFeedPresenter implements Presenter {
 		this.rpcService = rpcService;
 		this.userInfo = userInfo;
 		this.display = display;
+
+		display.showConfessionFilters();
 		
-		setConfessions();
-		
+		setConfessions(false);
+
 		bind();
 	}
 
@@ -68,26 +74,26 @@ public class ConfessionFeedPresenter implements Presenter {
 		this.rpcService = rpcService;
 		this.userInfo = userInfo;
 		this.display = display;
-		
+
 		try {
 			setConfessions(Long.parseLong(confId));
 		} catch (Exception e) {
-			setConfessions();
+			setConfessions(false);
 		}
-		
+
 		bind();
 	}
-	
+
 	private void setConfessions(Long confId) {
 		rpcService.getConfession(confId, new AsyncCallback<Confession>() {
-			
+
 			@Override
 			public void onSuccess(Confession result) {
 				ArrayList<Confession> confessionList = new ArrayList<Confession>();
 				confessionList.add(result);
-				display.setConfessions(confessionList, true);
+				display.setConfessions(confessionList, true, showUserControls);
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				logger.log(Constants.LOG_LEVEL,
@@ -97,17 +103,20 @@ public class ConfessionFeedPresenter implements Presenter {
 		});
 	}
 
-	private void setConfessions() {
+	private void setConfessions(boolean clean) {
+		if(clean) {
+			this.display.clearConfessions();
+		}
 		this.display.setConfessionPagesLoaded(0);
-		rpcService.getConfessions(0, new AsyncCallback<List<Confession>>() {
-			
+		rpcService.getConfessions(0, filter, userInfo.getLocale(), new AsyncCallback<List<Confession>>() {
+
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
-					display.setConfessions(result, true);
+					display.setConfessions(result, true, showUserControls);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				logger.log(Constants.LOG_LEVEL,
@@ -118,40 +127,50 @@ public class ConfessionFeedPresenter implements Presenter {
 	}
 
 	private void bind() {
-		display.getContentScrollPanel().addScrollHandler(new ScrollHandler() {
+		Window.addWindowScrollHandler(new Window.ScrollHandler() {
 			boolean inEvent = false;
-
 			@Override
-			public void onScroll(ScrollEvent event) {
-				if (display.isMoreConfessions()
-						&& !inEvent
-						&& display.getMaximumVerticalScrollPosition() <= display.getVerticalScrollPosition()) {
+			public void onWindowScroll(
+					com.google.gwt.user.client.Window.ScrollEvent event) {
+				if(display.isMoreConfessions() && !inEvent && ((Window.getScrollTop() + Window.getClientHeight()) >= (Document.get().getBody().getAbsoluteBottom()))) {
 					display.addLoaderImage();
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
-					rpcService.getConfessions(display.getConfessionPagesLoaded(),
-							new AsyncCallback<List<Confession>>() {
+					
+					rpcService.getConfessions(display.getConfessionPagesLoaded(), filter, userInfo.getLocale(), new AsyncCallback<List<Confession>>() {
 
-								@Override
-								public void onSuccess(List<Confession> result) {
-									display.setConfessions(result, true);
-									inEvent = false;
-									display.removeLoaderImage();
-								}
+						@Override
+						public void onSuccess(List<Confession> result) {
+							display.setConfessions(result, true, showUserControls);
+							inEvent = false;
+							display.removeLoaderImage();
+						}
 
-								@Override
-								public void onFailure(Throwable caught) {
-									logger.log(Constants.LOG_LEVEL,
-											"Exception in ConfessionFeedPresenter.onFailure()"
-													+ caught.getCause());
-								}
-							});
+						@Override
+						public void onFailure(Throwable caught) {
+							logger.log(Constants.LOG_LEVEL,
+									"Exception in ConfessionFeedPresenter.onFailure()"
+											+ caught.getCause());
+						}
+					});
 				}
+			}
+
+		});
+		
+		display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				ListBox lstBoxFilter = (ListBox)event.getSource();
+				String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
+				filter = Filters.valueOf(selectedFilter);
+				setConfessions(true);
 			}
 		});
 	}
 
-	
+
 	@Override
 	public void go(HasWidgets container) {
 		RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();

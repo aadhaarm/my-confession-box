@@ -1,6 +1,5 @@
 package com.l3.CB.client.view;
 
-import com.claudiushauptmann.gwt.recaptcha.client.RecaptchaWidget;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -10,12 +9,14 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
+import com.l3.CB.client.ui.widgets.RichTextToolbar;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
@@ -35,8 +36,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	private SuggestBox friendsSuggestBox;
 
 	private final TextBox txtTitle;
-	private final TextArea txtConfession;
+	
+    private final RichTextArea txtConfession;
+//
+//	private final TextArea txtConfession;
 	private final Button btnSubmit;
+	
+	private String captchaHTMLCode;
 	
 
 	public RegisterConfessionView(CBText cbText, UserInfo loggedInUserInfo) {
@@ -60,24 +66,44 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		hPanelShare.setVisible(false);
 		
 		txtTitle = new TextBox();
-		txtConfession = new TextArea();
+		txtConfession = new RichTextArea();
 		txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 
-//		RecaptchaWidget captchaWidget = new RecaptchaWidget("6Ldp-dcSAAAAAMKTMgocX2J_4seHkDdzXIlslnW8");
-		
 		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
+		
 		
 		grdConfessionForm.setWidget(0, 0, new Label(cbText.registerPageTitle()));
 		grdConfessionForm.setWidget(1, 0, identityPanel);
 		grdConfessionForm.setWidget(2, 0, hPanelShare);
 
 		grdConfessionForm.setWidget(3, 0, txtTitle);
-		grdConfessionForm.setWidget(4, 0, txtConfession);
-//		grdConfessionForm.setWidget(5, 0, captchaWidget);
+		grdConfessionForm.setWidget(4, 0, onInitialize());
+		
+		grdConfessionForm.setHTML(5, 0, "<div id='dynamic_recaptcha_1'></div>");
+		
+		
 		grdConfessionForm.setWidget(6, 0, btnSubmit);
 		
 		contentTableDecorator.add(grdConfessionForm);	
 	}
+	
+	/**
+	   * Initialize this example.
+	   */
+	  public Widget onInitialize() {
+	    txtConfession.ensureDebugId("cwRichText-area");
+	    txtConfession.setSize("100%", "14em");
+	    RichTextToolbar toolbar = new RichTextToolbar(txtConfession);
+	    toolbar.ensureDebugId("cwRichText-toolbar");
+	    toolbar.setWidth("100%");
+
+	    // Add the components to a panel
+	    Grid grid = new Grid(2, 1);
+	    grid.setStyleName("cw-RichText");
+	    grid.setWidget(0, 0, toolbar);
+	    grid.setWidget(1, 0, txtConfession);
+	    return grid;
+	  }
 
 	public HorizontalPanel gethPanelShare() {
 		return hPanelShare;
@@ -95,7 +121,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	@Override
 	public String getConfession() {
-		return this.txtConfession.getValue();
+		return this.txtConfession.getHTML();
 	}
 
 	@Override
@@ -156,6 +182,28 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	@Override
 	public HasClickHandlers getCbConfessTo() {
+		return cbConfessTo;
+	}
+
+	public void setCaptchaHTMLCode(String captchaHTMLCode) {
+//		this.captchaHTMLCode = captchaHTMLCode;
+//		grdConfessionForm.setHTML(5, 0, captchaHTMLCode);
+//		CommonUtils.getCaptcha("dynamic_recaptcha_1");
+	}
+
+	public TextBox getTxtTitle() {
+		return txtTitle;
+	}
+
+	public RichTextArea getTxtConfession() {
+		return txtConfession;
+	}
+	
+	public CheckBox getCbHideIdentityWidget() {
+		return cbHideIdentity;
+	}
+
+	public CheckBox getCbConfessToWidget() {
 		return cbConfessTo;
 	}
 }

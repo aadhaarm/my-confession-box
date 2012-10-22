@@ -3,6 +3,9 @@ package com.l3.CB.server;
 import java.util.List;
 import java.util.Map;
 
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
@@ -14,7 +17,6 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
-
 /**
  * The server side implementation of the RPC service.
  */
@@ -37,6 +39,7 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public Confession registerConfession(Confession confession) {
+		getThreadLocalRequest().getAttributeNames();
 		return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
 	}
 
@@ -97,5 +100,11 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 			Long confId, boolean isVisible) {
 		// TODO Validate user
 		return ConfessionManager.changeConfessionVisibility(userId, fbId, confId, isVisible);
+	}
+
+	@Override
+	public String getCaptchaString() {
+		ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", "6LfRCdgSAAAAAAsPSOu5sQJ1PopLMA-jSRXe5Bhm", false);
+		return c.createRecaptchaHtml(null, null);
 	}
 }

@@ -14,7 +14,9 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
@@ -37,14 +39,14 @@ public class ConfessionBox implements EntryPoint {
 	public static UserInfo userInfo;
 	public static String confId;
 	public static String accessToken;
-
+	PopupPanel pnlApplicationLoad;
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
 		RootPanel.get("appTitle").add(new Label(cbText.applicationTitle()));
 		final HandlerManager confEventBus = new HandlerManager(null);
-
+		showApplicationLoad();
 		CommonUtils.login(DOM.getElementById("auth-id"));
 		Timer t = new Timer() {
 			public void run() {
@@ -59,6 +61,21 @@ public class ConfessionBox implements EntryPoint {
 		};
 		t.schedule(2000);
 
+	}
+
+	private void showApplicationLoad() {
+		pnlApplicationLoad = new PopupPanel(false);
+		Image loaderImage = new Image("/images/appln-load-ajax-loader.gif");
+		loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
+		pnlApplicationLoad.add(loaderImage);
+		pnlApplicationLoad.setGlassEnabled(true);
+		pnlApplicationLoad.setAnimationEnabled(true);
+		RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
+	}
+	
+	private void removeApplicationLoad() {
+		pnlApplicationLoad.hide();
+		RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
 	}
 
 	private void checkUserLoginStatus(final ConfessionServiceAsync confessionService,
@@ -79,6 +96,8 @@ public class ConfessionBox implements EntryPoint {
 							//  logger.log(Constants.LOG_LEVEL, "User Info:" + userInfo.toString());
 							ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken, cbText);
 							confessionController.go(RootPanel.get());
+							removeApplicationLoad();
+
 //						} else {
 //							changeLocaleTo(userPrefferedLocale);
 //						}

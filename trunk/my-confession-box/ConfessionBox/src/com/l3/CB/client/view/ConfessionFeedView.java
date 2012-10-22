@@ -73,7 +73,10 @@ ConfessionFeedPresenter.Display {
 		lstFilterOptions.addItem("All confessions", Filters.ALL.name());
 		lstFilterOptions.addItem("Where people hide identity and confessed", Filters.CLOSED .name());
 		lstFilterOptions.addItem("From your language & country", Filters.LOCALE_SPECIFIC.name());
-//		lstFilterOptions.addItem("'Most same boats' voted confessions", Filters.MOST_SAME_BOATS.name());
+		lstFilterOptions.addItem("Most 'SAME BOAT' voted confessions", Filters.MOST_SAME_BOATS.name());
+		lstFilterOptions.addItem("Most 'LAME' voted confessions", Filters.MOST_LAME.name());
+		lstFilterOptions.addItem("Most 'SYMPATHAISED' voted confessions", Filters.MOST_SYMPATHY.name());
+		lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted confessions", Filters.MOST_SHOULD_BE_PARDONED.name());
 		lstFilterOptions.addItem("Where people dared to open identity and confess", Filters.OPEN.name());
 		
 		confessionPagesLoaded = 1;
@@ -107,7 +110,7 @@ ConfessionFeedPresenter.Display {
 			for (Confession confession : confessions) {
 				UserInfo confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 
-				Grid grid = new Grid(6, 2);
+				Grid grid = new Grid(8, 2);
 				grid.getElement().setId("confession-id-" + confession.getConfId());
 				grid.addStyleName(Constants.STYLE_CLASS_CONFESSION_GRID);
 				int row = 0;
@@ -119,9 +122,13 @@ ConfessionFeedPresenter.Display {
 					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, loggedInUserInfo, confessionService));
 					row++;
 				}
-				grid.setHTML(row, 0, CommonUtils.getProfilePictureAndName(confession, isAnyn));
-				grid.setWidget(row, 1, CommonUtils.getConfessionWithName(confession, confessedByUserInfo, isAnyn, cbText));
-				
+				grid.setHTML(row, 0, CommonUtils.getProfilePicture(confession, isAnyn));
+				grid.setWidget(row, 1, CommonUtils.getName(confession, confessedByUserInfo, isAnyn, cbText));
+				row++;
+				grid.setWidget(row, 1, new Label(confession.getConfessionTitle()));
+				row++;
+				grid.setHTML(row, 1, confession.getConfession());
+
 				if(confession.getConfessedTo() != null) {
 					row++;
 					grid.setWidget(row, 1, getPardonWidget(confession, isAnyn, confessedByUserInfo));

@@ -154,7 +154,9 @@ img {
 }
 
 .userControlButtonContainer {
-	
+	float: right;
+	width: 27px;
+	height: 30px;
 }
 
 .confessionScrollPanel {

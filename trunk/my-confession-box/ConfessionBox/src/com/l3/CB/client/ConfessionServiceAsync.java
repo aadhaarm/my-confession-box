@@ -33,4 +33,6 @@ public interface ConfessionServiceAsync {
 
 	void changeConfessionVisibility(Long userId, String fbId, Long confId,
 			boolean isVisible, AsyncCallback<Boolean> callback);
+
+	void getCaptchaString(AsyncCallback<String> callback);
 }

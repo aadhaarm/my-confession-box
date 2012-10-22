@@ -11,12 +11,14 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
+import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
@@ -26,7 +28,7 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.UserInfo;
 
-public class RegisterConfessionPresenter implements Presenter {
+public class EditConfessionPresenter implements Presenter {
 
 	Logger logger = Logger.getLogger("CBLogger");
 
@@ -39,7 +41,6 @@ public class RegisterConfessionPresenter implements Presenter {
 		boolean isShared();
 		public HasClickHandlers getCbHideIdentity();
 		public HasClickHandlers getCbConfessTo();
-		
 
 		public boolean isFriendsOracleNull();
 		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
@@ -52,6 +53,11 @@ public class RegisterConfessionPresenter implements Presenter {
 		public void setCaptchaHTMLCode(String captchaHTMLCode);
 		
 		Widget asWidget();
+		
+		public TextBox getTxtTitle();
+		public RichTextArea getTxtConfession();
+		public CheckBox getCbHideIdentityWidget();
+		public CheckBox getCbConfessToWidget();
 	}
 
 	@SuppressWarnings("unused")
@@ -65,9 +71,9 @@ public class RegisterConfessionPresenter implements Presenter {
 	private String accessToken;
 
 	
-	public RegisterConfessionPresenter(HandlerManager eventBus,
+	public EditConfessionPresenter(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService, FacebookServiceAsync facebookService, UserInfo userInfo,
-			final Display display, String accessToken) {
+			final Display display, String accessToken, Long confId) {
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
@@ -77,21 +83,26 @@ public class RegisterConfessionPresenter implements Presenter {
 		this.facebookService = facebookService;
 		display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
 		friendsOracle = new MultiWordSuggestOracle();
+
+		populateConfessionToBeEdited(confId);
 		
-		confessionService.getCaptchaString(new AsyncCallback<String>() {
+		bind();
+	}
+
+	private void populateConfessionToBeEdited(Long confId) {
+		confessionService.getConfession(confId, new AsyncCallback<Confession>() {
 			
 			@Override
-			public void onSuccess(String result) {
-				display.setCaptchaHTMLCode(result);
+			public void onSuccess(Confession result) {
+				
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
 				// TODO Auto-generated method stub
+				
 			}
 		});
-		
-		bind();
 	}
 
 	/**

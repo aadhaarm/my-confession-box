@@ -63,6 +63,33 @@ public class CommonUtils {
 		 });
 		}
 	}-*/;
+	
+	// Generate recaptcha
+	public static native void getCaptcha(String divId) /*-{
+		alert('In get captcha');
+		alert(divId);
+		if($wnd.Recaptcha) {
+			alert('got Recaptcha JS');
+			$wnd.Recaptcha.create("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", divId, {
+				theme: "white",
+				callback: $wnd.Recaptcha.focus_response_field
+			});
+			alert($wnd.Recaptcha.get_challenge());
+		}
+	}-*/;
+	
+	// Generate recaptcha
+	public static native String getCaptchaResponse() /*-{
+		alert('In get captcha');
+		alert(divId);
+		if($wnd.Recaptcha) {
+			alert('got Recaptcha JS');
+			return $wnd.Recaptcha.get_response();
+		}
+	}-*/;
+
+	
+	
 
 	public static String getString(JSONValue jsonValue) {
 		if(jsonValue != null) {
@@ -144,7 +171,7 @@ public class CommonUtils {
 	
 	// <fb:profile-pic uid="12345" width="32" height="32" linked="true"
 	// \><fb:profile-pic>
-	public static String getProfilePictureAndName(Confession confession, boolean isAnyn) {
+	public static String getProfilePicture(Confession confession, boolean isAnyn) {
 		final StringBuilder sb = new StringBuilder();
 
 		if (!confession.isShareAsAnyn() || !isAnyn) {
@@ -161,22 +188,26 @@ public class CommonUtils {
 		return sb.toString();
 	}
 	
-	public static Widget getConfessionWithName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
-		VerticalPanel pnlConfession = new VerticalPanel();
-
+	public static Widget getName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
+		Widget nameWidget = null;
 		if (!confession.isShareAsAnyn() || ! isAnyn) {
 			if (userInfo != null) {
 				Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
 				ancUserName.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
-				pnlConfession.add(ancUserName);
+				nameWidget = ancUserName;
 			}
 		} else {
 			Label lblConf = new Label();
 			lblConf.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
 			lblConf.setText(cbText.confessedByAnynName());
-			pnlConfession.add(lblConf);
+			nameWidget = lblConf;
 		}
-
+		return nameWidget;
+	}
+	
+	
+	public static Widget getConfession(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
+		VerticalPanel pnlConfession = new VerticalPanel();
 		pnlConfession.add(new Label(confession.getConfessionTitle()));
 		pnlConfession.add(new Label(confession.getConfession()));
 

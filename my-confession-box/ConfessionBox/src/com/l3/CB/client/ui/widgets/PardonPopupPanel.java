@@ -36,8 +36,8 @@ public class PardonPopupPanel extends PopupPanel{
 		Grid grid = new Grid(5, 2);
 		int row = 0;
 
-		grid.setHTML(row, 0, CommonUtils.getProfilePictureAndName(confession, false));
-		grid.setWidget(row, 1, CommonUtils.getConfessionWithName(confession, confessionByUser, false, cbText));
+		grid.setHTML(row, 0, CommonUtils.getProfilePicture(confession, false));
+		grid.setWidget(row, 1, CommonUtils.getConfession(confession, confessionByUser, false, cbText));
 		row++;
 		
 		VerticalPanel vPnlPardonConditions = new VerticalPanel();

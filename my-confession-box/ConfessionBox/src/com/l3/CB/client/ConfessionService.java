@@ -43,4 +43,6 @@ public interface ConfessionService extends RemoteService {
 	boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn);
 
 	boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
+
+	String getCaptchaString();
 }

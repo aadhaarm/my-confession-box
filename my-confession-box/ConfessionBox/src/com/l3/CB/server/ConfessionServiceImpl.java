@@ -3,8 +3,10 @@ package com.l3.CB.server;
 import java.util.List;
 import java.util.Map;
 
-import net.tanesha.recaptcha.ReCaptcha;
-import net.tanesha.recaptcha.ReCaptchaFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import nl.captcha.Captcha;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
@@ -38,9 +40,15 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 * @param confession - {@link Confession}
 	 */
 	@Override
-	public Confession registerConfession(Confession confession) {
-		getThreadLocalRequest().getAttributeNames();
-		return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
+	public Confession registerConfession(Confession confession, String captchaValue) {
+		HttpServletRequest request = getThreadLocalRequest();
+        HttpSession session = request.getSession();
+        Captcha captcha = (Captcha) session.getAttribute(Captcha.NAME);
+        if(captcha.isCorrect(captchaValue)) {
+        	getThreadLocalRequest().getAttributeNames();
+        	return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
+        }
+        return null;
 	}
 
 	/**
@@ -58,12 +66,12 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 * @param userId - {@link Long}
 	 */
 	@Override
-	public List<Confession> getConfessions(int page, Long userId) {
+	public List<Confession> getConfessionsIDID(int page, Long userId) {
 		return ConfessionManager.getConfessionsByUser(page, userId);
 	}
 
 	@Override
-	public Long userActivity(Long userId, Long confId, Activity activity) {
+	public Long registerUserActivity(Long userId, Long confId, Activity activity) {
 		return ActivityManager.registerUserActivity(userId, confId, activity);
 	}
 
@@ -81,7 +89,7 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 		return ConfessionManager.getOneConfession(confId);
 	}
 
-	public List<Confession> getConfessionsForMe(int page, Long userId) {
+	public List<Confession> getConfessionsTOME(int page, Long userId) {
 		return ConfessionManager.getConfessionsConfessedToMe(page, userId);
 	}
 
@@ -104,7 +112,8 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String getCaptchaString() {
-		ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", "6LfRCdgSAAAAAAsPSOu5sQJ1PopLMA-jSRXe5Bhm", false);
-		return c.createRecaptchaHtml(null, null);
+//		ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", "6LfRCdgSAAAAAAsPSOu5sQJ1PopLMA-jSRXe5Bhm", false);
+//		return c.createRecaptchaHtml(null, null);
+		return null;
 	}
 }

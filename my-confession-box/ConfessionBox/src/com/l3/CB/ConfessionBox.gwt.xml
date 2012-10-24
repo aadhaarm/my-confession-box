@@ -2,6 +2,8 @@
 <module rename-to='confessionbox'>
 
 	<inherits name="com.google.gwt.logging.Logging" />
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+	
 	<inherits name="com.google.gwt.i18n.I18N" />
 
 	<!-- Inherit the core Web Toolkit stuff. -->

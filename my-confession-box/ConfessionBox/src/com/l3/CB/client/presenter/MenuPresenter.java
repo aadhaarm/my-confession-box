@@ -16,8 +16,11 @@ public class MenuPresenter implements Presenter {
 		Widget asWidget();
 	}
 	
+	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
+	@SuppressWarnings("unused")
 	private final ConfessionServiceAsync rpcService; 
+	@SuppressWarnings("unused")
 	private UserInfo userInfo;
 	private final Display display;
 
@@ -37,7 +40,6 @@ public class MenuPresenter implements Presenter {
 
 	private void bind() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

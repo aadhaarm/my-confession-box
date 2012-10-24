@@ -7,10 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface FacebookServiceAsync {
 
-	//TODO: Can be removed
-	void getAccessToken(String authToken, AsyncCallback<String> callback);
-
-	void getUserDetails(String accessToken, AsyncCallback<String> callback);
+	void getUserLoggedInDetails(String accessToken, AsyncCallback<String> callback);
 
 	void getFriends(String accessToken, AsyncCallback<String> callback);
 

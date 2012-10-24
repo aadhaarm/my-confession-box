@@ -8,7 +8,6 @@ package com.l3.CB.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -29,8 +28,6 @@ import com.l3.CB.shared.TO.UserInfo;
  */
 public class ConfessionBox implements EntryPoint {
 
-	//	Logger logger = Logger.getLogger("CBLogger");
-
 	private final ConfessionServiceAsync confessionService = GWT.create(ConfessionService.class);
 	private final FacebookServiceAsync facebookService = GWT.create(FacebookService.class);
 
@@ -39,18 +36,20 @@ public class ConfessionBox implements EntryPoint {
 	public static UserInfo userInfo;
 	public static String confId;
 	public static String accessToken;
+
 	PopupPanel pnlApplicationLoad;
+	
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		RootPanel.get("appTitle").add(new Label(cbText.applicationTitle()));
+		RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
 		final HandlerManager confEventBus = new HandlerManager(null);
 		showApplicationLoad();
-		CommonUtils.login(DOM.getElementById("auth-id"));
+		CommonUtils.login(DOM.getElementById(Constants.DIV_AUTH_ID));
 		Timer t = new Timer() {
 			public void run() {
-				accessToken = DOM.getElementById("auth-id").getInnerHTML();
+				accessToken = DOM.getElementById(Constants.DIV_AUTH_ID).getInnerHTML();
 				if(accessToken != null && !"".equals(accessToken)) {
 					checkUserLoginStatus(confessionService, facebookService, confEventBus);
 					this.cancel();
@@ -68,9 +67,9 @@ public class ConfessionBox implements EntryPoint {
 		Image loaderImage = new Image("/images/appln-load-ajax-loader.gif");
 		loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
 		pnlApplicationLoad.add(loaderImage);
+		RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
 		pnlApplicationLoad.setGlassEnabled(true);
 		pnlApplicationLoad.setAnimationEnabled(true);
-		RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
 	}
 	
 	private void removeApplicationLoad() {
@@ -83,40 +82,25 @@ public class ConfessionBox implements EntryPoint {
 		confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 		if(accessToken != null && !"".equals(accessToken)) {
 			// Get user details of the current logged in user
-			ConfessionBox.this.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
+			ConfessionBox.this.facebookService.getUserLoggedInDetails(accessToken, new AsyncCallback<String>() {
 				@Override
 				public void onSuccess(String result) {
 					if(result != null){
 						// parse the response text into JSON and get user info
 						ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
-//						String clientLocale = LocaleInfo.getCurrentLocale().getLocaleName();
-//						String userPrefferedLocale = ConfessionBox.userInfo.getLocale();
-//						Window.alert(clientLocale +"<<<<"+ userPrefferedLocale);
-//						if(userPrefferedLocale!= null && clientLocale != null && userPrefferedLocale.equalsIgnoreCase(clientLocale)) {
-							//  logger.log(Constants.LOG_LEVEL, "User Info:" + userInfo.toString());
-							ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken, cbText);
-							confessionController.go(RootPanel.get());
-							removeApplicationLoad();
-
-//						} else {
-//							changeLocaleTo(userPrefferedLocale);
-//						}
+						if(userInfo == null) {
+							Window.alert(cbText.applicationError());
+						}
+						ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken, cbText);
+						confessionController.go(RootPanel.get());
+						removeApplicationLoad();
 					}
 				}
 				@Override
 				public void onFailure(Throwable caught) {
-					//	logger.log(Constants.LOG_LEVEL, "Error getUserDetails:" + caught.getStackTrace());
+					Window.alert(cbText.applicationError());
 				}
 			});
 		}
-	}
-
-	protected void changeLocaleTo(String userPrefferedLocale) {
-		
-		Window.alert(">>>>" + LocaleInfo.getLocaleQueryParam() + ">>>>" + userPrefferedLocale);
-		Window.Location.assign(Window.Location
-				.createUrlBuilder()
-				.setParameter(LocaleInfo.getLocaleQueryParam(),
-						userPrefferedLocale).buildString());		
 	}
 }

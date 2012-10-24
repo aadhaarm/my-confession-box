@@ -17,13 +17,7 @@ public class FacebookServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public String getAccessToken(String authToken) {
-		final String url = ServerUtils.getAccessTokenUrl(authToken);
-        return ServerUtils.fetchURL(url);
-	}
-
-	@Override
-	public String getUserDetails(String accessToken) {
+	public String getUserLoggedInDetails(String accessToken) {
 		final String url = FacebookUtil.getUserUrl(ServerUtils.encode(accessToken));
         return ServerUtils.fetchURL(url);
 	}

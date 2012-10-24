@@ -7,14 +7,16 @@ package com.l3.CB.client.util;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -30,8 +32,6 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class CommonUtils {
-
-	Logger logger = Logger.getLogger("CBLogger");
 
 	// redirect the browser to the given url
 	public static native void redirect(String url)/*-{
@@ -64,38 +64,12 @@ public class CommonUtils {
 		}
 	}-*/;
 	
-	// Generate recaptcha
-	public static native void getCaptcha(String divId) /*-{
-		alert('In get captcha');
-		alert(divId);
-		if($wnd.Recaptcha) {
-			alert('got Recaptcha JS');
-			$wnd.Recaptcha.create("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", divId, {
-				theme: "white",
-				callback: $wnd.Recaptcha.focus_response_field
-			});
-			alert($wnd.Recaptcha.get_challenge());
-		}
-	}-*/;
-	
-	// Generate recaptcha
-	public static native String getCaptchaResponse() /*-{
-		alert('In get captcha');
-		alert(divId);
-		if($wnd.Recaptcha) {
-			alert('got Recaptcha JS');
-			return $wnd.Recaptcha.get_response();
-		}
-	}-*/;
-
-	
-	
-
 	public static String getString(JSONValue jsonValue) {
+		String returnVal = null;
 		if(jsonValue != null) {
-			return jsonValue.isString().stringValue();
+			returnVal = jsonValue.isString().stringValue();
 		}
-		return null;
+		return returnVal;
 	}
 
 	public static String processAccessToken(String result) {
@@ -190,28 +164,31 @@ public class CommonUtils {
 	
 	public static Widget getName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
 		Widget nameWidget = null;
-		if (!confession.isShareAsAnyn() || ! isAnyn) {
-			if (userInfo != null) {
-				Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
-				ancUserName.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
-				nameWidget = ancUserName;
+		if(confession != null) {
+			if (!confession.isShareAsAnyn() || ! isAnyn) {
+				if (userInfo != null) {
+					Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
+					ancUserName.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
+					nameWidget = ancUserName;
+				}
+			} else {
+				Label lblConf = new Label();
+				lblConf.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
+				lblConf.setText(cbText.confessedByAnynName());
+				nameWidget = lblConf;
 			}
-		} else {
-			Label lblConf = new Label();
-			lblConf.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
-			lblConf.setText(cbText.confessedByAnynName());
-			nameWidget = lblConf;
 		}
 		return nameWidget;
 	}
 	
-	
-	public static Widget getConfession(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
-		VerticalPanel pnlConfession = new VerticalPanel();
-		pnlConfession.add(new Label(confession.getConfessionTitle()));
-		pnlConfession.add(new Label(confession.getConfession()));
-
-		return pnlConfession;
+	public static Widget getConfession(Confession confession) {
+		if(confession != null) {
+			VerticalPanel pnlConfession = new VerticalPanel();
+			pnlConfession.add(new Label(confession.getConfessionTitle()));
+			pnlConfession.add(new Label(confession.getConfession()));
+			return pnlConfession;
+		}
+		return null;
 	}
 
 	public static Widget getUserControls(Confession confession, UserInfo loggedInUserInfo, ConfessionServiceAsync confessionService) {
@@ -224,5 +201,39 @@ public class CommonUtils {
 		hPnlControls.add(btnDeleteConfession);
 		
 		return hPnlControls;
+	}
+
+	public static Widget getTextTruncated(final String confession) {
+		final FlowPanel fPnlConfession = new FlowPanel();
+		if(confession != null) {
+			final Anchor anchMore = new Anchor("more..");
+
+			if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
+				Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
+				fPnlConfession.add(lblConfession);
+				fPnlConfession.add(anchMore);
+				
+				anchMore.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						Label lblConfession = new Label(confession.substring(Constants.TEXT_LENGTH_ON_LOAD));
+						fPnlConfession.remove(anchMore);
+						fPnlConfession.add(lblConfession);
+					}
+				});
+			} else {
+				Label lblConfession = new Label(confession);
+				fPnlConfession.add(lblConfession);
+			}
+		}
+		return fPnlConfession;
+	}
+
+	public static String checkForNull(String confessionTitle) {
+		if(confessionTitle != null) {
+			return confessionTitle.trim();
+		}
+		return "";
 	}
 }

@@ -10,7 +10,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -23,6 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
@@ -30,34 +30,25 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class EditConfessionPresenter implements Presenter {
 
-	Logger logger = Logger.getLogger("CBLogger");
-
 	public interface Display {
 		public HasClickHandlers getSubmitBtn();
-		public String getConfession();
-		public String getConfessionTitle();
-		
-		public boolean isIdentityHidden();
-		boolean isShared();
 		public HasClickHandlers getCbHideIdentity();
 		public HasClickHandlers getCbConfessTo();
-
+		public String getConfession();
+		public String getConfessionTitle();
+		boolean isShared();
+		public boolean isIdentityHidden();
 		public boolean isFriendsOracleNull();
-		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
 		public HorizontalPanel gethPanelShare();
-
 		public String getSharedWith();
-		
+		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
 		public void setProfilePictureTag(boolean isAnyn, String gender, String fbId);
-		
 		public void setCaptchaHTMLCode(String captchaHTMLCode);
-		
-		Widget asWidget();
-		
 		public TextBox getTxtTitle();
 		public RichTextArea getTxtConfession();
 		public CheckBox getCbHideIdentityWidget();
 		public CheckBox getCbConfessToWidget();
+		Widget asWidget();
 	}
 
 	@SuppressWarnings("unused")
@@ -65,7 +56,7 @@ public class EditConfessionPresenter implements Presenter {
 	private final ConfessionServiceAsync confessionService; 
 	private UserInfo userInfo;
 	private final Display display;
-	private MultiWordSuggestOracle friendsOracle;
+	private final MultiWordSuggestOracle friendsOracle;
 	private Map<String, UserInfo> userfriends;
 	private FacebookServiceAsync facebookService;
 	private String accessToken;
@@ -85,22 +76,18 @@ public class EditConfessionPresenter implements Presenter {
 		friendsOracle = new MultiWordSuggestOracle();
 
 		populateConfessionToBeEdited(confId);
-		
 		bind();
 	}
 
 	private void populateConfessionToBeEdited(Long confId) {
 		confessionService.getConfession(confId, new AsyncCallback<Confession>() {
-			
 			@Override
 			public void onSuccess(Confession result) {
 				
 			}
-			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
-				
+				Error.handleError("EditConfessionPresenter", "onFailure", caught);
 			}
 		});
 	}
@@ -117,13 +104,12 @@ public class EditConfessionPresenter implements Presenter {
 			public void onSuccess(String result) {
 				if(result != null) {
 					userfriends = CommonUtils.getFriendsUserInfo(result);
-					logger.log(Constants.LOG_LEVEL,
-							"RegisterConfessionPresenter.onSuccess():"
-									+ result);
 					if(userfriends != null) {
 						//iterating over keys only
 						for (String friendsName : userfriends.keySet()) {
-							friendsOracle.add(friendsName);
+							if(friendsName != null) {
+								friendsOracle.add(friendsName);
+							}
 						}
 						display.setFriendsOracle(friendsOracle);
 					}
@@ -133,23 +119,17 @@ public class EditConfessionPresenter implements Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				logger.log(Constants.LOG_LEVEL,
-						"Exception in RegisterConfessionPresenter.onFailure()"
-								+ caught.getCause());
+				Error.handleError("EditConfessionPresenter", "onFailure", caught);
 			}
 		});
 	}
 
 	private void bind() {
 		this.display.getSubmitBtn().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
-
-//				Window.alert(CommonUtils.getCaptchaResponse());
 				// Get confession to be saved
 				final Confession confession = getConfessionToBeSaved();
-				
 				//Register Shared-To info
 				if(display.isShared()) {
 					final List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
@@ -172,7 +152,8 @@ public class EditConfessionPresenter implements Presenter {
 						
 						@Override
 						public void onFailure(Throwable caught) {
-							logger.log(Constants.LOG_LEVEL, "Exception in RegisterConfessionPresenter.bind()" + caught.getCause());
+							Error.handleError("EditConfessionPresenter",
+									"onFailure", caught);
 						}
 					});
 				} else  {
@@ -213,16 +194,16 @@ public class EditConfessionPresenter implements Presenter {
 	 * @param confession
 	 */
 	private void finallyRegisterConfession(final Confession confession) {
-		confessionService.registerConfession(confession, new AsyncCallback<Confession>() {
-			@Override
-			public void onSuccess(Confession result) {
-				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
-			}
-			@Override
-			public void onFailure(Throwable caught) {
-				logger.log(Constants.LOG_LEVEL, "Exception when registering confession:" + caught.getMessage());
-			}
-		});
+//		confessionService.registerConfession(confession, new AsyncCallback<Confession>() {
+//			@Override
+//			public void onSuccess(Confession result) {
+//				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+//			}
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				logger.log(Constants.LOG_LEVEL, "Exception when registering confession:" + caught.getMessage());
+//			}
+//		});
 	}
 
 	/**

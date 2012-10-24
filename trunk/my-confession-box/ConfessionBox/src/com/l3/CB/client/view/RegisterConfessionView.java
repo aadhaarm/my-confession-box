@@ -7,11 +7,11 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,24 +26,18 @@ import com.l3.CB.shared.TO.UserInfo;
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
 	private final Grid grdConfessionForm;
-	
 	private final VerticalPanel identityPanel;
 	private final CheckBox cbHideIdentity;
 	private final CheckBox cbConfessTo;
-
 	private MultiWordSuggestOracle friendsOracle;
 	private final HorizontalPanel hPanelShare;
 	private SuggestBox friendsSuggestBox;
-
 	private final TextBox txtTitle;
-	
     private final RichTextArea txtConfession;
-//
-//	private final TextArea txtConfession;
+    final TextBox captchaField;
 	private final Button btnSubmit;
-	
-	private String captchaHTMLCode;
-	
+	private final HorizontalPanel  hpnlCaptcha;
+	Image captchaImage;
 
 	public RegisterConfessionView(CBText cbText, UserInfo loggedInUserInfo) {
 		super();
@@ -51,7 +45,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
 		initWidget(contentTableDecorator);
 		
-		grdConfessionForm = new Grid(7, 2);
+		grdConfessionForm = new Grid(8, 2);
 		
 		identityPanel = new VerticalPanel();
 		cbHideIdentity = new CheckBox(cbText.registerPageOptionHideID());
@@ -71,18 +65,25 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
 		
+        captchaField = new TextBox();
+        captchaField.setText("CAPTCHA Word here");
+
+        hpnlCaptcha = new HorizontalPanel();
+        final Label responseLabel = new Label("Captcha");       
+        captchaImage = new Image();
+        hpnlCaptcha.add(responseLabel);
+        hpnlCaptcha.add(captchaImage);
 		
 		grdConfessionForm.setWidget(0, 0, new Label(cbText.registerPageTitle()));
 		grdConfessionForm.setWidget(1, 0, identityPanel);
 		grdConfessionForm.setWidget(2, 0, hPanelShare);
 
 		grdConfessionForm.setWidget(3, 0, txtTitle);
-		grdConfessionForm.setWidget(4, 0, onInitialize());
+		grdConfessionForm.setWidget(4, 0, initializeRichTextBox());
+		grdConfessionForm.setWidget(5, 0, hpnlCaptcha);
+		grdConfessionForm.setWidget(6, 0, captchaField);
 		
-		grdConfessionForm.setHTML(5, 0, "<div id='dynamic_recaptcha_1'></div>");
-		
-		
-		grdConfessionForm.setWidget(6, 0, btnSubmit);
+		grdConfessionForm.setWidget(7, 0, btnSubmit);
 		
 		contentTableDecorator.add(grdConfessionForm);	
 	}
@@ -90,7 +91,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	/**
 	   * Initialize this example.
 	   */
-	  public Widget onInitialize() {
+	  public Widget initializeRichTextBox() {
 	    txtConfession.ensureDebugId("cwRichText-area");
 	    txtConfession.setSize("100%", "14em");
 	    RichTextToolbar toolbar = new RichTextToolbar(txtConfession);
@@ -205,5 +206,15 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	public CheckBox getCbConfessToWidget() {
 		return cbConfessTo;
+	}
+
+	public String getCaptchaField() {
+		return captchaField.getValue();
+	}
+
+	public void reloadCaptchaImage(String uId) {
+		hpnlCaptcha.remove(captchaImage);
+		captchaImage = new Image("/SimpleCaptcha.jpg" + "?" + uId);
+        hpnlCaptcha.add(captchaImage);
 	}
 }

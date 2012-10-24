@@ -4,6 +4,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
@@ -15,6 +16,7 @@ import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
+import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
@@ -24,17 +26,17 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
 	
-	private final HandlerManager eventBus;
+	private final FacebookServiceAsync facebookService;
 	private final ConfessionServiceAsync confessionService; 
+	private final HandlerManager eventBus;
 	private static UserInfo loggesInUserInfo;
 	private HasWidgets container;
 	private String accessToken;
-	private FacebookServiceAsync facebookService;
 	private CBText cbText;	
 
 	public ConfessionController(HandlerManager eventBus,
 			ConfessionServiceAsync rpcService,
-			FacebookServiceAsync facebookService, UserInfo userInfo, String confId, String accessToken, CBText cbText) {
+			FacebookServiceAsync facebookService, UserInfo userInfo, String confId, String accessToken, final CBText cbText) {
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
@@ -42,22 +44,26 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		this.accessToken = accessToken;
 		this.facebookService = facebookService;
 		this.cbText = cbText;
+		
 		rpcService.registerUser(userInfo, new AsyncCallback<UserInfo>() {
 			
 			@Override
 			public void onSuccess(UserInfo result) {
-				ConfessionController.loggesInUserInfo = result;
-				
-				if(null != ConfessionBox.confId) {
-					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+				if(result != null) {
+					ConfessionController.loggesInUserInfo = result;
+					if(null != ConfessionBox.confId) {
+						History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+					} else {
+						History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+					}
 				} else {
-					History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+					Window.alert(cbText.applicationError());
 				}
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				// TODO Auto-generated method stub
+				Error.handleError("ConfessionController", "onFailure", caught);
 			}
 		});
 		bind();

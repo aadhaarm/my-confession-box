@@ -9,10 +9,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("facebook")
 public interface FacebookService extends RemoteService {
     
-	//TODO: can be removed
-	public String getAccessToken(String authToken);
-    
-    public String getUserDetails(String accessToken);
+    public String getUserLoggedInDetails(String accessToken);
 
     public String getUserDetails(String fbId, String accessToken);
     

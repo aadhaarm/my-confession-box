@@ -24,17 +24,17 @@ public interface ConfessionService extends RemoteService {
 
 	UserInfo registerUser(UserInfo userInfo);
 	
-	Confession registerConfession(Confession confession);
+	Confession registerConfession(Confession confession, String captchaValue);
 	
 	List<Confession> getConfessions(int page, Filters filter, String locale);
 	
-	List<Confession> getConfessions(int page, Long userId);
+	List<Confession> getConfessionsIDID(int page, Long userId);
 	
-	List<Confession> getConfessionsForMe(int page, Long userId);
+	List<Confession> getConfessionsTOME(int page, Long userId);
 	
 	Confession getConfession(Long confId);
 	
-	Long userActivity(Long userId, Long confId, Activity activity);
+	Long registerUserActivity(Long userId, Long confId, Activity activity);
 	
 	Map<String, Long> getUserActivity(Long userId, Long confId);
 	

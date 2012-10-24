@@ -4,6 +4,9 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface CBText extends Constants {
 
+	@DefaultStringValue("Error while communication with server. Please try reloading the application after some time.")
+	String applicationError();
+	
 	@DefaultStringValue("Feed")
 	String cbMenuConfessionFeed();
 	
@@ -90,4 +93,25 @@ public interface CBText extends Constants {
 
 	@DefaultStringValue("Pardon when people give you 'Should be pardoned' vote: Yet to be fulfilled")
 	String pardonPopupPardonActivityConditionYetToBoFulfilled();
+
+	@DefaultStringValue("Filters to choose the confessions you want to read.")
+	String feedPageFilterToolTip();
+
+	@DefaultStringValue("I am/was in kind of same situation once.")
+	String sameBoatButtonToolTip();
+
+	@DefaultStringValue("Vote if you find the confession inappropriate for the confession wall.")
+	String abuseButtonToolTip();
+
+	@DefaultStringValue("Vote if the confession is just lame and you done find its a real confession.")
+	String lameButtonToolTip();
+
+	@DefaultStringValue("Vote if you have sympathies for the confesser.")
+	String sympathyButtonToolTip();
+
+	@DefaultStringValue("Vote if you feel the confesser should be pardoned for the act.")
+	String shouldNotBePardonedButtonToolTip();
+
+	@DefaultStringValue("Vote if you feel the confesser should not be pardoned for the act.")
+	String shouleBePardonedButtonToolTip();
 }

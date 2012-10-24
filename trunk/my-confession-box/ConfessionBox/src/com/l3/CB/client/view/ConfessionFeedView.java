@@ -2,11 +2,12 @@ package com.l3.CB.client.view;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasAllGestureHandlers;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
@@ -28,6 +29,7 @@ import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.ui.widgets.ActivityButton;
 import com.l3.CB.client.ui.widgets.PardonPopupPanel;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
@@ -38,23 +40,15 @@ import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
 
-public class ConfessionFeedView extends Composite implements
-ConfessionFeedPresenter.Display {
+public class ConfessionFeedView extends Composite implements ConfessionFeedPresenter.Display {
 
-	Logger logger = Logger.getLogger("CBLogger");
-
-	private VerticalPanel vpnlConfessionList;
 	private ConfessionServiceAsync confessionService;
-//	private FacebookServiceAsync facebookService;
-	private UserInfo loggedInUserInfo;
-//	private String accessToken;
-	
 	private DecoratorPanel contentTableDecorator;
-//	private ScrollPanel contentScrollPanel;
+	private VerticalPanel vpnlConfessionList;
+	private UserInfo loggedInUserInfo;
 	private int confessionPagesLoaded;
 	private Image loaderImage;
 	private boolean moreConfessions;
-
 	private final ListBox lstFilterOptions;
 	
 	CBText cbText;
@@ -63,12 +57,30 @@ ConfessionFeedPresenter.Display {
 			UserInfo userInfo, FacebookServiceAsync facebookService, String accessToken, CBText cbText) {
 		super();
 		this.confessionService = confessionService;
-//		this.facebookService = facebookService;
 		this.loggedInUserInfo = userInfo;
-//		this.accessToken = accessToken;
 		this.cbText = cbText;
 		
 		lstFilterOptions = new ListBox();
+		getMeFilterListBox(lstFilterOptions);
+		
+		confessionPagesLoaded = 1;
+		getMeLoaderImage();
+		moreConfessions = true;
+
+		vpnlConfessionList = new VerticalPanel();
+		vpnlConfessionList.add(lstFilterOptions);
+		
+		contentTableDecorator = new DecoratorPanel();
+		contentTableDecorator.add(vpnlConfessionList);
+
+		initWidget(contentTableDecorator);
+	}
+
+	/**
+	 * @param lstFilterOptions 
+	 * 
+	 */
+	private ListBox getMeFilterListBox(ListBox lstFilterOptions) {
 		lstFilterOptions.setVisible(false);
 		lstFilterOptions.addItem("All confessions", Filters.ALL.name());
 		lstFilterOptions.addItem("Where people hide identity and confessed", Filters.CLOSED .name());
@@ -78,25 +90,7 @@ ConfessionFeedPresenter.Display {
 		lstFilterOptions.addItem("Most 'SYMPATHAISED' voted confessions", Filters.MOST_SYMPATHY.name());
 		lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted confessions", Filters.MOST_SHOULD_BE_PARDONED.name());
 		lstFilterOptions.addItem("Where people dared to open identity and confess", Filters.OPEN.name());
-		
-		confessionPagesLoaded = 1;
-		getMeLoaderImage();
-		moreConfessions = true;
-
-//		contentScrollPanel = new ScrollPanel();
-//		contentScrollPanel.addStyleName("confessionScrollPanel");
-//		contentScrollPanel.setAlwaysShowScrollBars(true);
-
-
-		vpnlConfessionList = new VerticalPanel();
-		vpnlConfessionList.add(lstFilterOptions);
-		
-//		contentScrollPanel.add(vpnlConfessionList);
-
-		contentTableDecorator = new DecoratorPanel();
-		contentTableDecorator.add(vpnlConfessionList);
-
-		initWidget(contentTableDecorator);
+		return lstFilterOptions;
 	}
 
 	private void getMeLoaderImage() {
@@ -127,7 +121,7 @@ ConfessionFeedPresenter.Display {
 				row++;
 				grid.setWidget(row, 1, new Label(confession.getConfessionTitle()));
 				row++;
-				grid.setHTML(row, 1, confession.getConfession());
+				grid.setWidget(row, 1, CommonUtils.getTextTruncated(confession.getConfession()));
 
 				if(confession.getConfessedTo() != null) {
 					row++;
@@ -195,13 +189,13 @@ ConfessionFeedPresenter.Display {
 	private Widget showPardonConditionStatus(List<PardonCondition> pardonConditions) {
 		VerticalPanel vPnlPardonCondition = new VerticalPanel();
 		for (PardonCondition pardonCondition : pardonConditions) {
-			if(Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
+			if(pardonCondition != null && Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
 				if(pardonCondition.isFulfil()) {
 					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionFulfilled()));
 				} else {
 					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionYetToBoFulfilled()));
 				}
-			} else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
+			} else if(pardonCondition != null && Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
 				if(pardonCondition.isFulfil()) {
 					vPnlPardonCondition.add(new Label(cbText.pardonPopupPardonActivityConditionFulfilled()));
 				} else {
@@ -268,9 +262,8 @@ ConfessionFeedPresenter.Display {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				logger.log(Constants.LOG_LEVEL,
-						"Exception in ConfessionFeedView.onFailure()"
-								+ caught.getCause());					}
+				Error.handleError("ConfessionFeedView", "onFailure", caught);
+			}
 		});
 
 		return fPlaneUserActivity;
@@ -384,6 +377,11 @@ ConfessionFeedPresenter.Display {
 
 	@Override
 	public HasChangeHandlers getConfessionFilterListBox() {
+		return lstFilterOptions;
+	}
+	
+	@Override
+	public HasFocusHandlers getConfessionFilterListBoxForHelp() {
 		return lstFilterOptions;
 	}
 	

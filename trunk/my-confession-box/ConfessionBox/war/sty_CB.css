@@ -9,6 +9,7 @@ div.container {
 }
 
 div.header {
+	position: fixed;
 	padding: 0.5em;
 	color: black;
 	clear: left;
@@ -25,15 +26,20 @@ div.footer {
 }
 
 h1.header {
+	font-size: larger;
 	padding: 0;
 	margin: 0;
 }
 
 div.left {
+	position: fixed;
 	float: left;
-	width: auto;
+	width: 130px;
 	margin: 0;
-	padding: 1em;
+	padding-bottom: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 3em;
 }
 
 div.right {
@@ -46,7 +52,10 @@ div.right {
 div.content {
 	min-height: 100px;
 	margin-left: auto;
-	padding: 1em;
+	padding-left: 13em;
+	padding-top: 1em;
+	padding-right: 1em;
+	padding-bottom: 1em;
 }
 
 .error-text-box {
@@ -203,7 +212,8 @@ img {
 }
 
 .confessionGridElement {
-	background-color: #F2F2F2;
+
+	
 }
 
 .pardonStatusPanel {
@@ -213,3 +223,4 @@ img {
 .dateTimeStamp {
 	
 }
+

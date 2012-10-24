@@ -13,6 +13,9 @@ public class Constants {
 	//Page DIVs
 	public static final String DIV_MAIN_CONTENT = "bodyDiv";
 	public static final String DIV_LEFT_MENU = "leftHandMenuDiv";
+	public static final String DIV_APPLN_TITLE = "appTitle";
+	public static final String DIV_AUTH_ID = "auth-id";
+	public static final String DIV_LEFT_TOOL_TIP = "leftHandToolTipDiv";
 	
 	//Request param name
 	public static final String REQ_PARAM_CONF_ID = "conf";
@@ -53,9 +56,11 @@ public class Constants {
 	public static final String STYLE_CLASS_PARDON_STATUS_PANEL = "pardonStatusPanel";
 	public static final String STYLE_CLASS_DATE_TIME_STAMP = "dateTimeStamp";
 	public static final String STYLE_CLASS_CONFESSION_GRID = "confessionGridElement";
+	public static final String STYLE_CLASS_BUTTON_WRAPPER = "btnWrapper";
 
 	public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
 
 	public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
 	public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
+	public static final int TEXT_LENGTH_ON_LOAD = 200;
 }

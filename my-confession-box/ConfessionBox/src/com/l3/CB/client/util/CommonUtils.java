@@ -15,6 +15,7 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -88,7 +89,7 @@ public class CommonUtils {
 
 	public static UserInfo getUserInfo(String jsonString) {
 		UserInfo userInfo = null;
-		if(jsonString != null) {
+		if(jsonString != null && !jsonString.isEmpty()) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 			if(jsonValue != null) {
@@ -193,11 +194,11 @@ public class CommonUtils {
 
 	public static Widget getUserControls(Confession confession, UserInfo loggedInUserInfo, ConfessionServiceAsync confessionService) {
 		HorizontalPanel hPnlControls = new HorizontalPanel();
-		
-		ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, loggedInUserInfo, confessionService, "",new Image("/images/sympathies.png",0,0,27,30), confession.isShareAsAnyn());
+		hPnlControls.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+		ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, loggedInUserInfo, confessionService, new Image("/images/sympathies.png",0,0,27,30), confession.isShareAsAnyn());
 		hPnlControls.add(btnChangeVisibility);
 
-		DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, loggedInUserInfo, confessionService, "",new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
+		DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, loggedInUserInfo, confessionService, new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
 		hPnlControls.add(btnDeleteConfession);
 		
 		return hPnlControls;
@@ -210,6 +211,7 @@ public class CommonUtils {
 
 			if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
 				Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
+				
 				fPnlConfession.add(lblConfession);
 				fPnlConfession.add(anchMore);
 				
@@ -235,5 +237,17 @@ public class CommonUtils {
 			return confessionTitle.trim();
 		}
 		return "";
+	}
+
+	/**
+	 * @param historyItem 
+	 * 
+	 */
+	public static void fireHistoryEvent(String historyItem) {
+		if(History.getToken() != null && History.getToken().equals(historyItem)) {
+			History.fireCurrentHistoryState();
+		} else {
+			History.newItem(historyItem);
+		}
 	}
 }

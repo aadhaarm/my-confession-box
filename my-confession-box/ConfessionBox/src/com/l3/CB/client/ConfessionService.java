@@ -24,7 +24,7 @@ public interface ConfessionService extends RemoteService {
 
 	UserInfo registerUser(UserInfo userInfo);
 	
-	Confession registerConfession(Confession confession, String captchaValue);
+	Confession registerConfession(Confession confession);
 	
 	List<Confession> getConfessions(int page, Filters filter, String locale);
 	

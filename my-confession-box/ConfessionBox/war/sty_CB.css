@@ -224,3 +224,20 @@ img {
 	
 }
 
+.fieldError {
+	border-bottom-color: red !important;
+	border-bottom-style: dashed !important;
+	border-width: 2px !important;
+}
+
+.refreshButton {
+	background: url(/images/sprite_black2.png) -63px -21px no-repeat;
+	height: 23px;
+	width: 23px;
+}
+
+.justOpen {
+	width: 400px;
+	border: none;
+	background: transparent;
+}

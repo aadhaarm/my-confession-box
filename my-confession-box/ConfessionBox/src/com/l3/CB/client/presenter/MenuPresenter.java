@@ -13,6 +13,10 @@ public class MenuPresenter implements Presenter {
 
 	public interface Display {
 		public MenuItem setFeedItemSelected();
+		public MenuItem getFeedItem();
+		public MenuItem getConfessItem();
+		public MenuItem getMyConItem();
+		public MenuItem getConToMeItem();
 		Widget asWidget();
 	}
 	
@@ -39,7 +43,7 @@ public class MenuPresenter implements Presenter {
 	}
 
 	private void bind() {
-		// TODO Auto-generated method stub
+		//TODO
 	}
 
 	@Override

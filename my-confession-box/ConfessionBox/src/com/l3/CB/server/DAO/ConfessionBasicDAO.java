@@ -423,7 +423,7 @@ public class ConfessionBasicDAO {
 				while (it.hasNext()) {
 					ConfessionShareDO confessionShare = it.next();
 					confessionShare.setPardon(checkIfPardonConditionsFulfilled(confId, pardonConditions));
-					confessionShare.setPardonConditionDOs(getPardonConditionsDO(userId, pardonConditions));
+					confessionShare.setPardonConditionDOs(getPardonConditionsDO(userId, confId, pardonConditions));
 					pm.makePersistent(confessionShare);
 				}
 			}
@@ -454,7 +454,7 @@ public class ConfessionBasicDAO {
 		return isPardoned;
 	}
 
-	private static List<PardonConditionDO> getPardonConditionsDO(Long userId, List<PardonCondition> pardonConditions) {
+	private static List<PardonConditionDO> getPardonConditionsDO(Long userId, Long confId, List<PardonCondition> pardonConditions) {
 		List<PardonConditionDO> conditionDOs = null;
 		if(pardonConditions != null && !pardonConditions.isEmpty()) {
 			conditionDOs = new ArrayList<PardonConditionDO>();
@@ -464,6 +464,7 @@ public class ConfessionBasicDAO {
 					PardonConditionDO pardonConditionDO = new PardonConditionDO(pardonCondition.getCondition());
 					pardonConditionDO.setUserId(userId);
 					pardonConditionDO.setCount(pardonCondition.getCount());
+					pardonConditionDO.setConfId(confId);
 					conditionDOs.add(pardonConditionDO);
 				}
 			}

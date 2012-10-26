@@ -7,9 +7,12 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -46,6 +49,8 @@ public class ConfessionFeedPresenter implements Presenter {
 		public HasChangeHandlers getConfessionFilterListBox();
 		public HasFocusHandlers getConfessionFilterListBoxForHelp();
 		public void clearConfessions();
+		public HasClickHandlers getRegreshButton();
+		void showEmptyScreen();
 	}
 
 	@SuppressWarnings("unused")
@@ -141,11 +146,9 @@ public class ConfessionFeedPresenter implements Presenter {
 
 						@Override
 						public void onSuccess(List<Confession> result) {
-							if(result != null) {
-								display.setConfessions(result, true, showUserControls);
-								inEvent = false;
-								display.removeLoaderImage();
-							}
+							display.setConfessions(result, true, showUserControls);
+							inEvent = false;
+							display.removeLoaderImage();
 						}
 
 						@Override
@@ -174,6 +177,14 @@ public class ConfessionFeedPresenter implements Presenter {
 			@Override
 			public void onFocus(FocusEvent event) {
 				HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
+			}
+		});
+		
+		display.getRegreshButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				setConfessions(true);
 			}
 		});
 	}

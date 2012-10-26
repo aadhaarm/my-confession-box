@@ -8,7 +8,7 @@ public class Error {
 	
 	private static CBText cbText = GWT.create(CBText.class);
 	
-	public static void handleError(String string, String string2, Throwable caught) {
+	public static void handleError(String className, String menthodName, Throwable caught) {
 		Window.alert(cbText.applicationError());
 	}
 }

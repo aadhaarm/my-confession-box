@@ -97,7 +97,7 @@ public interface CBText extends Constants {
 	@DefaultStringValue("Filters to choose the confessions you want to read.")
 	String feedPageFilterToolTip();
 
-	@DefaultStringValue("I am/was in kind of same situation once.")
+	@DefaultStringValue("Vote if you are or were once in kind of same situation. This vote will not be disclosed to anyone.")
 	String sameBoatButtonToolTip();
 
 	@DefaultStringValue("Vote if you find the confession inappropriate for the confession wall.")
@@ -114,4 +114,13 @@ public interface CBText extends Constants {
 
 	@DefaultStringValue("Vote if you feel the confesser should not be pardoned for the act.")
 	String shouleBePardonedButtonToolTip();
+
+	@DefaultStringValue("Confession Title")
+	String confessionTitleLabel();
+
+	@DefaultStringValue("Tick this if you want to share the confession anonymaously without disclosing your identity to any one.")
+	String registerConfHideIdCheckBoxToolTip();
+
+	@DefaultStringValue("Tick this if you want to confess to one of your friends. You need to cheoose your friend in the box below. Your identity with be disclosed to the person you confess to.")
+	String registerConfShareWithCheckBoxToolTip();
 }

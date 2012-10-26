@@ -5,13 +5,14 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasAllGestureHandlers;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -50,26 +51,37 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	private Image loaderImage;
 	private boolean moreConfessions;
 	private final ListBox lstFilterOptions;
-	
+	private final Button btnRefresh;
+	private final HorizontalPanel hPnlTopBar;
+
 	CBText cbText;
-	
+
 	public ConfessionFeedView(ConfessionServiceAsync confessionService,
 			UserInfo userInfo, FacebookServiceAsync facebookService, String accessToken, CBText cbText) {
 		super();
 		this.confessionService = confessionService;
 		this.loggedInUserInfo = userInfo;
 		this.cbText = cbText;
-		
+
 		lstFilterOptions = new ListBox();
 		getMeFilterListBox(lstFilterOptions);
-		
+
+		btnRefresh = new Button();
+		btnRefresh.setTitle("Refresh");
+		btnRefresh.setStyleName(Constants.STYLE_CLASS_REFRESH_BUTTON);
+
+		hPnlTopBar = new HorizontalPanel();
+		hPnlTopBar.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+		hPnlTopBar.add(lstFilterOptions);
+		hPnlTopBar.add(btnRefresh);
+
 		confessionPagesLoaded = 1;
 		getMeLoaderImage();
 		moreConfessions = true;
 
 		vpnlConfessionList = new VerticalPanel();
-		vpnlConfessionList.add(lstFilterOptions);
-		
+		vpnlConfessionList.add(hPnlTopBar);
+
 		contentTableDecorator = new DecoratorPanel();
 		contentTableDecorator.add(vpnlConfessionList);
 
@@ -83,13 +95,13 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	private ListBox getMeFilterListBox(ListBox lstFilterOptions) {
 		lstFilterOptions.setVisible(false);
 		lstFilterOptions.addItem("All confessions", Filters.ALL.name());
-		lstFilterOptions.addItem("Where people hide identity and confessed", Filters.CLOSED .name());
-		lstFilterOptions.addItem("From your language & country", Filters.LOCALE_SPECIFIC.name());
-		lstFilterOptions.addItem("Most 'SAME BOAT' voted confessions", Filters.MOST_SAME_BOATS.name());
-		lstFilterOptions.addItem("Most 'LAME' voted confessions", Filters.MOST_LAME.name());
-		lstFilterOptions.addItem("Most 'SYMPATHAISED' voted confessions", Filters.MOST_SYMPATHY.name());
-		lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted confessions", Filters.MOST_SHOULD_BE_PARDONED.name());
-		lstFilterOptions.addItem("Where people dared to open identity and confess", Filters.OPEN.name());
+		lstFilterOptions.addItem("Hidden identity", Filters.CLOSED .name());
+		lstFilterOptions.addItem("Your language", Filters.LOCALE_SPECIFIC.name());
+		lstFilterOptions.addItem("Most 'SAME BOAT' voted", Filters.MOST_SAME_BOATS.name());
+		lstFilterOptions.addItem("Most 'LAME' voted", Filters.MOST_LAME.name());
+		lstFilterOptions.addItem("Most 'SYMPATHAISED' voted", Filters.MOST_SYMPATHY.name());
+		lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted", Filters.MOST_SHOULD_BE_PARDONED.name());
+		lstFilterOptions.addItem("Open identity", Filters.OPEN.name());
 		return lstFilterOptions;
 	}
 
@@ -101,10 +113,17 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls) {
 
 		if (confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
+			for (final Confession confession : confessions) {
+				int numRows = 8;
+				if(!showUserControls) {
+					numRows--;
+				}
+				if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
+					numRows--;
+				}
 				UserInfo confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 
-				Grid grid = new Grid(8, 2);
+				final Grid grid = new Grid(numRows, 2);
 				grid.getElement().setId("confession-id-" + confession.getConfId());
 				grid.addStyleName(Constants.STYLE_CLASS_CONFESSION_GRID);
 				int row = 0;
@@ -130,9 +149,20 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 				row++;
 				grid.setWidget(row, 1, getUserActivityButtons(confession));
 				row++;
-				grid.setHTML(row, 1, getLikeButton(confession.getConfId()));
-				row++;
-				grid.setHTML(row, 1, getCommentSection(confession.getConfId()));
+				final Anchor justOpen = new Anchor("for 'FB Like', 'Send' and 'Comments'...");
+				justOpen.setStyleName(Constants.STYLE_CLASS_JUST_OPEN);
+				grid.setWidget(row, 1, justOpen);
+				final int rowFinal = row;
+
+				justOpen.addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent event) {
+						grid.remove(justOpen);
+						grid.setHTML(rowFinal, 1, getLikeButton(confession.getConfId()));
+						grid.setHTML(rowFinal+1, 1, getCommentSection(confession.getConfId()));
+						CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
+					}
+				});
 
 				vpnlConfessionList.add(grid);
 				CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
@@ -149,7 +179,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		for (ConfessionShare confessionShare : confessionShares) {
 			if(anynView) {
 				Label confStatus = new Label();
-				
+
 				if(confessionShare.isPardon()) {
 					confStatus.setText(cbText.pardonedStatus());
 				} else {
@@ -169,7 +199,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
 				pardonPanel.add(btnPardon);
 				btnPardon.addClickHandler(new ClickHandler() {
-					
+
 					@Override
 					public void onClick(ClickEvent event) {
 						pardonPopupPanel.center();
@@ -181,7 +211,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 				});
 			}
 			if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty())
-			pardonPanel.add(showPardonConditionStatus(confessionShare.getPardonConditions()));
+				pardonPanel.add(showPardonConditionStatus(confessionShare.getPardonConditions()));
 		}
 		return pardonPanel;
 	}
@@ -313,7 +343,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	private Widget getSBButton(final Confession confession) {
 		return new ActivityButton(Activity.SAME_BOAT, confession, loggedInUserInfo,
 				confessionService, cbText.buttonTitleSameBoat(),
-						Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,37,40));
+				Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,37,40));
 	}
 
 	private String getLikeButton(Long confId) {
@@ -379,14 +409,26 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	public HasChangeHandlers getConfessionFilterListBox() {
 		return lstFilterOptions;
 	}
-	
+
 	@Override
 	public HasFocusHandlers getConfessionFilterListBoxForHelp() {
 		return lstFilterOptions;
 	}
-	
+
 	public void clearConfessions() {
 		vpnlConfessionList.clear();
-		vpnlConfessionList.add(lstFilterOptions);
+		hPnlTopBar.add(lstFilterOptions);
+		hPnlTopBar.add(btnRefresh);
+		vpnlConfessionList.add(hPnlTopBar);
+	}
+
+	public HasClickHandlers getRegreshButton() {
+		return btnRefresh;
+	}
+
+	@Override
+	public void showEmptyScreen() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 
@@ -36,7 +37,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = feedItem;
-				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+				CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 			}
 		});
 		
@@ -62,7 +63,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = myConItem;
-				History.newItem(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
+				CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 			}
 		});
 
@@ -75,7 +76,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = conToMeItem;
-				History.newItem(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
+				CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 			}
 		});
 
@@ -98,4 +99,19 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		return feedItem;
 	}
 
+	public MenuItem getFeedItem() {
+		return feedItem;
+	}
+
+	public MenuItem getConfessItem() {
+		return confessItem;
+	}
+
+	public MenuItem getMyConItem() {
+		return myConItem;
+	}
+
+	public MenuItem getConToMeItem() {
+		return conToMeItem;
+	}
 }

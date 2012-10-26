@@ -3,11 +3,6 @@ package com.l3.CB.server;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import nl.captcha.Captcha;
-
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
@@ -40,15 +35,8 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 * @param confession - {@link Confession}
 	 */
 	@Override
-	public Confession registerConfession(Confession confession, String captchaValue) {
-		HttpServletRequest request = getThreadLocalRequest();
-        HttpSession session = request.getSession();
-        Captcha captcha = (Captcha) session.getAttribute(Captcha.NAME);
-        if(captcha.isCorrect(captchaValue)) {
-        	getThreadLocalRequest().getAttributeNames();
-        	return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
-        }
-        return null;
+	public Confession registerConfession(Confession confession) {
+      	return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
 	}
 
 	/**

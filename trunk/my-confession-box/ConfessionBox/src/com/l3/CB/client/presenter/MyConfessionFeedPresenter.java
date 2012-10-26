@@ -3,6 +3,8 @@ package com.l3.CB.client.presenter;
 import java.util.List;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -34,11 +36,14 @@ public class MyConfessionFeedPresenter implements Presenter {
 		this.display = display;
 		
 		showUserControls = true;
-		setConfessions();
+		setConfessions(true);
 		bind();
 	}
 
-	private void setConfessions() {
+	private void setConfessions(boolean clean) {
+		if(clean) {
+			this.display.clearConfessions();
+		}
 		this.display.setConfessionPagesLoaded(0);
 		rpcService.getConfessionsIDID(0, userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 			@Override
@@ -66,11 +71,9 @@ public class MyConfessionFeedPresenter implements Presenter {
 					rpcService.getConfessionsIDID(display.getConfessionPagesLoaded(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 						@Override
 						public void onSuccess(List<Confession> result) {
-							if(result != null) {
-								display.setConfessions(result, true, showUserControls);
-								inEvent = false;
-								display.removeLoaderImage();
-							}
+							display.setConfessions(result, true, showUserControls);
+							inEvent = false;
+							display.removeLoaderImage();
 						}
 						@Override
 						public void onFailure(Throwable caught) {
@@ -78,6 +81,14 @@ public class MyConfessionFeedPresenter implements Presenter {
 						}
 					});
 				}
+			}
+		});
+		
+		display.getRegreshButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				setConfessions(true);
 			}
 		});
 	}

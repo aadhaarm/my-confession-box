@@ -13,11 +13,14 @@ import com.l3.CB.shared.TO.UserInfo;
 public class ChangeVisibilityButton extends PushButton {
 
 	public ChangeVisibilityButton(final Confession confession, final UserInfo userInfo,
-			final ConfessionServiceAsync confessionService, String titleText,
-			Image buttonImage, final boolean shareAnyn) {
+			final ConfessionServiceAsync confessionService, Image buttonImage, final boolean shareAnyn) {
 		super();
 		this.addStyleName("userControlButtonContainer");
-		this.setTitle(titleText);
+		if(shareAnyn) {
+			this.setTitle("Un-Hide your identity by clicking this.");
+		} else {
+			this.setTitle("Hide your identity by clicking this.");
+		}
 
 		this.addClickHandler(new ClickHandler() {
 			@Override
@@ -26,7 +29,11 @@ public class ChangeVisibilityButton extends PushButton {
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result) {
-							// TODO handle success
+							if(shareAnyn) {
+								setTitle("Un-Hide your identity by clicking this.");
+							} else {
+								setTitle("Hide your identity by clicking this.");
+							}
 						}
 					}
 					@Override

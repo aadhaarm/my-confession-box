@@ -7,16 +7,14 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
-import com.l3.CB.client.ui.widgets.RichTextToolbar;
+import com.l3.CB.client.ui.widgets.CBTextArea;
+import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
@@ -32,79 +30,84 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	private MultiWordSuggestOracle friendsOracle;
 	private final HorizontalPanel hPanelShare;
 	private SuggestBox friendsSuggestBox;
-	private final TextBox txtTitle;
-    private final RichTextArea txtConfession;
-    final TextBox captchaField;
+	private final CBTextBox txtTitle;
+	private final CBTextArea txtConfession;
+	//    final TextBox captchaField;
 	private final Button btnSubmit;
-	private final HorizontalPanel  hpnlCaptcha;
-	Image captchaImage;
+	//	private final HorizontalPanel  hpnlCaptcha;
+	//	Image captchaImage;
 
 	public RegisterConfessionView(CBText cbText, UserInfo loggedInUserInfo) {
 		super();
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
 		initWidget(contentTableDecorator);
-		
+
 		grdConfessionForm = new Grid(8, 2);
-		
+
 		identityPanel = new VerticalPanel();
 		cbHideIdentity = new CheckBox(cbText.registerPageOptionHideID());
 		cbHideIdentity.setValue(true);
 		cbConfessTo = new CheckBox(cbText.registerPageOptionConfessToFriend());
-		
+
 		identityPanel.add(cbHideIdentity);
 		identityPanel.add(cbConfessTo);
-		
+
 		hPanelShare = new HorizontalPanel();
 		hPanelShare.add(new Label(cbText.registerPageChooseFriend()));
 		hPanelShare.setVisible(false);
-		
-		txtTitle = new TextBox();
-		txtConfession = new RichTextArea();
+
+		txtTitle = new CBTextBox();
+		txtConfession = new CBTextArea();
 		txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 
 		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
-		
-        captchaField = new TextBox();
-        captchaField.setText("CAPTCHA Word here");
 
-        hpnlCaptcha = new HorizontalPanel();
-        final Label responseLabel = new Label("Captcha");       
-        captchaImage = new Image();
-        hpnlCaptcha.add(responseLabel);
-        hpnlCaptcha.add(captchaImage);
-		
+		//        captchaField = new TextBox();
+		//        captchaField.setText("CAPTCHA Word here");
+
+		//        hpnlCaptcha = new HorizontalPanel();
+		//        final Label responseLabel = new Label("Captcha");       
+		//        captchaImage = new Image();
+		//        hpnlCaptcha.add(responseLabel);
+		//        hpnlCaptcha.add(captchaImage);
+
+		HorizontalPanel hpnlTitle = new HorizontalPanel();
+		final Label titleLabel = new Label(cbText.confessionTitleLabel());       
+		hpnlTitle.add(titleLabel);
+		hpnlTitle.add(txtTitle);
+
 		grdConfessionForm.setWidget(0, 0, new Label(cbText.registerPageTitle()));
 		grdConfessionForm.setWidget(1, 0, identityPanel);
 		grdConfessionForm.setWidget(2, 0, hPanelShare);
 
-		grdConfessionForm.setWidget(3, 0, txtTitle);
+		grdConfessionForm.setWidget(3, 0, hpnlTitle);
 		grdConfessionForm.setWidget(4, 0, initializeRichTextBox());
-		grdConfessionForm.setWidget(5, 0, hpnlCaptcha);
-		grdConfessionForm.setWidget(6, 0, captchaField);
-		
-		grdConfessionForm.setWidget(7, 0, btnSubmit);
-		
+		//		grdConfessionForm.setWidget(5, 0, hpnlCaptcha);
+		//		grdConfessionForm.setWidget(5, 0, captchaField);
+
+		grdConfessionForm.setWidget(6, 0, btnSubmit);
+
 		contentTableDecorator.add(grdConfessionForm);	
 	}
-	
-	/**
-	   * Initialize this example.
-	   */
-	  public Widget initializeRichTextBox() {
-	    txtConfession.ensureDebugId("cwRichText-area");
-	    txtConfession.setSize("100%", "14em");
-	    RichTextToolbar toolbar = new RichTextToolbar(txtConfession);
-	    toolbar.ensureDebugId("cwRichText-toolbar");
-	    toolbar.setWidth("100%");
 
-	    // Add the components to a panel
-	    Grid grid = new Grid(2, 1);
-	    grid.setStyleName("cw-RichText");
-	    grid.setWidget(0, 0, toolbar);
-	    grid.setWidget(1, 0, txtConfession);
-	    return grid;
-	  }
+	/**
+	 * Initialize this example.
+	 */
+	public Widget initializeRichTextBox() {
+		txtConfession.ensureDebugId("cwRichText-area");
+		txtConfession.setSize("100%", "14em");
+		//	    RichTextToolbar toolbar = new TextToolbar(txtConfession);
+		//	    toolbar.ensureDebugId("cwRichText-toolbar");
+		//	    toolbar.setWidth("100%");
+
+		// Add the components to a panel
+		//	    Grid grid = new Grid(2, 1);
+		//	    grid.setStyleName("cw-RichText");
+		//	    grid.setWidget(0, 0, toolbar);
+		//	    grid.setWidget(1, 0, txtConfession);
+		return txtConfession;
+	}
 
 	public HorizontalPanel gethPanelShare() {
 		return hPanelShare;
@@ -122,7 +125,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	@Override
 	public String getConfession() {
-		return this.txtConfession.getHTML();
+		return this.txtConfession.getText();
 	}
 
 	@Override
@@ -159,12 +162,12 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		if (isAnyn) {
 			sb.append("<img src=");
 			sb.append("'")
-					.append(FacebookUtil.getFaceIconImage(gender)).append("'");
+			.append(FacebookUtil.getFaceIconImage(gender)).append("'");
 			sb.append("/>");
 		} else {
 			sb.append("<fb:profile-pic uid=\"")
-					.append(fbId)
-					.append("\" width=\"50\" height=\"50\" linked=\"true\"></fb:profile-pic>");
+			.append(fbId)
+			.append("\" width=\"50\" height=\"50\" linked=\"true\"></fb:profile-pic>");
 		}
 
 		grdConfessionForm.setHTML(0, 1, sb.toString());
@@ -187,19 +190,19 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	}
 
 	public void setCaptchaHTMLCode(String captchaHTMLCode) {
-//		this.captchaHTMLCode = captchaHTMLCode;
-//		grdConfessionForm.setHTML(5, 0, captchaHTMLCode);
-//		CommonUtils.getCaptcha("dynamic_recaptcha_1");
+		//		this.captchaHTMLCode = captchaHTMLCode;
+		//		grdConfessionForm.setHTML(5, 0, captchaHTMLCode);
+		//		CommonUtils.getCaptcha("dynamic_recaptcha_1");
 	}
 
-	public TextBox getTxtTitle() {
+	public CBTextBox getTxtTitle() {
 		return txtTitle;
 	}
 
-	public RichTextArea getTxtConfession() {
+	public CBTextArea getTxtConfession() {
 		return txtConfession;
 	}
-	
+
 	public CheckBox getCbHideIdentityWidget() {
 		return cbHideIdentity;
 	}
@@ -208,13 +211,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		return cbConfessTo;
 	}
 
-	public String getCaptchaField() {
-		return captchaField.getValue();
-	}
+	//	public String getCaptchaField() {
+	//		return captchaField.getValue();
+	//	}
 
-	public void reloadCaptchaImage(String uId) {
-		hpnlCaptcha.remove(captchaImage);
-		captchaImage = new Image("/SimpleCaptcha.jpg" + "?" + uId);
-        hpnlCaptcha.add(captchaImage);
-	}
+	//	public void reloadCaptchaImage(String uId) {
+	//		hpnlCaptcha.remove(captchaImage);
+	//		captchaImage = new Image("/SimpleCaptcha.jpg" + "?" + uId);
+	//        hpnlCaptcha.add(captchaImage);
+	//	}
 }

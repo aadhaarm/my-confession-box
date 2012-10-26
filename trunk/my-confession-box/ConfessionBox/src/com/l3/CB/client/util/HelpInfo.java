@@ -8,16 +8,17 @@ import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 
 public class HelpInfo {
-	
+
 	static CBText cbText = GWT.create(CBText.class);
 	private static ScrollPanel sPnlToolTip = new ScrollPanel();
 
 	public static enum type {
-		CONFESSION_FILTER, SAME_BOAT_BUTTON, SYMPATHY_BUTTON, SHOULD_BE_PARDONED_BUTTON, SHOULD_NOT_BE_PARDONED_BUTTON, LAME_BUTTON, ABUSE_BUTTON;
+		CONFESSION_FILTER, SAME_BOAT_BUTTON, SYMPATHY_BUTTON, SHOULD_BE_PARDONED_BUTTON, SHOULD_NOT_BE_PARDONED_BUTTON, 
+		LAME_BUTTON, ABUSE_BUTTON, REGISTER_CONF_HIDE_ID_CHECKBOX, REGISTER_CONF_SHARE_WITH_CHECKBOX;
 	}
-	
+
 	/**
-	 * @param confessionFilter 
+	 * @param confessionFilter
 	 * 
 	 */
 	public static void showHelpInfo(type confessionFilter) {
@@ -40,15 +41,22 @@ public class HelpInfo {
 			sPnlToolTip.add(new Label(cbText.shouleBePardonedButtonToolTip()));
 			break;
 		case SHOULD_NOT_BE_PARDONED_BUTTON:
-			sPnlToolTip.add(new Label(cbText.shouldNotBePardonedButtonToolTip()));
+			sPnlToolTip
+					.add(new Label(cbText.shouldNotBePardonedButtonToolTip()));
 			break;
 		case SYMPATHY_BUTTON:
 			sPnlToolTip.add(new Label(cbText.sympathyButtonToolTip()));
 			break;
+		case REGISTER_CONF_HIDE_ID_CHECKBOX:
+			sPnlToolTip.add(new Label(cbText.registerConfHideIdCheckBoxToolTip()));
+			break;
+		case REGISTER_CONF_SHARE_WITH_CHECKBOX:
+			sPnlToolTip.add(new Label(cbText.registerConfShareWithCheckBoxToolTip()));
+			break;
 		default:
 			break;
 		}
-		
+
 		RootPanel.get(Constants.DIV_LEFT_TOOL_TIP).add(sPnlToolTip);
 	}
 }

@@ -63,4 +63,7 @@ public class Constants {
 	public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
 	public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
 	public static final int TEXT_LENGTH_ON_LOAD = 200;
+	public static final String STYLE_CLASS_FIELD_ERROR = "fieldError";
+	public static final String STYLE_CLASS_REFRESH_BUTTON = "refreshButton";
+	public static final String STYLE_CLASS_JUST_OPEN = "justOpen";
 }

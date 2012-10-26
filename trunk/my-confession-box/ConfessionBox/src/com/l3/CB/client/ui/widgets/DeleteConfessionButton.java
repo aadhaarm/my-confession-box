@@ -13,11 +13,14 @@ import com.l3.CB.shared.TO.UserInfo;
 public class DeleteConfessionButton extends PushButton {
 
 	public DeleteConfessionButton(final Confession confession, final UserInfo userInfo,
-			final ConfessionServiceAsync confessionService, String titleText,
-			Image buttonImage, final boolean isVisible) {
+			final ConfessionServiceAsync confessionService, Image buttonImage, final boolean isVisible) {
 		super();
 		this.addStyleName("userControlButtonContainer");
-		this.setTitle(titleText);
+		if(isVisible) {
+			this.setTitle("Hide your confession from anonymous wall.");
+		} else {
+			this.setTitle("Un-Hide your confession from anonymous wall.");
+		}
 
 		this.addClickHandler(new ClickHandler() {
 			@Override
@@ -26,7 +29,11 @@ public class DeleteConfessionButton extends PushButton {
 					@Override
 					public void onSuccess(Boolean result) {
 						if(result) {
-							// TODO handle event
+							if(isVisible) {
+								setTitle("Hide your confession from anonymous wall.");
+							} else {
+								setTitle("Un-Hide your confession from anonymous wall.");
+							}
 						}
 					}
 					

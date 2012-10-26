@@ -2,8 +2,6 @@ package com.l3.CB.client.ui.widgets;
 
 import java.util.logging.Logger;
 
-import javax.persistence.metamodel.Bindable;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;

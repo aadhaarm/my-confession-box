@@ -17,7 +17,7 @@ public interface ConfessionServiceAsync {
 
 	void registerUser(UserInfo userInfo, AsyncCallback<UserInfo> callback);
 
-	void registerConfession(Confession confession, String captchaValue,
+	void registerConfession(Confession confession,
 			AsyncCallback<Confession> callback);
 	void getConfessions(int page, Filters filter, String locale,
 			AsyncCallback<List<Confession>> callback);

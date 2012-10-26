@@ -16,6 +16,7 @@ import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.MenuView;
@@ -52,9 +53,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 				if(result != null) {
 					ConfessionController.loggesInUserInfo = result;
 					if(null != ConfessionBox.confId) {
-						History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+						CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 					} else {
-						History.newItem(Constants.HISTORY_ITEM_CONFESSION_FEED);
+						CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 					}
 				} else {
 					Window.alert(cbText.applicationError());

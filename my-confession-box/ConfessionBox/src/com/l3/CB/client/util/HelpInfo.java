@@ -11,7 +11,6 @@ public class HelpInfo {
 
 	static CBText cbText = GWT.create(CBText.class);
 	private static ScrollPanel sPnlToolTip = new ScrollPanel();
-
 	public static enum type {
 		CONFESSION_FILTER, SAME_BOAT_BUTTON, SYMPATHY_BUTTON, SHOULD_BE_PARDONED_BUTTON, SHOULD_NOT_BE_PARDONED_BUTTON, 
 		LAME_BUTTON, ABUSE_BUTTON, REGISTER_CONF_HIDE_ID_CHECKBOX, REGISTER_CONF_SHARE_WITH_CHECKBOX;
@@ -38,7 +37,7 @@ public class HelpInfo {
 			sPnlToolTip.add(new Label(cbText.sameBoatButtonToolTip()));
 			break;
 		case SHOULD_BE_PARDONED_BUTTON:
-			sPnlToolTip.add(new Label(cbText.shouleBePardonedButtonToolTip()));
+			sPnlToolTip.add(new Label(cbText.shouldBePardonedButtonToolTip()));
 			break;
 		case SHOULD_NOT_BE_PARDONED_BUTTON:
 			sPnlToolTip
@@ -56,7 +55,8 @@ public class HelpInfo {
 		default:
 			break;
 		}
-
+		
+		sPnlToolTip.setStyleName(Constants.STYLE_CLASS_HELP_INFO);
 		RootPanel.get(Constants.DIV_LEFT_TOOL_TIP).add(sPnlToolTip);
 	}
 }

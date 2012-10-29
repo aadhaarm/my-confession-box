@@ -5,11 +5,14 @@
  */
 package com.l3.CB.client.util;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -21,6 +24,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
@@ -30,6 +34,7 @@ import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class CommonUtils {
@@ -89,7 +94,7 @@ public class CommonUtils {
 
 	public static UserInfo getUserInfo(String jsonString) {
 		UserInfo userInfo = null;
-		if(jsonString != null && !jsonString.isEmpty()) {
+		if(jsonString != null && jsonString.length() > 0) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 			if(jsonValue != null) {
@@ -113,7 +118,7 @@ public class CommonUtils {
 	public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
 		Map<String, UserInfo> friends = null;
 
-		if(jsonString != null) {
+		if(jsonString != null && jsonString.length() > 0) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 
@@ -208,9 +213,9 @@ public class CommonUtils {
 		final FlowPanel fPnlConfession = new FlowPanel();
 		if(confession != null) {
 			final Anchor anchMore = new Anchor("more..");
-
+			anchMore.setStyleName(Constants.STYLE_CLASS_MORE_TEXT_LINK);
 			if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
-				Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
+				final Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
 				
 				fPnlConfession.add(lblConfession);
 				fPnlConfession.add(anchMore);
@@ -219,9 +224,13 @@ public class CommonUtils {
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						Label lblConfession = new Label(confession.substring(Constants.TEXT_LENGTH_ON_LOAD));
-						fPnlConfession.remove(anchMore);
-						fPnlConfession.add(lblConfession);
+						if("more..".equalsIgnoreCase(anchMore.getText())) {
+							lblConfession.setText(confession);
+							anchMore.setText("less..");
+						} else {
+							lblConfession.setText(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
+							anchMore.setText("more..");
+						}
 					}
 				});
 			} else {
@@ -249,5 +258,54 @@ public class CommonUtils {
 		} else {
 			History.newItem(historyItem);
 		}
+	}
+
+	/**
+	 * @param lstFilterOptions 
+	 * 
+	 */
+	public static ListBox getMeFilterListBox(ListBox lstFilterOptions) {
+		if(lstFilterOptions != null) {
+			lstFilterOptions.setVisible(false);
+			lstFilterOptions.addItem("All confessions", Filters.ALL.name());
+			lstFilterOptions.addItem("Hidden identity", Filters.CLOSED .name());
+			lstFilterOptions.addItem("Your language", Filters.LOCALE_SPECIFIC.name());
+			lstFilterOptions.addItem("Most 'SAME BOAT' voted", Filters.MOST_SAME_BOATS.name());
+			lstFilterOptions.addItem("Most 'LAME' voted", Filters.MOST_LAME.name());
+			lstFilterOptions.addItem("Most 'SYMPATHAISED' voted", Filters.MOST_SYMPATHY.name());
+			lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted", Filters.MOST_SHOULD_BE_PARDONED.name());
+			lstFilterOptions.addItem("Open identity", Filters.OPEN.name());
+			lstFilterOptions.addItem("Confessions with your activity", Filters.USER_ACTIVITY.name());
+		}
+		return lstFilterOptions;
+	}
+
+	public static String getDateInFormat(Date date) {
+		Date currentTimeStamp = new Date();
+		long timeDifference = currentTimeStamp.getTime() - date.getTime();
+		if(timeDifference <= (3600000  * 24)) {
+			long seconds = timeDifference/1000;
+			long minuts = seconds/60;
+			long hours = minuts / 60;
+			if(seconds < 60) {
+				return "less than a min ago";
+			} else if(seconds >= 60 && seconds < 3600) {
+				return minuts + " minuts ago";
+			} else {
+				return hours + " hours ago";
+			}
+		} else {
+			long days = timeDifference / (1000*60*60*24);
+			if(days >= 1 && days <= 30) {
+				return days + " days ago";
+			} else {
+				return DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).format(date);
+			}
+		}
+	}
+
+	public static Widget getEmptyWidget() {
+		Label lblEmptyPage = new Label("No confessions for you in this view.");
+		return lblEmptyPage;
 	}
 }

@@ -1,37 +1,45 @@
 package com.l3.CB.client.view;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.TO.UserInfo;
 
 public class MenuView extends Composite implements MenuPresenter.Display {
 
-	private final MenuBar menuBar; 
-	private final MenuItem feedItem;
-	private final MenuItem confessItem;
-	private final MenuItem myConItem;
-	private final MenuItem conToMeItem;
-	private MenuItem selectedMenuItem;
+	private final VerticalPanel menuBar; 
+	private final PushButton feedItem;
+	private final PushButton confessItem;
+	private final PushButton myConItem;
+	private final PushButton conToMeItem;
+	private PushButton selectedMenuItem;
+	UserInfo userInfo;
+	ConfessionServiceAsync confessionService;
+	MenuButton btnMenuItemMyConf;
+	MenuButton btnMenuItemConfToMe;
 	
-	public MenuView(CBText cbText) {
+	public MenuView(CBText cbText, UserInfo userInfo, ConfessionServiceAsync confessionService) {
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		initWidget(contentTableDecorator);
-		menuBar = new MenuBar(true);
-		menuBar.setAnimationEnabled(true);
+		menuBar = new VerticalPanel();
+//		menuBar.setAnimationEnabled(true);
 		menuBar.addStyleName(Constants.STYLE_CLASS_MENU);
 	
-		feedItem = new MenuItem(cbText.cbMenuConfessionFeed(), new Command() {
+		feedItem = new PushButton(cbText.cbMenuConfessionFeed(), new ClickHandler() {
 			
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
@@ -40,11 +48,11 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 				CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 			}
 		});
-		
-		confessItem = new MenuItem(cbText.cbMenuConfessionConfess(), new Command() {
+
+		confessItem = new PushButton(cbText.cbMenuConfessionConfess(), new ClickHandler() {
 			
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				confessItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
@@ -54,23 +62,24 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 			}
 		});
 
-		myConItem = new MenuItem(cbText.cbMenuConfessionMyConfessions(), new Command() {
+		myConItem = new PushButton(cbText.cbMenuConfessionMyConfessions(), new ClickHandler() {
 			
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				myConItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				}
 				selectedMenuItem = myConItem;
 				CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
+				
 			}
 		});
 
-		conToMeItem = new MenuItem(cbText.cbMenuConfessionConfessToMe(), new Command() {
+		conToMeItem = new PushButton(cbText.cbMenuConfessionConfessToMe(), new ClickHandler() {
 			
 			@Override
-			public void execute() {
+			public void onClick(ClickEvent event) {
 				conToMeItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 				if(selectedMenuItem != null) {
 					selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
@@ -80,12 +89,20 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 			}
 		});
 
-		menuBar.addItem(feedItem);
-		menuBar.addItem(confessItem);
-		menuBar.addItem(myConItem);
-		menuBar.addItem(conToMeItem);
+		menuBar.add(feedItem);
+		menuBar.add(confessItem);
+		btnMenuItemMyConf = getPanelWithCount(myConItem, 0);
+		menuBar.add(btnMenuItemMyConf);
+		btnMenuItemConfToMe = getPanelWithCount(conToMeItem, 0);
+		menuBar.add(btnMenuItemConfToMe);
 		
 		contentTableDecorator.add(menuBar);
+	}
+
+	private MenuButton getPanelWithCount(PushButton myConItem, int i) {
+		MenuButton btnMenuItem = new MenuButton(userInfo, confessionService, i, myConItem);
+		btnMenuItem.add(myConItem);
+		return btnMenuItem;
 	}
 
 	public Widget asWidget() {
@@ -93,25 +110,45 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	}
 
 	@Override
-	public MenuItem setFeedItemSelected() {
+	public PushButton setFeedItemSelected() {
 		feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		selectedMenuItem = feedItem;
 		return feedItem;
 	}
 
-	public MenuItem getFeedItem() {
+	@Override
+	public PushButton getFeedItem() {
 		return feedItem;
 	}
 
-	public MenuItem getConfessItem() {
+	@Override
+	public PushButton getConfessItem() {
 		return confessItem;
 	}
 
-	public MenuItem getMyConItem() {
+	@Override
+	public PushButton getMyConItem() {
 		return myConItem;
 	}
 
-	public MenuItem getConToMeItem() {
+	@Override
+	public PushButton getConToMeItem() {
 		return conToMeItem;
+	}
+
+	public boolean setMyConfCount(int count) {
+		return true;
+	}
+	
+	public boolean setConfToMeCount(int count) {
+		return true;
+	}
+
+	public MenuButton getBtnMenuItemMyConf() {
+		return btnMenuItemMyConf;
+	}
+
+	public MenuButton getBtnMenuItemConfToMe() {
+		return btnMenuItemConfToMe;
 	}
 }

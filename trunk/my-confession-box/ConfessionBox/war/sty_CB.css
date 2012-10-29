@@ -69,7 +69,8 @@ div.content {
 	background-color: #3B5998;
 }
 
-
+div.helpInfoDiv {
+}
 
 
 
@@ -196,11 +197,11 @@ img {
 }
 
 .menuStyleName {
-	
+	width: 139px;
 }
 
 .menuItemSelected {
-	background-color: #B4B9C4;
+	background-color: #B4B9C4 !important;
 }
 
 #auth-id {
@@ -212,8 +213,10 @@ img {
 }
 
 .confessionGridElement {
-
-	
+	border-top-style: solid;
+	border-top-color: silver;
+    border-top-width: 1px;
+    width: 563px;
 }
 
 .pardonStatusPanel {
@@ -221,7 +224,9 @@ img {
 }
 
 .dateTimeStamp {
-	
+	color: gray;
+	font-style: italic;
+	font-size: small;
 }
 
 .fieldError {
@@ -240,4 +245,21 @@ img {
 	width: 400px;
 	border: none;
 	background: transparent;
+}
+
+.confessionTitleText {
+	font-size: large;
+	font-weight: bold;
+}
+
+.moreTextLink {
+	float: right;
+}
+
+.helpInfoPanel {
+	border-color: cyan;
+	margin-top: 6px;
+	padding: 3px;
+	border-style: solid;	
+	width: 137px;
 }

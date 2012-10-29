@@ -76,7 +76,7 @@ public class FacebookUtil {
 	
 	public static UserInfo getUserInfo(String jsonString) {
 		UserInfo userInfo = null;
-		if(jsonString != null) {
+		if(jsonString != null && !jsonString.isEmpty()) {
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 			if(jsonValue != null) {

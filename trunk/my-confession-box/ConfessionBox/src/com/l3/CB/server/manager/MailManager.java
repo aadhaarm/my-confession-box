@@ -65,7 +65,7 @@ public class MailManager {
 			Message msg = new MimeMessage(session);
 			msg.setFrom(new InternetAddress(fromMailId, "Confession Box (fbconfess admin)"));
 			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(pardonedToUser.getUsername()+"@facebook.com", "Dear " + pardonedToUser.getName()));
-			msg.setSubject("Someone has confessed to you");
+			msg.setSubject("You have been pardoned");
 			msg.setText(msgBody);
 			Transport.send(msg);
 

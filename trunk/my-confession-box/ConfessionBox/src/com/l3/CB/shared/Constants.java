@@ -57,13 +57,16 @@ public class Constants {
 	public static final String STYLE_CLASS_DATE_TIME_STAMP = "dateTimeStamp";
 	public static final String STYLE_CLASS_CONFESSION_GRID = "confessionGridElement";
 	public static final String STYLE_CLASS_BUTTON_WRAPPER = "btnWrapper";
+	public static final String STYLE_CLASS_FIELD_ERROR = "fieldError";
+	public static final String STYLE_CLASS_REFRESH_BUTTON = "refreshButton";
+	public static final String STYLE_CLASS_JUST_OPEN = "justOpen";
+	public static final String STYLE_CLASS_CONFESSION_TITLE_TEXT = "confessionTitleText";
+	public static final String STYLE_CLASS_MORE_TEXT_LINK = "moreTextLink";
+	public static final String STYLE_CLASS_HELP_INFO = "helpInfoPanel";
 
 	public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
 
 	public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
 	public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
 	public static final int TEXT_LENGTH_ON_LOAD = 200;
-	public static final String STYLE_CLASS_FIELD_ERROR = "fieldError";
-	public static final String STYLE_CLASS_REFRESH_BUTTON = "refreshButton";
-	public static final String STYLE_CLASS_JUST_OPEN = "justOpen";
 }

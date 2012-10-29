@@ -1,6 +1,7 @@
 package com.l3.CB.server.DO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -20,12 +21,13 @@ public class UserActivityDO implements Serializable {
 	}
 
 	public UserActivityDO(long userId, long confId, String activityType,
-			boolean shareAsAnyn) {
+			boolean shareAsAnyn, Date timeStamp) {
 		super();
 		this.userId = userId;
 		this.confId = confId;
 		this.activityType = activityType;
 		this.shareAsAnyn = shareAsAnyn;
+		this.timeStamp = timeStamp;
 	}
 
 	@PrimaryKey
@@ -43,6 +45,9 @@ public class UserActivityDO implements Serializable {
 	@Persistent
 	private boolean shareAsAnyn = true;
 
+	@Persistent
+	private Date timeStamp;
+	
 	public Long getActivityId() {
 		return activityId;
 	}
@@ -81,5 +86,13 @@ public class UserActivityDO implements Serializable {
 
 	public void setShareAsAnyn(boolean shareAsAnyn) {
 		this.shareAsAnyn = shareAsAnyn;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 }

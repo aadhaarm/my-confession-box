@@ -1,5 +1,7 @@
 package com.l3.CB.server.DAO;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +47,7 @@ public class ConfessionOtherDAO {
 		return activityMap;
 	}
 
-	private static Long getActivityCount(Long confId, String activityType) {
+	public static Long getActivityCount(Long confId, String activityType) {
 		Long activityCount = new Long(0);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -65,11 +67,11 @@ public class ConfessionOtherDAO {
 		return activityCount;
 	}
 
-	public static long updateActivityCount(Long userId, Long confId, Activity activity) {
+	public static long updateActivityCount(Long userId, Long confId, Activity activity, Date timeStamp) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		long count = 0;
 		try {
-			UserActivityDO userActivityDO = new UserActivityDO(userId, confId, activity.name(), true);
+			UserActivityDO userActivityDO = new UserActivityDO(userId, confId, activity.name(), true, timeStamp);
 			pm.makePersistent(userActivityDO);
 			count = getActivityCount(confId, activity.name());
 		} catch (Exception e) {
@@ -162,5 +164,35 @@ public class ConfessionOtherDAO {
 		} finally {
 			pm.close();
 		}
+	}
+
+	public static List<Long> getUserActivity(Long userId, int page, int pageSize) {
+		List<Long> confIds = null;
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(UserActivityDO.class);
+			query.setFilter("userId == id");
+			query.declareParameters("String id");
+			query.setRange((page*pageSize), ((page*pageSize)+pageSize));
+			query.setOrdering("timeStamp desc");
+
+			@SuppressWarnings("unchecked")
+			List<UserActivityDO> result = (List<UserActivityDO>) query.execute(userId);
+			
+			if (result != null && !result.isEmpty()) {
+				confIds = new ArrayList<Long>();
+				Iterator<UserActivityDO> it = result.iterator();
+				for (UserActivityDO userActivityDO : result) {
+					confIds.add(userActivityDO.getConfId());
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confession for DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+
+		return confIds;
 	}
 }

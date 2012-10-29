@@ -94,138 +94,138 @@ public class ConfessionBasicDAO {
 			query.setOrdering("timeStamp desc");
 
 			switch (filter) {
-				case LOCALE_SPECIFIC:
-					query.setFilter("isVisibleOnPublicWall == status && locale == lang");
-					query.declareParameters("String status" + ", "  + "String lang");
-					List<ConfessionDO> resultSet1 = null;
-					resultSet1 = (List<ConfessionDO>) query.execute(true, locale);
-					if (resultSet1 != null && !resultSet1.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet1.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+			case LOCALE_SPECIFIC:
+				query.setFilter("isVisibleOnPublicWall == status && locale == lang");
+				query.declareParameters("String status" + ", "  + "String lang");
+				List<ConfessionDO> resultSet1 = null;
+				resultSet1 = (List<ConfessionDO>) query.execute(true, locale);
+				if (resultSet1 != null && !resultSet1.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet1.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case OPEN:
-					query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
-					query.declareParameters("String status" + ", "  + "String closed");
-					List<ConfessionDO> resultSet2 = null;
-					resultSet2 = (List<ConfessionDO>) query.execute(true, false);
-					if (resultSet2 != null && !resultSet2.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet2.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case OPEN:
+				query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
+				query.declareParameters("String status" + ", "  + "String closed");
+				List<ConfessionDO> resultSet2 = null;
+				resultSet2 = (List<ConfessionDO>) query.execute(true, false);
+				if (resultSet2 != null && !resultSet2.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet2.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case CLOSED:
-					query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
-					query.declareParameters("String status" + ", "  + "String closed");
-					List<ConfessionDO> resultSet3 = null;
-					resultSet3 = (List<ConfessionDO>) query.execute(true, true);
-					if (resultSet3 != null && !resultSet3.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet3.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case CLOSED:
+				query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
+				query.declareParameters("String status" + ", "  + "String closed");
+				List<ConfessionDO> resultSet3 = null;
+				resultSet3 = (List<ConfessionDO>) query.execute(true, true);
+				if (resultSet3 != null && !resultSet3.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet3.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case MOST_SAME_BOATS:
-					query.setFilter("isVisibleOnPublicWall == status");
-					query.declareParameters("String status");
-					query.setOrdering("numOfSameBoatVote desc");					
-					List<ConfessionDO> resultSet4 = null;
-					resultSet4 = (List<ConfessionDO>) query.execute(true);
-					if (resultSet4 != null && !resultSet4.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet4.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case MOST_SAME_BOATS:
+				query.setFilter("isVisibleOnPublicWall == status");
+				query.declareParameters("String status");
+				query.setOrdering("numOfSameBoatVote desc");					
+				List<ConfessionDO> resultSet4 = null;
+				resultSet4 = (List<ConfessionDO>) query.execute(true);
+				if (resultSet4 != null && !resultSet4.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet4.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case MOST_LAME:
-					query.setFilter("isVisibleOnPublicWall == status");
-					query.declareParameters("String status");
-					query.setOrdering("numOfLameVote desc");					
-					List<ConfessionDO> resultSet5 = null;
-					resultSet5 = (List<ConfessionDO>) query.execute(true);
-					if (resultSet5 != null && !resultSet5.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet5.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case MOST_LAME:
+				query.setFilter("isVisibleOnPublicWall == status");
+				query.declareParameters("String status");
+				query.setOrdering("numOfLameVote desc");					
+				List<ConfessionDO> resultSet5 = null;
+				resultSet5 = (List<ConfessionDO>) query.execute(true);
+				if (resultSet5 != null && !resultSet5.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet5.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case MOST_SYMPATHY:
-					query.setFilter("isVisibleOnPublicWall == status");
-					query.declareParameters("String status");
-					query.setOrdering("numOfSympathyVote desc");					
-					List<ConfessionDO> resultSet6 = null;
-					resultSet6 = (List<ConfessionDO>) query.execute(true);
-					if (resultSet6 != null && !resultSet6.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet6.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case MOST_SYMPATHY:
+				query.setFilter("isVisibleOnPublicWall == status");
+				query.declareParameters("String status");
+				query.setOrdering("numOfSympathyVote desc");					
+				List<ConfessionDO> resultSet6 = null;
+				resultSet6 = (List<ConfessionDO>) query.execute(true);
+				if (resultSet6 != null && !resultSet6.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet6.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
-				case MOST_SHOULD_BE_PARDONED:
-					query.setFilter("isVisibleOnPublicWall == status");
-					query.declareParameters("String status");
-					query.setOrdering("numOfShouldBePardonedVote desc");					
-					List<ConfessionDO> resultSet7 = null;
-					resultSet7 = (List<ConfessionDO>) query.execute(true);
-					if (resultSet7 != null && !resultSet7.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet7.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;
+			case MOST_SHOULD_BE_PARDONED:
+				query.setFilter("isVisibleOnPublicWall == status");
+				query.declareParameters("String status");
+				query.setOrdering("numOfShouldBePardonedVote desc");					
+				List<ConfessionDO> resultSet7 = null;
+				resultSet7 = (List<ConfessionDO>) query.execute(true);
+				if (resultSet7 != null && !resultSet7.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet7.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;					
-				default:
-					List<ConfessionDO> resultSet8 = null;
-					query.setFilter("isVisibleOnPublicWall == status");
-					query.declareParameters("String status");
-					resultSet8 = (List<ConfessionDO>) query.execute(true);
-					if (resultSet8 != null && !resultSet8.isEmpty()) {
-						confessions = new ArrayList<Confession>();
-						Iterator<ConfessionDO> it = resultSet8.iterator();
-						while (it.hasNext()) {
-							ConfessionDO confessionDO = it.next();
-							Confession confession = getConfession(confessionDO);
-//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
-							confessions.add(confession);
-						}
+				}
+				break;					
+			default:
+				List<ConfessionDO> resultSet8 = null;
+				query.setFilter("isVisibleOnPublicWall == status");
+				query.declareParameters("String status");
+				resultSet8 = (List<ConfessionDO>) query.execute(true);
+				if (resultSet8 != null && !resultSet8.isEmpty()) {
+					confessions = new ArrayList<Confession>();
+					Iterator<ConfessionDO> it = resultSet8.iterator();
+					while (it.hasNext()) {
+						ConfessionDO confessionDO = it.next();
+						Confession confession = getConfession(confessionDO);
+						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+						confessions.add(confession);
 					}
-					break;
+				}
+				break;
 			}
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,
@@ -254,7 +254,7 @@ public class ConfessionBasicDAO {
 				while (it.hasNext()) {
 					ConfessionDO confessionDO = it.next();
 					Confession confession = getConfession(confessionDO);
-//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+					//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 					confessions.add(confession);
 				}
 			}
@@ -305,7 +305,7 @@ public class ConfessionBasicDAO {
 				while (it.hasNext()) {
 					ConfessionDO confessionDO = it.next();
 					confession = getConfession(confessionDO);
-//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+					//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 				}
 			}
 		} catch (Exception e) {
@@ -336,7 +336,7 @@ public class ConfessionBasicDAO {
 				while (it.hasNext()) {
 					ConfessionShareDO confessionShareDO = it.next();
 					Confession confession = getConfession(confessionShareDO.getConfId());
-//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
+					//					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 					confessions.add(confession);
 				}
 			}
@@ -346,7 +346,7 @@ public class ConfessionBasicDAO {
 		} finally {
 			pm.close();
 		}
-		
+
 		return confessions;
 	}
 
@@ -396,7 +396,7 @@ public class ConfessionBasicDAO {
 	private static List<PardonCondition> getPardonConditions(List<PardonConditionDO> pardonConditionDOs) {
 		List<PardonCondition> pardonConditions = null;
 		if(pardonConditionDOs != null) {
-			
+
 			pardonConditions = new ArrayList<PardonCondition>();
 			for (PardonConditionDO pardonConditionDO : pardonConditionDOs) {
 				PardonCondition pardonCondition = new PardonCondition();
@@ -409,7 +409,34 @@ public class ConfessionBasicDAO {
 		return pardonConditions;
 	}
 
-	public static boolean pardonConfession(Long userId, Long confId, List<PardonCondition> pardonConditions) {
+	public static boolean pardonConfession(Long userId, Long confId, List<PardonCondition> pardonConditions, boolean isPardoned) {
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			try {
+				Query query = pm.newQuery(ConfessionShareDO.class);
+				query.setFilter("userId == user && confId == conf");
+				query.declareParameters("String user" + ", "  + "String conf");
+				@SuppressWarnings("unchecked")
+				List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(userId, confId);
+
+				if (result != null && !result.isEmpty()) {
+					Iterator<ConfessionShareDO> it = result.iterator();
+					while (it.hasNext()) {
+						ConfessionShareDO confessionShare = it.next();
+						confessionShare.setPardon(isPardoned);
+						pm.makePersistent(confessionShare);
+					}
+				}
+			} catch (Exception e) {
+				logger.log(Level.SEVERE,
+						"Error while getting user from DB:" + e.getMessage());           
+				return false;
+			} finally {
+				pm.close();
+			}
+		return true;
+	}
+
+	public static boolean addPardonCondition(Long userId, Long confId, List<PardonCondition> pardonConditions) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			Query query = pm.newQuery(ConfessionShareDO.class);
@@ -422,7 +449,6 @@ public class ConfessionBasicDAO {
 				Iterator<ConfessionShareDO> it = result.iterator();
 				while (it.hasNext()) {
 					ConfessionShareDO confessionShare = it.next();
-					confessionShare.setPardon(checkIfPardonConditionsFulfilled(confId, pardonConditions));
 					confessionShare.setPardonConditionDOs(getPardonConditionsDO(userId, confId, pardonConditions));
 					pm.makePersistent(confessionShare);
 				}
@@ -437,22 +463,6 @@ public class ConfessionBasicDAO {
 		return true;
 	}
 
-	private static boolean checkIfPardonConditionsFulfilled(Long confId, List<PardonCondition> pardonConditions) {
-		boolean isPardoned = false;
-		if(pardonConditions == null) {
-			isPardoned = true;
-		} else {
-			for (PardonCondition pardonCondition : pardonConditions) {
-				Confession confession = getConfession(confId);
-				if(Constants.pardonConditionUnhide.equals(pardonCondition.getCondition())) {
-					if(!confession.isShareAsAnyn()) {
-						isPardoned = true;
-					}
-				}
-			}
-		}
-		return isPardoned;
-	}
 
 	private static List<PardonConditionDO> getPardonConditionsDO(Long userId, Long confId, List<PardonCondition> pardonConditions) {
 		List<PardonConditionDO> conditionDOs = null;
@@ -501,7 +511,7 @@ public class ConfessionBasicDAO {
 		}
 		return pardonConditions;
 	}
-	
+
 	public static boolean updateConfessionCondition(Long confId, String condition, boolean isFulfill) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -555,4 +565,57 @@ public class ConfessionBasicDAO {
 		}
 		return true;
 	}
+
+	public static List<Confession> getConfessions(List<Long> confIDs, int page,	int feedPageSize, Filters filter, String locale) {
+		List<Confession> confesions = new ArrayList<Confession>();
+		for (Long confId : confIDs) {
+			confesions.add(getConfession(confId));
+		}
+		return confesions;
+	}
+
+	public static long getConfessionCount(Long userId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query query = pm.newQuery(ConfessionDO.class);
+			query.setFilter("userId == id");
+			query.declareParameters("String id");
+			@SuppressWarnings("unchecked")
+			List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
+
+			if (result != null && !result.isEmpty()) {
+				return result.size();
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confessions count from DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return 0;
+	}
+
+
+	public static long getConfessionsForMeCount(Long userId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			Query queryGetconfId = pm.newQuery(ConfessionShareDO.class);
+			queryGetconfId.setFilter("userId == id");
+			queryGetconfId.declareParameters("String id");
+			@SuppressWarnings("unchecked")
+			List<ConfessionShareDO> result = (List<ConfessionShareDO>) queryGetconfId.execute(userId);
+
+			if (result != null && !result.isEmpty()) {
+				return result.size();
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while getting confessions for DB:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+
+		return 0;
+	}
+
 }

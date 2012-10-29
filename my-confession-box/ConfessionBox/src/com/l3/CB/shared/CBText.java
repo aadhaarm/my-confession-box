@@ -82,16 +82,16 @@ public interface CBText extends Constants {
 	@DefaultStringValue("Yet to be pardoned")
 	String yetToBePardonedStatus();
 
-	@DefaultStringValue("Un-Hide Identity to the world: Condition fulfilled")
+	@DefaultStringValue("Un-Hide Identity: Condition fulfilled")
 	String pardonPopupOpenIdentityConditionFulfilled();
 
-	@DefaultStringValue("Un-Hide Identity to the world: Yet to be fulfilled")
+	@DefaultStringValue("Un-Hide Identity: Yet to be fulfilled")
 	String pardonPopupOpenIdentityConditionYetToBoFulfilled();
 
-	@DefaultStringValue("Pardon when people give you 'Should be pardoned' vote: Condition fulfilled")
+	@DefaultStringValue("people should give you 'Should be pardoned' vote: Condition fulfilled")
 	String pardonPopupPardonActivityConditionFulfilled();
 
-	@DefaultStringValue("Pardon when people give you 'Should be pardoned' vote: Yet to be fulfilled")
+	@DefaultStringValue("people should give you 'Should be pardoned' vote: Yet to be fulfilled")
 	String pardonPopupPardonActivityConditionYetToBoFulfilled();
 
 	@DefaultStringValue("Filters to choose the confessions you want to read.")
@@ -110,10 +110,10 @@ public interface CBText extends Constants {
 	String sympathyButtonToolTip();
 
 	@DefaultStringValue("Vote if you feel the confesser should be pardoned for the act.")
-	String shouldNotBePardonedButtonToolTip();
+	String shouldBePardonedButtonToolTip();
 
 	@DefaultStringValue("Vote if you feel the confesser should not be pardoned for the act.")
-	String shouleBePardonedButtonToolTip();
+	String shouldNotBePardonedButtonToolTip();
 
 	@DefaultStringValue("Confession Title")
 	String confessionTitleLabel();
@@ -123,4 +123,7 @@ public interface CBText extends Constants {
 
 	@DefaultStringValue("Tick this if you want to confess to one of your friends. You need to cheoose your friend in the box below. Your identity with be disclosed to the person you confess to.")
 	String registerConfShareWithCheckBoxToolTip();
+
+	@DefaultStringValue("'Like', 'Comments' & 'Send'...")
+	String getMeJustOpenLinkText();
 }

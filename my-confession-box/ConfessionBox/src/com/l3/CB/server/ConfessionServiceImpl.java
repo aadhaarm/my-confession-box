@@ -44,8 +44,8 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 * @param page - {@link Integer}
 	 */
 	@Override
-	public List<Confession> getConfessions(int page, Filters filter, String locale) {
-		return ConfessionManager.getConfessionsByFilter(page, filter, locale);
+	public List<Confession> getConfessions(int page, Filters filter, String locale, Long userId) {
+		return ConfessionManager.getConfessionsByFilter(page, filter, locale, userId);
 	}
 
 	/**
@@ -99,9 +99,12 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public String getCaptchaString() {
-//		ReCaptcha c = ReCaptchaFactory.newReCaptcha("6LfRCdgSAAAAAFZ1HscTRf7F_nOFbLy4hK9bxROw", "6LfRCdgSAAAAAAsPSOu5sQJ1PopLMA-jSRXe5Bhm", false);
-//		return c.createRecaptchaHtml(null, null);
-		return null;
+	public long getMyConfessionCount(Long userId) {
+		return ConfessionManager.getConfessionsByUserCount(userId);
+	}
+
+	@Override
+	public long getConfessionForMeCount(Long userId) {
+		return ConfessionManager.getConfessionsForMeCount(userId);
 	}
 }

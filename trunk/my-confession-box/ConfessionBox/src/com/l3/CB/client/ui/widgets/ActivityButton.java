@@ -35,7 +35,7 @@ public class ActivityButton extends AbsolutePanel {
 		btn = new PushButton(buttonImage);
 		btn.addStyleName(btnStyleName);
 		this.setTitle(titleText);
-		final Label btnCount = new Label(getCountToDisplay(Long.toOctalString(count)));
+		final Label btnCount = new Label(getCountToDisplay(Long.toString(count)));
 		btn.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

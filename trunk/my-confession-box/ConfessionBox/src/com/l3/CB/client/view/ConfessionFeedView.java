@@ -1,5 +1,6 @@
 package com.l3.CB.client.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +9,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -37,7 +36,6 @@ import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
-import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.UserInfo;
 
@@ -53,6 +51,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	private final ListBox lstFilterOptions;
 	private final Button btnRefresh;
 	private final HorizontalPanel hPnlTopBar;
+	private List<Confession> confessionsThisView;
 
 	CBText cbText;
 
@@ -64,7 +63,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		this.cbText = cbText;
 
 		lstFilterOptions = new ListBox();
-		getMeFilterListBox(lstFilterOptions);
+		CommonUtils.getMeFilterListBox(lstFilterOptions);
 
 		btnRefresh = new Button();
 		btnRefresh.setTitle("Refresh");
@@ -88,30 +87,15 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		initWidget(contentTableDecorator);
 	}
 
-	/**
-	 * @param lstFilterOptions 
-	 * 
-	 */
-	private ListBox getMeFilterListBox(ListBox lstFilterOptions) {
-		lstFilterOptions.setVisible(false);
-		lstFilterOptions.addItem("All confessions", Filters.ALL.name());
-		lstFilterOptions.addItem("Hidden identity", Filters.CLOSED .name());
-		lstFilterOptions.addItem("Your language", Filters.LOCALE_SPECIFIC.name());
-		lstFilterOptions.addItem("Most 'SAME BOAT' voted", Filters.MOST_SAME_BOATS.name());
-		lstFilterOptions.addItem("Most 'LAME' voted", Filters.MOST_LAME.name());
-		lstFilterOptions.addItem("Most 'SYMPATHAISED' voted", Filters.MOST_SYMPATHY.name());
-		lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted", Filters.MOST_SHOULD_BE_PARDONED.name());
-		lstFilterOptions.addItem("Open identity", Filters.OPEN.name());
-		return lstFilterOptions;
-	}
-
 	private void getMeLoaderImage() {
 		loaderImage = new Image(Constants.LOADER_IMAGE_PATH);
 		loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
 	}
 
 	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls) {
-
+		if(confessionsThisView == null) {
+			confessionsThisView = new ArrayList<Confession>();
+		}
 		if (confessions != null && !confessions.isEmpty()) {
 			for (final Confession confession : confessions) {
 				int numRows = 8;
@@ -131,25 +115,36 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 				if(confessedByUserInfo != null) {
 					confession.setFbId(confessedByUserInfo.getId());
 				}
+
+				// Set USER CONTROLS
 				if(showUserControls) {
 					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, loggedInUserInfo, confessionService));
 					row++;
 				}
+				// Set USER PROFILE PIC or ANYN PIC 
 				grid.setHTML(row, 0, CommonUtils.getProfilePicture(confession, isAnyn));
+				// Set USER NAME
 				grid.setWidget(row, 1, CommonUtils.getName(confession, confessedByUserInfo, isAnyn, cbText));
 				row++;
-				grid.setWidget(row, 1, new Label(confession.getConfessionTitle()));
+				// Confession Title
+				Label lblConfessionTitle = new Label(confession.getConfessionTitle());
+				lblConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
+				grid.setWidget(row, 1, lblConfessionTitle);
 				row++;
+				// Confession text
 				grid.setWidget(row, 1, CommonUtils.getTextTruncated(confession.getConfession()));
-
+				
+				// Pardon widget
 				if(confession.getConfessedTo() != null) {
 					row++;
 					grid.setWidget(row, 1, getPardonWidget(confession, isAnyn, confessedByUserInfo));
 				}
 				row++;
+				// User ACTIVITY Buttons
 				grid.setWidget(row, 1, getUserActivityButtons(confession));
 				row++;
-				final Anchor justOpen = new Anchor("for 'FB Like', 'Send' and 'Comments'...");
+				// Just OPEN
+				final Anchor justOpen = new Anchor(cbText.getMeJustOpenLinkText());
 				justOpen.setStyleName(Constants.STYLE_CLASS_JUST_OPEN);
 				grid.setWidget(row, 1, justOpen);
 				final int rowFinal = row;
@@ -166,8 +161,14 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
 				vpnlConfessionList.add(grid);
 				CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
+				
+				confessionsThisView.add(confession);
 			}
 		} else {
+			if(confessionsThisView == null || confessionsThisView.isEmpty()) {
+				vpnlConfessionList.clear();
+				vpnlConfessionList.add(CommonUtils.getEmptyWidget());
+			}
 			moreConfessions = false;
 		}
 	}
@@ -227,9 +228,9 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 				}
 			} else if(pardonCondition != null && Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
 				if(pardonCondition.isFulfil()) {
-					vPnlPardonCondition.add(new Label(cbText.pardonPopupPardonActivityConditionFulfilled()));
+					vPnlPardonCondition.add(new Label(pardonCondition.getCount() + " " + cbText.pardonPopupPardonActivityConditionFulfilled()));
 				} else {
-					vPnlPardonCondition.add(new Label(cbText.pardonPopupPardonActivityConditionYetToBoFulfilled()));
+					vPnlPardonCondition.add(new Label(pardonCondition.getCount() + " " + cbText.pardonPopupPardonActivityConditionYetToBoFulfilled()));
 				}
 			}
 		}
@@ -246,9 +247,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		final ActivityButton btnAB = (ActivityButton) getABButton(confession);
 
 		if (confession.getTimeStamp() != null) {
-			Label lblDateTimeStamp = new Label(DateTimeFormat.getFormat(
-					PredefinedFormat.DATE_TIME_SHORT).format(
-							confession.getTimeStamp()));
+			Label lblDateTimeStamp = new Label(CommonUtils.getDateInFormat(confession.getTimeStamp()));
 			lblDateTimeStamp.addStyleName(Constants.STYLE_CLASS_DATE_TIME_STAMP);
 			fPlaneUserActivity.add(lblDateTimeStamp);
 		}

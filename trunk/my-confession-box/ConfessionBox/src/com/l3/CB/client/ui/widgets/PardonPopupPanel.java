@@ -44,6 +44,7 @@ public class PardonPopupPanel extends PopupPanel{
 		
 		HorizontalPanel hPnlPardonActivityCondition = new HorizontalPanel();
 		lbPardonActivityCondition = new ListBox();
+		lbPardonActivityCondition.addItem("1");
 		lbPardonActivityCondition.addItem("5");
 		lbPardonActivityCondition.addItem("10");
 		lbPardonActivityCondition.addItem("20");

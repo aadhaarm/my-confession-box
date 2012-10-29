@@ -19,7 +19,7 @@ public interface ConfessionServiceAsync {
 
 	void registerConfession(Confession confession,
 			AsyncCallback<Confession> callback);
-	void getConfessions(int page, Filters filter, String locale,
+	void getConfessions(int page, Filters filter, String locale, Long userId,
 			AsyncCallback<List<Confession>> callback);
 	void getConfession(Long confId, AsyncCallback<Confession> callback);
 	void getConfessionsIDID(int page, Long userId, AsyncCallback<List<Confession>> callback);
@@ -35,5 +35,7 @@ public interface ConfessionServiceAsync {
 	void changeConfessionVisibility(Long userId, String fbId, Long confId,
 			boolean isVisible, AsyncCallback<Boolean> callback);
 
-	void getCaptchaString(AsyncCallback<String> callback);
+	void getMyConfessionCount(Long userId, AsyncCallback<Long> callback);
+
+	void getConfessionForMeCount(Long userId, AsyncCallback<Long> callback);
 }

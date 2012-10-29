@@ -26,7 +26,7 @@ public interface ConfessionService extends RemoteService {
 	
 	Confession registerConfession(Confession confession);
 	
-	List<Confession> getConfessions(int page, Filters filter, String locale);
+	List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
 	
 	List<Confession> getConfessionsIDID(int page, Long userId);
 	
@@ -44,5 +44,8 @@ public interface ConfessionService extends RemoteService {
 
 	boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
 
-	String getCaptchaString();
+	long getMyConfessionCount(Long userId);
+
+	long getConfessionForMeCount(Long userId);
+
 }

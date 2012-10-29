@@ -113,15 +113,15 @@ public class ConfessionFeedPresenter implements Presenter {
 		});
 	}
 
-	private void setConfessions(boolean clean) {
-		if(clean) {
-			this.display.clearConfessions();
-		}
+	private void setConfessions(final boolean clean) {
 		this.display.setConfessionPagesLoaded(0);
-		rpcService.getConfessions(0, filter, userInfo.getLocale(), new AsyncCallback<List<Confession>>() {
+		rpcService.getConfessions(0, filter, userInfo.getLocale(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
+					if(clean) {
+						display.clearConfessions();
+					}
 					display.setConfessions(result, true, showUserControls);
 				}
 			}
@@ -142,7 +142,7 @@ public class ConfessionFeedPresenter implements Presenter {
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
 					
-					rpcService.getConfessions(display.getConfessionPagesLoaded(), filter, userInfo.getLocale(), new AsyncCallback<List<Confession>>() {
+					rpcService.getConfessions(display.getConfessionPagesLoaded(), filter, userInfo.getLocale(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 
 						@Override
 						public void onSuccess(List<Confession> result) {

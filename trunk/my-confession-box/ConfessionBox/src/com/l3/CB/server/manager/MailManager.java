@@ -19,16 +19,15 @@ import com.l3.CB.shared.TO.UserInfo;
 public class MailManager {
 
 	static Logger logger = Logger.getLogger("CBLogger");
-	static String fromMailId = "fbconfess@facebook.com";
 
-	public static boolean sendConfessionEmail(String confessionToEmail, long confId, String confessssionByName, String confessionToName) {
+	public static boolean sendConfessionEmail(UserInfo confessionToUser, UserInfo confessionByUser, long confId) {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
-		String msgBody = getConfessionEmailMsgBody(confId, confessssionByName, confessionToName);
+		String msgBody = getConfessionEmailMsgBody(confId, confessionByUser.getName(), confessionToUser.getName());
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(fromMailId, "Confession Box (fbconfess admin)"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionToEmail, "Dear " + confessionToName));
+			msg.setFrom(new InternetAddress(confessionByUser.getEmail(), "Confession Box (fbconfess admin)"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionToUser.getUsername()+"@facebook.com", "Dear " + confessionToUser.getName()));
 			msg.setSubject("Someone has confessed to you");
 			msg.setText(msgBody);
 			Transport.send(msg);
@@ -43,7 +42,7 @@ public class MailManager {
 			logger.log(Constants.LOG_LEVEL,
 					"Exception in MailManager.sendFormSaveEmail()" + e.getCause());
 		}
-		return false;
+		return true;
 	}
 
 	private static String getConfessionEmailMsgBody(long confId, String confessssionBy, String confessionTo){
@@ -51,9 +50,7 @@ public class MailManager {
 		sb.append("Dear ").append(confessionTo).append(",\n");
 		sb.append(confessssionBy).append(" has confessed to you.\n");
 		sb.append("To see what ").append(confessssionBy).append(" has confessed, please check the link ");
-		sb.append("<a href='");
 		sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId);
-		sb.append("'>").append("Confession Box").append("</a>");
 		return sb.toString();
 	}
 
@@ -63,7 +60,7 @@ public class MailManager {
 		String msgBody = getPardonesEmailMsgBody(pardonedByUser, confId, pardonedToUser);
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(fromMailId, "Confession Box (fbconfess admin)"));
+			msg.setFrom(new InternetAddress(pardonedByUser.getEmail(), "Confession Box (fbconfess admin)"));
 			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(pardonedToUser.getUsername()+"@facebook.com", "Dear " + pardonedToUser.getName()));
 			msg.setSubject("You have been pardoned");
 			msg.setText(msgBody);
@@ -87,9 +84,7 @@ public class MailManager {
 		sb.append("Dear ").append(pardonedToUser.getName()).append(",\n");
 		sb.append("You have been pardoned by ").append(pardonedByUser.getName()).append("\n");
 		sb.append("Please check the link ");
-		sb.append("<a href='");
 		sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId);
-		sb.append("'>").append("Confession Box").append("</a>");
 		return sb.toString();	
 	}
 }

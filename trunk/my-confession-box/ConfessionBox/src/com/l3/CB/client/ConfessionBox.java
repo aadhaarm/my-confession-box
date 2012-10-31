@@ -8,17 +8,24 @@ package com.l3.CB.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.HasRpcToken;
+import com.google.gwt.user.client.rpc.ServiceDefTarget;
+import com.google.gwt.user.client.rpc.XsrfToken;
+import com.google.gwt.user.client.rpc.XsrfTokenService;
+import com.google.gwt.user.client.rpc.XsrfTokenServiceAsync;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.UserInfo;
@@ -28,12 +35,13 @@ import com.l3.CB.shared.TO.UserInfo;
  */
 public class ConfessionBox implements EntryPoint {
 
-	private final ConfessionServiceAsync confessionService = GWT.create(ConfessionService.class);
-	private final FacebookServiceAsync facebookService = GWT.create(FacebookService.class);
+	private FacebookServiceAsync facebookService = null;
+	private ConfessionServiceAsync confessionService = null;
 
 	CBText cbText = GWT.create(CBText.class);
 
-	public static UserInfo userInfo;
+	public static UserInfo loggedInUserInfo;
+	public static String loggedInUserEmail;
 	public static String confId;
 	public static String accessToken;
 
@@ -43,23 +51,39 @@ public class ConfessionBox implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()));
+		XsrfTokenServiceAsync xsrf = (XsrfTokenServiceAsync)GWT.create(XsrfTokenService.class);
+		((ServiceDefTarget)xsrf).setServiceEntryPoint(GWT.getModuleBaseURL() + "xsrf");
+		xsrf.getNewXsrfToken(new AsyncCallback<XsrfToken>() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Error.handleError("ConfessionBox", "onFailure", caught);
+			}
+			@Override
+			public void onSuccess(XsrfToken result) {
+				confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
+				((HasRpcToken) confessionService).setRpcToken(result);
+
+				facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
+				((HasRpcToken) facebookService).setRpcToken(result);
+			}
+		});
+				
 		RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
 		final HandlerManager confEventBus = new HandlerManager(null);
 		showApplicationLoad();
-		CommonUtils.login(DOM.getElementById(Constants.DIV_AUTH_ID));
+		CommonUtils.login();
 		Timer t = new Timer() {
 			public void run() {
-				accessToken = DOM.getElementById(Constants.DIV_AUTH_ID).getInnerHTML();
 				if(accessToken != null && !"".equals(accessToken)) {
 					checkUserLoginStatus(confessionService, facebookService, confEventBus);
 					this.cancel();
 				} else {
-					this.schedule(2000);
+					this.schedule(1000);
 				}
 			}
 		};
-		t.schedule(2000);
-
+		t.schedule(1000);
 	}
 
 	private void showApplicationLoad() {
@@ -87,11 +111,14 @@ public class ConfessionBox implements EntryPoint {
 				public void onSuccess(String result) {
 					if(result != null){
 						// parse the response text into JSON and get user info
-						ConfessionBox.userInfo = CommonUtils.getUserInfo(result);
-						if(userInfo == null) {
+						ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(result);
+						if(loggedInUserInfo.getEmail() != null) {
+							loggedInUserEmail = loggedInUserInfo.getEmail();
+						}
+						if(loggedInUserInfo == null) {
 							Window.alert(cbText.applicationError());
 						}
-						ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, userInfo, confId, accessToken, cbText);
+						ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, confId, accessToken, cbText);
 						confessionController.go(RootPanel.get());
 						removeApplicationLoad();
 					}

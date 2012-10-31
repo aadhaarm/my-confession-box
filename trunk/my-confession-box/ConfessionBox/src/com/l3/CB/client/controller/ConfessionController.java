@@ -30,29 +30,27 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	private final FacebookServiceAsync facebookService;
 	private final ConfessionServiceAsync confessionService; 
 	private final HandlerManager eventBus;
-	private static UserInfo loggedInUserInfo;
 	private HasWidgets container;
 	private String accessToken;
 	private CBText cbText;	
 
 	public ConfessionController(final HandlerManager eventBus,
 			ConfessionServiceAsync rpcService,
-			FacebookServiceAsync facebookService, UserInfo userInfo, String confId, String accessToken, final CBText cbText) {
+			FacebookServiceAsync facebookService, String confId, String accessToken, final CBText cbText) {
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
-		ConfessionController.loggedInUserInfo = userInfo;
 		this.accessToken = accessToken;
 		this.facebookService = facebookService;
 		this.cbText = cbText;
 		
-		rpcService.registerUser(userInfo, new AsyncCallback<UserInfo>() {
+		rpcService.registerUser(ConfessionBox.loggedInUserInfo, new AsyncCallback<UserInfo>() {
 			
 			@Override
 			public void onSuccess(UserInfo result) {
 				if(result != null) {
-					ConfessionController.loggedInUserInfo = result;
-					Presenter presenter = new MenuPresenter(eventBus, confessionService, loggedInUserInfo, new MenuView(cbText, loggedInUserInfo, confessionService));
+					ConfessionBox.loggedInUserInfo = result;
+					Presenter presenter = new MenuPresenter(eventBus, confessionService, ConfessionBox.loggedInUserInfo, new MenuView(cbText, confessionService));
 					presenter.go(container);
 					if(null != ConfessionBox.confId) {
 						CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
@@ -83,15 +81,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if (token != null) {
 			Presenter presenter = null;
 			if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
-				presenter = new RegisterConfessionPresenter(eventBus, confessionService, facebookService, loggedInUserInfo, new RegisterConfessionView(cbText, loggedInUserInfo), accessToken);
+				presenter = new RegisterConfessionPresenter(eventBus, confessionService, facebookService, new RegisterConfessionView(cbText), accessToken);
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
-				presenter = new ConfessionFeedPresenter(eventBus, confessionService, loggedInUserInfo, new ConfessionFeedView(confessionService, loggedInUserInfo, facebookService, accessToken, cbText));
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, new ConfessionFeedView(confessionService, facebookService, accessToken, cbText));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
-				presenter = new ConfessionFeedPresenter(eventBus, confessionService, loggedInUserInfo, new ConfessionFeedView(confessionService, loggedInUserInfo, facebookService, accessToken, cbText), ConfessionBox.confId);
+				presenter = new ConfessionFeedPresenter(eventBus, confessionService, new ConfessionFeedView(confessionService, facebookService, accessToken, cbText), ConfessionBox.confId);
 			} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
-				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, loggedInUserInfo, new ConfessionFeedView(confessionService, loggedInUserInfo, facebookService, accessToken, cbText));
+				presenter = new MyConfessionFeedPresenter(eventBus, confessionService, new ConfessionFeedView(confessionService, facebookService, accessToken, cbText));
 			} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
-				presenter = new ConfessionForMeFeedPresenter(eventBus, confessionService, loggedInUserInfo, new ConfessionFeedView(confessionService, loggedInUserInfo, facebookService, accessToken, cbText));
+				presenter = new ConfessionForMeFeedPresenter(eventBus, confessionService, new ConfessionFeedView(confessionService, facebookService, accessToken, cbText));
 			}
 			if (presenter != null) {
 				presenter.go(container);

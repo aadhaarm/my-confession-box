@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
@@ -22,17 +23,14 @@ public class MyConfessionFeedPresenter implements Presenter {
 	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync rpcService; 
-	private UserInfo userInfo;
 	private final Display display;
 	private final boolean showUserControls;
 	
 	public MyConfessionFeedPresenter(HandlerManager eventBus,
-			ConfessionServiceAsync rpcService, UserInfo userInfo,
-			Display display) {
+			ConfessionServiceAsync rpcService, Display display) {
 		super();
 		this.eventBus = eventBus;
 		this.rpcService = rpcService;
-		this.userInfo = userInfo;
 		this.display = display;
 		
 		showUserControls = true;
@@ -45,7 +43,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 			this.display.clearConfessions();
 		}
 		this.display.setConfessionPagesLoaded(0);
-		rpcService.getConfessionsIDID(0, userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+		rpcService.getConfessionsIDID(0, ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
@@ -68,7 +66,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 					display.addLoaderImage();
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
-					rpcService.getConfessionsIDID(display.getConfessionPagesLoaded(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+					rpcService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 						@Override
 						public void onSuccess(List<Confession> result) {
 							display.setConfessions(result, true, showUserControls);

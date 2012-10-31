@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
@@ -30,7 +31,6 @@ import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
-import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionFeedPresenter implements Presenter {
 
@@ -56,19 +56,16 @@ public class ConfessionFeedPresenter implements Presenter {
 	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync rpcService; 
-	private UserInfo userInfo;
 	private final Display display;
 	boolean showUserControls = false;
 	Filters filter = Filters.ALL;
 	CBText cbText = GWT.create(CBText.class);
 	
 	public ConfessionFeedPresenter(HandlerManager eventBus,
-			ConfessionServiceAsync rpcService, UserInfo userInfo,
-			Display display) {
+			ConfessionServiceAsync rpcService, Display display) {
 		super();
 		this.eventBus = eventBus;
 		this.rpcService = rpcService;
-		this.userInfo = userInfo;
 		this.display = display;
 
 		display.showConfessionFilters();
@@ -77,12 +74,11 @@ public class ConfessionFeedPresenter implements Presenter {
 	}
 
 	public ConfessionFeedPresenter(HandlerManager eventBus,
-			ConfessionServiceAsync rpcService, UserInfo userInfo,
+			ConfessionServiceAsync rpcService,
 			Display display, String confId) {
 		super();
 		this.eventBus = eventBus;
 		this.rpcService = rpcService;
-		this.userInfo = userInfo;
 		this.display = display;
 
 		try {
@@ -115,7 +111,7 @@ public class ConfessionFeedPresenter implements Presenter {
 
 	private void setConfessions(final boolean clean) {
 		this.display.setConfessionPagesLoaded(0);
-		rpcService.getConfessions(0, filter, userInfo.getLocale(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+		rpcService.getConfessions(0, filter, ConfessionBox.loggedInUserInfo.getLocale(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 				if(result != null) {
@@ -142,7 +138,7 @@ public class ConfessionFeedPresenter implements Presenter {
 					inEvent = true;
 					display.incrementConfessionPagesLoaded();
 					
-					rpcService.getConfessions(display.getConfessionPagesLoaded(), filter, userInfo.getLocale(), userInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+					rpcService.getConfessions(display.getConfessionPagesLoaded(), filter, ConfessionBox.loggedInUserInfo.getLocale(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 
 						@Override
 						public void onSuccess(List<Confession> result) {

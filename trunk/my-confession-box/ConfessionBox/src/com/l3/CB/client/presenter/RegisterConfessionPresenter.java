@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.ui.widgets.CBTextArea;
@@ -42,13 +43,10 @@ public class RegisterConfessionPresenter implements Presenter {
 		public HasClickHandlers getCbConfessTo();
 		public HorizontalPanel gethPanelShare();
 		public String getSharedWith();
-		//		public String getCaptchaField();
 		public boolean isIdentityHidden();
 		public boolean isFriendsOracleNull();
 		public void setFriendsOracle(MultiWordSuggestOracle friendsOracle);
 		public void setProfilePictureTag(boolean isAnyn, String gender, String fbId);
-		//		public void reloadCaptchaImage(String uId);
-		//		public void setCaptchaHTMLCode(String captchaHTMLCode);
 		boolean isShared();
 		public CBTextBox getTxtTitle();
 		public CBTextArea getTxtConfession();
@@ -60,7 +58,6 @@ public class RegisterConfessionPresenter implements Presenter {
 	@SuppressWarnings("unused")
 	private final HandlerManager eventBus;
 	private final ConfessionServiceAsync confessionService; 
-	private final UserInfo userInfo;
 	private final Display display;
 	private final MultiWordSuggestOracle friendsOracle;
 	private Map<String, UserInfo> userfriends;
@@ -68,16 +65,14 @@ public class RegisterConfessionPresenter implements Presenter {
 	private String accessToken;
 
 	public RegisterConfessionPresenter(HandlerManager eventBus,
-			ConfessionServiceAsync rpcService, FacebookServiceAsync facebookService, UserInfo userInfo,
-			final Display display, String accessToken) {
+			ConfessionServiceAsync rpcService, FacebookServiceAsync facebookService, final Display display, String accessToken) {
 		super();
 		this.eventBus = eventBus;
 		this.confessionService = rpcService;
-		this.userInfo = userInfo;
 		this.display = display;
 		this.accessToken = accessToken;
 		this.facebookService = facebookService;
-		display.setProfilePictureTag(true, userInfo.getGender(), userInfo.getId());
+		display.setProfilePictureTag(true, ConfessionBox.loggedInUserInfo.getGender(), ConfessionBox.loggedInUserInfo.getId());
 		friendsOracle = new MultiWordSuggestOracle();
 	
 		bind();
@@ -164,7 +159,7 @@ public class RegisterConfessionPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				display.setProfilePictureTag(display.isIdentityHidden(), userInfo.getGender(), userInfo.getId());
+				display.setProfilePictureTag(display.isIdentityHidden(), ConfessionBox.loggedInUserInfo.getGender(), ConfessionBox.loggedInUserInfo.getId());
 			}
 		});
 
@@ -173,6 +168,9 @@ public class RegisterConfessionPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if(display.isShared()) {
+					if(ConfessionBox.loggedInUserEmail == null) {
+						CommonUtils.loginWithPermissions();
+					}
 					if(display.isFriendsOracleNull()) {
 						getMyFriends();
 					}
@@ -253,14 +251,15 @@ public class RegisterConfessionPresenter implements Presenter {
 	 * @return
 	 */
 	private Confession getConfessionToBeSaved() {
-		if(userInfo != null) {
+		if(ConfessionBox.loggedInUserInfo != null) {
 			final Confession confession = new Confession(CommonUtils.checkForNull(display.getConfession()), display.isIdentityHidden());
-			confession.setUserId(userInfo.getUserId());
+			confession.setUserId(ConfessionBox.loggedInUserInfo.getUserId());
+			confession.setUserEmailAddress(ConfessionBox.loggedInUserEmail);
 			confession.setConfessionTitle(CommonUtils.checkForNull(display.getConfessionTitle()));
 			confession.setTimeStamp(new Date());
-			confession.setUsername(userInfo.getUsername());
-			confession.setUserFullName(userInfo.getName());
-			confession.setLocale(userInfo.getLocale());
+			confession.setUsername(ConfessionBox.loggedInUserInfo.getUsername());
+			confession.setUserFullName(ConfessionBox.loggedInUserInfo.getName());
+			confession.setLocale(ConfessionBox.loggedInUserInfo.getLocale());
 			return confession;
 		}
 		return null;

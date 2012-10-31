@@ -95,6 +95,7 @@ public class UserDAO {
 					userDO.setGender(userInfo.getGender());
 					userDO.setName(userInfo.getName());
 					userDO.setUserName(userInfo.getUsername());
+					userDO.setEmail(userInfo.getEmail());
 					pm.makePersistent(userDO);
 				}
 			}
@@ -113,6 +114,7 @@ public class UserDAO {
 			userDO = new UserDO(userInfo.getId(), userInfo.getGender());
 			userDO.setName(userInfo.getName());
 			userDO.setUserName(userInfo.getUsername());
+			userDO.setEmail(userInfo.getEmail());
 		}
 		return userDO;
 	}

@@ -25,7 +25,10 @@ public class UserInfo implements Serializable {
 	private String link;
 	// User gender
 	private String gender;
+
 	private String locale;
+	
+	private String email;
 	
 	public UserInfo(Long userId) {
 		super();
@@ -89,11 +92,18 @@ public class UserInfo implements Serializable {
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	@Override
 	public String toString() {
 		return "UserInfo [userId=" + userId + ", id=" + id + ", name=" + name
 				+ ", first_name=" + first_name + ", last_name=" + last_name
 				+ ", username=" + username + ", link=" + link + ", gender="
-				+ gender + ", locale=" + locale + "]";
+				+ gender + ", locale=" + locale + ", email=" + email + "]";
 	}
 }

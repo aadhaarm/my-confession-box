@@ -8,8 +8,9 @@ package com.l3.CB.client;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.google.gwt.user.client.rpc.XsrfProtectedService;
+import com.google.gwt.user.server.rpc.XsrfProtect;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
@@ -19,8 +20,9 @@ import com.l3.CB.shared.TO.UserInfo;
 /**
  * The client side stub for the RPC service.
  */
+@XsrfProtect
 @RemoteServiceRelativePath("confession-box")
-public interface ConfessionService extends RemoteService {
+public interface ConfessionService extends XsrfProtectedService {
 
 	UserInfo registerUser(UserInfo userInfo);
 	

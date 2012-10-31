@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -37,7 +38,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	//	private final HorizontalPanel  hpnlCaptcha;
 	//	Image captchaImage;
 
-	public RegisterConfessionView(CBText cbText, UserInfo loggedInUserInfo) {
+	public RegisterConfessionView(CBText cbText) {
 		super();
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
@@ -157,20 +158,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	 * @param fbId - facebook id 
 	 */
 	public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
-		final StringBuilder sb = new StringBuilder();
-
-		if (isAnyn) {
-			sb.append("<img src=");
-			sb.append("'")
-			.append(FacebookUtil.getFaceIconImage(gender)).append("'");
-			sb.append("/>");
+		Image profileImage = null;
+		if (!isAnyn) {
+			profileImage = new Image(FacebookUtil.getUserImageUrl(fbId));
 		} else {
-			sb.append("<fb:profile-pic uid=\"")
-			.append(fbId)
-			.append("\" width=\"50\" height=\"50\" linked=\"true\"></fb:profile-pic>");
+			profileImage = new Image(FacebookUtil.getFaceIconImage(gender));
 		}
-
-		grdConfessionForm.setHTML(0, 1, sb.toString());
+		grdConfessionForm.setWidget(0, 1, profileImage);
 		CommonUtils.parseXFBMLJS();
 	}
 

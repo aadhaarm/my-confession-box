@@ -105,7 +105,6 @@ public class ConfessionBasicDAO {
 					while (it.hasNext()) {
 						ConfessionDO confessionDO = it.next();
 						Confession confession = getConfession(confessionDO);
-						//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 						confessions.add(confession);
 					}
 				}

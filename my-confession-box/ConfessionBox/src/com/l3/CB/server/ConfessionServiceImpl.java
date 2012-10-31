@@ -3,7 +3,7 @@ package com.l3.CB.server;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
 import com.l3.CB.server.manager.ConfessionManager;
@@ -17,7 +17,7 @@ import com.l3.CB.shared.TO.UserInfo;
 /**
  * The server side implementation of the RPC service.
  */
-public class ConfessionServiceImpl extends RemoteServiceServlet implements
+public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implements
 		ConfessionService {
 
 	/**
@@ -55,7 +55,8 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public List<Confession> getConfessionsIDID(int page, Long userId) {
-		return ConfessionManager.getConfessionsByUser(page, userId);
+		List<Confession> confessions = ConfessionManager.getConfessionsByUser(page, userId);
+		return confessions;
 	}
 
 	@Override

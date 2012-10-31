@@ -21,18 +21,22 @@ public class ConfessionManager {
 		confession.setUserIp(ipAddress);
 		confession = ConfessionBasicDAO.registerConfession(confession);
 
+		UserInfo confessionByUser = UserManager.getUserByUserId(confession.getUserId());
+		
 		//Register confession Shared
 		if(confession.getConfessedTo() != null) {
 			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
 
 				UserInfo userSharedTo = new UserInfo();
 				userSharedTo.setId(confessionShare.getFbId());
+				userSharedTo.setUsername(confessionShare.getUsername());
+				userSharedTo.setName(confessionShare.getUserFullName());
 				userSharedTo = UserManager.registerUser(userSharedTo);
 
 				confessionShare.setUserId(userSharedTo.getUserId());
 				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
 
-				MailManager.sendConfessionEmail(confessionShare.getUsername()+"@facebook.com", confession.getConfId(), confession.getUserFullName(), confessionShare.getUserFullName());
+				MailManager.sendConfessionEmail(userSharedTo, confessionByUser, confession.getConfId());
 			}
 		}
 		return confession;

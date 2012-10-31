@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
@@ -31,12 +32,12 @@ public class PardonPopupPanel extends PopupPanel{
 	private final CheckBox cbOpenIdentityCondition;
 	private final ListBox lbPardonActivityCondition;
 	
-	public PardonPopupPanel(Confession confession, UserInfo loggedInUser, UserInfo confessionByUser, CBText cbText, ConfessionServiceAsync confessionService, Button btnPardonHome) {
+	public PardonPopupPanel(Confession confession, UserInfo confessionByUser, CBText cbText, ConfessionServiceAsync confessionService, Button btnPardonHome) {
 		super();
 		Grid grid = new Grid(5, 2);
 		int row = 0;
 
-		grid.setHTML(row, 0, CommonUtils.getProfilePicture(confession, false));
+		grid.setWidget(row, 0, CommonUtils.getProfilePicture(confession, false));
 		grid.setWidget(row, 1, CommonUtils.getConfession(confession));
 		row++;
 
@@ -73,10 +74,10 @@ public class PardonPopupPanel extends PopupPanel{
 		grid.setWidget(row, 1, btnCancel);
 		setWidget(grid);
 		
-		bind(confessionService, confession, confessionByUser, loggedInUser, btnPardonHome);
+		bind(confessionService, confession, confessionByUser, btnPardonHome);
 	}
 
-	private void bind(final ConfessionServiceAsync confessionService, final Confession confession, final UserInfo confessedByUser, final UserInfo loggedInUserInfo, final Button btnPardonHome) {
+	private void bind(final ConfessionServiceAsync confessionService, final Confession confession, final UserInfo confessedByUser, final Button btnPardonHome) {
 		btnCancel.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -88,13 +89,13 @@ public class PardonPopupPanel extends PopupPanel{
 			@Override
 			public void onClick(ClickEvent event) {
 				if(confessedByUser != null) {
-					confessionService.pardonConfession(loggedInUserInfo, confession.getConfId(), confessedByUser, getPardonConditions(), new AsyncCallback<Void>() {
+					confessionService.pardonConfession(ConfessionBox.loggedInUserInfo, confession.getConfId(), confessedByUser, getPardonConditions(), new AsyncCallback<Void>() {
 						@Override
 						public void onSuccess(Void result) {
 							if(result != null) {
 								btnPardon.setEnabled(false);
 								btnPardonHome.setEnabled(false);
-								hide();
+								hidePopup();
 							}
 						}
 
@@ -130,5 +131,9 @@ public class PardonPopupPanel extends PopupPanel{
 
 	public Button getBtnCancel() {
 		return btnCancel;
+	}
+	
+	public void hidePopup() {
+		hide();
 	}
 }

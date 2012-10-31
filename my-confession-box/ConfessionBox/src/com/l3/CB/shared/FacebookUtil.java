@@ -8,19 +8,19 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class FacebookUtil {
 
-//    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
-//    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-//    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-//    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-//    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
-
-    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
     public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
     public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
     public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
     public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
+    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
+
+//    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+//    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+//    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+//    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+//    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
     
     public static String getApplicationId() {
         return APPLICATION_ID;
@@ -83,20 +83,20 @@ public class FacebookUtil {
 				JSONObject jsonObject = jsonValue.isObject();
 				if(jsonObject != null) {
 					userInfo = new UserInfo();
-					userInfo.setId(getString(jsonObject.get("id")));
-					userInfo.setFirst_name(getString(jsonObject.get("first_name")));
-					userInfo.setLast_name(getString(jsonObject.get("last_name")));
-					userInfo.setLink(getString(jsonObject.get("link")));
-					userInfo.setName(getString(jsonObject.get("name")));
-					userInfo.setUsername(getString(jsonObject.get("username")));
-					userInfo.setGender(getString(jsonObject.get("gender")));
+					userInfo.setId(getJSONStringValue(jsonObject.get("id")));
+					userInfo.setFirst_name(getJSONStringValue(jsonObject.get("first_name")));
+					userInfo.setLast_name(getJSONStringValue(jsonObject.get("last_name")));
+					userInfo.setLink(getJSONStringValue(jsonObject.get("link")));
+					userInfo.setName(getJSONStringValue(jsonObject.get("name")));
+					userInfo.setUsername(getJSONStringValue(jsonObject.get("username")));
+					userInfo.setGender(getJSONStringValue(jsonObject.get("gender")));
 				}
 			}
 		}
 		return userInfo;
 	}
 	
-	public static String getString(JSONValue jsonValue) {
+	public static String getJSONStringValue(JSONValue jsonValue) {
 		if(jsonValue != null) {
 			return jsonValue.isString().stringValue();
 		}

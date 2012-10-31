@@ -9,6 +9,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -23,6 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.FacebookServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
@@ -44,7 +47,6 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	private ConfessionServiceAsync confessionService;
 	private DecoratorPanel contentTableDecorator;
 	private VerticalPanel vpnlConfessionList;
-	private UserInfo loggedInUserInfo;
 	private int confessionPagesLoaded;
 	private Image loaderImage;
 	private boolean moreConfessions;
@@ -56,10 +58,9 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	CBText cbText;
 
 	public ConfessionFeedView(ConfessionServiceAsync confessionService,
-			UserInfo userInfo, FacebookServiceAsync facebookService, String accessToken, CBText cbText) {
+			FacebookServiceAsync facebookService, String accessToken, CBText cbText) {
 		super();
 		this.confessionService = confessionService;
-		this.loggedInUserInfo = userInfo;
 		this.cbText = cbText;
 
 		lstFilterOptions = new ListBox();
@@ -118,11 +119,11 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
 				// Set USER CONTROLS
 				if(showUserControls) {
-					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, loggedInUserInfo, confessionService));
+					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, ConfessionBox.loggedInUserInfo, confessionService));
 					row++;
 				}
 				// Set USER PROFILE PIC or ANYN PIC 
-				grid.setHTML(row, 0, CommonUtils.getProfilePicture(confession, isAnyn));
+				grid.setWidget(row, 0, CommonUtils.getProfilePicture(confession, isAnyn));
 				// Set USER NAME
 				grid.setWidget(row, 1, CommonUtils.getName(confession, confessedByUserInfo, isAnyn, cbText));
 				row++;
@@ -193,7 +194,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 					btnPardon.setEnabled(false);
 				}
 
-				final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, loggedInUserInfo, confessionByUser, cbText, confessionService, btnPardon);
+				final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, confessionByUser, cbText, confessionService, btnPardon);
 				pardonPopupPanel.setAnimationEnabled(true);
 				pardonPopupPanel.setGlassEnabled(true);
 				pardonPopupPanel.addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
@@ -251,7 +252,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 			lblDateTimeStamp.addStyleName(Constants.STYLE_CLASS_DATE_TIME_STAMP);
 			fPlaneUserActivity.add(lblDateTimeStamp);
 		}
-		confessionService.getUserActivity(loggedInUserInfo.getUserId(),
+		confessionService.getUserActivity(ConfessionBox.loggedInUserInfo.getUserId(),
 				confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
 
 			@Override
@@ -298,62 +299,76 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		return fPlaneUserActivity;
 	}
 
-	private String getCommentSection(Long confId) {
-		// <fb:comments href="http://example.com" num_posts="2"
-		// width="470"></fb:comments>
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<fb:comments href=\"");
-		sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId)
-		.append("\"");
-		sb.append(" num_posts=\"2\" width=\"470\"></fb:comments>");
-		return sb.toString();
-	}
-
 	private Widget getABButton(final Confession confession) {
-		return new ActivityButton(Activity.ABUSE, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.ABUSE, confession, ConfessionBox.loggedInUserInfo,
 				confessionService, cbText.buttonTitleReportAbuse(),
 				Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSNPButton(final Confession confession) {
 		return new ActivityButton(Activity.SHOULD_NOT_BE_PARDONED, confession,
-				loggedInUserInfo, confessionService, cbText.buttonTitleShouldNotBePardoned(),
+				ConfessionBox.loggedInUserInfo, confessionService, cbText.buttonTitleShouldNotBePardoned(),
 				Constants.STYLE_CLASS_SNP_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSPButton(final Confession confession) {
-		return new ActivityButton(Activity.SHOULD_BE_PARDONED, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SHOULD_BE_PARDONED, confession, ConfessionBox.loggedInUserInfo,
 				confessionService, cbText.buttonTitleShouldBePardoned(),
 				Constants.STYLE_CLASS_SP_ACTIVITY, new Image("/images/shouldBepardoned.png",0,0,37,40));
 	}
 
 	private Widget getLMButton(final Confession confession) {
-		return new ActivityButton(Activity.LAME, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.LAME, confession, ConfessionBox.loggedInUserInfo,
 				confessionService, cbText.buttonTitleLameConfession(),
 				Constants.STYLE_CLASS_LAME_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
 	}
 
 	private Widget getSYButton(final Confession confession) {
-		return new ActivityButton(Activity.SYMPATHY, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SYMPATHY, confession, ConfessionBox.loggedInUserInfo,
 				confessionService, cbText.buttonTitleSympathy(),
 				Constants.STYLE_CLASS_SYM_ACTIVITY, new Image("/images/sympathies.png",0,0,37,40));
 	}
 
 	private Widget getSBButton(final Confession confession) {
-		return new ActivityButton(Activity.SAME_BOAT, confession, loggedInUserInfo,
+		return new ActivityButton(Activity.SAME_BOAT, confession, ConfessionBox.loggedInUserInfo,
 				confessionService, cbText.buttonTitleSameBoat(),
 				Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,37,40));
 	}
 
 	private String getLikeButton(Long confId) {
-		// <fb:like href="http://apps.facebook.com.fbconfessalfa" send="true"
-		// width="450" show_faces="false" font="lucida grande"></fb:like>
-		final StringBuilder sb = new StringBuilder();
-		sb.append("<fb:like href=\"");
-		sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId)
-		.append("\"");
-		sb.append(" send=\"true\" width=\"450\" show_faces=\"false\" font=\"lucida grande\"></fb:like>");
-		return sb.toString();
+		SafeHtmlBuilder sb = new SafeHtmlBuilder();
+		sb.append(new SafeHtml() {
+			@Override
+			public String asString() {
+				return "<fb:like href='";
+			}
+		}); 
+		sb.appendEscaped(FacebookUtil.REDIRECT_URL +"?conf="+ confId).appendHtmlConstant("'");
+		sb.append(new SafeHtml() {
+			@Override
+			public String asString() {
+				return " send=\"true\" width=\"450\" show_faces=\"false\" font=\"lucida grande\"></fb:like>";
+			}
+		});
+		return sb.toSafeHtml().asString();
+	}
+
+	private String getCommentSection(Long confId) {
+		final SafeHtmlBuilder sb = new SafeHtmlBuilder();
+		sb.append(new SafeHtml() {
+			@Override
+			public String asString() {
+				return "<fb:comments href='";
+			}
+		});
+		sb.appendEscaped(FacebookUtil.REDIRECT_URL + "?conf="+ confId).appendHtmlConstant("'");
+		sb.append(new SafeHtml() {
+			@Override
+			public String asString() {
+				return " num_posts=\"2\" width=\"470\"></fb:comments>";
+			}
+		});
+		return sb.toSafeHtml().asString();
 	}
 
 	@Override

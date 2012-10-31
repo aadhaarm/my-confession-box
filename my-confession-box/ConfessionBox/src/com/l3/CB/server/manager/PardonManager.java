@@ -72,13 +72,11 @@ public class PardonManager {
 	}
 
 	private static boolean checkIfNoPardonConditions(Long confId, List<PardonCondition> pardonConditions) {
-		boolean isPardoned = false;
-		if(pardonConditions == null) {
-			isPardoned = true;
-		} else {
-			isPardoned = false;
+		boolean noPardonedConditions = true;
+		if(pardonConditions != null && !pardonConditions.isEmpty()) {
+			noPardonedConditions = false;
 		}
-		return isPardoned;
+		return noPardonedConditions;
 	}
 
 	private static boolean justPardon(UserInfo pandonByUser, UserInfo pardonedToUser, Long confId, List<PardonCondition> pardonConditions, boolean isPardoned) {

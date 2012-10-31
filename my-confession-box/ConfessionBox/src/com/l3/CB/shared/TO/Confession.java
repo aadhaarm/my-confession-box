@@ -42,6 +42,8 @@ public class Confession implements Serializable {
 	
 	private String userFullName;
 	
+	private String userEmailAddress;
+	
 	private String username;
 
 	private boolean isVisibleOnPublicWall = true;
@@ -264,5 +266,13 @@ public class Confession implements Serializable {
 
 	public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
 		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+	}
+
+	public String getUserEmailAddress() {
+		return userEmailAddress;
+	}
+
+	public void setUserEmailAddress(String userEmailAddress) {
+		this.userEmailAddress = userEmailAddress;
 	}
 }

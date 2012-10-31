@@ -23,6 +23,7 @@ public class UserManager {
 			userInfo.setGender(userDO.getGender());
 			userInfo.setName(userDO.getName());
 			userInfo.setUsername(userDO.getUserName());
+			userInfo.setEmail(userDO.getEmail());
 		}
 		return userInfo;
 	}

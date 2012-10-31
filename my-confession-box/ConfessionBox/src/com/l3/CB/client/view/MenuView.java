@@ -29,7 +29,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	MenuButton btnMenuItemMyConf;
 	MenuButton btnMenuItemConfToMe;
 	
-	public MenuView(CBText cbText, UserInfo userInfo, ConfessionServiceAsync confessionService) {
+	public MenuView(CBText cbText, ConfessionServiceAsync confessionService) {
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		initWidget(contentTableDecorator);
 		menuBar = new VerticalPanel();

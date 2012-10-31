@@ -58,18 +58,31 @@ public class CommonUtils {
 		}
 	}-*/;
 
-	public static native String login(Element elementId) /*-{
+	public static native void login() /*-{
 		if($wnd.FB) {
 	  		$wnd.FB.login(function(response) {
 		   if (response.authResponse) {
-	   		 elementId.innerHTML = response.authResponse.accessToken;
-		   } else {
-		     console.log('User cancelled login or did not fully authorize.');
+	   		 @com.l3.CB.client.ConfessionBox::accessToken = response.authResponse.accessToken;
 		   }
-		 });
+		 }, {scope: 'email'});
 		}
 	}-*/;
-	
+
+	public static native void loginWithPermissions() /*-{
+	if($wnd.FB) {
+  		$wnd.FB.login(function(response) {
+		   if (response.authResponse) {
+	   		 @com.l3.CB.client.ConfessionBox::accessToken = response.authResponse.accessToken;
+			FB.api('/me', function(response) {
+				alert(response.email);
+			  @com.l3.CB.client.ConfessionBox::loggedInUserEmail = response.email;
+			});
+		   }
+		 }, {scope: 'email'});
+		}
+	}-*/;
+
+
 	public static String getString(JSONValue jsonValue) {
 		String returnVal = null;
 		if(jsonValue != null) {
@@ -95,6 +108,7 @@ public class CommonUtils {
 	public static UserInfo getUserInfo(String jsonString) {
 		UserInfo userInfo = null;
 		if(jsonString != null && jsonString.length() > 0) {
+			jsonString = stripOutComment(jsonString);
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 			if(jsonValue != null) {
@@ -109,16 +123,23 @@ public class CommonUtils {
 					userInfo.setUsername(getString(jsonObject.get("username")));
 					userInfo.setGender(getString(jsonObject.get("gender")));
 					userInfo.setLocale(getString(jsonObject.get("locale")));
+					userInfo.setEmail(getString(jsonObject.get("email")));
 				}
 			}
 		}
 		return userInfo;
 	}
 
+	private static String stripOutComment(String jsonString) {
+		return jsonString.substring(2, jsonString.length()-2);
+	}
+
 	public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
 		Map<String, UserInfo> friends = null;
 
 		if(jsonString != null && jsonString.length() > 0) {
+			jsonString = stripOutComment(jsonString);
+
 			// parse the response text into JSON
 			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 
@@ -148,26 +169,17 @@ public class CommonUtils {
 		}
 		return friends;
 	}
-	
-	// <fb:profile-pic uid="12345" width="32" height="32" linked="true"
-	// \><fb:profile-pic>
-	public static String getProfilePicture(Confession confession, boolean isAnyn) {
-		final StringBuilder sb = new StringBuilder();
 
+	public static Image getProfilePicture(Confession confession, boolean isAnyn) {
+		Image profileImage = null;
 		if (!confession.isShareAsAnyn() || !isAnyn) {
-			sb.append("<fb:profile-pic uid=\"")
-			.append(confession.getFbId())
-			.append("\"linked=\"true\"></fb:profile-pic>");
+			profileImage = new Image(FacebookUtil.getUserImageUrl(confession.getFbId()));
 		} else {
-			sb.append("<img src=");
-			sb.append("'")
-			.append(FacebookUtil.getFaceIconImage(confession
-					.getGender())).append("'");
-			sb.append("/>");
+			profileImage = new Image(FacebookUtil.getFaceIconImage(confession.getGender()));
 		}
-		return sb.toString();
+		return profileImage;
 	}
-	
+
 	public static Widget getName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
 		Widget nameWidget = null;
 		if(confession != null) {
@@ -186,7 +198,7 @@ public class CommonUtils {
 		}
 		return nameWidget;
 	}
-	
+
 	public static Widget getConfession(Confession confession) {
 		if(confession != null) {
 			VerticalPanel pnlConfession = new VerticalPanel();
@@ -205,7 +217,7 @@ public class CommonUtils {
 
 		DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, loggedInUserInfo, confessionService, new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
 		hPnlControls.add(btnDeleteConfession);
-		
+
 		return hPnlControls;
 	}
 
@@ -216,12 +228,12 @@ public class CommonUtils {
 			anchMore.setStyleName(Constants.STYLE_CLASS_MORE_TEXT_LINK);
 			if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
 				final Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
-				
+
 				fPnlConfession.add(lblConfession);
 				fPnlConfession.add(anchMore);
-				
+
 				anchMore.addClickHandler(new ClickHandler() {
-					
+
 					@Override
 					public void onClick(ClickEvent event) {
 						if("more..".equalsIgnoreCase(anchMore.getText())) {

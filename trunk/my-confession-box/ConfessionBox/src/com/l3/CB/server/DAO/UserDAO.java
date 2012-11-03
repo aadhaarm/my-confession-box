@@ -12,60 +12,78 @@ import com.l3.CB.server.DO.UserDO;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class UserDAO {
-	
+
 	static Logger logger = Logger.getLogger("CBLogger");
 
+	/**
+	 * Get User if registered. Update info if old info is not complete
+	 * @param userInfo
+	 * @return {@link UserDO}
+	 */
 	public static UserDO getUserByUserId(UserInfo userInfo) {
 		UserDO userDO = null;
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		try {
-			Query query = pm.newQuery(UserDO.class);
-			query.setFilter("userId == id");
-			query.declareParameters("String id");
-			@SuppressWarnings("unchecked")
-			List<UserDO> result = (List<UserDO>) query
-					.execute(userInfo.getUserId());
+		if(userInfo != null) {
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			try {
+				Query query = pm.newQuery(UserDO.class);
+				query.setFilter("userId == id");
+				query.declareParameters("String id");
+				@SuppressWarnings("unchecked")
+				List<UserDO> result = (List<UserDO>) query.execute(userInfo.getUserId());
 
-			if (result != null &&  !result.isEmpty()) {
-				Iterator<UserDO> it = result.iterator();
-				while (it.hasNext()) {
-					userDO = it.next();
+				if (result != null &&  !result.isEmpty()) {
+					Iterator<UserDO> it = result.iterator();
+					while (it.hasNext()) {
+						userDO = it.next();
+						// We assume if gender has come, rest of the details also must have come with user info object
+						if(userDO != null && userInfo.getGender() != null) {
+							logger.log(Level.INFO, "Updating info, User id:" + userDO.getUserId());
+							userDO.setGender(userInfo.getGender());
+							userDO.setName(userInfo.getName());
+							userDO.setUserName(userInfo.getUsername());
+							userDO.setEmail(userInfo.getEmail());
+							pm.makePersistent(userDO);
+						}
+					}
 				}
-				if(userDO != null && userDO.getGender() == null && userInfo.getGender() != null) {
-					userDO.setGender(userInfo.getGender());
-					userDO.setName(userInfo.getName());
-					userDO.setUserName(userInfo.getUsername());
-					pm.makePersistent(userDO);
-				}
+			} catch (Exception e) {
+				logger.log(Level.SEVERE,
+						"Error while getting user from DB or updating Info:" + e.getMessage());
+			} finally {
+				pm.close();
 			}
-		} catch (Exception e) {
-			logger.log(Level.SEVERE,
-					"Error while getting user from DB:" + e.getMessage());
-		} finally {
-			pm.close();
 		}
 		return userDO;
 	}
 
-	
+	/**
+	 * Register user and persist its user details
+	 * @param userInfo
+	 * @return {@link UserInfo}
+	 */
 	public static UserInfo registerUser(UserInfo userInfo) {
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		long userId = 0;
-		try {
-			UserDO userDO = getUserByFBId(userInfo);
-			if (userDO != null) {
-				userInfo.setUserId(userDO.getUserId());
-			} else {
-				userDO = getUserDO(userInfo);
-				pm.makePersistent(userDO);
-				userId = userDO.getUserId();
-				userInfo.setUserId(userId);
+		if(userInfo != null) {
+
+			PersistenceManager pm = PMF.get().getPersistenceManager();
+			long userId = 0;
+			try {
+				//Get user details if already exist, update details if we have latest of them
+				UserDO userDO = getUserByFBId(userInfo);
+
+				if (userDO != null) {
+					userInfo.setUserId(userDO.getUserId());
+				} else {
+					userDO = getUserDO(userInfo);
+					pm.makePersistent(userDO);
+					userId = userDO.getUserId();
+					userInfo.setUserId(userId);
+				}
+			} catch (Exception e) {
+				logger.log(Level.SEVERE,
+						"Error while registering user:" + e.getMessage());
+			} finally {
+				pm.close();
 			}
-		} catch (Exception e) {
-			logger.log(Level.SEVERE,
-					"Error while registering user:" + e.getMessage());
-		} finally {
-			pm.close();
 		}
 		return userInfo;
 	}
@@ -84,7 +102,7 @@ public class UserDAO {
 			query.declareParameters("String id");
 			@SuppressWarnings("unchecked")
 			List<UserDO> result = (List<UserDO>) query
-					.execute(userInfo.getId());
+			.execute(userInfo.getId());
 
 			if (result != null && !result.isEmpty()) {
 				Iterator<UserDO> it = result.iterator();
@@ -107,7 +125,12 @@ public class UserDAO {
 		}
 		return userDO;
 	}
-	
+
+	/**
+	 * Convert user TO to DO
+	 * @param userInfo
+	 * @return {@link UserDO}
+	 */
 	private static UserDO getUserDO(UserInfo userInfo) {
 		UserDO userDO = null;
 		if (userInfo != null) {

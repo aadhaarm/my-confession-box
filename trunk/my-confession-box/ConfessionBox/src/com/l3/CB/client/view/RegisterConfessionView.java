@@ -20,7 +20,6 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
-import com.l3.CB.shared.TO.UserInfo;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
@@ -137,6 +136,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	public void setFriendsOracle(MultiWordSuggestOracle friendsOracle) {
 		this.friendsOracle = friendsOracle;
 		friendsSuggestBox = new SuggestBox(friendsOracle);
+//		friendsSuggestBox.showSuggestionList();
+		hPanelShare.setSpacing(4);
 		hPanelShare.add(friendsSuggestBox);
 	}
 

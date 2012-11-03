@@ -14,7 +14,6 @@ import com.l3.CB.server.DO.ConfessionDO;
 import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.DO.PardonConditionDO;
 import com.l3.CB.server.DO.UserDO;
-import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
@@ -25,6 +24,12 @@ public class ConfessionBasicDAO {
 
 	static Logger logger = Logger.getLogger("CBLogger");
 
+	/**
+	 * Persists confession
+	 * 
+	 * @param confession
+	 * @return confession Id - {@link Long}
+	 */
 	public static Confession registerConfession(Confession confession) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		long confessionId = 0;
@@ -33,6 +38,7 @@ public class ConfessionBasicDAO {
 			pm.makePersistent(confessionDO);
 			confessionId = confessionDO.getConfId();
 			confession.setConfId(confessionId);
+			logger.log(Level.INFO, "Confession logged, ID:" + confessionId);
 		} catch (Exception e) {
 			logger.log(Level.SEVERE,
 					"Error while registering confession:" + e.getMessage());

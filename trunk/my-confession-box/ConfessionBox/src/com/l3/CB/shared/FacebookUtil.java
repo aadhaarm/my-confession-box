@@ -8,19 +8,19 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class FacebookUtil {
 
-    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
-    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
-
-//    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+//    public static final String APPLICATION_ID = "202435696462206"; // replace with real values from Facebook app configuration
 //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
 //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
 //    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
 //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
+//    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
+
+    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
     
     public static String getApplicationId() {
         return APPLICATION_ID;
@@ -107,9 +107,9 @@ public class FacebookUtil {
 	public static String getFaceIconImage(String gender) {
 		final StringBuilder sb = new StringBuilder();
 		if("male".equalsIgnoreCase(gender)) {
-			sb.append("/images/boy50X50.png");
+			sb.append("/images/male.jpg");
 		} else {
-			sb.append("/images/girl 50X50.png");
+			sb.append("/images/male.jpg");
 		}
         return sb.toString();
 	}
@@ -118,5 +118,9 @@ public class FacebookUtil {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(FB_GRAPH_URL).append("me/friends?access_token=").append(accessToken);
 		return sb.toString();
+	}
+	
+	public static String getActivityUrl(Long confId) {
+		return REDIRECT_URL +"?conf="+ confId;
 	}
 }

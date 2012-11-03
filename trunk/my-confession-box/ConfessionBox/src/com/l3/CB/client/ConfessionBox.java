@@ -36,9 +36,9 @@ import com.l3.CB.shared.TO.UserInfo;
 public class ConfessionBox implements EntryPoint {
 
 	private FacebookServiceAsync facebookService = null;
-	private ConfessionServiceAsync confessionService = null;
+	public static ConfessionServiceAsync confessionService = null;
 
-	CBText cbText = GWT.create(CBText.class);
+	public static CBText cbText = GWT.create(CBText.class);
 
 	public static UserInfo loggedInUserInfo;
 	public static String loggedInUserEmail;
@@ -112,12 +112,15 @@ public class ConfessionBox implements EntryPoint {
 					if(result != null){
 						// parse the response text into JSON and get user info
 						ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(result);
-						if(loggedInUserInfo.getEmail() != null) {
-							loggedInUserEmail = loggedInUserInfo.getEmail();
-						}
+
 						if(loggedInUserInfo == null) {
 							Window.alert(cbText.applicationError());
 						}
+						
+						if(loggedInUserInfo != null && loggedInUserInfo.getEmail() != null) {
+							loggedInUserEmail = loggedInUserInfo.getEmail();
+						}
+						
 						ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, confId, accessToken, cbText);
 						confessionController.go(RootPanel.get());
 						removeApplicationLoad();

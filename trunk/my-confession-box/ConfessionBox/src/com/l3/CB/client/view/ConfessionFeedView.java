@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dev.cfg.Condition;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
@@ -99,19 +100,12 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		}
 		if (confessions != null && !confessions.isEmpty()) {
 			for (final Confession confession : confessions) {
-				int numRows = 8;
-				if(!showUserControls) {
-					numRows--;
-				}
-				if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
-					numRows--;
-				}
+			
 				UserInfo confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 
-				final Grid grid = new Grid(numRows, 2);
-				grid.getElement().setId("confession-id-" + confession.getConfId());
-				grid.addStyleName(Constants.STYLE_CLASS_CONFESSION_GRID);
-				int row = 0;
+				final FlowPanel fPnlMainContainer = new FlowPanel();
+				fPnlMainContainer.getElement().setId("confession-id-" + confession.getConfId());
+				fPnlMainContainer.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
 				if(confessedByUserInfo != null) {
 					confession.setFbId(confessedByUserInfo.getId());
@@ -119,48 +113,71 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
 				// Set USER CONTROLS
 				if(showUserControls) {
-					grid.setWidget(row, 1,  CommonUtils.getUserControls(confession, ConfessionBox.loggedInUserInfo, confessionService));
-					row++;
+					fPnlMainContainer.add(CommonUtils.getUserControls(confession, ConfessionBox.loggedInUserInfo, confessionService));
 				}
+				FlowPanel fPnlTopContent = new FlowPanel();
+				fPnlTopContent.setStyleName("top");
 				// Set USER PROFILE PIC or ANYN PIC 
-				grid.setWidget(row, 0, CommonUtils.getProfilePicture(confession, isAnyn));
+				fPnlTopContent.add(CommonUtils.getProfilePicture(confession, isAnyn));
 				// Set USER NAME
-				grid.setWidget(row, 1, CommonUtils.getName(confession, confessedByUserInfo, isAnyn, cbText));
-				row++;
+				fPnlTopContent.add(CommonUtils.getName(confession, confessedByUserInfo, isAnyn, cbText));
+				// Set STATUS BAR
+				fPnlTopContent.add(CommonUtils.getStatusBar(confession, cbText));
+				
+				fPnlMainContainer.add(fPnlTopContent);
+
+				FlowPanel fPnlMiddleContent = new FlowPanel();
+				fPnlMiddleContent.setStyleName("middle");
 				// Confession Title
 				Label lblConfessionTitle = new Label(confession.getConfessionTitle());
 				lblConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
-				grid.setWidget(row, 1, lblConfessionTitle);
-				row++;
+				fPnlMiddleContent.add(lblConfessionTitle);
 				// Confession text
-				grid.setWidget(row, 1, CommonUtils.getTextTruncated(confession.getConfession()));
+				fPnlMiddleContent.add(CommonUtils.getTextTruncated(confession.getConfession()));
 				
 				// Pardon widget
 				if(confession.getConfessedTo() != null) {
-					row++;
-					grid.setWidget(row, 1, getPardonWidget(confession, isAnyn, confessedByUserInfo));
+					fPnlMiddleContent.add(getPardonWidget(confession, isAnyn, confessedByUserInfo));
 				}
-				row++;
+				Widget a = CommonUtils.getConditionStatus(confession);
+				if(a != null)
+				fPnlMiddleContent.add(a);
+				
+				fPnlMiddleContent.add(CommonUtils.getUndoToolTipBar());
+				fPnlMiddleContent.add(CommonUtils.getShareToolTipBar());
+
+				fPnlMainContainer.add(fPnlMiddleContent);
+
+				FlowPanel fPnlButtonEtc = new FlowPanel();
 				// User ACTIVITY Buttons
-				grid.setWidget(row, 1, getUserActivityButtons(confession));
-				row++;
+				fPnlButtonEtc.add(getUserActivityButtons(confession));
+				// Show Pardon status
+				Label lblPardonStatus = CommonUtils.getPardonStatus(confession);
+				if(lblPardonStatus != null) {
+					fPnlButtonEtc.add(lblPardonStatus);
+				}
+
+				fPnlMainContainer.add(fPnlButtonEtc);
+				
 				// Just OPEN
+				final FlowPanel fPnlFBWidgets = new FlowPanel();
+				fPnlFBWidgets.setStyleName("fb_widgets");
 				final Anchor justOpen = new Anchor(cbText.getMeJustOpenLinkText());
 				justOpen.setStyleName(Constants.STYLE_CLASS_JUST_OPEN);
-				grid.setWidget(row, 1, justOpen);
-				final int rowFinal = row;
+				fPnlFBWidgets.add(justOpen);
+				fPnlMainContainer.add(fPnlFBWidgets);
 
 				justOpen.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						grid.remove(justOpen);
-						grid.setHTML(rowFinal, 1, getLikeButton(confession.getConfId()));
-						grid.setHTML(rowFinal+1, 1, getCommentSection(confession.getConfId()));
+						fPnlFBWidgets.remove(justOpen);
+//						grid.add(getLikeButton(confession.getConfId()));
+//						grid.setHTML(rowFinal+1, 1, getCommentSection(confession.getConfId()));
 						CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
 					}
 				});
 
-				vpnlConfessionList.add(grid);
+				vpnlConfessionList.add(fPnlMainContainer);
 				CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
 				
 				confessionsThisView.add(confession);
@@ -175,19 +192,26 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	}
 
 	private Widget getPardonWidget(final Confession confession, boolean anynView, final UserInfo confessionByUser) {
-		HorizontalPanel pardonPanel = new HorizontalPanel();
-		pardonPanel.addStyleName(Constants.STYLE_CLASS_PARDON_STATUS_PANEL);
+		FlowPanel fPnlPardon = new FlowPanel();
+		fPnlPardon.setStyleName("condition");
+		
 		List<ConfessionShare> confessionShares = confession.getConfessedTo();
 		for (ConfessionShare confessionShare : confessionShares) {
 			if(anynView) {
-				Label confStatus = new Label();
+				FlowPanel fPnlCondition = new FlowPanel();
+				
+				Label lblConfession = new Label("Pardoned with condition: This Confession has been pardoned with the following conditions.");
+				fPnlCondition.add(lblConfession);
+				
+				Anchor ancConditionHelpInfo = new Anchor("[?]");
+				fPnlCondition.add(ancConditionHelpInfo);
 
-				if(confessionShare.isPardon()) {
-					confStatus.setText(cbText.pardonedStatus());
-				} else {
-					confStatus.setText(cbText.yetToBePardonedStatus());
+				fPnlPardon.add(fPnlCondition);
+
+				if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty()) {
+					fPnlPardon.add(showPardonConditionStatus(confessionShare.getPardonConditions()));
 				}
-				pardonPanel.add(confStatus);
+			
 			} else {
 				final Button btnPardon = new Button("Pardon");
 				if(confessionShare.isPardon()) {
@@ -199,7 +223,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 				pardonPopupPanel.setGlassEnabled(true);
 				pardonPopupPanel.addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
 
-				pardonPanel.add(btnPardon);
+				fPnlPardon.add(btnPardon);
 				btnPardon.addClickHandler(new ClickHandler() {
 
 					@Override
@@ -212,46 +236,56 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 					}
 				});
 			}
-			if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty())
-				pardonPanel.add(showPardonConditionStatus(confessionShare.getPardonConditions()));
 		}
-		return pardonPanel;
+		return fPnlPardon;
 	}
 
 	private Widget showPardonConditionStatus(List<PardonCondition> pardonConditions) {
 		VerticalPanel vPnlPardonCondition = new VerticalPanel();
+		int countCondition = 1;
 		for (PardonCondition pardonCondition : pardonConditions) {
-			if(pardonCondition != null && Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
-				if(pardonCondition.isFulfil()) {
-					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionFulfilled()));
-				} else {
-					vPnlPardonCondition.add(new Label(cbText.pardonPopupOpenIdentityConditionYetToBoFulfilled()));
-				}
-			} else if(pardonCondition != null && Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
-				if(pardonCondition.isFulfil()) {
-					vPnlPardonCondition.add(new Label(pardonCondition.getCount() + " " + cbText.pardonPopupPardonActivityConditionFulfilled()));
-				} else {
-					vPnlPardonCondition.add(new Label(pardonCondition.getCount() + " " + cbText.pardonPopupPardonActivityConditionYetToBoFulfilled()));
+			if(pardonCondition != null) {
+				FlowPanel fPnlCondition = new FlowPanel();
+				if(Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
+					Label lblCondition = new Label(countCondition + "." + cbText.pardonPopupOpenIdentityConditionView());
+					Anchor ancConditionHelpInfo = new Anchor("[?]");
+					if(pardonCondition.isFulfil()) {
+						lblCondition.setStyleName("text_decoration");
+					}
+					fPnlCondition.add(lblCondition);
+					fPnlCondition.add(ancConditionHelpInfo);
+					vPnlPardonCondition.add(fPnlCondition);
+				} else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
+					Label lblCondition = new Label(countCondition + "." + cbText.pardonPopupPardonActivityConditionPartOne() + pardonCondition.getCount() + cbText.pardonPopupPardonActivityConditionPartTwo());
+					Anchor ancConditionHelpInfo = new Anchor("[?]");
+					if(pardonCondition.isFulfil()) {
+						lblCondition.setStyleName("text_decoration");
+					}
+					fPnlCondition.add(lblCondition);
+					fPnlCondition.add(ancConditionHelpInfo);
+					vPnlPardonCondition.add(fPnlCondition);
 				}
 			}
+			countCondition++;
 		}
 		return vPnlPardonCondition;
 	}
 
 	private FlowPanel getUserActivityButtons(final Confession confession) {
 		final FlowPanel fPlaneUserActivity = new FlowPanel();
+		fPlaneUserActivity.setStyleName("buttons");
 		final ActivityButton btnSB = (ActivityButton) getSBButton(confession);
 		final ActivityButton btnSY = (ActivityButton) getSYButton(confession);
 		final ActivityButton btnLM = (ActivityButton) getLMButton(confession);
 		final ActivityButton btnSP = (ActivityButton) getSPButton(confession);
 		final ActivityButton btnSNP = (ActivityButton) getSNPButton(confession);
 		final ActivityButton btnAB = (ActivityButton) getABButton(confession);
-
-		if (confession.getTimeStamp() != null) {
-			Label lblDateTimeStamp = new Label(CommonUtils.getDateInFormat(confession.getTimeStamp()));
-			lblDateTimeStamp.addStyleName(Constants.STYLE_CLASS_DATE_TIME_STAMP);
-			fPlaneUserActivity.add(lblDateTimeStamp);
-		}
+//
+//		if (confession.getTimeStamp() != null) {
+//			Label lblDateTimeStamp = new Label(CommonUtils.getDateInFormat(confession.getTimeStamp()));
+//			lblDateTimeStamp.addStyleName(Constants.STYLE_CLASS_DATE_TIME_STAMP);
+//			fPlaneUserActivity.add(lblDateTimeStamp);
+//		}
 		confessionService.getUserActivity(ConfessionBox.loggedInUserInfo.getUserId(),
 				confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
 
@@ -260,25 +294,25 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
 				if (result != null) {
 					if (result.containsKey(Activity.ABUSE.name())) {
-						btnAB.getBtn().setEnabled(false);
+						btnAB.disableBtn();
 					}
 					if (result.containsKey(Activity.LAME.name())) {
-						btnLM.getBtn().setEnabled(false);
+						btnLM.disableBtn();
 					}
 					if (result.containsKey(Activity.SAME_BOAT.name())) {
-						btnSB.getBtn().setEnabled(false);
+						btnSB.disableBtn();
 					}
 					if (result.containsKey(Activity.SHOULD_BE_PARDONED
 							.name())) {
-						btnSP.getBtn().setEnabled(false);
+						btnSP.disableBtn();
 					}
 					if (result
 							.containsKey(Activity.SHOULD_NOT_BE_PARDONED
 									.name())) {
-						btnSNP.getBtn().setEnabled(false);
+						btnSNP.disableBtn();
 					}
 					if (result.containsKey(Activity.SYMPATHY.name())) {
-						btnSY.getBtn().setEnabled(false);
+						btnSY.disableBtn();
 					}
 				}
 

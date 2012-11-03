@@ -13,6 +13,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.l3.CB.server.DO.ConfessionDO;
+import com.l3.CB.server.DO.SubscribtionDO;
 import com.l3.CB.server.DO.UserActivityDO;
 import com.l3.CB.shared.TO.Activity;
 
@@ -194,5 +195,40 @@ public class ConfessionOtherDAO {
 		}
 
 		return confIds;
+	}
+
+	public static boolean isSubscribed(Long confId, Long userId, boolean changeSubscribtionStatus) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		boolean isSubscribed = false;
+		try {
+			Query query = pm.newQuery(SubscribtionDO.class);
+			query.setFilter("userId == user && confId == conf");
+			query.declareParameters("String user" + ", "  + "String conf");
+			@SuppressWarnings("unchecked")
+			List<SubscribtionDO> result = (List<SubscribtionDO>) query.execute(userId, confId);
+
+			if (result != null && !result.isEmpty()) {
+				Iterator<SubscribtionDO> it = result.iterator();
+				while (it.hasNext()) {
+					SubscribtionDO subscribtionDO = it.next();
+					if(subscribtionDO != null) {
+						if(changeSubscribtionStatus) {
+							subscribtionDO.setSubscribed(!subscribtionDO.isSubscribed());
+							pm.makePersistent(subscribtionDO);
+						}
+						isSubscribed = subscribtionDO.isSubscribed();
+					}
+				}
+			} else if(changeSubscribtionStatus) {
+				SubscribtionDO subscribtionDO = new SubscribtionDO(userId, confId, true);
+				pm.makePersistent(subscribtionDO);
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE,
+					"Error while checking if user is subscribed:" + e.getMessage());
+		} finally {
+			pm.close();
+		}
+		return isSubscribed;
 	}
 }

@@ -10,6 +10,11 @@ public class UserManager {
 		return UserDAO.registerUser(userInfo);
 	}
 
+	/**
+	 * Get User already registered in CB
+	 * @param userId
+	 * @return {@link UserInfo}
+	 */
 	public static UserInfo getUserByUserId(Long userId) {
 		return getUserInfo(UserDAO.getUserByUserId(new UserInfo(userId)));
 	}
@@ -27,9 +32,4 @@ public class UserManager {
 		}
 		return userInfo;
 	}
-
-	public static boolean validateUserndRequest() {
-		return false;
-	}
 }
-

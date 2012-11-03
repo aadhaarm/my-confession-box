@@ -30,10 +30,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.ui.widgets.ChangeVisibilityButton;
 import com.l3.CB.client.ui.widgets.DeleteConfessionButton;
+import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
 
@@ -64,7 +66,7 @@ public class CommonUtils {
 		   if (response.authResponse) {
 	   		 @com.l3.CB.client.ConfessionBox::accessToken = response.authResponse.accessToken;
 		   }
-		 }, {scope: 'email'});
+		 }, {scope: 'email'}, {display: 'page'});
 		}
 	}-*/;
 
@@ -73,13 +75,31 @@ public class CommonUtils {
   		$wnd.FB.login(function(response) {
 		   if (response.authResponse) {
 	   		 @com.l3.CB.client.ConfessionBox::accessToken = response.authResponse.accessToken;
-			FB.api('/me', function(response) {
+			$wnd.FB.api('/me', function(response) {
 				alert(response.email);
 			  @com.l3.CB.client.ConfessionBox::loggedInUserEmail = response.email;
 			});
 		   }
 		 }, {scope: 'email'});
 		}
+	}-*/;
+	
+	public static native void postOnWall(String linkUrl, String pictureUrl, String activityTitle, String activityCaption, String activityDescription) /*-{
+        // calling the API ...
+        var obj = {
+          method: 'feed',
+          link: linkUrl,
+          picture: pictureUrl,
+          name: activityTitle,
+          caption: activityCaption,
+          description: activityDescription
+        };
+
+        function callback(response) {
+//          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        }
+
+        $wnd.FB.ui(obj, callback);
 	}-*/;
 
 
@@ -109,21 +129,24 @@ public class CommonUtils {
 		UserInfo userInfo = null;
 		if(jsonString != null && jsonString.length() > 0) {
 			jsonString = stripOutComment(jsonString);
-			// parse the response text into JSON
-			JSONValue jsonValue = JSONParser.parseStrict(jsonString);
-			if(jsonValue != null) {
-				JSONObject jsonObject = jsonValue.isObject();
-				if(jsonObject != null) {
-					userInfo = new UserInfo();
-					userInfo.setId(getString(jsonObject.get("id")));
-					userInfo.setFirst_name(getString(jsonObject.get("first_name")));
-					userInfo.setLast_name(getString(jsonObject.get("last_name")));
-					userInfo.setLink(getString(jsonObject.get("link")));
-					userInfo.setName(getString(jsonObject.get("name")));
-					userInfo.setUsername(getString(jsonObject.get("username")));
-					userInfo.setGender(getString(jsonObject.get("gender")));
-					userInfo.setLocale(getString(jsonObject.get("locale")));
-					userInfo.setEmail(getString(jsonObject.get("email")));
+			if(jsonString != null && jsonString.length() > 0) {
+
+				// parse the response text into JSON
+				JSONValue jsonValue = JSONParser.parseStrict(jsonString);
+				if(jsonValue != null) {
+					JSONObject jsonObject = jsonValue.isObject();
+					if(jsonObject != null) {
+						userInfo = new UserInfo();
+						userInfo.setId(getString(jsonObject.get("id")));
+						userInfo.setFirst_name(getString(jsonObject.get("first_name")));
+						userInfo.setLast_name(getString(jsonObject.get("last_name")));
+						userInfo.setLink(getString(jsonObject.get("link")));
+						userInfo.setName(getString(jsonObject.get("name")));
+						userInfo.setUsername(getString(jsonObject.get("username")));
+						userInfo.setGender(getString(jsonObject.get("gender")));
+						userInfo.setLocale(getString(jsonObject.get("locale")));
+						userInfo.setEmail(getString(jsonObject.get("email")));
+					}
 				}
 			}
 		}
@@ -177,26 +200,27 @@ public class CommonUtils {
 		} else {
 			profileImage = new Image(FacebookUtil.getFaceIconImage(confession.getGender()));
 		}
+		profileImage.setStyleName("image");
 		return profileImage;
 	}
 
 	public static Widget getName(Confession confession, UserInfo userInfo, boolean isAnyn, CBText cbText) {
-		Widget nameWidget = null;
+		FlowPanel fPnlNameWidget = null;
 		if(confession != null) {
+			fPnlNameWidget = new FlowPanel();
+			fPnlNameWidget.setStyleName("name");
 			if (!confession.isShareAsAnyn() || ! isAnyn) {
 				if (userInfo != null) {
 					Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
-					ancUserName.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
-					nameWidget = ancUserName;
+					fPnlNameWidget.add(ancUserName);
 				}
 			} else {
-				Label lblConf = new Label();
-				lblConf.addStyleName(Constants.STYLE_CLASS_CONFESSED_BY);
-				lblConf.setText(cbText.confessedByAnynName());
-				nameWidget = lblConf;
+				Anchor ancAnynUser = new Anchor();
+				ancAnynUser.setText(cbText.confessedByAnynName());
+				fPnlNameWidget.add(ancAnynUser);
 			}
 		}
-		return nameWidget;
+		return fPnlNameWidget;
 	}
 
 	public static Widget getConfession(Confession confession) {
@@ -223,9 +247,9 @@ public class CommonUtils {
 
 	public static Widget getTextTruncated(final String confession) {
 		final FlowPanel fPnlConfession = new FlowPanel();
+		fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 		if(confession != null) {
 			final Anchor anchMore = new Anchor("more..");
-			anchMore.setStyleName(Constants.STYLE_CLASS_MORE_TEXT_LINK);
 			if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
 				final Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
 
@@ -319,5 +343,65 @@ public class CommonUtils {
 	public static Widget getEmptyWidget() {
 		Label lblEmptyPage = new Label("No confessions for you in this view.");
 		return lblEmptyPage;
+	}
+
+	public static Widget getStatusBar(Confession confession, CBText cbText) {
+		FlowPanel fPnlStatusBar = new FlowPanel();
+		fPnlStatusBar.setStyleName("status_bar");
+		
+		// Subscribe link
+		fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
+
+		// Time stamp
+		Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInFormat(confession.getTimeStamp()));
+		lblDateTimeStamp.setStyleName("time_stamp");
+		fPnlStatusBar.add(lblDateTimeStamp);
+		
+		return fPnlStatusBar;
+	}
+
+	public static Widget getUndoToolTipBar() {
+		FlowPanel fPnlToolTipBar = new FlowPanel();
+		fPnlToolTipBar.setStyleName("tooltip_left");
+		Anchor ancHelpInfo = new Anchor("[?]");
+		Label lblUndoToolTip = new Label("Click again to undo");
+		fPnlToolTipBar.add(lblUndoToolTip);
+		fPnlToolTipBar.add(ancHelpInfo);
+		return fPnlToolTipBar;
+	}
+
+	public static Widget getShareToolTipBar() {
+		FlowPanel fPnlToolTipBar = new FlowPanel();
+		fPnlToolTipBar.setStyleName("tooltip_right");
+		Anchor ancShare = new Anchor("Share");
+		Label lblShareToolTip = new Label("all ur votes on your wall");
+		Anchor ancHelpInfo = new Anchor("[?]");
+		fPnlToolTipBar.add(ancShare);
+		fPnlToolTipBar.add(lblShareToolTip);
+		fPnlToolTipBar.add(ancHelpInfo);
+		return fPnlToolTipBar;
+	}
+
+	public static Label getPardonStatus(Confession confession) {
+		if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+			Label pardonStatus = new Label();
+			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+				if(confessionShare.isPardon()) {
+					pardonStatus.setText("PARDONED");
+					pardonStatus.setStyleName("pardon_status_yes");
+					return pardonStatus;
+				} else {
+					pardonStatus.setText("Awaiting PARDONED");
+					pardonStatus.setStyleName("pardon_status_no");
+					return pardonStatus;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Widget getConditionStatus(Confession confession) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

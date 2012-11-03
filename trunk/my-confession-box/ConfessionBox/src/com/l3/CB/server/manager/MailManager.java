@@ -19,15 +19,17 @@ import com.l3.CB.shared.TO.UserInfo;
 public class MailManager {
 
 	static Logger logger = Logger.getLogger("CBLogger");
-
+	static String fromMailAddress = "fbconfess@appspot.gserviceaccount.com";
+	
 	public static boolean sendConfessionEmail(UserInfo confessionToUser, UserInfo confessionByUser, long confId) {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 		String msgBody = getConfessionEmailMsgBody(confId, confessionByUser.getName(), confessionToUser.getName());
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(confessionByUser.getEmail(), "Confession Box (fbconfess admin)"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionToUser.getUsername()+"@facebook.com", "Dear " + confessionToUser.getName()));
+			msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionToUser.getEmail(), confessionToUser.getName()));
+			msg.addRecipient(Message.RecipientType.CC, new InternetAddress(confessionByUser.getEmail(), confessionByUser.getName()));
 			msg.setSubject("Someone has confessed to you");
 			msg.setText(msgBody);
 			Transport.send(msg);
@@ -60,8 +62,9 @@ public class MailManager {
 		String msgBody = getPardonesEmailMsgBody(pardonedByUser, confId, pardonedToUser);
 		try {
 			Message msg = new MimeMessage(session);
-			msg.setFrom(new InternetAddress(pardonedByUser.getEmail(), "Confession Box (fbconfess admin)"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(pardonedToUser.getUsername()+"@facebook.com", "Dear " + pardonedToUser.getName()));
+			msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(pardonedToUser.getEmail(), pardonedToUser.getName()));
+			msg.addRecipient(Message.RecipientType.CC, new InternetAddress(pardonedByUser.getEmail(), pardonedByUser.getName()));
 			msg.setSubject("You have been pardoned");
 			msg.setText(msgBody);
 			Transport.send(msg);

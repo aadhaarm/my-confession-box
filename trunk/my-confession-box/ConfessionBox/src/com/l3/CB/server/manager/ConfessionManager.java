@@ -13,6 +13,7 @@ import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionManager {
+
 	/**
 	 * @param confession
 	 * @return
@@ -21,22 +22,25 @@ public class ConfessionManager {
 		confession.setUserIp(ipAddress);
 		confession = ConfessionBasicDAO.registerConfession(confession);
 
-		UserInfo confessionByUser = UserManager.getUserByUserId(confession.getUserId());
 		
 		//Register confession Shared
 		if(confession.getConfessedTo() != null) {
+			// Get the confession by user details
+			UserInfo confessionByUser = UserManager.getUserByUserId(confession.getUserId());
+			
 			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-
+				// Get User Share to details, register if not already registered
 				UserInfo userSharedTo = new UserInfo();
 				userSharedTo.setId(confessionShare.getFbId());
-				userSharedTo.setUsername(confessionShare.getUsername());
 				userSharedTo.setName(confessionShare.getUserFullName());
 				userSharedTo = UserManager.registerUser(userSharedTo);
-
+				// In any case, we have got the user ID, s we can register the share
 				confessionShare.setUserId(userSharedTo.getUserId());
 				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
 
-				MailManager.sendConfessionEmail(userSharedTo, confessionByUser, confession.getConfId());
+				if(userSharedTo.getEmail() != null && "".equals(userSharedTo.getEmail())) {
+					MailManager.sendConfessionEmail(userSharedTo, confessionByUser, confession.getConfId());
+				}
 			}
 		}
 		return confession;
@@ -154,5 +158,13 @@ public class ConfessionManager {
 
 	public static long getConfessionsForMeCount(Long userId) {
 		return ConfessionBasicDAO.getConfessionsForMeCount(userId);
+	}
+
+	public static boolean changeSubscribtionStatus(Long confId, Long userId) {
+		return ConfessionOtherDAO.isSubscribed(confId, userId, true);
+	}
+
+	public static boolean isSubscribed(Long confId, Long userId) {
+		return ConfessionOtherDAO.isSubscribed(confId, userId, false);
 	}
 }

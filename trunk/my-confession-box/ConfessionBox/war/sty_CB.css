@@ -158,6 +158,33 @@ img {
     z-index: 1;
 }
 
+.loaderWrap {
+	position: absolute;
+    right: 38px;
+    top: 29px;
+    z-index: 1;
+}
+
+.timerCountWrap {
+	position: absolute;
+	text-align: right;
+    right: 3px;
+    top: 29px;
+    font-size:xx-small;
+    z-index: 1;
+}
+
+.shareWrap {
+	position: absolute;
+	text-align: right;
+    right: 3px;
+    top: 24px;
+    font-size:x-small;
+    z-index: 1;
+    font-weight: bold;
+    background-color: white;
+}
+
 .activityButtonContainer {
 	float: left;
 	width: 57px;	

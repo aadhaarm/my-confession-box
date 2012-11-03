@@ -1,0 +1,197 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
+
+.main_container{
+	background:#f5f5f5;
+	padding:0 0px 0 0px;
+	width:572px;
+	height:auto;
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size:small;
+	border-bottom:solid 1px #CCC;
+}
+
+a:link, a:visited {
+	color:#415896;
+}
+
+a:hover {
+	color:#07285d;
+	}
+	
+.text_decoration {
+	text-decoration:line-through;	
+}
+/*Top div styling*/
+
+.top {
+	height: auto;
+	width:auto;
+	padding:10px 12px 10px 12px;
+}
+/*3 divs are put inside top div for image placehosder, name and status bar (time stamp), we can also add more divs to top panel later*/
+
+.image {
+	float: left;
+	}
+	
+.name {
+	margin-left:80px;
+	font-weight:600;
+}
+.status_bar {
+	float:right;
+	text-align:right;
+	color: #999;
+	font-size:smaller;
+}
+
+.status_bar a {
+color: #999;	
+}
+
+.time_stamp {
+    float:right;
+    position:relative;
+    padding-left:4px;
+}
+
+/*Middle div styling*/
+
+.middle {
+	position:relative;
+	margin: 10px 0 10px 0;
+	}
+
+.confession_title {
+	font-weight:600;
+	padding-top:25px;
+	padding-left:19px;
+	padding-right:19px;
+	}
+	
+.confession_body {
+	padding:5px 19px 15px 19px;
+	margin:0 0px 0 0px;
+	font-size: 12px;
+	color:#343434;
+	/*background-color:#F8FFD7;*/
+	background-color:#FEFFED;
+	}
+
+.condition {
+	background-color:#73883e;
+	padding:4px 5px 2px 10px;
+	margin:0 25px 0px 25px;
+	color:#FFF;
+	font-size: smaller;
+	line-height:15px;
+	}
+	
+.condition_label a {
+	font-weight:600;
+	color:#fff;
+	}
+
+.condition_status {
+	float:right;
+	margin-top:-42px;
+	margin-right:45px;
+	color:#FFF;
+	background-color:#39F;
+	padding:3px 5px 3px 5px;
+	font-size:10px;
+}
+
+.tooltip_left{
+	margin-left:25px;
+	margin-right:25px;
+	padding:2px 0 2px 5px;
+	border:#CCC;
+	/*border-bottom-style:dashed;*/
+	color:#999;
+	font-size:12px;
+	background-color:#333;
+	}
+
+.tooltip_right{
+	margin-left:25px;
+	margin-right:25px;
+	padding:2px 0 2px 5px;
+	border:#CCC;
+	/*border-bottom-style:dashed;*/
+	color:#999;
+	font-size:12px;
+	background-color:#333;
+	}
+
+.tooltip_left a {
+	color:#fff;
+	}
+
+.tooltip_right a {
+	color:#fff;
+	}
+
+
+/*bottom div is below middle div for all buttons and pardon staus area. This div will have 2 more sub divs - buttons and pardon_status*/
+
+.buttons {
+	position:relative;
+}
+
+.buttons {
+width:auto;
+height:45px;
+}
+
+.buttons ul {
+	width:auto;
+margin:0 auto 0 auto;
+}
+
+.buttons ul li {
+	float:left;
+padding:0 2px 0 2px;
+border-right:1px solid #FFF;
+border-left:1px solid #FFF;
+height:41px;
+list-style:none;
+display:block;
+line-height:30px;
+text-align:center;
+cursor:pointer;
+}
+
+.buttons li:hover {
+
+}
+
+/*pardon status div*/
+
+.pardon_status_yes {
+	float:right;
+	padding:4px 20px;
+	margin:-41px 10px 0 0;
+	position:relative;
+	background-color:#73883e;
+	color:#FFF;
+	font-size:18px;
+}
+
+.pardon_status_no {
+	float:right;
+	padding:4px 15px;
+	margin:-39px 10px 0 0;
+	position:relative;
+	background-color:#999;
+	color:#FFF;
+	font-size:16px;
+}
+
+.fb_widgets {
+	padding:5px 5px;
+	font-size:11px;
+}

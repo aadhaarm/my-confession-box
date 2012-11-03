@@ -88,7 +88,6 @@ public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implement
 	}
 
 	public boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn) {
-//		getThreadLocalRequest().getCookies()[0].
 		return ConfessionManager.changeIdentityVisibility(userId, fbId, confId, shareAnyn);
 	}
 
@@ -107,5 +106,15 @@ public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implement
 	@Override
 	public long getConfessionForMeCount(Long userId) {
 		return ConfessionManager.getConfessionsForMeCount(userId);
+	}
+
+	@Override
+	public boolean subscribe(Long confId, Long userId) {
+		return ConfessionManager.changeSubscribtionStatus(confId, userId);
+	}
+
+	@Override
+	public boolean isSubscribed(Long confId, Long userId) {
+		return ConfessionManager.isSubscribed(confId, userId);
 	}
 }

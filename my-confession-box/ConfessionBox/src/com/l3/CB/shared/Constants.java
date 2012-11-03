@@ -36,7 +36,7 @@ public class Constants {
 	public static final Level LOG_LEVEL = Level.OFF;
 	
 	//Loader image animation
-	public static final String LOADER_IMAGE_PATH = "/images/ajax-loader_1.gif";
+	public static final String LOADER_IMAGE_PATH = "/images/ajax-loader.gif";
 
 	//Style class
 	public static final String STYLE_CLASS_LOADER_IMAGE = "loaderImage";
@@ -55,13 +55,13 @@ public class Constants {
 	public static final String STYLE_CLASS_PARDON_MODAL = "pardonModalPopupWindow";
 	public static final String STYLE_CLASS_PARDON_STATUS_PANEL = "pardonStatusPanel";
 	public static final String STYLE_CLASS_DATE_TIME_STAMP = "dateTimeStamp";
-	public static final String STYLE_CLASS_CONFESSION_GRID = "confessionGridElement";
+	public static final String STYLE_CLASS_CONFESSION_MAIN_CONTAINER = "main_container";
 	public static final String STYLE_CLASS_BUTTON_WRAPPER = "btnWrapper";
 	public static final String STYLE_CLASS_FIELD_ERROR = "fieldError";
 	public static final String STYLE_CLASS_REFRESH_BUTTON = "refreshButton";
 	public static final String STYLE_CLASS_JUST_OPEN = "justOpen";
-	public static final String STYLE_CLASS_CONFESSION_TITLE_TEXT = "confessionTitleText";
-	public static final String STYLE_CLASS_MORE_TEXT_LINK = "moreTextLink";
+	public static final String STYLE_CLASS_CONFESSION_TITLE_TEXT = "confession_title";
+	public static final String STYLE_CLASS_CONFESSION_BODY = "confession_body";
 	public static final String STYLE_CLASS_HELP_INFO = "helpInfoPanel";
 
 	public static final String PARDON_GRID_ID = "pardon-confession-grid-id";

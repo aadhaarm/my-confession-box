@@ -115,33 +115,20 @@ public class RegisterConfessionPresenter implements Presenter {
 
 					// Get confession to be saved
 					final Confession confession = getConfessionToBeSaved();
+
 					if(confession != null) {
+
 						//Register Shared-To info
 						if(display.isShared()) {
-							final List<ConfessionShare> confessedTo = new ArrayList<ConfessionShare>();
-							String fbIdSharedUser = userfriends.get(display.getSharedWith()).getId();
-							if(fbIdSharedUser != null) {
-								final ConfessionShare confessToWithCondition = getConfessedToWithConditions(fbIdSharedUser);
-								if(confessToWithCondition != null) {
-									facebookService.getUserDetails(fbIdSharedUser, accessToken, new AsyncCallback<String>() {
-										@Override
-										public void onSuccess(String result) {
-											UserInfo confessedToUser = CommonUtils.getUserInfo(result);
-											if(confessedToUser != null) {
-												confessToWithCondition.setUserFullName(confessedToUser.getName());
-												confessToWithCondition.setUsername(confessedToUser.getUsername());
-												confessedTo.add(confessToWithCondition);
-												confession.setConfessedTo(confessedTo);
-												//Finally register confession
-												finallyRegisterConfession(confession);
-											}
-										}
-
-										@Override
-										public void onFailure(Throwable caught) {
-											Error.handleError("RegisterConfessionPresenter", "bind", caught);
-										}
-									});
+							final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
+							UserInfo fbSharedUser = userfriends.get(display.getSharedWith());
+							if(fbSharedUser != null) {
+								final ConfessionShare confessTo = getConfessedShareTO(fbSharedUser.getId());
+								if(confessTo != null) {
+									lstConfessTo.add(confessTo);
+									confession.setConfessedTo(lstConfessTo);
+									//Finally register confession
+									finallyRegisterConfession(confession);
 								}
 							}
 						} else  {
@@ -151,8 +138,6 @@ public class RegisterConfessionPresenter implements Presenter {
 					}
 				}
 			}
-
-
 		});
 
 		display.getCbHideIdentity().addClickHandler(new ClickHandler() {
@@ -236,7 +221,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	 * @param fbIdSharedUser
 	 * @return
 	 */
-	private ConfessionShare getConfessedToWithConditions(String fbIdSharedUser) {
+	private ConfessionShare getConfessedShareTO(String fbIdSharedUser) {
 		if(fbIdSharedUser != null) {
 			final ConfessionShare confessToWithCondition = new ConfessionShare();
 			confessToWithCondition.setTimeStamp(new Date());

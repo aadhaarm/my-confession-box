@@ -61,10 +61,10 @@ public interface CBText extends Constants {
 	@DefaultStringValue("I pardon you on one condition, Only when you Un-Hide your identity to the world.")
 	String pardonPopupOpenIdentityCondition();
 	
-	@DefaultStringValue("I pardon you on one condition, Only when ")
+	@DefaultStringValue("Get ")
 	String pardonPopupPardonActivityConditionPartOne();	
 	
-	@DefaultStringValue("people give you 'Should be pardoned' vote.")
+	@DefaultStringValue(" 'Should be pardoned' votes.")
 	String pardonPopupPardonActivityConditionPartTwo();
 	
 	@DefaultStringValue("I hereby pardon you for the above mentioned confession, only when you fulfill the above conditions that I have selected")
@@ -82,11 +82,8 @@ public interface CBText extends Constants {
 	@DefaultStringValue("Yet to be pardoned")
 	String yetToBePardonedStatus();
 
-	@DefaultStringValue("Un-Hide Identity: Condition fulfilled")
-	String pardonPopupOpenIdentityConditionFulfilled();
-
-	@DefaultStringValue("Un-Hide Identity: Yet to be fulfilled")
-	String pardonPopupOpenIdentityConditionYetToBoFulfilled();
+	@DefaultStringValue("Reveal your Identity")
+	String pardonPopupOpenIdentityConditionView();
 
 	@DefaultStringValue("people should give you 'Should be pardoned' vote: Condition fulfilled")
 	String pardonPopupPardonActivityConditionFulfilled();
@@ -126,4 +123,14 @@ public interface CBText extends Constants {
 
 	@DefaultStringValue("'Like', 'Comments' & 'Send'...")
 	String getMeJustOpenLinkText();
+
+	@DefaultStringValue("Subscribe")
+	String subscribeAnchorLabel();
+
+	@DefaultStringValue("Un-Subscribe")
+	String unSubscribeAnchorLabel();
+
+	@DefaultStringValue("Subscribe to comments and pardon status updates of this confession")
+	String subscribeLinkToolTipText();
+	
 }

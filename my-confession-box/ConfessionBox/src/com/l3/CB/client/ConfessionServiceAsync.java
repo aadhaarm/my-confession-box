@@ -39,4 +39,8 @@ public interface ConfessionServiceAsync {
 	void getMyConfessionCount(Long userId, AsyncCallback<Long> callback);
 
 	void getConfessionForMeCount(Long userId, AsyncCallback<Long> callback);
+
+	void subscribe(Long confId, Long userId, AsyncCallback<Boolean> callback);
+
+	void isSubscribed(Long confId, Long userId, AsyncCallback<Boolean> callback);
 }

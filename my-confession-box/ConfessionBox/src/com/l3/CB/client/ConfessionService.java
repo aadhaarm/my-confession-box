@@ -50,4 +50,7 @@ public interface ConfessionService extends XsrfProtectedService {
 
 	long getConfessionForMeCount(Long userId);
 
+	boolean subscribe(Long confId, Long userId);
+
+	boolean isSubscribed(Long confId, Long userId);
 }

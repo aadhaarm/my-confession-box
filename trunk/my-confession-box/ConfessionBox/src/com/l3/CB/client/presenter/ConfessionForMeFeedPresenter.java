@@ -5,13 +5,11 @@ import java.util.List;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.ConfessionBox;
-import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -19,81 +17,79 @@ import com.l3.CB.shared.TO.Confession;
 
 public class ConfessionForMeFeedPresenter implements Presenter {
 
-	@SuppressWarnings("unused")
-	private final HandlerManager eventBus;
-	private final ConfessionServiceAsync confessionService; 
-	private final Display display;
-	private final boolean showUserControls;
+    private final Display display;
+    private final boolean showUserControls;
 
-	public ConfessionForMeFeedPresenter(HandlerManager eventBus,
-			ConfessionServiceAsync rpcService, Display display) {
-		super();
-		this.eventBus = eventBus;
-		this.confessionService = rpcService;
-		this.display = display;
-		
-		showUserControls = false;
-		setConfessions(true);
-		bind();
+    public ConfessionForMeFeedPresenter(Display display) {
+	super();
+	this.display = display;
+	showUserControls = false;
+	setConfessions(true);
+	bind();
+    }
+
+    private void setConfessions(boolean clean) {
+	if(clean) {
+	    this.display.clearConfessions();
 	}
-
-	private void setConfessions(boolean clean) {
-		if(clean) {
-			this.display.clearConfessions();
+	this.display.setConfessionPagesLoaded(0);
+	ConfessionBox.confessionService.getConfessionsTOME(0, ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+	    @Override
+	    public void onSuccess(List<Confession> result) {
+		display.setConfessions(result, false, showUserControls);
+		if(result == null || result.isEmpty()) {
+		    display.showEmptyScreen();
 		}
-		this.display.setConfessionPagesLoaded(0);
-		confessionService.getConfessionsTOME(0, ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+	    }
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
+	    }
+	});
+    }
+
+    private void bind() {
+	/*
+	 * LOAD MORE CONFESSIONS on scroll
+	 */
+	Window.addWindowScrollHandler(new Window.ScrollHandler() {
+	    boolean inEvent = false;
+	    @Override
+	    public void onWindowScroll(com.google.gwt.user.client.Window.ScrollEvent event) {
+		if(display.isMoreConfessions() && !inEvent && ((Window.getScrollTop() + Window.getClientHeight()) >= (Document.get().getBody().getAbsoluteBottom()))) {
+		    display.addLoaderImage();
+		    inEvent = true;
+		    display.incrementConfessionPagesLoaded();
+		    ConfessionBox.confessionService.getConfessionsTOME(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(),	new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
-				display.setConfessions(result, false, showUserControls);
-				if(result == null || result.isEmpty()) {
-					display.showEmptyScreen();
-				}
+			    display.setConfessions(result, false, showUserControls);
+			    inEvent = false;
+			    display.removeLoaderImage();
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-				Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
+			    Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
 			}
-		});
-	}
+		    });
+		}
+	    }
+	});
 
-	private void bind() {
-		Window.addWindowScrollHandler(new Window.ScrollHandler() {
-			boolean inEvent = false;
-			@Override
-			public void onWindowScroll(com.google.gwt.user.client.Window.ScrollEvent event) {
-				if(display.isMoreConfessions() && !inEvent && ((Window.getScrollTop() + Window.getClientHeight()) >= (Document.get().getBody().getAbsoluteBottom()))) {
-					display.addLoaderImage();
-					inEvent = true;
-					display.incrementConfessionPagesLoaded();
-					confessionService.getConfessionsTOME(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(),	new AsyncCallback<List<Confession>>() {
-						@Override
-						public void onSuccess(List<Confession> result) {
-							display.setConfessions(result, false, showUserControls);
-							inEvent = false;
-							display.removeLoaderImage();
-						}
-						@Override
-						public void onFailure(Throwable caught) {
-							Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
-						}
-					});
-				}
-			}
-		});
-		
-		display.getRegreshButton().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				setConfessions(true);
-			}
-		});
-	}
+	/*
+	 * Refresh when REFRESH button is pressed
+	 */
+	display.getRefreshButton().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		setConfessions(true);
+	    }
+	});
+    }
 
-	@Override
-	public void go(HasWidgets container) {
-		RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
-		RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
-	}
+    @Override
+    public void go(HasWidgets container) {
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
+    }
 }

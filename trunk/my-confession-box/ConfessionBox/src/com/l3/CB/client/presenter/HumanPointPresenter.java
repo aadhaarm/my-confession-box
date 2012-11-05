@@ -5,67 +5,66 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
-import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 
 public class HumanPointPresenter implements Presenter {
 
-	public interface Display {
-		Widget asWidget();
-		public void setPoint(int points);
-	}
-	
-	private final Display display;
+    public interface Display {
+	Widget asWidget();
+	public void setPoint(int points);
+    }
 
-	public HumanPointPresenter(Display display) {
-		super();
-		this.display = display;
+    private final Display display;
 
-		bind();
-	}
+    public HumanPointPresenter(Display display) {
+	super();
+	this.display = display;
 
-	private void bind() {
-		update();
-	}
+	bind();
+    }
 
-	@Override
-	public void go(HasWidgets container) {
-		RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).clear();
-		RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).add(display.asWidget());		
-	}
+    private void bind() {
+	update();
+    }
 
-	public void update() {
-		ConfessionBox.confessionService.getHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Integer>() {
-			
-			@Override
-			public void onSuccess(Integer result) {
-				display.setPoint(result);
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Error.handleError("HumanPointPresenter", "onFailure", caught);
-			}
-		});
-	}
-	
-	/**
-	 * UPDATE HUMAN POINTS and REFRESH HUMAN POINTS BAR
-	 * @param activity
-	 */
-	public void updateHumanPoints(final int points) {
-		ConfessionBox.confessionService.updateHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), points, new AsyncCallback<Integer>() {
-			
-			@Override
-			public void onSuccess(Integer result) {
-				display.setPoint(result);
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Error.handleError("ActivityButton", "getActivityTimer", caught);
-			}
-		});
-	}
+    @Override
+    public void go(HasWidgets container) {
+	RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).clear();
+	RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).add(display.asWidget());		
+    }
+
+    public void update() {
+	ConfessionBox.confessionService.getHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Integer>() {
+
+	    @Override
+	    public void onSuccess(Integer result) {
+		display.setPoint(result);
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("HumanPointPresenter", "onFailure", caught);
+	    }
+	});
+    }
+
+    /**
+     * UPDATE HUMAN POINTS and REFRESH HUMAN POINTS BAR
+     * @param activity
+     */
+    public void updateHumanPoints(final int points) {
+	ConfessionBox.confessionService.updateHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), points, new AsyncCallback<Integer>() {
+
+	    @Override
+	    public void onSuccess(Integer result) {
+		display.setPoint(result);
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("ActivityButton", "getActivityTimer", caught);
+	    }
+	});
+    }
 }

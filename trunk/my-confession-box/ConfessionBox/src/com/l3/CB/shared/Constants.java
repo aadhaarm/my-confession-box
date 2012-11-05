@@ -38,6 +38,7 @@ public class Constants {
 	
 	//Loader image animation
 	public static final String LOADER_IMAGE_PATH = "/images/ajax-loader.gif";
+	public static final String LOAD_APPLICATION_IMAGE_PATH = "/images/loading.gif";
 
 	//Style class
 	public static final String STYLE_CLASS_LOADER_IMAGE = "loaderImage";

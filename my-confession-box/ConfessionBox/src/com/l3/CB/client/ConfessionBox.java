@@ -11,7 +11,6 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.HasRpcToken;
@@ -35,103 +34,88 @@ import com.l3.CB.shared.TO.UserInfo;
  */
 public class ConfessionBox implements EntryPoint {
 
-	private FacebookServiceAsync facebookService = null;
-	public static ConfessionServiceAsync confessionService = null;
+    public static CBText cbText = GWT.create(CBText.class);
+    public static UserInfo loggedInUserInfo;
+    public static String confId;
+    public static String accessToken;
+    public static HandlerManager confEventBus;
+    public static FacebookServiceAsync facebookService = null;
+    public static ConfessionServiceAsync confessionService = null;
 
-	public static CBText cbText = GWT.create(CBText.class);
+    PopupPanel pnlApplicationLoad;
 
-	public static UserInfo loggedInUserInfo;
-	public static String loggedInUserEmail;
-	public static String confId;
-	public static String accessToken;
-	public static HandlerManager confEventBus;
-	
-	PopupPanel pnlApplicationLoad;
-	
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
-		Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()));
-		XsrfTokenServiceAsync xsrf = (XsrfTokenServiceAsync)GWT.create(XsrfTokenService.class);
-		((ServiceDefTarget)xsrf).setServiceEntryPoint(GWT.getModuleBaseURL() + "xsrf");
-		xsrf.getNewXsrfToken(new AsyncCallback<XsrfToken>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				Error.handleError("ConfessionBox", "onFailure", caught);
-			}
-			@Override
-			public void onSuccess(XsrfToken result) {
-				confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
-				((HasRpcToken) confessionService).setRpcToken(result);
+    /**
+     * This is the entry point method.
+     */
+    @Override
+    public void onModuleLoad() {
+	// Application title
+	RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
 
-				facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
-				((HasRpcToken) facebookService).setRpcToken(result);
-			}
-		});
-				
-		RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
-		confEventBus = new HandlerManager(null);
-		showApplicationLoad();
-		CommonUtils.login();
-		Timer t = new Timer() {
-			public void run() {
-				if(accessToken != null && !"".equals(accessToken) && confessionService != null && facebookService != null) {
-					checkUserLoginStatus(confessionService, facebookService, confEventBus);
-					this.cancel();
-				} else {
-					this.schedule(1000);
-				}
-			}
-		};
-		t.schedule(1000);
-	}
+	// Get XSRF setup
+	Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()));
+	XsrfTokenServiceAsync xsrf = (XsrfTokenServiceAsync)GWT.create(XsrfTokenService.class);
+	((ServiceDefTarget)xsrf).setServiceEntryPoint(GWT.getModuleBaseURL() + "xsrf");
+	xsrf.getNewXsrfToken(new AsyncCallback<XsrfToken>() {
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("ConfessionBox", "onFailure", caught);
+	    }
+	    @Override
+	    public void onSuccess(XsrfToken result) {
+		confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
+		((HasRpcToken) confessionService).setRpcToken(result);
 
-	private void showApplicationLoad() {
-		pnlApplicationLoad = new PopupPanel(false);
-		Image loaderImage = new Image("/images/appln-load-ajax-loader.gif");
-		loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
-		pnlApplicationLoad.add(loaderImage);
-		RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
-		pnlApplicationLoad.setGlassEnabled(true);
-		pnlApplicationLoad.setAnimationEnabled(true);
-	}
-	
-	private void removeApplicationLoad() {
-		pnlApplicationLoad.hide();
-		RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
-	}
+		facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
+		((HasRpcToken) facebookService).setRpcToken(result);
+	    }
+	});
 
-	private void checkUserLoginStatus(final ConfessionServiceAsync confessionService,
-			final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
-		confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
-		if(accessToken != null && !"".equals(accessToken)) {
-			// Get user details of the current logged in user
-			ConfessionBox.this.facebookService.getUserLoggedInDetails(accessToken, new AsyncCallback<String>() {
-				@Override
-				public void onSuccess(String result) {
-					if(result != null){
-						// parse the response text into JSON and get user info
-						ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(result);
-
-						if(loggedInUserInfo == null) {
-							Window.alert(cbText.applicationError());
-						}
-						
-						if(loggedInUserInfo != null && loggedInUserInfo.getEmail() != null) {
-							loggedInUserEmail = loggedInUserInfo.getEmail();
-						}
-						
-						ConfessionController confessionController = new ConfessionController(confEventBus, confessionService, facebookService, confId, accessToken, cbText);
-						confessionController.go(RootPanel.get());
-						removeApplicationLoad();
-					}
-				}
-				@Override
-				public void onFailure(Throwable caught) {
-					Error.handleError("ConfessionBox", "onFailure", caught);
-				}
-			});
+	// Get Facebook access token and other information
+	confEventBus = new HandlerManager(null);
+	showApplicationLoad();
+	CommonUtils.login();
+	Timer t = new Timer() {
+	    @Override
+	    public void run() {
+		ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo();
+		if(ConfessionBox.loggedInUserInfo != null && confessionService != null && facebookService != null) {
+		    proceedToApp(confessionService, facebookService, confEventBus);
+		    this.cancel();
+		} else {
+		    this.schedule(1000);
 		}
-	}
+	    }
+	};
+	t.schedule(500);
+    }
+
+    private void proceedToApp(final ConfessionServiceAsync confessionService, final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
+	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+	ConfessionController confessionController = new ConfessionController(confId);
+	confessionController.go(RootPanel.get());
+	removeApplicationLoad();
+    }
+
+    /**
+     * APPLICATION LOAD animation
+     */
+    private void showApplicationLoad() {
+	Image loaderImage = new Image(Constants.LOAD_APPLICATION_IMAGE_PATH);
+	pnlApplicationLoad = new PopupPanel(false);
+	pnlApplicationLoad.setGlassEnabled(true);
+	pnlApplicationLoad.setAnimationEnabled(true);
+	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
+	pnlApplicationLoad.add(loaderImage);
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
+	pnlApplicationLoad.center();
+    }
+
+    /**
+     * Remove animation
+     */
+    private void removeApplicationLoad() {
+	pnlApplicationLoad.hide();
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
+    }
 }

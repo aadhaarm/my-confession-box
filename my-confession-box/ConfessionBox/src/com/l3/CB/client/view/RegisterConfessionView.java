@@ -13,11 +13,11 @@ import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.util.CommonUtils;
-import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 
@@ -37,7 +37,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	//	private final HorizontalPanel  hpnlCaptcha;
 	//	Image captchaImage;
 
-	public RegisterConfessionView(CBText cbText) {
+	public RegisterConfessionView() {
 		super();
 		DecoratorPanel contentTableDecorator = new DecoratorPanel();
 		contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
@@ -46,22 +46,22 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		grdConfessionForm = new Grid(8, 2);
 
 		identityPanel = new VerticalPanel();
-		cbHideIdentity = new CheckBox(cbText.registerPageOptionHideID());
+		cbHideIdentity = new CheckBox(ConfessionBox.cbText.registerPageOptionHideID());
 		cbHideIdentity.setValue(true);
-		cbConfessTo = new CheckBox(cbText.registerPageOptionConfessToFriend());
+		cbConfessTo = new CheckBox(ConfessionBox.cbText.registerPageOptionConfessToFriend());
 
 		identityPanel.add(cbHideIdentity);
 		identityPanel.add(cbConfessTo);
 
 		hPanelShare = new HorizontalPanel();
-		hPanelShare.add(new Label(cbText.registerPageChooseFriend()));
+		hPanelShare.add(new Label(ConfessionBox.cbText.registerPageChooseFriend()));
 		hPanelShare.setVisible(false);
 
 		txtTitle = new CBTextBox();
 		txtConfession = new CBTextArea();
 		txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 
-		btnSubmit = new Button(cbText.buttonTextSubmitConfession());
+		btnSubmit = new Button(ConfessionBox.cbText.buttonTextSubmitConfession());
 
 		//        captchaField = new TextBox();
 		//        captchaField.setText("CAPTCHA Word here");
@@ -73,11 +73,11 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		//        hpnlCaptcha.add(captchaImage);
 
 		HorizontalPanel hpnlTitle = new HorizontalPanel();
-		final Label titleLabel = new Label(cbText.confessionTitleLabel());       
+		final Label titleLabel = new Label(ConfessionBox.cbText.confessionTitleLabel());       
 		hpnlTitle.add(titleLabel);
 		hpnlTitle.add(txtTitle);
 
-		grdConfessionForm.setWidget(0, 0, new Label(cbText.registerPageTitle()));
+		grdConfessionForm.setWidget(0, 0, new Label(ConfessionBox.cbText.registerPageTitle()));
 		grdConfessionForm.setWidget(1, 0, identityPanel);
 		grdConfessionForm.setWidget(2, 0, hPanelShare);
 
@@ -109,6 +109,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		return txtConfession;
 	}
 
+	@Override
 	public HorizontalPanel gethPanelShare() {
 		return hPanelShare;
 	}
@@ -133,6 +134,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		return cbHideIdentity.getValue();
 	}
 
+	@Override
 	public void setFriendsOracle(MultiWordSuggestOracle friendsOracle) {
 		this.friendsOracle = friendsOracle;
 		friendsSuggestBox = new SuggestBox(friendsOracle);
@@ -141,14 +143,17 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		hPanelShare.add(friendsSuggestBox);
 	}
 
+	@Override
 	public boolean isFriendsOracleNull() {
 		return (friendsOracle == null);
 	}
 
+	@Override
 	public String getConfessionTitle() {
 		return txtTitle.getText();
 	}
 
+	@Override
 	public String getSharedWith() {
 		return friendsSuggestBox.getValue();
 	}
@@ -158,6 +163,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	 * @param gender - String
 	 * @param fbId - facebook id 
 	 */
+	@Override
 	public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
 		Image profileImage = null;
 		if (!isAnyn) {
@@ -190,18 +196,22 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 		//		CommonUtils.getCaptcha("dynamic_recaptcha_1");
 	}
 
+	@Override
 	public CBTextBox getTxtTitle() {
 		return txtTitle;
 	}
 
+	@Override
 	public CBTextArea getTxtConfession() {
 		return txtConfession;
 	}
 
+	@Override
 	public CheckBox getCbHideIdentityWidget() {
 		return cbHideIdentity;
 	}
 
+	@Override
 	public CheckBox getCbConfessToWidget() {
 		return cbConfessTo;
 	}

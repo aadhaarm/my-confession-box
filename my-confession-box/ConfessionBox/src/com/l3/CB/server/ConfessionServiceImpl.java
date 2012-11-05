@@ -100,12 +100,12 @@ public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implement
 	}
 
 	@Override
-	public long getMyConfessionCount(Long userId) {
+	public long getMyConfessionNumber(Long userId) {
 		return ConfessionManager.getConfessionsByUserCount(userId);
 	}
 
 	@Override
-	public long getConfessionForMeCount(Long userId) {
+	public long getNumberOfConfessionForMe(Long userId) {
 		return ConfessionManager.getConfessionsForMeCount(userId);
 	}
 

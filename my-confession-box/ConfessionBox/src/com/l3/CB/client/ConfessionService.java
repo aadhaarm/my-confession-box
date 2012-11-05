@@ -24,37 +24,34 @@ import com.l3.CB.shared.TO.UserInfo;
 @RemoteServiceRelativePath("confession-box")
 public interface ConfessionService extends XsrfProtectedService {
 
-	UserInfo registerUser(UserInfo userInfo);
+    // REGISTER USER
+    UserInfo registerUser(UserInfo userInfo);
 
-	int updateHumanPoints(Long userId, int points);
-	
-	int getHumanPoints(Long userId);
-	
-	Confession registerConfession(Confession confession);
-	
-	List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
-	
-	List<Confession> getConfessionsIDID(int page, Long userId);
-	
-	List<Confession> getConfessionsTOME(int page, Long userId);
-	
-	Confession getConfession(Long confId);
-	
-	Long registerUserActivity(Long userId, Long confId, Activity activity);
-	
-	Map<String, Long> getUserActivity(Long userId, Long confId);
-	
-	void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions);
+    // HUMAN POINTS methods
+    int updateHumanPoints(Long userId, int points);
+    int getHumanPoints(Long userId);
+    
+    // REGISTER CONFESSION
+    Confession registerConfession(Confession confession);
 
-	boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn);
+    // GET Confession
+    List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
+    List<Confession> getConfessionsIDID(int page, Long userId);
+    List<Confession> getConfessionsTOME(int page, Long userId);
+    Confession getConfession(Long confId);
+    long getNumberOfConfessionForMe(Long userId);
 
-	boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
+    // USER ACTIVITY
+    Long registerUserActivity(Long userId, Long confId, Activity activity);
+    Map<String, Long> getUserActivity(Long userId, Long confId);
 
-	long getMyConfessionCount(Long userId);
+    void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions);
+    boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn);
+    boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
 
-	long getConfessionForMeCount(Long userId);
+    long getMyConfessionNumber(Long userId);
 
-	boolean subscribe(Long confId, Long userId);
-
-	boolean isSubscribed(Long confId, Long userId);
+    // SUBSCRIBE
+    boolean subscribe(Long confId, Long userId);
+    boolean isSubscribed(Long confId, Long userId);
 }

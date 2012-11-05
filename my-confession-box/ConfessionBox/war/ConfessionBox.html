@@ -1,20 +1,18 @@
 <!doctype html>
 <html xmlns:fb="http://ogp.me/ns/fb#">
 	<head>
-		<meta property="fb:app_id" content="171485962909999">
-		<!-- <meta property="fb:app_id" content="202435696462206" /> -->
+ 		<title>Confession Box</title>
+ 		
+ 		<meta property="og:title" content="Confession Box" />
+		<meta property="og:type" content="cause" />
 		<meta property="og:url" content="http://apps.facebook.com/fbconfessbeta/" />
-		<meta property="og:site_name" content="CB Beta" />
-		<meta property="og:type" content="website" />
-		<meta property="og:image" content="http://fbconfess.appspot.com/images/confession_box_smiley_face.jpg"/>
-		<meta property="og:title" content="Confession Box" />
-		<meta property="og:description" content="CB Dev/Design environment" />
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		
+		<meta property="og:image" content="http://fbconfess.appspot.com/images/confession_box_smiley_face.jpg" />
+		<meta property="og:site_name" content="Confession Box" />
+		<meta property="fb:app_id" content="202435696462206" />
+ 		
 		<link type="text/css" rel="stylesheet" href="sty_CB.css">
 		<link type="text/css" rel="stylesheet" href="style.css">
-
-		<title>Confession Box</title>
+		<script type="text/javascript" src="confessionbox/confessionbox.nocache.js"></script>
 	</head>
 	
 	<body>
@@ -22,18 +20,15 @@
 		<script src="//connect.facebook.net/en_US/all.js"></script>
 		<script>
 		  FB.init({
-		    appId      : '171485962909999',
-		    channelUrl : '//fbconfess.appspot.com', // Channel File
-		    status     : true, // check login status
-		    cookie     : true, // enable cookies to allow the server to access the session
-		    xfbml      : true  // parse XFBML
+		    appId      : '202435696462206',
+		    channelUrl : '//fbconfess.appspot.com',
+		    status     : true,
+		    cookie     : true,
+		    xfbml      : true
 		  });
 		</script>
 
-		<script type="text/javascript" src="confessionbox/confessionbox.nocache.js"></script>
-		
-		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
-			style="position: absolute; width: 0; height: 0; border: 0"></iframe>
+		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position: absolute; width: 0; height: 0; border: 0"></iframe>
 	
 		<!-- Web app will not function without JavaScript enabled -->
 		<noscript>
@@ -45,17 +40,13 @@
 			<div class="header">
 				<h1 class="header" id="appTitle"></h1>
 			</div>
-	
 			<div id="leftHandDiv" class="left">
 				<div id="leftHandMenuDiv"></div>
+				<div id="humanPointDiv"></div>
 				<div id="leftHandToolTipDiv" class="helpInfoDiv"></div>
 			</div>
-	
 			<div id="bodyDiv" class="content"></div>
-
-
 			<div id="footerDiv" class="footer">By L3 Confession Box</div>
 		</div>
 	</body>
-	
 </html>

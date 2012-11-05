@@ -35,11 +35,13 @@ a:hover {
 
 .image {
 	float: left;
+	border-style: solid;
+	border-width: 1px;
 	}
 	
 .name {
 	margin-left:80px;
-	font-weight:600;
+	/* font-weight:600; */
 }
 .status_bar {
 	float:right;
@@ -84,12 +86,24 @@ color: #999;
 .condition {
 	background-color:#73883e;
 	padding:4px 5px 2px 10px;
-	margin:0 25px 0px 25px;
+	margin:0 25px 0px 15px;
 	color:#FFF;
-	font-size: smaller;
+	font-size: smaller !important;
 	line-height:15px;
 	}
 	
+.pardonCondition {
+	float: left;
+	font-size: smaller;
+	}
+
+.conditionTick {
+	float: left;
+	}
+	
+.pardonConditionList {
+	width: auto;
+	}
 .condition_label a {
 	font-weight:600;
 	color:#fff;
@@ -140,16 +154,14 @@ color: #999;
 
 .buttons {
 	position:relative;
-}
-
-.buttons {
-width:auto;
-height:45px;
-}
+	width:auto;
+	height:45px;
+	padding-left: 15px;
+	}
 
 .buttons ul {
 	width:auto;
-margin:0 auto 0 auto;
+	margin:0 auto 0 auto;
 }
 
 .buttons ul li {
@@ -192,6 +204,17 @@ cursor:pointer;
 }
 
 .fb_widgets {
-	padding:5px 5px;
+	padding:5px 15px;
 	font-size:11px;
+}
+
+.humanPointLabel {
+	float: left;
+}
+
+#humanPointDiv {
+    background-color: wheat;
+    margin-bottom: 2px;
+    margin-top: 4px;
+    width: 149px;
 }

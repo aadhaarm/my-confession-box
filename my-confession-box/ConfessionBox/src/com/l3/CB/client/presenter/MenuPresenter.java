@@ -77,7 +77,7 @@ public class MenuPresenter implements Presenter {
 				});
 
 				
-				this.schedule(300000);
+//				this.schedule(300000);
 			}
 		};
 		t.schedule(10);

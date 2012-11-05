@@ -37,13 +37,13 @@ public class FieldVerifier {
 		if (name == null) {
 			return false;
 		}
-		return name.length() > 3;
+		return (name.length() > 3 && name.length() <= 100);
 	}
 	
 	public static boolean isValidConfession(String confessionText) {
 		if (confessionText == null) {
 			return false;
 		}
-		return (confessionText.length() > 3 && confessionText.length() < 1000);
+		return (confessionText.length() > 3 && confessionText.length() <= 1501);
 	}
 }

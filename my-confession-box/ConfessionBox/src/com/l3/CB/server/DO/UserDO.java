@@ -34,6 +34,9 @@ public class UserDO implements Serializable {
 	@Persistent
 	private String email;
 	
+	@Persistent
+	private int humanPoints = 0;
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -91,5 +94,13 @@ public class UserDO implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public int getHumanPoints() {
+		return humanPoints;
+	}
+
+	public void setHumanPoints(int humanPoints) {
+		this.humanPoints = humanPoints;
 	}
 }

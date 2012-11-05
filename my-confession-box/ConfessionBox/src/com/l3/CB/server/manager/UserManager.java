@@ -29,7 +29,16 @@ public class UserManager {
 			userInfo.setName(userDO.getName());
 			userInfo.setUsername(userDO.getUserName());
 			userInfo.setEmail(userDO.getEmail());
+			userInfo.setHumanPoints(userDO.getHumanPoints());
 		}
 		return userInfo;
+	}
+
+	public static int updateHumanPoints(Long userId, int points) {
+		return UserDAO.updateHumanPoints(userId, points, true);
+	}
+
+	public static int getHumanPoints(Long userId) {
+		return UserDAO.updateHumanPoints(userId, 0, false);
 	}
 }

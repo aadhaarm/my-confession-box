@@ -16,8 +16,10 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
+import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
+import com.l3.CB.client.util.EventUtils;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
@@ -55,20 +57,18 @@ public class ActivityButton extends AbsolutePanel {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				CommonUtils.postOnWall(FacebookUtil.getActivityUrl(confession.getConfId()), getImageUrl(buttonImage.getUrl()), getActivityTitle(activity), getActivityCaption(confession), getActivityDescription(activity));
+				CommonUtils.postOnWall(FacebookUtil.getActivityUrl(confession.getConfId()), getImageUrl(buttonImage.getUrl()), getActivityTitle(activity), getActivityCaption(confession), getActivityDescription(activity), activity.getActivitySharePoints());
 			}
-
 		});
 		
 		final Timer timer = getActivityTimer(activity, confession, userInfo,
 				confessionService, btnCount);
 
-		addClickEvent(timer);
+		addVoteButtonClickEvent(timer);
 		
 		this.add(btn);
 		btnCount.setStyleName(Constants.STYLE_CLASS_BUTTON_WRAPPER);
 		this.add(btnCount, btn.getElement());
-		
 		bind(activity, btn);
 	}
 
@@ -91,7 +91,7 @@ public class ActivityButton extends AbsolutePanel {
 	/**
 	 * @param timer
 	 */
-	private void addClickEvent(final Timer timer) {
+ 	private void addVoteButtonClickEvent(final Timer timer) {
 		btn.addClickHandler(new ClickHandler() {
 			boolean inEvent = false;
 			@Override
@@ -114,7 +114,7 @@ public class ActivityButton extends AbsolutePanel {
 	}
 
 	/**
-	 * 
+	 * TIMER ANIMATION
 	 */
 	private void getTimerWrapAnimation() {
 		timerCount = new Label(Integer.toString(count));
@@ -162,7 +162,9 @@ public class ActivityButton extends AbsolutePanel {
 
 							btnShare.setVisible(true);
 							add(btnShare, btn.getElement());
+							EventUtils.raiseUpdateHPEvent(activity.getActivityPoints());
 						}
+
 						
 						@Override
 						public void onFailure(Throwable caught) {

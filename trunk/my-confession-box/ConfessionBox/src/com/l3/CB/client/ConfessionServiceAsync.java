@@ -43,4 +43,9 @@ public interface ConfessionServiceAsync {
 	void subscribe(Long confId, Long userId, AsyncCallback<Boolean> callback);
 
 	void isSubscribed(Long confId, Long userId, AsyncCallback<Boolean> callback);
+
+	void updateHumanPoints(Long userId, int points,
+			AsyncCallback<Integer> callback);
+
+	void getHumanPoints(Long userId, AsyncCallback<Integer> callback);
 }

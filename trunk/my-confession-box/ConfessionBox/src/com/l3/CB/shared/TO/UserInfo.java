@@ -30,6 +30,8 @@ public class UserInfo implements Serializable {
 	
 	private String email;
 	
+	private int humanPoints;
+	
 	public UserInfo(Long userId) {
 		super();
 		this.userId = userId;
@@ -105,5 +107,11 @@ public class UserInfo implements Serializable {
 				+ ", first_name=" + first_name + ", last_name=" + last_name
 				+ ", username=" + username + ", link=" + link + ", gender="
 				+ gender + ", locale=" + locale + ", email=" + email + "]";
+	}
+	public int getHumanPoints() {
+		return humanPoints;
+	}
+	public void setHumanPoints(int humanPoints) {
+		this.humanPoints = humanPoints;
 	}
 }

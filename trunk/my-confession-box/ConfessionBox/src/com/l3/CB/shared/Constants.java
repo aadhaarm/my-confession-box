@@ -16,6 +16,7 @@ public class Constants {
 	public static final String DIV_APPLN_TITLE = "appTitle";
 	public static final String DIV_AUTH_ID = "auth-id";
 	public static final String DIV_LEFT_TOOL_TIP = "leftHandToolTipDiv";
+	public static final String DIV_LEFT_HUMAN_POINT = "humanPointDiv";
 	
 	//Request param name
 	public static final String REQ_PARAM_CONF_ID = "conf";
@@ -68,5 +69,5 @@ public class Constants {
 
 	public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
 	public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
-	public static final int TEXT_LENGTH_ON_LOAD = 200;
+	public static final int TEXT_LENGTH_ON_LOAD = 300;
 }

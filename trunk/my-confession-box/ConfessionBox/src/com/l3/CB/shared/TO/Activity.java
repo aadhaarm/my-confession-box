@@ -32,7 +32,7 @@ public enum Activity {
 		int returnVal = 0;
 		switch (this) {
 		case ABUSE:
-			returnVal = 0;
+			returnVal = 10;
 			break;
 		case SAME_BOAT:
 			returnVal = 10;
@@ -44,7 +44,7 @@ public enum Activity {
 			returnVal = 10;
 			break;
 		case SHOULD_NOT_BE_PARDONED:
-			returnVal = 0;
+			returnVal = 2;
 			break;
 		case SYMPATHY:
 			returnVal = 5;
@@ -52,4 +52,30 @@ public enum Activity {
 		}
 		return returnVal;
 	}
+	
+	public int getActivityPoints() {
+		int returnVal = 0;
+		switch (this) {
+		case ABUSE:
+			returnVal = 0;
+			break;
+		case SAME_BOAT:
+			returnVal = 1;
+			break;
+		case LAME:
+			returnVal = 1;
+			break;
+		case SHOULD_BE_PARDONED:
+			returnVal = 1;
+			break;
+		case SHOULD_NOT_BE_PARDONED:
+			returnVal = 1;
+			break;
+		case SYMPATHY:
+			returnVal = 1;
+			break;
+		}
+		return returnVal;
+	}
+
 }

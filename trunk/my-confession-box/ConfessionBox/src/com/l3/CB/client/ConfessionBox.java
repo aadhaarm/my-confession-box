@@ -44,7 +44,8 @@ public class ConfessionBox implements EntryPoint {
 	public static String loggedInUserEmail;
 	public static String confId;
 	public static String accessToken;
-
+	public static HandlerManager confEventBus;
+	
 	PopupPanel pnlApplicationLoad;
 	
 	/**
@@ -70,12 +71,12 @@ public class ConfessionBox implements EntryPoint {
 		});
 				
 		RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
-		final HandlerManager confEventBus = new HandlerManager(null);
+		confEventBus = new HandlerManager(null);
 		showApplicationLoad();
 		CommonUtils.login();
 		Timer t = new Timer() {
 			public void run() {
-				if(accessToken != null && !"".equals(accessToken)) {
+				if(accessToken != null && !"".equals(accessToken) && confessionService != null && facebookService != null) {
 					checkUserLoginStatus(confessionService, facebookService, confEventBus);
 					this.cancel();
 				} else {
@@ -128,7 +129,7 @@ public class ConfessionBox implements EntryPoint {
 				}
 				@Override
 				public void onFailure(Throwable caught) {
-					Window.alert(cbText.applicationError());
+					Error.handleError("ConfessionBox", "onFailure", caught);
 				}
 			});
 		}

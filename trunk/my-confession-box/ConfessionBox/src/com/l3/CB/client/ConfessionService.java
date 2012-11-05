@@ -25,6 +25,10 @@ import com.l3.CB.shared.TO.UserInfo;
 public interface ConfessionService extends XsrfProtectedService {
 
 	UserInfo registerUser(UserInfo userInfo);
+
+	int updateHumanPoints(Long userId, int points);
+	
+	int getHumanPoints(Long userId);
 	
 	Confession registerConfession(Confession confession);
 	

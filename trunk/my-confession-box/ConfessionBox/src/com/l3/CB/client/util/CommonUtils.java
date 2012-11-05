@@ -84,7 +84,7 @@ public class CommonUtils {
 		}
 	}-*/;
 	
-	public static native void postOnWall(String linkUrl, String pictureUrl, String activityTitle, String activityCaption, String activityDescription) /*-{
+	public static native void postOnWall(String linkUrl, String pictureUrl, String activityTitle, String activityCaption, String activityDescription, int addPoints) /*-{
         // calling the API ...
         var obj = {
           method: 'feed',
@@ -96,7 +96,9 @@ public class CommonUtils {
         };
 
         function callback(response) {
-//          document.getElementById('msg').innerHTML = "Post ID: " + response['post_id'];
+        	if(response['post_id']) {
+        		$entry(@com.l3.CB.client.util.EventUtils::raiseUpdateHPEvent(I)(addPoints));
+        	}
         }
 
         $wnd.FB.ui(obj, callback);
@@ -212,6 +214,7 @@ public class CommonUtils {
 			if (!confession.isShareAsAnyn() || ! isAnyn) {
 				if (userInfo != null) {
 					Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
+					ancUserName.removeStyleName("gwt-Anchor");
 					fPnlNameWidget.add(ancUserName);
 				}
 			} else {

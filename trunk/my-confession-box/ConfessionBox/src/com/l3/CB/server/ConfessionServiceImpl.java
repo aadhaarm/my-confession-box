@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 import com.l3.CB.client.ConfessionService;
+import com.l3.CB.server.DAO.UserDAO;
 import com.l3.CB.server.manager.ActivityManager;
 import com.l3.CB.server.manager.ConfessionManager;
 import com.l3.CB.server.manager.PardonManager;
@@ -116,5 +117,15 @@ public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implement
 	@Override
 	public boolean isSubscribed(Long confId, Long userId) {
 		return ConfessionManager.isSubscribed(confId, userId);
+	}
+
+	@Override
+	public int updateHumanPoints(Long userId, int points) {
+		return UserManager.updateHumanPoints(userId, points);
+	}
+
+	@Override
+	public int getHumanPoints(Long userId) {
+		return UserManager.getHumanPoints(userId);
 	}
 }

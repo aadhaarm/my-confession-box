@@ -5,14 +5,13 @@
  */
 package com.l3.CB.client.util;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -25,11 +24,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.EditConfessionEvent;
 import com.l3.CB.client.ui.widgets.ChangeVisibilityButton;
 import com.l3.CB.client.ui.widgets.DeleteConfessionButton;
+import com.l3.CB.client.ui.widgets.ShareConfessionPopup;
 import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
@@ -110,6 +112,23 @@ public class CommonUtils {
         $wnd.FB.ui(obj, callback);
 	}-*/;
 
+    public static native void sendConfessionNotification(String toUserFbId, String toUserFullName, String fromUserFullName, String link, String imageUrl) /*-{
+        // calling the API ...
+        var obj = {
+          method: 'send',
+          to: toUserFbId,
+          link: link,
+          picture: imageUrl,
+          name: fromUserFullName + ' has confessed to you on Confession Box.',
+        };
+
+        function callback(response) {
+
+        }
+
+        $wnd.FB.ui(obj, callback);
+    }-*/;
+
 
     public static String getString(JSONValue jsonValue) {
 	String returnVal = null;
@@ -165,32 +184,34 @@ public class CommonUtils {
 	return jsonString.substring(2, jsonString.length()-2);
     }
 
-    public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
-	Map<String, UserInfo> friends = null;
+    public static List<UserInfo> getFriendsUserInfo(String jsonString) {
+	List<UserInfo> friends = null;
 
 	if(jsonString != null && jsonString.length() > 0) {
 	    jsonString = stripOutComment(jsonString);
+	    if(jsonString != null && jsonString.length() > 0) {
 
-	    // parse the response text into JSON
-	    JSONValue jsonValue = JSONParser.parseStrict(jsonString);
+		// parse the response text into JSON
+		JSONValue jsonValue = JSONParser.parseStrict(jsonString);
 
-	    if(jsonValue != null) {
-		JSONObject jsonObject = jsonValue.isObject();
+		if(jsonValue != null) {
+		    JSONObject jsonObject = jsonValue.isObject();
 
-		if(jsonObject != null) {
-		    JSONArray jsonArray = jsonObject.get("data").isArray();
+		    if(jsonObject != null) {
+			JSONArray jsonArray = jsonObject.get("data").isArray();
 
-		    if(jsonArray != null) {
-			friends = new HashMap<String, UserInfo>();
+			if(jsonArray != null) {
+			    friends = new ArrayList<UserInfo>();
 
-			for (int i = 0; i < jsonArray.size(); i++) {
-			    JSONValue userJSONValue = jsonArray.get(i);
-			    if(userJSONValue != null) {
-				JSONObject friendJson = userJSONValue.isObject();
-				UserInfo userInfo = new UserInfo();
-				userInfo.setId(getString(friendJson.get("id")));
-				userInfo.setName(getString(friendJson.get("name")));
-				friends.put(userInfo.getName(), userInfo);
+			    for (int i = 0; i < jsonArray.size(); i++) {
+				JSONValue userJSONValue = jsonArray.get(i);
+				if(userJSONValue != null) {
+				    JSONObject friendJson = userJSONValue.isObject();
+				    UserInfo userInfo = new UserInfo();
+				    userInfo.setId(getString(friendJson.get("id")));
+				    userInfo.setName(getString(friendJson.get("name")));
+				    friends.add(userInfo);
+				}
 			    }
 			}
 		    }
@@ -242,14 +263,45 @@ public class CommonUtils {
 	return null;
     }
 
-    public static Widget getUserControls(Confession confession) {
+    public static Widget getUserControls(final Confession confession) {
 	HorizontalPanel hPnlControls = new HorizontalPanel();
 	hPnlControls.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+
 	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image("/images/sympathies.png",0,0,27,30), confession.isShareAsAnyn());
 	hPnlControls.add(btnChangeVisibility);
 
 	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
 	hPnlControls.add(btnDeleteConfession);
+
+	PushButton btnShareConfession = new PushButton();
+	btnShareConfession.addStyleName("userControlButtonContainer");
+	btnShareConfession.setTitle("Ask for pardon from some one in your friends.");
+	hPnlControls.add(btnShareConfession);
+	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+	    btnShareConfession.setEnabled(false);
+	} else {
+	    btnShareConfession.addClickHandler(new ClickHandler() {
+		ShareConfessionPopup shareConfessionPopup = new ShareConfessionPopup(confession);
+		@Override
+		public void onClick(ClickEvent event) {
+		    shareConfessionPopup.populateFriendsList();
+		    shareConfessionPopup.setGlassEnabled(true);
+		    shareConfessionPopup.center();
+		}
+	    });
+	}
+
+	PushButton btnEditConfession = new PushButton();
+	btnEditConfession.addStyleName("userControlButtonContainer");
+	btnEditConfession.setTitle("Update your confession");
+	hPnlControls.add(btnEditConfession);
+	btnEditConfession.addClickHandler(new ClickHandler() {
+
+	    @Override
+	    public void onClick(ClickEvent event) {
+		ConfessionBox.confEventBus.fireEvent(new EditConfessionEvent(confession));
+	    }
+	});
 
 	return hPnlControls;
     }
@@ -325,7 +377,7 @@ public class CommonUtils {
 	return lstFilterOptions;
     }
 
-    public static String getDateInFormat(Date date) {
+    public static String getDateInAGOFormat(Date date) {
 	Date currentTimeStamp = new Date();
 	long timeDifference = currentTimeStamp.getTime() - date.getTime();
 	if(timeDifference <= (3600000  * 24)) {
@@ -340,14 +392,14 @@ public class CommonUtils {
 		return hours + " hours ago";
 	    }
 	} else {
-	    long days = timeDifference / (1000*60*60*24);
-	    if(days >= 1 && days <= 30) {
-		return days + " days ago";
-	    } else {
-		return DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM).format(date);
-	    }
+	    return DateTimeFormat.getFormat("EEE, MMM d, ''yy - h:mm a").format(date);
 	}
     }
+
+    public static String getDateInFormat(Date date) {
+	return DateTimeFormat.getFormat("EEE, MMM d, ''yy - h:mm a").format(date);
+    }
+
 
     public static Widget getEmptyWidget() {
 	Label lblEmptyPage = new Label("No confessions for you in this view.");
@@ -362,7 +414,7 @@ public class CommonUtils {
 	fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
 
 	// Time stamp
-	Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInFormat(confession.getTimeStamp()));
+	Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
 	lblDateTimeStamp.setStyleName("time_stamp");
 	fPnlStatusBar.add(lblDateTimeStamp);
 
@@ -395,14 +447,17 @@ public class CommonUtils {
 	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
 	    Label pardonStatus = new Label();
 	    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-		if(confessionShare.isPardon()) {
-		    pardonStatus.setText("PARDONED");
-		    pardonStatus.setStyleName("pardon_status_yes");
-		    return pardonStatus;
-		} else {
-		    pardonStatus.setText("Awaiting PARDONED");
-		    pardonStatus.setStyleName("pardon_status_no");
-		    return pardonStatus;
+		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
+		    switch (confessionShare.getPardonStatus()) {
+		    case PARDONED:
+			pardonStatus.setText("PARDONED");
+			pardonStatus.setStyleName("pardon_status_yes");
+			return pardonStatus;
+		    default:
+			pardonStatus.setText("Awaiting PARDONED");
+			pardonStatus.setStyleName("pardon_status_no");
+			return pardonStatus;
+		    }
 		}
 	    }
 	}

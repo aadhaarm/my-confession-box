@@ -237,6 +237,7 @@ img {
 
 .pardonModalPopupWindow {
 	width: 650px;
+	min-height: 250px;
 }
 
 .confessionGridElement {

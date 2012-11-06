@@ -12,6 +12,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.EditConfessionEvent;
+import com.l3.CB.client.event.EditConfessionEventHandler;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateHPEventHandler;
 import com.l3.CB.client.event.UpdateMenuEvent;
@@ -55,7 +57,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		    // Initialize Human points
 		    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 		    humanPointPresenter.go(container);
-		    
+
 		    if(null != ConfessionBox.confId) {
 			CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 		    } else {
@@ -83,12 +85,21 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		humanPointPresenter.updateHumanPoints(event.getUpdatedCount());
 	    }
 	});
-	
-	
+
+
 	ConfessionBox.confEventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
 	    @Override
 	    public void updateMenuCount(UpdateMenuEvent event) {
 		menuPresenter.initializeMenuCounts();
+	    }
+	});
+
+	ConfessionBox.confEventBus.addHandler(EditConfessionEvent.TYPE, new EditConfessionEventHandler() {
+
+	    @Override
+	    public void editConfession(EditConfessionEvent event) {
+		Presenter presenter = new RegisterConfessionPresenter(new RegisterConfessionView(), event.getConfessionToBeEdited());
+		presenter.go(container);
 	    }
 	});
     }

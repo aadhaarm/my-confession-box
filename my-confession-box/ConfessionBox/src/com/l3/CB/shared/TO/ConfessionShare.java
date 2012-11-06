@@ -6,102 +6,102 @@ import java.util.List;
 
 public class ConfessionShare implements Serializable {
 
-	/**
-	 * Default serial ID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Default serial ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	private Long shareId;
-	
-	private Long confId;
-	
-	private Long userId;
-	
-	private String fbId;
-	
-	private boolean pardon;
-	
-	List<PardonCondition> pardonConditions;
-	
-	private Date timeStamp;
-	
-	private String userFullName;
-	
-	private String username;
+    private Long shareId;
 
-	public ConfessionShare() {
-		super();
-	}
+    private Long confId;
 
-	public Long getShareId() {
-		return shareId;
-	}
+    private Long userId;
 
-	public void setShareId(Long shareId) {
-		this.shareId = shareId;
-	}
+    private String fbId;
 
-	public Long getConfId() {
-		return confId;
-	}
+    private PardonStatus pardonStatus;
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    List<PardonCondition> pardonConditions;
 
-	public Long getUserId() {
-		return userId;
-	}
+    private Date timeStamp;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    private String userFullName;
 
-	public boolean isPardon() {
-		return pardon;
-	}
+    private String username;
 
-	public void setPardon(boolean pardon) {
-		this.pardon = pardon;
-	}
+    public ConfessionShare() {
+	super();
+    }
 
-	public String getFbId() {
-		return fbId;
-	}
+    public Long getShareId() {
+	return shareId;
+    }
 
-	public void setFbId(String fbId) {
-		this.fbId = fbId;
-	}
+    public void setShareId(Long shareId) {
+	this.shareId = shareId;
+    }
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    public Long getConfId() {
+	return confId;
+    }
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
 
-	public String getUserFullName() {
-		return userFullName;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public void setUserFullName(String userFullName) {
-		this.userFullName = userFullName;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getFbId() {
+	return fbId;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setFbId(String fbId) {
+	this.fbId = fbId;
+    }
 
-	public List<PardonCondition> getPardonConditions() {
-		return pardonConditions;
-	}
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
 
-	public void setPardonConditions(List<PardonCondition> pardonConditions) {
-		this.pardonConditions = pardonConditions;
-	}
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
+
+    public String getUserFullName() {
+	return userFullName;
+    }
+
+    public void setUserFullName(String userFullName) {
+	this.userFullName = userFullName;
+    }
+
+    public String getUsername() {
+	return username;
+    }
+
+    public void setUsername(String username) {
+	this.username = username;
+    }
+
+    public List<PardonCondition> getPardonConditions() {
+	return pardonConditions;
+    }
+
+    public void setPardonConditions(List<PardonCondition> pardonConditions) {
+	this.pardonConditions = pardonConditions;
+    }
+
+    public PardonStatus getPardonStatus() {
+	return pardonStatus;
+    }
+
+    public void setPardonStatus(PardonStatus pardonStatus) {
+	this.pardonStatus = pardonStatus;
+    }
 }

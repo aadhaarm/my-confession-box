@@ -190,25 +190,30 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		addPardonConditionStatus(confessionShare.getPardonConditions(), fPnlPardon);
 	    } else if(!anynView) {
 		final Button btnPardon = new Button("Pardon");
-		if(confessionShare.isPardon()) {
-		    btnPardon.setEnabled(false);
-		} else {
-		    final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, confessionByUser, btnPardon);
-		    pardonPopupPanel.setAnimationEnabled(true);
-		    pardonPopupPanel.setGlassEnabled(true);
-		    pardonPopupPanel.addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
-		    
-		    btnPardon.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-			    pardonPopupPanel.center();
-			    if(pardonPopupPanel.getElement() != null) {
-				pardonPopupPanel.getElement().setId(Constants.PARDON_GRID_ID);
-				CommonUtils.parseXFBMLJS(DOM.getElementById(Constants.PARDON_GRID_ID));
+		if(confessionShare.getPardonStatus() != null) {
+		    switch (confessionShare.getPardonStatus()) {
+		    case PARDONED:
+			btnPardon.setEnabled(false);
+			break;
+		    default:
+			final PardonPopupPanel pardonPopupPanel = new PardonPopupPanel(confession, confessionByUser, btnPardon);
+			pardonPopupPanel.setAnimationEnabled(true);
+			pardonPopupPanel.setGlassEnabled(true);
+			pardonPopupPanel.addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
+			
+			btnPardon.addClickHandler(new ClickHandler() {
+			    @Override
+			    public void onClick(ClickEvent event) {
+				pardonPopupPanel.center();
+				if(pardonPopupPanel.getElement() != null) {
+				    pardonPopupPanel.getElement().setId(Constants.PARDON_GRID_ID);
+				    CommonUtils.parseXFBMLJS(DOM.getElementById(Constants.PARDON_GRID_ID));
+				}
 			    }
-			}
-		    });
-		}
+			});
+			break;
+		    }
+		} 
 		fPnlPardon.add(btnPardon);
 	    }
 	}

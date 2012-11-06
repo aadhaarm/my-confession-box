@@ -54,7 +54,8 @@ public class ActivityButton extends AbsolutePanel {
 		CommonUtils.postOnWall(FacebookUtil.getActivityUrl(confession.getConfId()), getImageUrl(buttonImage.getUrl()), getActivityTitle(activity), getActivityCaption(confession), getActivityDescription(activity), activity.getActivitySharePoints());
 	    }
 	});
-
+	
+	// Register activity with TIMER
 	final Timer timer = getActivityTimer(activity, confession, btnCount);
 
 	addVoteButtonClickEvent(timer);

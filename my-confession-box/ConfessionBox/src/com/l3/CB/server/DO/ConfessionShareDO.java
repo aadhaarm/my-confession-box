@@ -9,83 +9,85 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.l3.CB.shared.TO.PardonStatus;
+
 @PersistenceCapable
 public class ConfessionShareDO implements Serializable {
 
-	/**
-	 * Default serial ID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Default serial ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long shareId;
-	
-	@Persistent
-	private Long confId;
-	
-	@Persistent
-	private Long userId;
-	
-	@Persistent
-	private boolean pardon;
-	
-	@Persistent
-	private Date timeStamp;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long shareId;
 
-	@Persistent
-	private List<PardonConditionDO> pardonConditionDOs;
-	
-	public ConfessionShareDO() {
-		super();
-		pardon = false;
-	}
+    @Persistent
+    private Long confId;
 
-	public Long getShareId() {
-		return shareId;
-	}
+    @Persistent
+    private Long userId;
 
-	public void setShareId(Long shareId) {
-		this.shareId = shareId;
-	}
+    @Persistent
+    private String pardonStatus;
 
-	public Long getConfId() {
-		return confId;
-	}
+    @Persistent
+    private Date timeStamp;
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    @Persistent
+    private List<PardonConditionDO> pardonConditionDOs;
 
-	public Long getUserId() {
-		return userId;
-	}
+    public ConfessionShareDO() {
+	super();
+	pardonStatus = PardonStatus.AWAITING_PARDON.name();
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public Long getShareId() {
+	return shareId;
+    }
 
-	public boolean isPardon() {
-		return pardon;
-	}
+    public void setShareId(Long shareId) {
+	this.shareId = shareId;
+    }
 
-	public void setPardon(boolean pardon) {
-		this.pardon = pardon;
-	}
+    public Long getConfId() {
+	return confId;
+    }
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public List<PardonConditionDO> getPardonConditionDOs() {
-		return pardonConditionDOs;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public void setPardonConditionDOs(List<PardonConditionDO> pardonConditionDOs) {
-		this.pardonConditionDOs = pardonConditionDOs;
-	}
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
+
+    public List<PardonConditionDO> getPardonConditionDOs() {
+	return pardonConditionDOs;
+    }
+
+    public void setPardonConditionDOs(List<PardonConditionDO> pardonConditionDOs) {
+	this.pardonConditionDOs = pardonConditionDOs;
+    }
+
+    public String getPardonStatus() {
+        return pardonStatus;
+    }
+
+    public void setPardonStatus(String pardonStatus) {
+        this.pardonStatus = pardonStatus;
+    }
 }

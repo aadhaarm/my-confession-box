@@ -41,4 +41,13 @@ public class UserManager {
 	public static int getHumanPoints(Long userId) {
 		return UserDAO.updateHumanPoints(userId, 0, false);
 	}
+
+	public static UserInfo isUserRegistered(String fbId) {
+	    if(fbId != null && !fbId.isEmpty()){
+		UserInfo user = new UserInfo();
+		user.setId(fbId);
+		return getUserInfo(UserDAO.getUserByFBId(user));
+	    }
+	    return null;
+	}
 }

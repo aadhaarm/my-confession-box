@@ -14,157 +14,189 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionManager {
 
-	/**
-	 * @param confession
-	 * @return
-	 */
-	public static Confession registerConfession(Confession confession, String ipAddress) {
-		confession.setUserIp(ipAddress);
-		confession = ConfessionBasicDAO.registerConfession(confession);
+    /**
+     * @param confession
+     * @return
+     */
+    public static Confession registerConfession(Confession confession, String ipAddress) {
+	if(confession.getConfId() == null) {
 
-		
-		//Register confession Shared
-		if(confession.getConfessedTo() != null) {
-			// Get the confession by user details
-			UserInfo confessionByUser = UserManager.getUserByUserId(confession.getUserId());
-			
-			for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-				// Get User Share to details, register if not already registered
-				UserInfo userSharedTo = new UserInfo();
-				userSharedTo.setId(confessionShare.getFbId());
-				userSharedTo.setName(confessionShare.getUserFullName());
-				userSharedTo = UserManager.registerUser(userSharedTo);
-				// In any case, we have got the user ID, s we can register the share
-				confessionShare.setUserId(userSharedTo.getUserId());
-				ConfessionBasicDAO.registerConfessionShare(confessionShare, confession.getConfId());
+	    confession.setUserIp(ipAddress);
 
-				if(userSharedTo.getEmail() != null && "".equals(userSharedTo.getEmail())) {
-					MailManager.sendConfessionEmail(userSharedTo, confessionByUser, confession.getConfId());
-				}
-			}
+	    // PERSIST CONFESSION
+	    confession = ConfessionBasicDAO.registerConfession(confession);
+
+	    //Register confession Shared
+	    if(confession.getConfessedTo() != null) {
+		// Get the confession by user details
+		UserInfo confessionByUser = UserManager.getUserByUserId(confession.getUserId());
+
+		for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+
+		    addConfessedToUser(confession.getConfId(), confessionByUser, confessionShare);
 		}
-		return confession;
+	    }
+	} else {
+	    /*
+	     * Update flow
+	     */
+	    // Set updated IP address
+	    confession.setUserIp(ipAddress);
+
+	    // PERSIST CONFESSION
+	    confession = ConfessionBasicDAO.updateConfession(confession);
+
+	}
+	return confession;
+    }
+
+    /**
+     * Add CONFESSED TO user to a confession
+     * 
+     * @param confession
+     * @param confessionByUser
+     * @param confessionShare
+     */
+    public static void addConfessedToUser(Long confId, UserInfo confessionByUser, ConfessionShare confessionShare) {
+	// Get User Share to details, register if not already registered
+	UserInfo userSharedTo = new UserInfo();
+	userSharedTo.setId(confessionShare.getFbId());
+	userSharedTo.setName(confessionShare.getUserFullName());
+	// REGISTER USER if not registered
+	userSharedTo = UserManager.registerUser(userSharedTo);
+
+	// REGISTER confession share
+	confessionShare.setUserId(userSharedTo.getUserId());
+	ConfessionBasicDAO.registerConfessionShare(confessionShare, confId);
+
+	if(userSharedTo.getEmail() != null && "".equals(userSharedTo.getEmail())) {
+	    MailManager.sendConfessionEmail(userSharedTo, confessionByUser, confId);
+	}
+    }
+
+    /**
+     * @param page
+     * @param filter 
+     * @param locale 
+     * @param userId 
+     * @return
+     */
+    public static List<Confession> getConfessionsByFilter(int page, Filters filter, String locale, Long userId) {
+	List<Confession> confessions = null;
+
+	if(filter.equals(Filters.USER_ACTIVITY)) {
+	    List<Long> confIDs = ConfessionOtherDAO.getUserActivity(userId, page, Constants.FEED_PAGE_SIZE);
+	    if(confIDs != null) {
+		confessions = ConfessionBasicDAO.getConfessions(confIDs, page, Constants.FEED_PAGE_SIZE, filter, locale);
+	    } 
+	} else {
+	    confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE, filter, locale);
 	}
 
-	/**
-	 * @param page
-	 * @param filter 
-	 * @param locale 
-	 * @param userId 
-	 * @return
-	 */
-	public static List<Confession> getConfessionsByFilter(int page, Filters filter, String locale, Long userId) {
-		List<Confession> confessions = null;
-
-		if(filter.equals(Filters.USER_ACTIVITY)) {
-			List<Long> confIDs = ConfessionOtherDAO.getUserActivity(userId, page, Constants.FEED_PAGE_SIZE);
-			if(confIDs != null) {
-				confessions = ConfessionBasicDAO.getConfessions(confIDs, page, Constants.FEED_PAGE_SIZE, filter, locale);
-			} 
-		} else {
-			confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE, filter, locale);
-		}
-
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				if(!confession.isShareAsAnyn()) {
-					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-					confession.setUserDetailsJSON(userDetailsJSON);
-				} else {
-					// MOST IMPORTANT CODE!!
-					confession.setFbId(null);
-				}
-
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-			}
-		}
-		return confessions;
-	}
-
-	/**
-	 * @param page
-	 * @param userId
-	 * @return
-	 */
-	public static List<Confession> getConfessionsByUser(int page, Long userId) {
-		List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				if(!confession.isShareAsAnyn()) {
-					String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-					confession.setUserDetailsJSON(userDetailsJSON);
-				} else {
-					// MOST IMPORTANT CODE!!
-					confession.setFbId(null);
-				}
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-			}
-		}
-		return confessions;
-	}
-
-	/**
-	 * @param confId
-	 * @return
-	 */
-	public static Confession getOneConfession(Long confId) {
-		Confession confession = ConfessionBasicDAO.getConfession(confId);
-		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
+	if(confessions != null && !confessions.isEmpty()) {
+	    for (Confession confession : confessions) {
 		if(!confession.isShareAsAnyn()) {
-			String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-			confession.setUserDetailsJSON(userDetailsJSON);
+		    String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+		    confession.setUserDetailsJSON(userDetailsJSON);
 		} else {
-			// MOST IMPORTANT CODE!!
-			confession.setFbId(null);
+		    // MOST IMPORTANT CODE!!
+		    confession.setFbId(null);
 		}
-		return confession;
-	}
 
-	/**
-	 * @param page
-	 * @param userId
-	 * @return
-	 */
-	public static List<Confession> getConfessionsConfessedToMe(int page, Long userId) {
-		//TODO: Validate if user is correct
-		List<Confession> confessions = ConfessionBasicDAO.getConfessionsForMe(userId, page, Constants.FEED_PAGE_SIZE);
-		if(confessions != null && !confessions.isEmpty()) {
-			for (Confession confession : confessions) {
-				String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-				confession.setUserDetailsJSON(userDetailsJSON);
-				confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), true));
-			}
+		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
+	    }
+	}
+	return confessions;
+    }
+
+    /**
+     * @param page
+     * @param userId
+     * @return
+     */
+    public static List<Confession> getConfessionsByUser(int page, Long userId) {
+	List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
+	if(confessions != null && !confessions.isEmpty()) {
+	    for (Confession confession : confessions) {
+		if(!confession.isShareAsAnyn()) {
+		    String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+		    confession.setUserDetailsJSON(userDetailsJSON);
+		} else {
+		    // MOST IMPORTANT CODE!!
+		    confession.setFbId(null);
 		}
-		return confessions;
+		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
+	    }
 	}
+	return confessions;
+    }
 
-	public static boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn) {
-		//TODO: validate user
-		boolean result = ConfessionOtherDAO.changeVisibility(userId, confId, shareAnyn);
-		if(result) {
-			PardonManager.validateIfConditionsMet(confId);
-		}
-		return result; 
+    /**
+     * @param confId
+     * @return
+     */
+    public static Confession getOneConfession(Long confId) {
+	Confession confession = ConfessionBasicDAO.getConfession(confId);
+	confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
+	if(!confession.isShareAsAnyn()) {
+	    String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+	    confession.setUserDetailsJSON(userDetailsJSON);
+	} else {
+	    // MOST IMPORTANT CODE!!
+	    confession.setFbId(null);
 	}
+	return confession;
+    }
 
-	public static boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible) {
-		// TODO Validate user
-		return ConfessionBasicDAO.updateConfessionVisibility(confId, userId, isVisible);
+    /**
+     * @param page
+     * @param userId
+     * @return
+     */
+    public static List<Confession> getConfessionsConfessedToMe(int page, Long userId) {
+	//TODO: Validate if user is correct
+	List<Confession> confessions = ConfessionBasicDAO.getConfessionsForMe(userId, page, Constants.FEED_PAGE_SIZE);
+	if(confessions != null && !confessions.isEmpty()) {
+	    for (Confession confession : confessions) {
+		String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+		confession.setUserDetailsJSON(userDetailsJSON);
+		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), true));
+	    }
 	}
+	return confessions;
+    }
 
-	public static long getConfessionsByUserCount(Long userId) {
-		return ConfessionBasicDAO.getConfessionCount(userId);
+    public static boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn) {
+	//TODO: validate user
+	boolean result = ConfessionOtherDAO.changeVisibility(userId, confId, shareAnyn);
+	if(result) {
+	    PardonManager.validateIfConditionsMet(confId);
 	}
+	return result; 
+    }
 
-	public static long getConfessionsForMeCount(Long userId) {
-		return ConfessionBasicDAO.getConfessionsForMeCount(userId);
-	}
+    public static boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible) {
+	// TODO Validate user
+	return ConfessionBasicDAO.updateConfessionVisibility(confId, userId, isVisible);
+    }
 
-	public static boolean changeSubscribtionStatus(Long confId, Long userId) {
-		return ConfessionOtherDAO.isSubscribed(confId, userId, true);
-	}
+    public static long getConfessionsByUserCount(Long userId) {
+	return ConfessionBasicDAO.getConfessionCount(userId);
+    }
 
-	public static boolean isSubscribed(Long confId, Long userId) {
-		return ConfessionOtherDAO.isSubscribed(confId, userId, false);
-	}
+    public static long getConfessionsForMeCount(Long userId) {
+	return ConfessionBasicDAO.getConfessionsForMeCount(userId);
+    }
+
+    public static boolean changeSubscribtionStatus(Long confId, Long userId) {
+	return ConfessionOtherDAO.isSubscribed(confId, userId, true);
+    }
+
+    public static boolean isSubscribed(Long confId, Long userId) {
+	return ConfessionOtherDAO.isSubscribed(confId, userId, false);
+    }
+
+    public static List<UserInfo> getUserSubscribed(Long confId) {
+	return ConfessionOtherDAO.getUserSubscribed(confId);
+    }
 }

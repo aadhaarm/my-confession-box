@@ -20,6 +20,7 @@ import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.PardonCondition;
+import com.l3.CB.shared.TO.PardonStatus;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class PardonPopupPanel extends PopupPanel{
@@ -87,7 +88,17 @@ public class PardonPopupPanel extends PopupPanel{
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(confessedByUser != null) {
-		    ConfessionBox.confessionService.pardonConfession(ConfessionBox.loggedInUserInfo, confession.getConfId(), confessedByUser, getPardonConditions(), new AsyncCallback<Void>() {
+		    List<PardonCondition> pardonConditions= getPardonConditions();
+		    
+		    /**
+		     * Pardon if no conditions
+		     * Awaiting pardon if pardoned with conditions		    
+		     */
+		    PardonStatus pardonStatus = PardonStatus.PARDONED;
+		    if(pardonConditions != null && !pardonConditions.isEmpty()) {
+			pardonStatus = PardonStatus.PARDONED_WITH_CONDITION;
+		    }
+		    ConfessionBox.confessionService.pardonConfession(ConfessionBox.loggedInUserInfo, confession.getConfId(), confessedByUser, pardonConditions, pardonStatus, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 			    btnPardon.setEnabled(false);

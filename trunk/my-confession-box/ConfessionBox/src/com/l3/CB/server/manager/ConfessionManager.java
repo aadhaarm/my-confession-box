@@ -135,10 +135,11 @@ public class ConfessionManager {
      * @param confId
      * @return
      */
-    public static Confession getOneConfession(Long confId) {
+    public static Confession getOneConfession(Long confId, boolean secure) {
 	Confession confession = ConfessionBasicDAO.getConfession(confId);
 	confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
-	if(!confession.isShareAsAnyn()) {
+	
+	if(!confession.isShareAsAnyn() || secure) {
 	    String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
 	    confession.setUserDetailsJSON(userDetailsJSON);
 	} else {

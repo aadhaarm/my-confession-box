@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -24,9 +25,11 @@ public class ShareConfessionPopup extends PopupPanel {
     private final Button btnSubmit; 
     private FriendsListBox friendsListBox;
     private final FlowPanel fPnlConfessionShare;
+    private final Confession confession;
 
     public ShareConfessionPopup(Confession confession) {
 	super(true);
+	this.confession = confession;
 	addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
 	fPnlConfessionShare = new FlowPanel();
 //	populateFriendsList();
@@ -55,6 +58,7 @@ public class ShareConfessionPopup extends PopupPanel {
 
 				@Override
 				public void onSuccess(Void result) {
+				    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 				    hide();
 				}
 

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateFeedToMeEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -58,9 +59,7 @@ public class PardonPopupPanel extends PopupPanel{
 	vPnlPardonConditions.add(hPnlPardonActivityCondition);
 
 	cbOpenIdentityCondition = new CheckBox(ConfessionBox.cbText.pardonPopupOpenIdentityCondition());
-	if(confession.isShareAsAnyn()) {
-	    vPnlPardonConditions.add(cbOpenIdentityCondition);
-	}
+	vPnlPardonConditions.add(cbOpenIdentityCondition);
 
 	grid.setWidget(row, 1, vPnlPardonConditions);
 	row++;
@@ -89,7 +88,7 @@ public class PardonPopupPanel extends PopupPanel{
 	    public void onClick(ClickEvent event) {
 		if(confessedByUser != null) {
 		    List<PardonCondition> pardonConditions= getPardonConditions();
-		    
+
 		    /**
 		     * Pardon if no conditions
 		     * Awaiting pardon if pardoned with conditions		    
@@ -104,6 +103,7 @@ public class PardonPopupPanel extends PopupPanel{
 			    btnPardon.setEnabled(false);
 			    btnPardonHome.setEnabled(false);
 			    hidePopup();
+			    ConfessionBox.confEventBus.fireEvent(new UpdateFeedToMeEvent(confession));
 			}
 
 			@Override

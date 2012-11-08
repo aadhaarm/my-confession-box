@@ -14,33 +14,39 @@ import com.l3.CB.shared.TO.UserInfo;
 public class PardonManager {
 
     /**
-     * @param pandonByUser
+     * @param pardonByUser
      * @param confId
      * @param pardonedToUser
      * @param pardonConditions
      * @param pardonStatus 
      */
-    public static void pardonWithConditions(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus) {
+    public static void pardonConfession(UserInfo pardonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus) {
 	switch (pardonStatus) {
 	case PARDONED:
-	    processPardonStatus(pandonByUser, pardonedToUser, confId, pardonConditions, pardonStatus);
+	    // Update pardon share with new status
+	    ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, pardonStatus);
+	    // Float required emails
+	    informPardonEvent(pardonByUser, pardonedToUser, confId);
 	    break;
 	case PARDONED_WITH_CONDITION:
-	    ConfessionBasicDAO.addPardonCondition(pandonByUser.getUserId(), confId, pardonConditions);
+	    // Add conditions in DB
+	    ConfessionBasicDAO.addPardonCondition(pardonByUser.getUserId(), confId, pardonConditions);
+	    // Update pardon share with new status
+	    ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, pardonStatus);
+	    // Validate if any condition already met and update share status
 	    validateIfConditionsMet(confId);
 	    break;
 	}
     }
 
     public static void validateIfConditionsMet(Long confId) {
-
 	int totalConditions = 0;
 	int conditionsMet = 0;
 
 	// Fetch pardon conditions
 	List<PardonCondition> pardonConditions = ConfessionBasicDAO.getConfessionCondition(confId);
 	// FETCH confession
-	Confession confession = ConfessionManager.getOneConfession(confId);
+	Confession confession = ConfessionManager.getOneConfession(confId, false);
 	long pardonByUserId = 0;
 
 	if(pardonConditions != null && !pardonConditions.isEmpty()) {
@@ -78,26 +84,23 @@ public class PardonManager {
 	    UserInfo pardonedToUser = UserManager.getUserByUserId(confession.getUserId());
 
 	    if(totalConditions == conditionsMet) {
-		// All conditions met
-		processPardonStatus(pardonByUser, pardonedToUser, confId, pardonConditions, PardonStatus.PARDONED);
+		// Update pardon share with new status
+		ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, PardonStatus.PARDONED);
+		// Float required emails
+		informPardonEvent(pardonByUser, pardonedToUser, confId);
 	    } else {
-		// Some conditions left
-		processPardonStatus(pardonByUser, pardonedToUser, confId, pardonConditions, PardonStatus.PARDONED_WITH_CONDITION);
+		// Update pardon share with new status
+		ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, PardonStatus.PARDONED_WITH_CONDITION);
 	    }
 	}		
     }
 
-
-    private static boolean processPardonStatus(UserInfo pandonByUser, UserInfo pardonedToUser, Long confId, List<PardonCondition> pardonConditions, PardonStatus pardonedStatus) {
-	ConfessionBasicDAO.pardonConfession(pandonByUser.getUserId(), confId, pardonConditions, pardonedStatus);
-
-	// Mail users if confession is pardoned
-	switch (pardonedStatus) {
-	case PARDONED:
-	    MailManager.sendPardonMail(pandonByUser, confId, pardonedToUser);
-	    checkSubscription(confId);
-	    break;
+    private static boolean informPardonEvent(UserInfo pardonByUser, UserInfo pardonedToUser, Long confId) {
+	if(pardonedToUser != null && pardonedToUser.getEmail() == null) {
+	    pardonedToUser = UserManager.getUserByFbId(pardonedToUser);
 	}
+	MailManager.sendPardonMail(pardonByUser, confId, pardonedToUser);
+	checkSubscription(confId);
 	return true;
     }
 

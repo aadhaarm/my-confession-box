@@ -6,6 +6,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.TO.Confession;
 
@@ -32,6 +33,7 @@ public class ChangeVisibilityButton extends PushButton {
 			    } else {
 				setTitle("Hide your identity by clicking this.");
 			    }
+			    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 			}
 		    }
 		    @Override

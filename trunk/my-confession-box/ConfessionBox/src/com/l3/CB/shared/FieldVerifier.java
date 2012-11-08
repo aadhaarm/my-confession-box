@@ -22,28 +22,35 @@ package com.l3.CB.shared;
  */
 public class FieldVerifier {
 
-	/**
-	 * Verifies that the specified name is valid for our service.
-	 * 
-	 * In this example, we only require that the name is at least four
-	 * characters. In your application, you can use more complex checks to ensure
-	 * that usernames, passwords, email addresses, URLs, and other fields have the
-	 * proper syntax.
-	 * 
-	 * @param name the name to validate
-	 * @return true if valid, false if invalid
-	 */
-	public static boolean isValidTitle(String name) {
-		if (name == null) {
-			return false;
-		}
-		return (name.length() > 3 && name.length() <= 100);
+    /**
+     * Verifies that the specified name is valid for our service.
+     * 
+     * In this example, we only require that the name is at least four
+     * characters. In your application, you can use more complex checks to ensure
+     * that usernames, passwords, email addresses, URLs, and other fields have the
+     * proper syntax.
+     * 
+     * @param name the name to validate
+     * @return true if valid, false if invalid
+     */
+    public static boolean isValidTitle(String name) {
+	if (name == null) {
+	    return false;
 	}
-	
-	public static boolean isValidConfession(String confessionText) {
-		if (confessionText == null) {
-			return false;
-		}
-		return (confessionText.length() > 3 && confessionText.length() <= 1501);
+	return (name.length() > 3 && name.length() <= 100);
+    }
+
+    public static boolean isValidConfession(String confessionText) {
+	if (confessionText == null) {
+	    return false;
 	}
+	return (confessionText.length() > 3 && confessionText.length() <= 1501);
+    }
+
+    public static boolean isValidConfession(String confessionText, int min, int max) {
+	if (confessionText == null) {
+	    return false;
+	}
+	return (confessionText.length() > min && confessionText.length() <= max);
+    }
 }

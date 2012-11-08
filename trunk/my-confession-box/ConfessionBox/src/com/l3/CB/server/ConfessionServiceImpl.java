@@ -72,12 +72,12 @@ ConfessionService {
     }
 
     /**
-     * Get confessions
-     * @param confId - {@link Long}
+     * Get confession
      */
     @Override
-    public Confession getConfession(Long confId) {
-	return ConfessionManager.getOneConfession(confId);
+    public Confession getConfession(Long confId, boolean secure) {
+	// TODO: validate user
+	return ConfessionManager.getOneConfession(confId, secure);
     }
 
     @Override
@@ -87,7 +87,7 @@ ConfessionService {
 
     @Override
     public void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus) {
-	PardonManager.pardonWithConditions(pandonByUser, confId, pardonedToUser, pardonConditions, pardonStatus);
+	PardonManager.pardonConfession(pandonByUser, confId, pardonedToUser, pardonConditions, pardonStatus);
     }
 
     @Override

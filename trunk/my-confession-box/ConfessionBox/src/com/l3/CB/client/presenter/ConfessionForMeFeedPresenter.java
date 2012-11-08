@@ -10,6 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateFeedToMeEvent;
+import com.l3.CB.client.event.UpdateFeedToMeEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -83,6 +85,28 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		setConfessions(true);
+	    }
+	});
+
+	ConfessionBox.confEventBus.addHandler(UpdateFeedToMeEvent.TYPE, new UpdateFeedToMeEventHandler() {
+	    @Override
+	    public void updateFeedToMeConfessions(UpdateFeedToMeEvent event) {
+		Confession confessionToBepdated = event.getConfession();
+		if(confessionToBepdated != null) {
+		    ConfessionBox.confessionService.getConfession(confessionToBepdated.getConfId(), true, new AsyncCallback<Confession>() {
+			@Override
+			public void onSuccess(Confession result) {
+			    if(result != null) {
+				display.setConfessions(result);
+			    }
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			    Error.handleError("ConfessionForMeFeedPresenter : on UpdateFeedToMeEvent - confessionService.getConfession", "onFailure", caught);
+			}
+		    });
+		}
 	    }
 	});
     }

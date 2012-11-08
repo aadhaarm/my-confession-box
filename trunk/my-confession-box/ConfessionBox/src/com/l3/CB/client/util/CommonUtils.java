@@ -16,10 +16,12 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -39,6 +41,7 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
+import com.sun.tools.javac.comp.Flow;
 
 public class CommonUtils {
 
@@ -233,7 +236,7 @@ public class CommonUtils {
 	return profileImage;
     }
 
-    public static Widget getName(Confession confession, UserInfo userInfo, boolean isAnyn) {
+    public static FlowPanel getName(Confession confession, UserInfo userInfo, boolean isAnyn) {
 	FlowPanel fPnlNameWidget = null;
 	if(confession != null) {
 	    fPnlNameWidget = new FlowPanel();
@@ -242,6 +245,7 @@ public class CommonUtils {
 		if (userInfo != null) {
 		    Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
 		    ancUserName.removeStyleName("gwt-Anchor");
+		    ancUserName.setTarget("_BLANK");
 		    fPnlNameWidget.add(ancUserName);
 		}
 	    } else {
@@ -263,7 +267,7 @@ public class CommonUtils {
 	return null;
     }
 
-    public static Widget getUserControls(final Confession confession) {
+    public static HorizontalPanel getUserControls(final Confession confession) {
 	HorizontalPanel hPnlControls = new HorizontalPanel();
 	hPnlControls.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
 
@@ -306,15 +310,18 @@ public class CommonUtils {
 	return hPnlControls;
     }
 
-    public static Widget getTextTruncated(final String confession) {
+    public static FlowPanel getTextTruncated(final String confession) {
 	final FlowPanel fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 	if(confession != null) {
-	    final Anchor anchMore = new Anchor("more..");
 	    if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
-		final Label lblConfession = new Label(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
-
+		final HTML lblConfession = new HTML(confession);
+		lblConfession.setStyleName("confessionText");
+		lblConfession.setHeight("80px");
 		fPnlConfession.add(lblConfession);
+
+		final Anchor anchMore = new Anchor("more..");
+		anchMore.setStyleName("moreLink");
 		fPnlConfession.add(anchMore);
 
 		anchMore.addClickHandler(new ClickHandler() {
@@ -322,16 +329,16 @@ public class CommonUtils {
 		    @Override
 		    public void onClick(ClickEvent event) {
 			if("more..".equalsIgnoreCase(anchMore.getText())) {
-			    lblConfession.setText(confession);
+			    lblConfession.setHeight("auto");
 			    anchMore.setText("less..");
 			} else {
-			    lblConfession.setText(confession.substring(0, Constants.TEXT_LENGTH_ON_LOAD));
+			    lblConfession.setHeight("80px");
 			    anchMore.setText("more..");
 			}
 		    }
 		});
 	    } else {
-		Label lblConfession = new Label(confession);
+		HTML lblConfession = new HTML(SafeHtmlUtils.fromSafeConstant(confession));
 		fPnlConfession.add(lblConfession);
 	    }
 	}
@@ -406,7 +413,7 @@ public class CommonUtils {
 	return lblEmptyPage;
     }
 
-    public static Widget getStatusBar(Confession confession) {
+    public static FlowPanel getStatusBar(Confession confession) {
 	FlowPanel fPnlStatusBar = new FlowPanel();
 	fPnlStatusBar.setStyleName("status_bar");
 

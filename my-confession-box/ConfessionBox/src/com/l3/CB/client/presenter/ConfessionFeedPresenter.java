@@ -52,6 +52,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	public void clearConfessions();
 	public HasClickHandlers getRefreshButton();
 	void showEmptyScreen();
+	public void setConfessions(Confession confession);
     }
 
     private final Display display;
@@ -78,7 +79,7 @@ public class ConfessionFeedPresenter implements Presenter {
     }
 
     private void setConfessions(Long confId) {
-	ConfessionBox.confessionService.getConfession(confId, new AsyncCallback<Confession>() {
+	ConfessionBox.confessionService.getConfession(confId, false, new AsyncCallback<Confession>() {
 	    @Override
 	    public void onSuccess(Confession result) {
 		if(result != null) {

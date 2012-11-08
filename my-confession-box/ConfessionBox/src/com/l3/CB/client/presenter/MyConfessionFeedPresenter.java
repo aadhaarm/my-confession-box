@@ -10,6 +10,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -79,11 +81,34 @@ public class MyConfessionFeedPresenter implements Presenter {
 		setConfessions(true);
 	    }
 	});
-    }
 
-    @Override
-    public void go(HasWidgets container) {
-	RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
-	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
+	ConfessionBox.confEventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
+
+	    @Override
+	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
+		Confession confessionToBepdated = event.getConfession();
+		if(confessionToBepdated != null) {
+		    ConfessionBox.confessionService.getConfession(confessionToBepdated.getConfId(), false, new AsyncCallback<Confession>() {
+			@Override
+			public void onSuccess(Confession result) {
+			    if(result != null) {
+				display.setConfessions(result);
+			    }
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			    Error.handleError("ConfessionForMeFeedPresenter : on UpdateFeedToMeEvent - confessionService.getConfession", "onFailure", caught);
+			}
+		    });
+		}
+	    }
+	   }); 
+	}
+
+	@Override
+	public void go(HasWidgets container) {
+	    RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
+	    RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
+	}
     }
-}

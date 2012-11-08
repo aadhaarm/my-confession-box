@@ -421,7 +421,7 @@ public class ConfessionBasicDAO {
 	return pardonConditions;
     }
 
-    public static boolean pardonConfession(Long userId, Long confId, List<PardonCondition> pardonConditions, PardonStatus pardonedStatus) {
+    public static boolean updateConfessionSharePardonCondition(Long userId, Long confId, List<PardonCondition> pardonConditions, PardonStatus pardonedStatus) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {
 	    Query query = pm.newQuery(ConfessionShareDO.class);

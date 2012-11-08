@@ -28,7 +28,8 @@ public interface ConfessionServiceAsync {
     void getConfessions(int page, Filters filter, String locale, Long userId, AsyncCallback<List<Confession>> callback);
     void getConfessionsIDID(int page, Long userId, AsyncCallback<List<Confession>> callback);
     void getConfessionsTOME(int page, Long userId, AsyncCallback<List<Confession>> callback);
-    void getConfession(Long confId, AsyncCallback<Confession> callback);
+    void getConfession(Long confId, boolean secure,
+	    AsyncCallback<Confession> callback);
 
     void pardonConfession(UserInfo pandonByUser, Long confId,
 	    UserInfo pardonedToUser, List<PardonCondition> pardonConditions,

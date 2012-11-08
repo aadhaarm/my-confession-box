@@ -41,7 +41,7 @@ public interface ConfessionService extends XsrfProtectedService {
     List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
     List<Confession> getConfessionsIDID(int page, Long userId);
     List<Confession> getConfessionsTOME(int page, Long userId);
-    Confession getConfession(Long confId);
+    Confession getConfession(Long confId, boolean secure);
     long getNumberOfConfessionForMe(Long userId);
 
     // USER ACTIVITY

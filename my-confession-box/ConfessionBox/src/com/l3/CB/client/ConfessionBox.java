@@ -5,6 +5,8 @@
  */
 package com.l3.CB.client;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
@@ -22,6 +24,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
@@ -53,7 +56,14 @@ public class ConfessionBox implements EntryPoint {
 	RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
 
 	// Get XSRF setup
-	Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()));
+	String cookie = Cookies.getCookie("JSESSIONID");
+	if(cookie == null) {
+	    Date expiration = new Date();
+	    CalendarUtil.addDaysToDate(expiration, 1);
+	    Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()), expiration);
+	}
+
+	// Exchange token with server
 	XsrfTokenServiceAsync xsrf = (XsrfTokenServiceAsync)GWT.create(XsrfTokenService.class);
 	((ServiceDefTarget)xsrf).setServiceEntryPoint(GWT.getModuleBaseURL() + "xsrf");
 	xsrf.getNewXsrfToken(new AsyncCallback<XsrfToken>() {

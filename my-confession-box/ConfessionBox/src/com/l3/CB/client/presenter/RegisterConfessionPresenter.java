@@ -52,7 +52,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	public CheckBox getCbConfessToWidget();
 
 	public void setTxtAppendedText();
-	public String getTxtAppendedText();
+	public CBTextArea getTxtAppendedText();
 
 	Widget asWidget();
     }
@@ -85,7 +85,6 @@ public class RegisterConfessionPresenter implements Presenter {
 	    display.getTxtTitle().setEnabled(false);
 	    display.getTxtConfession().setText(confession.getConfession());
 	    display.getTxtConfession().setEnabled(false);
-
 	    display.setTxtAppendedText();
 	}
     }
@@ -120,8 +119,8 @@ public class RegisterConfessionPresenter implements Presenter {
 	    public void onClick(ClickEvent event) {
 		if(confession == null) {
 
-		    if(display.getTxtTitle().validate() && display.getTxtConfession().validate()) {
-
+		    if(display.getTxtTitle().validate() && display.getTxtConfession().validate(3, 1500)) {
+			
 			// Get confession to be saved
 			final Confession confession = getConfessionToBeSaved();
 
@@ -153,13 +152,16 @@ public class RegisterConfessionPresenter implements Presenter {
 		    /*
 		     * Edit confession flow
 		     */
-		    Date updateTimeStamp = new Date();
-		    confession.setConfession(confession.getConfession()
-			    .concat("<br/>Update - ")
-			    .concat(CommonUtils.getDateInFormat(updateTimeStamp)
-				    .concat("<hr/>")
-				.concat(CommonUtils.checkForNull(display.getTxtAppendedText()))));
-		    finallyRegisterConfession(confession);
+		    if(display.getTxtAppendedText().validate(3, 500)) {
+			display.getTxtAppendedText().getFormatter();
+			Date updateTimeStamp = new Date();
+			confession.setConfession(confession.getConfession()
+				.concat("<br/><br/>Updated on - ")
+				.concat(CommonUtils.getDateInFormat(updateTimeStamp)
+					.concat("<hr/>")
+					.concat(CommonUtils.checkForNull(display.getTxtAppendedText().getText()))));
+			finallyRegisterConfession(confession);
+		    }
 		}
 	    }
 	});
@@ -195,10 +197,17 @@ public class RegisterConfessionPresenter implements Presenter {
 	display.getTxtConfession().addBlurHandler(new BlurHandler() {
 	    @Override
 	    public void onBlur(BlurEvent event) {
-		display.getTxtConfession().validate();
+		display.getTxtConfession().validate(3, 1500);
 	    }
 	});
 
+	display.getTxtAppendedText().addBlurHandler(new BlurHandler() {
+	    @Override
+	    public void onBlur(BlurEvent event) {
+		display.getTxtAppendedText().validate(3, 500);
+	    }
+	});
+	
 	display.getCbHideIdentity().addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {

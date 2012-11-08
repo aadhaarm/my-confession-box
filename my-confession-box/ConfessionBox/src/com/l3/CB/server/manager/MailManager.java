@@ -2,6 +2,7 @@ package com.l3.CB.server.manager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.mail.Message;
@@ -19,30 +20,36 @@ import com.l3.CB.shared.TO.UserInfo;
 public class MailManager {
 
     static Logger logger = Logger.getLogger("CBLogger");
-    static String fromMailAddress = "fbconfess@appspot.gserviceaccount.com";
+    static String fromMailAddress = "aadhaar.m@gmail.com";
 
     public static boolean sendConfessionEmail(UserInfo confessionToUser, UserInfo confessionByUser, long confId) {
+	logger.log(Level.INFO, "Confessed by user:" + confessionByUser.toString());
+	logger.log(Level.INFO, "Confessed to user:" + confessionToUser.toString());
+	logger.log(Level.INFO, "From email address:" + fromMailAddress);
+
 	Properties props = new Properties();
 	Session session = Session.getDefaultInstance(props, null);
 	String msgBody = getConfessionEmailMsgBody(confId, confessionByUser.getName(), confessionToUser.getName());
 	try {
 	    Message msg = new MimeMessage(session);
-	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box"));
+	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box (fbconfess admin)"));
 	    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionToUser.getEmail(), confessionToUser.getName()));
 	    msg.addRecipient(Message.RecipientType.CC, new InternetAddress(confessionByUser.getEmail(), confessionByUser.getName()));
 	    msg.setSubject("Someone has confessed to you");
 	    msg.setText(msgBody);
+	    logger.log(Level.INFO, "Email message object:" + msg.getDescription());
+
 	    Transport.send(msg);
 
 	} catch (AddressException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "AddressException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (MessagingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "MessagingException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (UnsupportedEncodingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "UnsupportedEncodingException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	}
 	return true;
     }
@@ -57,27 +64,32 @@ public class MailManager {
     }
 
     public static void sendPardonMail(UserInfo pardonedByUser, Long confId, UserInfo pardonedToUser) {
+	logger.log(Level.INFO, "pardonedToUser:" + pardonedToUser.toString());
+	logger.log(Level.INFO, "pardonedByUser:" + pardonedByUser.toString());
+	logger.log(Level.INFO, "From email address:" + fromMailAddress);
+	
 	Properties props = new Properties();
 	Session session = Session.getDefaultInstance(props, null);
 	String msgBody = getPardonesEmailMsgBody(pardonedByUser, confId, pardonedToUser);
 	try {
 	    Message msg = new MimeMessage(session);
-	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box"));
+	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box (fbconfess admin)"));
 	    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(pardonedToUser.getEmail(), pardonedToUser.getName()));
 	    msg.addRecipient(Message.RecipientType.CC, new InternetAddress(pardonedByUser.getEmail(), pardonedByUser.getName()));
 	    msg.setSubject("You have been pardoned!");
 	    msg.setText(msgBody);
+	    logger.log(Level.INFO, "Email message object:" + msg.getDescription());
 	    Transport.send(msg);
 
 	} catch (AddressException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "AddressException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (MessagingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "MessagingException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (UnsupportedEncodingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "UnsupportedEncodingException in MailManager.sendFormSaveEmail()" + e.getMessage());
 	}
     }
 
@@ -97,20 +109,20 @@ public class MailManager {
 	String msgBody = getSubscriptionEmailMsgBody(subscriberUserInfo, confId);
 	try {
 	    Message msg = new MimeMessage(session);
-	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box"));
+	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box (fbconfess admin)"));
 	    msg.addRecipient(Message.RecipientType.TO, new InternetAddress(subscriberUserInfo.getEmail(), subscriberUserInfo.getName()));
 	    msg.setSubject("Your subscribed confession has been pardoned!");
 	    msg.setText(msgBody);
 	    Transport.send(msg);
 	} catch (AddressException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "Exception in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (MessagingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "Exception in MailManager.sendFormSaveEmail()" + e.getMessage());
 	} catch (UnsupportedEncodingException e) {
 	    logger.log(Constants.LOG_LEVEL,
-		    "Exception in MailManager.sendFormSaveEmail()" + e.getCause());
+		    "Exception in MailManager.sendFormSaveEmail()" + e.getMessage());
 	}
     }
 

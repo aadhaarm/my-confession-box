@@ -11,7 +11,6 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
@@ -34,7 +33,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private FriendsListBox friendsListBox;
     private final CBTextBox txtTitle;
     private final CBTextArea txtConfession;
-    private final TextArea txtAppendedText;
+    private final CBTextArea txtAppendedText;
     private final Button btnSubmit;
 
     public RegisterConfessionView() {
@@ -60,6 +59,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	txtTitle = new CBTextBox();
 	txtConfession = new CBTextArea();
 	txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
+	txtConfession.setSize("100%", "14em");
 
 	btnSubmit = new Button(ConfessionBox.cbText.buttonTextSubmitConfession());
 
@@ -73,9 +73,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	grdConfessionForm.setWidget(2, 0, hPanelShare);
 
 	grdConfessionForm.setWidget(3, 0, hpnlTitle);
-	grdConfessionForm.setWidget(4, 0, initializeConfessionTextBox());
-
-	txtAppendedText = new TextArea();
+	grdConfessionForm.setWidget(4, 0, txtConfession);
+	
+	txtAppendedText = new CBTextArea();
 	txtAppendedText.setSize("100%", "5em");
 	txtAppendedText.setVisible(false);
 	
@@ -90,16 +90,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	grdConfessionForm.setWidget(5, 0, txtAppendedText);
     }
 
-    public String getTxtAppendedText() {
-        return txtAppendedText.getText();
-    }
-
-    /**
-     * Initialize this example.
-     */
-    public Widget initializeConfessionTextBox() {
-	txtConfession.setSize("100%", "14em");
-	return txtConfession;
+    @Override
+    public CBTextArea getTxtAppendedText() {
+        return txtAppendedText;
     }
 
     @Override
@@ -119,7 +112,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public String getConfession() {
-	return this.txtConfession.getText();
+	return this.txtConfession.getHTML();
     }
 
     @Override

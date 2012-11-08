@@ -82,6 +82,15 @@ color: #999;
 	/*background-color:#F8FFD7;*/
 	background-color:#FEFFED;
 	}
+	
+.confessionText {
+	overflow: hidden;
+}	
+	
+.moreLink {
+    float: right;
+    position: relative;
+}
 
 .condition {
 	background-color:#73883e;

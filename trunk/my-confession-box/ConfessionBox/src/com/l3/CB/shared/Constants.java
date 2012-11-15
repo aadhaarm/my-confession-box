@@ -54,10 +54,10 @@ public class Constants {
     public static final String STYLE_CLASS_SYM_ACTIVITY = "activityButton";
     public static final String STYLE_CLASS_SB_ACTIVITY = "activityButton";
     public static final String STYLE_CLASS_MENU_ITEM_SELECTED = "menuItemSelected";
-    public static final String STYLE_CLASS_MENU = "menuStyleName";
+    public static final String STYLE_CLASS_MENU = "menu";
     public static final String STYLE_CLASS_CONFESSED_BY = "confession";
     public static final String STYLE_CLASS_REGISTER_CONFESSION_PAGE = "confessionRegisterPage";
-    public static final String STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX = "registerConfessionTextBox";
+    public static final String STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX = "confession_text";
     public static final String STYLE_CLASS_PARDON_MODAL = "pardonModalPopupWindow";
     public static final String STYLE_CLASS_PARDON_STATUS_PANEL = "pardonStatusPanel";
     public static final String STYLE_CLASS_DATE_TIME_STAMP = "dateTimeStamp";
@@ -69,10 +69,30 @@ public class Constants {
     public static final String STYLE_CLASS_CONFESSION_TITLE_TEXT = "confession_title";
     public static final String STYLE_CLASS_CONFESSION_BODY = "confession_body";
     public static final String STYLE_CLASS_HELP_INFO = "helpInfoPanel";
+    public static final String DIV_ACTIVITY_BUTTON_CONTAINER = "activityButtonContainer";
+    public static final String DIV_ACTIVITY_BUTTON_SHARE_BUTTON = "shareWrap";
+    public static final String DIV_USER_CONTROL_BUTTON_CONTAINER = "userControlButtonContainer";
+    public static final String DIV_CONFESSION_PANEL_TOP_CONTAINER = "top";
+    public static final String DIV_CONFESSION_PANEL_MIDDLE_CONTAINER = "middle";
+    public static final String DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER = "fb_widgets";
+    public static final String DIV_PROFILE_IMAGE = "image";
+    public static final String DIV_PROFILE_NAME = "name";
+    public static final String DIV_CONFESSION_TEXT = "confessionText";
+    public static final String DIV_MORE_LINK = "moreLink";
+    public static final String DIV_STATUS_BAR = "status_bar";
+    public static final String DIV_TIME_STAMP = "time_stamp";
+    public static final String DIV_PARDONED_STATUS = "pardon_status_yes";
+    public static final String DIV_AWAITING_PARDON_STATUS = "pardon_status_no";
 
     public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
 
     public static final String pardonConditionUnhide = "UN_HIDE_IDENTITY";
     public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
     public static final int TEXT_LENGTH_ON_LOAD = 400;
+
+    public static final int CONF_MIN_CHARS = 3;
+    public static final int CONF_MAX_CHARS = 1500;
+    public static final int COMM_MAX_CHARS = 500;
+
+    public static final int CONF_CACHE_EXPIRATION_SEC = 300;
 }

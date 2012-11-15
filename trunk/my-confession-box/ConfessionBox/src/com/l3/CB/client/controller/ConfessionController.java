@@ -5,10 +5,13 @@
  */
 package com.l3.CB.client.controller;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
@@ -32,7 +35,6 @@ import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
 import com.l3.CB.shared.Constants;
-import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
 
@@ -46,11 +48,11 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	 * Call server with logged in user info
 	 * Register if new, update info or just bring the user UserID with the user info
 	 */
-	ConfessionBox.confessionService.registerUser(ConfessionBox.loggedInUserInfo, new AsyncCallback<UserInfo>() {
+	ConfessionBox.confessionService.registerUser(ConfessionBox.loggedInUserInfo, new AsyncCallback<Long>() {
 	    @Override
-	    public void onSuccess(UserInfo result) {
+	    public void onSuccess(Long result) {
 		if(result != null) {
-		    ConfessionBox.loggedInUserInfo = result;
+		    ConfessionBox.loggedInUserInfo.setUserId(result);
 		    // Initialize MENU
 		    menuPresenter = new MenuPresenter(new MenuView());
 		    menuPresenter.go(container);
@@ -77,6 +79,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     }
 
     private void bind() {
+
+	ConfessionBox.logo.addClickHandler(new ClickHandler() {
+	    
+	    @Override
+	    public void onClick(ClickEvent event) {
+		Location.reload();
+	    }
+	});
+	
 	// Listen all history new item addition
 	History.addValueChangeHandler(this);
 	ConfessionBox.confEventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {

@@ -16,6 +16,15 @@
 		<url-pattern>/confessionbox/confession-box</url-pattern>
 	</servlet-mapping>
 
+	<!-- <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/confessionbox/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint> -->
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>facebookServlet</servlet-name>

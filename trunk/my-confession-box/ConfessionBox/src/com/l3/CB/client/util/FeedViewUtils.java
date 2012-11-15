@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.ShowToolTipEvent;
 import com.l3.CB.client.ui.widgets.ActivityButton;
 import com.l3.CB.client.ui.widgets.FBCommentWidget;
 import com.l3.CB.client.ui.widgets.FBLikeWidget;
@@ -28,6 +29,33 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class FeedViewUtils {
 
+    public static HTML getUndoToolTipBar() {
+	Anchor ancHelpInfo = new Anchor("?");
+	HTML undoTooltip = new HTML("Click again to undo [" + ancHelpInfo  + "]"); 
+	undoTooltip.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		HelpInfo.showHelpInfo(HelpInfo.type.UNDO_VOTE);
+	    }
+	});
+	undoTooltip.setStyleName("tooltip_left");
+	return undoTooltip;
+    }
+
+    public static HTML getShareToolTipBar() {
+	Anchor ancHelpInfo = new Anchor("?");
+	HTML shareTooltip = new HTML("Share your vote on you FB wall [" + ancHelpInfo  + "]"); 
+	shareTooltip.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		HelpInfo.showHelpInfo(HelpInfo.type.SHARE_VOTE);
+	    }
+	});
+	shareTooltip.setStyleName("tooltip_right");
+	return shareTooltip;
+    }
+
+
     public static FlowPanel getPardonWidget(final Confession confession, boolean anynView, final UserInfo confessionByUser) {
 	FlowPanel fPnlPardon = new FlowPanel();
 	if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
@@ -40,7 +68,14 @@ public class FeedViewUtils {
 		    fPnlPardon.add(lblConfession);
 
 		    Anchor ancConditionHelpInfo = new Anchor("[?]");
+		    ancConditionHelpInfo.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+			    HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_HELP_TEXT);
+			}
+		    });
 		    fPnlPardon.add(ancConditionHelpInfo);
+		    
 		    // Add conditions for pardon 
 		    addPardonConditionStatus(confessionShare.getPardonConditions(), fPnlPardon);
 		} else if(!anynView) {
@@ -85,6 +120,12 @@ public class FeedViewUtils {
 		    Label lblCondition = new Label(countCondition + ". " + ConfessionBox.cbText.pardonPopupOpenIdentityConditionView() + ".");
 		    lblCondition.setStyleName("pardonCondition");
 		    Anchor ancConditionHelpInfo = new Anchor("[?]");
+		    ancConditionHelpInfo.addClickHandler(new ClickHandler() {
+		        @Override
+		        public void onClick(ClickEvent event) {
+		            HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_UNDHIDE_HELP_TEXT);
+		        }
+		    });
 		    fPnlCondition.add(lblCondition);
 		    fPnlCondition.add(ancConditionHelpInfo);
 		    if(pardonCondition.isFulfil()) {
@@ -98,6 +139,12 @@ public class FeedViewUtils {
 		    Label lblCondition = new Label(countCondition + ". " + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartOne() + pardonCondition.getCount() + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartTwo());
 		    lblCondition.setStyleName("pardonCondition");
 		    Anchor ancConditionHelpInfo = new Anchor("[?]");
+		    ancConditionHelpInfo.addClickHandler(new ClickHandler() {
+		        @Override
+		        public void onClick(ClickEvent event) {
+		            HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_SPVOTE_HELP_TEXT);
+		        }
+		    });
 		    fPnlCondition.add(lblCondition);
 		    fPnlCondition.add(ancConditionHelpInfo);
 		    if(pardonCondition.isFulfil()) {
@@ -125,31 +172,40 @@ public class FeedViewUtils {
 
 	ConfessionBox.confessionService.getUserActivity(ConfessionBox.loggedInUserInfo.getUserId(),
 		confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
-
+	    int i = 0;
 	    @Override
 	    public void onSuccess(Map<String, Long> result) {
 
 		if (result != null) {
 		    if (result.containsKey(Activity.ABUSE.name())) {
+			i++;
 			btnAB.disableBtn();
 		    }
 		    if (result.containsKey(Activity.LAME.name())) {
+			i++;
 			btnLM.disableBtn();
 		    }
 		    if (result.containsKey(Activity.SAME_BOAT.name())) {
+			i++;
 			btnSB.disableBtn();
 		    }
 		    if (result.containsKey(Activity.SHOULD_BE_PARDONED
 			    .name())) {
+			i++;
 			btnSP.disableBtn();
 		    }
 		    if (result
 			    .containsKey(Activity.SHOULD_NOT_BE_PARDONED
 				    .name())) {
+			i++;
 			btnSNP.disableBtn();
 		    }
 		    if (result.containsKey(Activity.SYMPATHY.name())) {
+			i++;
 			btnSY.disableBtn();
+		    }
+		    if(i > 0) {
+			ConfessionBox.confEventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
 		    }
 		}
 

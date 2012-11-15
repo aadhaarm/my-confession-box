@@ -45,7 +45,7 @@ public class PardonPopupPanel extends PopupPanel{
 
 	HorizontalPanel hPnlPardonActivityCondition = new HorizontalPanel();
 	lbPardonActivityCondition = new ListBox();
-	lbPardonActivityCondition.addItem("1");
+//	lbPardonActivityCondition.addItem("1");
 	lbPardonActivityCondition.addItem("5");
 	lbPardonActivityCondition.addItem("10");
 	lbPardonActivityCondition.addItem("20");
@@ -97,7 +97,11 @@ public class PardonPopupPanel extends PopupPanel{
 		    if(pardonConditions != null && !pardonConditions.isEmpty()) {
 			pardonStatus = PardonStatus.PARDONED_WITH_CONDITION;
 		    }
-		    ConfessionBox.confessionService.pardonConfession(ConfessionBox.loggedInUserInfo, confession.getConfId(), confessedByUser, pardonConditions, pardonStatus, new AsyncCallback<Void>() {
+		    ConfessionBox.confessionService.pardonConfession(
+			    ConfessionBox.loggedInUserInfo,
+			    confession.getConfId(), confessedByUser,
+			    pardonConditions, pardonStatus,
+			    new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 			    btnPardon.setEnabled(false);

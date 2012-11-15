@@ -55,5 +55,10 @@
         <property name="userId" direction="asc"/>
         <property name="timeStamp" direction="desc"/>
     </datastore-index>
+    
+        <datastore-index kind="SubscribtionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
 
 </datastore-indexes>

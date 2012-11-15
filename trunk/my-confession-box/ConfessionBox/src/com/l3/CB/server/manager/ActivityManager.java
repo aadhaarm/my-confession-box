@@ -24,6 +24,7 @@ public class ActivityManager {
 
 	if(activity.equals(Activity.SHOULD_BE_PARDONED)) {
 	    List<ConfessionShare> confessionShares = ConfessionBasicDAO.getConfessionShare(confId, false);
+	    if(confessionShares != null && !confessionShares.isEmpty())
 	    for (ConfessionShare confessionShare : confessionShares) {
 		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
 		    switch (confessionShare.getPardonStatus()) {

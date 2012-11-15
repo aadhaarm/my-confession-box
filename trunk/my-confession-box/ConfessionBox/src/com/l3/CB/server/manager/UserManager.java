@@ -28,6 +28,15 @@ public class UserManager {
 	return getUserInfo(UserDAO.getUserByFBId(userInfo));
     }
 
+    /**
+     * Get User already registered in CB
+     * @param userId
+     * @return {@link UserInfo}
+     */
+    public static boolean validateUser(Long userId, String fbId) {
+	return UserDAO.validateUser(userId, fbId);
+    }
+
 
     private static UserInfo getUserInfo(UserDO userDO) {
 	UserInfo userInfo = null;

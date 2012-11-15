@@ -10,7 +10,10 @@ div.container {
 
 div.header {
 	position: fixed;
-	padding: 0.5em;
+	padding-bottom: 0.5em;
+    padding-left: 15px;
+    padding-right: 0.5em;
+    padding-top: 0.5em;
 	color: black;
 	clear: left;
 	text-align: center;
@@ -58,92 +61,19 @@ div.content {
 	padding-bottom: 1em;
 }
 
-.error-text-box {
-	border: 1px solid red;
-	background: white url("../images/Error.icon.gif")
-		no-repeat left center;
-	padding-left: 15px !important;
-}
-
-.formDromTable {
-	background-color: #3B5998;
-}
 
 div.helpInfoDiv {
+
 }
 
-
-
-
-
-
-img {
-	border: 0px;
-}
-
-.flt {
-	float: left;
-}
-
-.menubg {
-	clear: left;
-	background-color: #3B5998;
-	width: 202px;
-}
-
-.menu {
-	float: left;
-	clear: left;
-	font: bold 11px Helvetica, Arial, sans-serif;
-}
-
-.menu li {
-	margin: 0px 0px 0px 0px;
-	list-style: none;
-}
-
-.menu a,.menu a:visited {
-	width: 186px;
-	height: 22px;
-	margin: 0px 0px 2px -32px;
-	position: relative;
-	display: block;
-	color: #cbe7f5;
-	text-decoration: none;
-	background: url(menubg2.jpg) no-repeat;
-	padding: 4px 0 0 8px;
-}
-
-* html .menu a,.menu a:visited {
-	width: 186px;
-	height: 22px;
-	margin: 0px 0px 2px -32px;
-	position: relative;
-	display: block;
-	color: #cbe7f5;
-	text-decoration: none;
-	background: url(menubg2.jpg) no-repeat;
-	padding: 4px 0 0 8px;
-}
-
-.menu a:hover,.menu a:active,.menu li.current_page_item a,.menu li.current_page_item a:visited
-	{
-	background: url(menubg1.jpg) no-repeat;
-	text-decoration: none;
-}
-
-.bot {
-	clear: left;
-}
-
-.confession {
+/* .confession {
 	color: #333333;
     line-height: 1.38;
     margin-left: 10px;
     font-family: lucida Grande;
     font-size: 13px;
 }
-
+ */
 .activityButton {
 	height: 40px;
 	width: 44px;
@@ -201,10 +131,6 @@ img {
 	width: 559;
 	max-width: 1400px;
     min-width: 545px;
-/* 
-	max-height: 750px;
-	min-height: 685px;
-*/
  }
 
 .loaderImage {
@@ -213,22 +139,8 @@ img {
     margin-right: auto
 }
 
-.confessionRegisterPage {
-	width: 559;
-	height: auto;
-}
-
-.registerConfessionTextBox {
-	width: 440px !important;
-	height: 300px;
-}
-
-.menuStyleName {
-	width: 139px;
-}
-
 .menuItemSelected {
-	background-color: #B4B9C4 !important;
+	background-color: #DAF7CF !important;
 }
 
 #auth-id {
@@ -269,12 +181,6 @@ img {
 	width: 23px;
 }
 
-.justOpen {
-	width: 400px;
-	border: none;
-	background: transparent;
-}
-
 .confessionTitleText {
 	font-size: large;
 	font-weight: bold;
@@ -285,7 +191,7 @@ img {
 }
 
 .helpInfoPanel {
-	border-color: cyan;
+	border-color: black;
 	margin-top: 6px;
 	padding: 3px;
 	border-style: solid;	

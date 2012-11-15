@@ -1,9 +1,8 @@
 package com.l3.CB.client.presenter;
 
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
@@ -14,11 +13,11 @@ import com.l3.CB.shared.Constants;
 public class MenuPresenter implements Presenter {
 
     public interface Display {
-	public PushButton setFeedItemSelected();
-	public PushButton getFeedItem();
-	public PushButton getConfessItem();
-	public PushButton getMyConItem();
-	public PushButton getConToMeItem();
+	public HTML setFeedItemSelected();
+	public HTML getFeedItem();
+	public HTML getConfessItem();
+	public HTML getMyConItem();
+	public HTML getConToMeItem();
 	public MenuButton getBtnMenuItemMyConf();
 	public MenuButton getBtnMenuItemConfToMe();
 
@@ -35,14 +34,7 @@ public class MenuPresenter implements Presenter {
     }
 
     private void bind() {
-	Timer refreshTimer = new Timer() {
-	    @Override
-	    public void run() {
-		initializeMenuCounts();
-		schedule(1000*60*15);
-	    }
-	};
-	refreshTimer.schedule(100);
+	initializeMenuCounts();
     }
 
     /**

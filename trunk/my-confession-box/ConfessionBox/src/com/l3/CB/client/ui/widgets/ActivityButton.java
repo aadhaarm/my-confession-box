@@ -1,7 +1,5 @@
 package com.l3.CB.client.ui.widgets;
 
-import java.util.logging.Logger;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -15,6 +13,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.ActivityEvent;
+import com.l3.CB.client.event.CancelActivityEvent;
+import com.l3.CB.client.event.ShowToolTipEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.EventUtils;
@@ -26,7 +27,6 @@ import com.l3.CB.shared.TO.Confession;
 
 public class ActivityButton extends AbsolutePanel {
 
-    Logger logger = Logger.getLogger("CBLogger");
     final PushButton btn;
     Label timerCount = null;
     Image loader = null;
@@ -35,7 +35,7 @@ public class ActivityButton extends AbsolutePanel {
 
     public ActivityButton(final Activity activity, final Confession confession, String titleText, String btnStyleName, final Image buttonImage) {
 	super();
-	this.addStyleName("activityButtonContainer");
+	this.addStyleName(Constants.DIV_ACTIVITY_BUTTON_CONTAINER);
 	long count = getCount(confession, activity);
 
 	btn = new PushButton(buttonImage);
@@ -45,13 +45,19 @@ public class ActivityButton extends AbsolutePanel {
 
 	getTimerWrapAnimation();
 
-	btnShare = new Button("share"); 
-	btnShare.setStyleName("shareWrap");
+	btnShare = new Button(ConfessionBox.cbText.activityButtonShareButtonLabel()); 
+	btnShare.setStyleName(Constants.DIV_ACTIVITY_BUTTON_SHARE_BUTTON);
 	btnShare.addClickHandler(new ClickHandler() {
-
 	    @Override
 	    public void onClick(ClickEvent event) {
-		CommonUtils.postOnWall(FacebookUtil.getActivityUrl(confession.getConfId()), getImageUrl(buttonImage.getUrl()), getActivityTitle(activity), getActivityCaption(confession), getActivityDescription(activity), activity.getActivitySharePoints());
+		// POST ON WALL popup
+		CommonUtils.postOnWall(
+			FacebookUtil.getActivityUrl(confession.getConfId()),
+			getImageUrl(buttonImage.getUrl()),
+			getActivityTitle(activity),
+			getActivityCaption(confession),
+			getActivityDescription(activity),
+			activity.getActivitySharePoints());
 	    }
 	});
 	
@@ -71,7 +77,10 @@ public class ActivityButton extends AbsolutePanel {
     }
 
     private String getActivityDescription(Activity activity) {
-	return ConfessionBox.loggedInUserInfo.getName() + " has been given " + Integer.toString(activity.getActivitySharePoints()) + " 'Human Points'.";
+	return ConfessionBox.loggedInUserInfo.getName()
+		+ ConfessionBox.cbText.activityButtonShareClickText1()
+		+ Integer.toString(activity.getActivitySharePoints())
+		+ ConfessionBox.cbText.activityButtonShareClickText2();
     }
 
     private String getActivityCaption(Confession confession) {
@@ -79,7 +88,7 @@ public class ActivityButton extends AbsolutePanel {
     }
 
     private String getActivityTitle(Activity activity) {
-	return ConfessionBox.loggedInUserInfo.getName() + " has " + activity.getActivityAsVerb();
+	return ConfessionBox.loggedInUserInfo.getName() + activity.getActivityAsVerb();
     }
 
     /**
@@ -132,12 +141,14 @@ public class ActivityButton extends AbsolutePanel {
 	    @Override
 	    public void cancel() {
 		super.cancel();
+		ConfessionBox.confEventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
 		count = ActivityButton.this.count-1;
 		timerCount.setText(Integer.toString(ActivityButton.this.count));
 	    }
 
 	    @Override
 	    public void run() {
+		ConfessionBox.confEventBus.fireEvent(new ActivityEvent(confession.getConfId()));
 		if(count > 0) {
 		    timerCount.setText(Integer.toString(count));
 		    count--;
@@ -155,8 +166,8 @@ public class ActivityButton extends AbsolutePanel {
 			    btnShare.setVisible(true);
 			    add(btnShare, btn.getElement());
 			    EventUtils.raiseUpdateHPEvent(activity.getActivityPoints());
+			    ConfessionBox.confEventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
 			}
-
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -263,7 +274,7 @@ public class ActivityButton extends AbsolutePanel {
 	} else if(count != null && count.length() == 5) {
 	    count = count.substring(0, 1) + "k";
 	} else if(count != null && count.length() > 5) {
-	    count = "☝" + count.substring(0, 2) + "k";
+	    count = "⬆" + count.substring(0, 2) + "k";
 	}
 	return count;
     }

@@ -5,13 +5,16 @@
  		
  		<meta property="og:title" content="Confession Box" />
 		<meta property="og:type" content="cause" />
-		<meta property="og:url" content="http://apps.facebook.com/fbconfessbeta/" />
+		<meta property="og:url" content="http://apps.facebook.com/fbconfess/" />
 		<meta property="og:image" content="http://fbconfess.appspot.com/images/confession_box_smiley_face.jpg" />
 		<meta property="og:site_name" content="Confession Box" />
-		<meta property="fb:app_id" content="202435696462206" />
+		<meta property="fb:app_id" content="171485962909999" />
  		
 		<link type="text/css" rel="stylesheet" href="sty_CB.css">
 		<link type="text/css" rel="stylesheet" href="style.css">
+		<link type="text/css" rel="stylesheet" href="confess.css">
+		<link type="text/css" rel="stylesheet" href="menu.css">
+
 		<script type="text/javascript" src="confessionbox/confessionbox.nocache.js"></script>
 	</head>
 	
@@ -20,7 +23,7 @@
 		<script src="//connect.facebook.net/en_US/all.js"></script>
 		<script>
 		  FB.init({
-		    appId      : '202435696462206',
+		    appId      : '171485962909999',
 		    channelUrl : '//fbconfess.appspot.com',
 		    status     : true,
 		    cookie     : true,
@@ -37,16 +40,14 @@
 		</noscript>
 	
 		<div class="container">
-			<div class="header">
-				<h1 class="header" id="appTitle"></h1>
-			</div>
+			<div class="header"><a href="#" id="appTitle"></a></div>
 			<div id="leftHandDiv" class="left">
 				<div id="leftHandMenuDiv"></div>
-				<div id="humanPointDiv"></div>
+				<div id="humanPointDiv" class="human_points"></div>
 				<div id="leftHandToolTipDiv" class="helpInfoDiv"></div>
 			</div>
 			<div id="bodyDiv" class="content"></div>
-			<div id="footerDiv" class="footer">By L3 Confession Box</div>
+			<!-- <div id="footerDiv" class="footer">By L3 Confession Box</div> -->
 		</div>
 	</body>
 </html>

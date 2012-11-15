@@ -1,6 +1,7 @@
 package com.l3.CB.client.ui.widgets;
 
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -27,6 +28,8 @@ public class ConfessionPanel extends FlowPanel{
     private FlowPanel fPnlPardonWidget;
     private FlowPanel fPnlActivityButtons;
     private Label lblPardonStatus;
+    private HTML undoToolTip;
+    private HTML shareToolTip;
 
     public ConfessionPanel(Confession confession, boolean showUserControls, boolean isAnyn) {
 	super();
@@ -34,6 +37,9 @@ public class ConfessionPanel extends FlowPanel{
 	this.confession = confession;
 	this.anonymousView = isAnyn;
 	this.showUserControls = showUserControls;
+
+	this.getElement().setId("confession-id-" + confession.getConfId());
+	this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
 	getConfessionWidgetsSetup(confession);
     }
@@ -48,25 +54,21 @@ public class ConfessionPanel extends FlowPanel{
 	    confession.setFbId(confessedByUserInfo.getId());
 	    this.confession = confession;
 	}
-	
+
 	/*
 	 * Instantiate widgets
 	 */
-
-	this.getElement().setId("confession-id-" + confession.getConfId());
-	this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
-	
 	// Set USER CONTROLS
 	if(this.showUserControls) {
 	    hPnlUserControls = CommonUtils.getUserControls(confession);
 	    this.add(hPnlUserControls);
 	}
-	
+
 	initializeConfessionWidgets(confession);
 
 	// TOP Container
 	FlowPanel fPnlTopContent = new FlowPanel();
-	fPnlTopContent.setStyleName("top");
+	fPnlTopContent.setStyleName(Constants.DIV_CONFESSION_PANEL_TOP_CONTAINER);
 
 	// Set USER PROFILE PIC or ANYN PIC 
 	fPnlTopContent.add(imgProfileImage);
@@ -81,7 +83,7 @@ public class ConfessionPanel extends FlowPanel{
 
 	// MIDDLE Container
 	fPnlMiddleContent = new FlowPanel();
-	fPnlMiddleContent.setStyleName("middle");
+	fPnlMiddleContent.setStyleName(Constants.DIV_CONFESSION_PANEL_MIDDLE_CONTAINER);
 
 	// Confession Title
 	lblConfessionTitle = new Label(confession.getConfessionTitle());
@@ -93,13 +95,17 @@ public class ConfessionPanel extends FlowPanel{
 
 	// Pardon widget
 	fPnlMiddleContent.add(fPnlPardonWidget);
-	//		Widget conditionStatusWidget = CommonUtils.getConditionStatus(confession);
-	//		if(conditionStatusWidget != null) {
-	//		    fPnlMiddleContent.add(conditionStatusWidget);
-	//		}
 
-	//		fPnlMiddleContent.add(CommonUtils.getUndoToolTipBar());
-	//		fPnlMiddleContent.add(CommonUtils.getShareToolTipBar());
+	// UNDO tool tip
+	undoToolTip = FeedViewUtils.getUndoToolTipBar();
+	undoToolTip.setVisible(false);
+	fPnlMiddleContent.add(undoToolTip);
+	
+	// Share tool tip
+	shareToolTip = FeedViewUtils.getShareToolTipBar();
+	shareToolTip.setVisible(false);
+	fPnlMiddleContent.add(shareToolTip);
+
 	this.add(fPnlMiddleContent);
 
 	// BUTTONS
@@ -112,10 +118,9 @@ public class ConfessionPanel extends FlowPanel{
 	}
 	this.add(fPnlButtonEtc);
 
-
 	// FB WIDGETS
 	final FlowPanel fPnlFBWidgets = new FlowPanel();
-	fPnlFBWidgets.setStyleName("fb_widgets");
+	fPnlFBWidgets.setStyleName(Constants.DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER);
 	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
 	fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
 	this.add(fPnlFBWidgets);
@@ -137,5 +142,17 @@ public class ConfessionPanel extends FlowPanel{
 	lblPardonStatus = CommonUtils.getPardonStatus(this.confession);
 	// Pardon widget
 	fPnlPardonWidget = FeedViewUtils.getPardonWidget(this.confession, anonymousView, confessedByUserInfo);
+    }
+    
+    public void showUndoTooltip() {
+	undoToolTip.setVisible(true);
+    }
+    
+    public void showShareToolTip() {
+	shareToolTip.setVisible(true);
+    }
+    
+    public void hideUndoToolTip() {
+	undoToolTip.setVisible(false);
     }
 }

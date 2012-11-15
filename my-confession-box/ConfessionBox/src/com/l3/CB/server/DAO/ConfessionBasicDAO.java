@@ -127,7 +127,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -143,7 +142,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -160,7 +158,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -177,7 +174,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -194,7 +190,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -211,7 +206,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -227,7 +221,6 @@ public class ConfessionBasicDAO {
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);
-			//							confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 			confessions.add(confession);
 		    }
 		}
@@ -260,7 +253,6 @@ public class ConfessionBasicDAO {
 		while (it.hasNext()) {
 		    ConfessionDO confessionDO = it.next();
 		    Confession confession = getConfession(confessionDO);
-		    //					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 		    confessions.add(confession);
 		}
 	    }
@@ -311,7 +303,6 @@ public class ConfessionBasicDAO {
 		while (it.hasNext()) {
 		    ConfessionDO confessionDO = it.next();
 		    confession = getConfession(confessionDO);
-		    //					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 		}
 	    }
 	} catch (Exception e) {
@@ -342,7 +333,6 @@ public class ConfessionBasicDAO {
 		while (it.hasNext()) {
 		    ConfessionShareDO confessionShareDO = it.next();
 		    Confession confession = getConfession(confessionShareDO.getConfId());
-		    //					confession.setActivityCount(ConfessionOtherDAO.getUserActivity(confession.getConfId()));
 		    confessions.add(confession);
 		}
 	    }
@@ -576,14 +566,6 @@ public class ConfessionBasicDAO {
 	    pm.close();
 	}
 	return true;
-    }
-
-    public static List<Confession> getConfessions(List<Long> confIDs, int page,	int feedPageSize, Filters filter, String locale) {
-	List<Confession> confesions = new ArrayList<Confession>();
-	for (Long confId : confIDs) {
-	    confesions.add(getConfession(confId));
-	}
-	return confesions;
     }
 
     public static long getConfessionCount(Long userId) {

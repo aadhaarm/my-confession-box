@@ -7,22 +7,22 @@ public enum Activity {
 		String returnVal = "";
 		switch (this) {
 		case ABUSE:
-			returnVal = "reported abuse";
+			returnVal = "has reported abuse";
 			break;
 		case SAME_BOAT:
-			returnVal = "voted 'same boat'";
+			returnVal = "has voted 'same boat'";
 			break;
 		case LAME:
-			returnVal = "voted 'lame'";
+			returnVal = "has voted 'lame'";
 			break;
 		case SHOULD_BE_PARDONED:
-			returnVal = "voted 'Should be pardoned'";
+			returnVal = "has voted 'Should be pardoned'";
 			break;
 		case SHOULD_NOT_BE_PARDONED:
-			returnVal = "voted 'Should not be pardoned'";
+			returnVal = "has voted 'Should not be pardoned'";
 			break;
 		case SYMPATHY:
-			returnVal = "sympathised";
+			returnVal = "has sympathised";
 			break;
 		}
 		return returnVal;

@@ -1,0 +1,103 @@
+@charset "UTF-8";
+/* CSS Document */
+
+/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
+
+
+.reg_main_container{
+	background:#f5f5f5;
+	padding:0 0px 0 0px;
+	width:572px;
+	height:auto;
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size:small;
+	border-bottom:solid 1px #CCC;
+}
+
+reg_main_container a:link, reg_main_container a:visited {
+	color:#415896;
+}
+
+a:hover {
+	color:#07285d;
+	}
+
+/*confession css begins here*/
+
+.selections {
+	padding:10px 0 0 5px;
+	}
+
+.header_text {
+	border-bottom:solid 1px #CCC;
+	margin:10px 15px 0 10px;
+}
+
+.subtext {
+	font-size:smaller;	
+}
+
+.reg_image {
+	float: right;
+	margin:-55px 10px 0 5px;
+	}
+
+.options {
+	background-color:#FF9;
+	padding: 5px 20px 10px 20px;
+	margin: 2px 15px 0 15px;
+	font-size:smaller;
+}
+
+.options_title{
+	font-weight:600;
+}
+
+.appeal {
+	font-size:smaller;
+	font-weight:600;
+	margin-top: 8px;
+}
+
+.friend_image {
+	height: 25px;
+	height: 25px;
+    margin-bottom: -7px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 25px;
+}
+	
+.confession {
+	}
+
+.reg_confession_title {
+	font-weight:600;
+	font-size:smaller;
+	margin:10px 0 10px 15px;
+}
+
+.confession_text {
+	margin:5px 5px 0 15px;	
+}
+
+.ch_remaining{
+	font-size:smaller;
+	margin:2px 25px 10px 0;
+	float:right;
+}
+
+.buttons {
+	clear:both;
+	}
+
+.save_draft {
+	margin:5px 0 5px 15px;
+	float:left;
+}
+
+.submit_confession {
+	margin:5px 20px 5px 10px;
+	float:right;
+}

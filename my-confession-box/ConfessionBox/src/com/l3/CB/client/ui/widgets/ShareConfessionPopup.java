@@ -1,7 +1,7 @@
 package com.l3.CB.client.ui.widgets;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -19,11 +19,13 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.UserInfo;
 
+
 public class ShareConfessionPopup extends PopupPanel {
 
-    private List<UserInfo> userfriends;
+    private Map<String, UserInfo> userfriends;
+
     private final Button btnSubmit; 
-    private FriendsListBox friendsListBox;
+    private FriendsSuggestBox friendsSuggestBox;
     private final FlowPanel fPnlConfessionShare;
     private final Confession confession;
 
@@ -32,8 +34,7 @@ public class ShareConfessionPopup extends PopupPanel {
 	this.confession = confession;
 	addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
 	fPnlConfessionShare = new FlowPanel();
-//	populateFriendsList();
-	btnSubmit = new Button("Send Confession");
+	btnSubmit = new Button(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
 	fPnlConfessionShare.add(btnSubmit);
 	add(fPnlConfessionShare);
 	bind(confession.getConfId());
@@ -44,17 +45,28 @@ public class ShareConfessionPopup extends PopupPanel {
 
 	    @Override
 	    public void onClick(ClickEvent event) {
-		if(friendsListBox != null) {
+		if(friendsSuggestBox != null && friendsSuggestBox.validate()) {
 
-		    UserInfo selectedUser = friendsListBox.getSelectedUser();
+		    UserInfo selectedUser = friendsSuggestBox.getSelectedUser();
 		    if(selectedUser != null) {
 			// Open a fb notification message dialog
-			CommonUtils.sendConfessionNotification(selectedUser.getId(), selectedUser.getName(), ConfessionBox.loggedInUserInfo.getName(), FacebookUtil.getConfessionNotificationUrl(), FacebookUtil.getApplicationImage());
+			CommonUtils.sendConfessionNotification(
+				selectedUser.getId(), selectedUser.getName(),
+				ConfessionBox.loggedInUserInfo.getName(),
+				FacebookUtil.getConfessionNotificationUrl(),
+				FacebookUtil.getApplicationImage(),
+				    ConfessionBox.cbText.shareConfessionFBWallMessage());
 
 			final ConfessionShare confessTo = getConfessedShareTO(selectedUser);
 
 			if(confessTo != null) {
-			    ConfessionBox.confessionService.createConfessedToUser(confId, ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), confessTo, new AsyncCallback<Void>() {
+			    ConfessionBox.confessionService
+				    .createConfessedToUser(confId,
+					    ConfessionBox.loggedInUserInfo
+						    .getUserId(),
+					    ConfessionBox.loggedInUserInfo
+						    .getId(), confessTo,
+					    new AsyncCallback<Void>() {
 
 				@Override
 				public void onSuccess(Void result) {
@@ -93,7 +105,7 @@ public class ShareConfessionPopup extends PopupPanel {
      * Get user friends
      */
     public void populateFriendsList() {
-	if(friendsListBox == null) {
+	if(friendsSuggestBox == null) {
 
 	    ConfessionBox.facebookService.getFriends(ConfessionBox.accessToken, new AsyncCallback<String>() {
 		@Override
@@ -101,8 +113,8 @@ public class ShareConfessionPopup extends PopupPanel {
 		    if(result != null) {
 			userfriends = CommonUtils.getFriendsUserInfo(result);
 			if(userfriends != null && !userfriends.isEmpty()) {
-			    friendsListBox = new FriendsListBox(userfriends);
-			    fPnlConfessionShare.add(friendsListBox);
+			    friendsSuggestBox = new FriendsSuggestBox(userfriends);
+			    fPnlConfessionShare.add(friendsSuggestBox);
 			}
 		    }
 		}

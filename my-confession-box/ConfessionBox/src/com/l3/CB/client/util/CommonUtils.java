@@ -5,9 +5,9 @@
  */
 package com.l3.CB.client.util;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -41,7 +41,6 @@ import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
-import com.sun.tools.javac.comp.Flow;
 
 public class CommonUtils {
 
@@ -62,15 +61,8 @@ public class CommonUtils {
 
     // Parse the XFBML tags on page, in the given ELEMENT
     public static native void parseXFBMLJS(Element element) /*-{
-		if($wnd.FB) {
+		if($wnd.FB && element) {
 			$wnd.FB.XFBML.parse(element);
-		}
-	}-*/;
-
-    // Parse all the XFBML tags on the page
-    public static native void parseXFBMLJS() /*-{
-		if($wnd.FB) {
-	  		$wnd.FB.XFBML.parse();
 		}
 	}-*/;
 
@@ -90,7 +82,18 @@ public class CommonUtils {
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserEmail = response.email;
         	});
-            } 
+            } else {
+     		$wnd.FB.api('/me', function(response) {
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserFbId = response.id;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserFullName = response.name;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserFirst_name = response.first_name;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLast_name = response.last_name;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLink = response.link;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserUsername = response.username;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserGender = response.gender;
+		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
+        	});
+   		}
            }, {scope: 'email'});
 	}
 	}-*/;
@@ -115,14 +118,14 @@ public class CommonUtils {
         $wnd.FB.ui(obj, callback);
 	}-*/;
 
-    public static native void sendConfessionNotification(String toUserFbId, String toUserFullName, String fromUserFullName, String link, String imageUrl) /*-{
+    public static native void sendConfessionNotification(String toUserFbId, String toUserFullName, String fromUserFullName, String link, String imageUrl, String message) /*-{
         // calling the API ...
         var obj = {
           method: 'send',
           to: toUserFbId,
           link: link,
           picture: imageUrl,
-          name: fromUserFullName + ' has confessed to you on Confession Box.',
+          name: fromUserFullName + message,
         };
 
         function callback(response) {
@@ -139,20 +142,6 @@ public class CommonUtils {
 	    returnVal = jsonValue.isString().stringValue();
 	}
 	return returnVal;
-    }
-
-    public static String processAccessToken(String result) {
-	String accessToken = null;
-	if(result != null) {
-	    String [] resultArgs = result.split("&");
-	    if(resultArgs != null && resultArgs.length > 0) {
-		String [] accessTokenParam = resultArgs[0].split("=");
-		if(accessTokenParam != null && accessTokenParam.length >= 2) {
-		    accessToken = accessTokenParam[1];
-		}
-	    }
-	}
-	return accessToken;
     }
 
     public static UserInfo getUserInfo(String jsonString) {
@@ -187,8 +176,8 @@ public class CommonUtils {
 	return jsonString.substring(2, jsonString.length()-2);
     }
 
-    public static List<UserInfo> getFriendsUserInfo(String jsonString) {
-	List<UserInfo> friends = null;
+    public static Map<String, UserInfo> getFriendsUserInfo(String jsonString) {
+	Map<String, UserInfo> friends = null;
 
 	if(jsonString != null && jsonString.length() > 0) {
 	    jsonString = stripOutComment(jsonString);
@@ -204,7 +193,7 @@ public class CommonUtils {
 			JSONArray jsonArray = jsonObject.get("data").isArray();
 
 			if(jsonArray != null) {
-			    friends = new ArrayList<UserInfo>();
+			    friends = new HashMap<String, UserInfo>();
 
 			    for (int i = 0; i < jsonArray.size(); i++) {
 				JSONValue userJSONValue = jsonArray.get(i);
@@ -213,7 +202,7 @@ public class CommonUtils {
 				    UserInfo userInfo = new UserInfo();
 				    userInfo.setId(getString(friendJson.get("id")));
 				    userInfo.setName(getString(friendJson.get("name")));
-				    friends.add(userInfo);
+				    friends.put(userInfo.getName(), userInfo);
 				}
 			    }
 			}
@@ -232,7 +221,7 @@ public class CommonUtils {
 	} else {
 	    profileImage = new Image(FacebookUtil.getFaceIconImage(confession.getGender()));
 	}
-	profileImage.setStyleName("image");
+	profileImage.setStyleName(Constants.DIV_PROFILE_IMAGE);
 	return profileImage;
     }
 
@@ -240,7 +229,7 @@ public class CommonUtils {
 	FlowPanel fPnlNameWidget = null;
 	if(confession != null) {
 	    fPnlNameWidget = new FlowPanel();
-	    fPnlNameWidget.setStyleName("name");
+	    fPnlNameWidget.setStyleName(Constants.DIV_PROFILE_NAME);
 	    if (!confession.isShareAsAnyn() || ! isAnyn) {
 		if (userInfo != null) {
 		    Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
@@ -278,16 +267,16 @@ public class CommonUtils {
 	hPnlControls.add(btnDeleteConfession);
 
 	PushButton btnShareConfession = new PushButton();
-	btnShareConfession.addStyleName("userControlButtonContainer");
-	btnShareConfession.setTitle("Ask for pardon from some one in your friends.");
+	btnShareConfession.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
+	btnShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
 	hPnlControls.add(btnShareConfession);
 	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
 	    btnShareConfession.setEnabled(false);
 	} else {
 	    btnShareConfession.addClickHandler(new ClickHandler() {
-		ShareConfessionPopup shareConfessionPopup = new ShareConfessionPopup(confession);
 		@Override
 		public void onClick(ClickEvent event) {
+		    ShareConfessionPopup shareConfessionPopup = new ShareConfessionPopup(confession);
 		    shareConfessionPopup.populateFriendsList();
 		    shareConfessionPopup.setGlassEnabled(true);
 		    shareConfessionPopup.center();
@@ -296,8 +285,8 @@ public class CommonUtils {
 	}
 
 	PushButton btnEditConfession = new PushButton();
-	btnEditConfession.addStyleName("userControlButtonContainer");
-	btnEditConfession.setTitle("Update your confession");
+	btnEditConfession.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
+	btnEditConfession.setTitle(ConfessionBox.cbText.editConfessionUserControlButtonTitle());
 	hPnlControls.add(btnEditConfession);
 	btnEditConfession.addClickHandler(new ClickHandler() {
 
@@ -316,24 +305,24 @@ public class CommonUtils {
 	if(confession != null) {
 	    if(confession.length() > Constants.TEXT_LENGTH_ON_LOAD) {
 		final HTML lblConfession = new HTML(confession);
-		lblConfession.setStyleName("confessionText");
+		lblConfession.setStyleName(Constants.DIV_CONFESSION_TEXT);
 		lblConfession.setHeight("80px");
 		fPnlConfession.add(lblConfession);
 
-		final Anchor anchMore = new Anchor("more..");
-		anchMore.setStyleName("moreLink");
+		final Anchor anchMore = new Anchor(ConfessionBox.cbText.moreLink());
+		anchMore.setStyleName(Constants.DIV_MORE_LINK);
 		fPnlConfession.add(anchMore);
 
 		anchMore.addClickHandler(new ClickHandler() {
 
 		    @Override
 		    public void onClick(ClickEvent event) {
-			if("more..".equalsIgnoreCase(anchMore.getText())) {
+			if(ConfessionBox.cbText.moreLink().equalsIgnoreCase(anchMore.getText())) {
 			    lblConfession.setHeight("auto");
-			    anchMore.setText("less..");
+			    anchMore.setText(ConfessionBox.cbText.lessLink());
 			} else {
 			    lblConfession.setHeight("80px");
-			    anchMore.setText("more..");
+			    anchMore.setText(ConfessionBox.cbText.moreLink());
 			}
 		    }
 		});
@@ -371,15 +360,16 @@ public class CommonUtils {
     public static ListBox getMeFilterListBox(ListBox lstFilterOptions) {
 	if(lstFilterOptions != null) {
 	    lstFilterOptions.setVisible(false);
-	    lstFilterOptions.addItem("All confessions", Filters.ALL.name());
-	    lstFilterOptions.addItem("Hidden identity", Filters.CLOSED .name());
-	    lstFilterOptions.addItem("Your language", Filters.LOCALE_SPECIFIC.name());
-	    lstFilterOptions.addItem("Most 'SAME BOAT' voted", Filters.MOST_SAME_BOATS.name());
-	    lstFilterOptions.addItem("Most 'LAME' voted", Filters.MOST_LAME.name());
-	    lstFilterOptions.addItem("Most 'SYMPATHAISED' voted", Filters.MOST_SYMPATHY.name());
-	    lstFilterOptions.addItem("Most 'SHOULD BE PARDONED' voted", Filters.MOST_SHOULD_BE_PARDONED.name());
-	    lstFilterOptions.addItem("Open identity", Filters.OPEN.name());
-	    lstFilterOptions.addItem("Confessions with your activity", Filters.USER_ACTIVITY.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterAllConfessions(), Filters.ALL.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSubscribedConfessions(), Filters.SUBSCRIBED .name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterHiddenIdlConfessions(), Filters.CLOSED .name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLocaleConfessions(), Filters.LOCALE_SPECIFIC.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSBVoteConfessions(), Filters.MOST_SAME_BOATS.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLameVotedConfessions(), Filters.MOST_LAME.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSymVoteConfessions(), Filters.MOST_SYMPATHY.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSPVoteConfessions(), Filters.MOST_SHOULD_BE_PARDONED.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterOpenIdConfessions(), Filters.OPEN.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterUserActivityConfessions(), Filters.USER_ACTIVITY.name());
 	}
 	return lstFilterOptions;
     }
@@ -392,11 +382,11 @@ public class CommonUtils {
 	    long minuts = seconds/60;
 	    long hours = minuts / 60;
 	    if(seconds < 60) {
-		return "less than a min ago";
+		return ConfessionBox.cbText.timestampLessThanMinut();
 	    } else if(seconds >= 60 && seconds < 3600) {
-		return minuts + " minuts ago";
+		return minuts + ConfessionBox.cbText.timestampMinutsAgo();
 	    } else {
-		return hours + " hours ago";
+		return hours + ConfessionBox.cbText.timestampHoursAgo();
 	    }
 	} else {
 	    return DateTimeFormat.getFormat("EEE, MMM d, ''yy - h:mm a").format(date);
@@ -409,45 +399,23 @@ public class CommonUtils {
 
 
     public static Widget getEmptyWidget() {
-	Label lblEmptyPage = new Label("No confessions for you in this view.");
+	Label lblEmptyPage = new Label(ConfessionBox.cbText.noConfessionsInViewMessage());
 	return lblEmptyPage;
     }
 
     public static FlowPanel getStatusBar(Confession confession) {
 	FlowPanel fPnlStatusBar = new FlowPanel();
-	fPnlStatusBar.setStyleName("status_bar");
+	fPnlStatusBar.setStyleName(Constants.DIV_STATUS_BAR);
 
 	// Subscribe link
 	fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
 
 	// Time stamp
 	Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
-	lblDateTimeStamp.setStyleName("time_stamp");
+	lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
 	fPnlStatusBar.add(lblDateTimeStamp);
 
 	return fPnlStatusBar;
-    }
-
-    public static Widget getUndoToolTipBar() {
-	FlowPanel fPnlToolTipBar = new FlowPanel();
-	fPnlToolTipBar.setStyleName("tooltip_left");
-	Anchor ancHelpInfo = new Anchor("[?]");
-	Label lblUndoToolTip = new Label("Click again to undo");
-	fPnlToolTipBar.add(lblUndoToolTip);
-	fPnlToolTipBar.add(ancHelpInfo);
-	return fPnlToolTipBar;
-    }
-
-    public static Widget getShareToolTipBar() {
-	FlowPanel fPnlToolTipBar = new FlowPanel();
-	fPnlToolTipBar.setStyleName("tooltip_right");
-	Anchor ancShare = new Anchor("Share");
-	Label lblShareToolTip = new Label("all ur votes on your wall");
-	Anchor ancHelpInfo = new Anchor("[?]");
-	fPnlToolTipBar.add(ancShare);
-	fPnlToolTipBar.add(lblShareToolTip);
-	fPnlToolTipBar.add(ancHelpInfo);
-	return fPnlToolTipBar;
     }
 
     public static Label getPardonStatus(Confession confession) {
@@ -457,12 +425,12 @@ public class CommonUtils {
 		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
 		    switch (confessionShare.getPardonStatus()) {
 		    case PARDONED:
-			pardonStatus.setText("PARDONED");
-			pardonStatus.setStyleName("pardon_status_yes");
+			pardonStatus.setText(ConfessionBox.cbText.pardonStatusLabel());
+			pardonStatus.setStyleName(Constants.DIV_PARDONED_STATUS);
 			return pardonStatus;
 		    default:
-			pardonStatus.setText("Awaiting PARDONED");
-			pardonStatus.setStyleName("pardon_status_no");
+			pardonStatus.setText(ConfessionBox.cbText.awaitingPardonStatusLabel());
+			pardonStatus.setStyleName(Constants.DIV_AWAITING_PARDON_STATUS);
 			return pardonStatus;
 		    }
 		}

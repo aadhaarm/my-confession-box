@@ -1,11 +1,13 @@
 package com.l3.CB.server;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
+import com.l3.CB.server.manager.CacheManager;
 import com.l3.CB.server.manager.ConfessionManager;
 import com.l3.CB.server.manager.PardonManager;
 import com.l3.CB.server.manager.UserManager;
@@ -26,10 +28,12 @@ ConfessionService {
      * Default serial version ID
      */
     private static final long serialVersionUID = 1L;
+    
+    private static final CacheManager cacheManager = new CacheManager();
 
     @Override
-    public UserInfo registerUser(UserInfo userInfo) {
-	return UserManager.registerUser(userInfo);
+    public Long registerUser(UserInfo userInfo) {
+	return UserManager.registerUser(userInfo).getUserId();
     }
 
     /**
@@ -37,8 +41,8 @@ ConfessionService {
      * @param confession - {@link Confession}
      */
     @Override
-    public Confession registerConfession(Confession confession) {
-	return ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
+    public void registerConfession(Confession confession) {
+	ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
     }
 
     /**
@@ -113,8 +117,8 @@ ConfessionService {
     }
 
     @Override
-    public boolean subscribe(Long confId, Long userId) {
-	return ConfessionManager.changeSubscribtionStatus(confId, userId);
+    public boolean subscribe(Long confId, Long userId, Date timeStamp) {
+	return ConfessionManager.changeSubscribtionStatus(confId, userId, timeStamp);
     }
 
     @Override
@@ -144,5 +148,15 @@ ConfessionService {
 	    UserInfo confessionByUser = UserManager.getUserByUserId(userId);
 	    ConfessionManager.addConfessedToUser(confId, confessionByUser, confessionShare);
 	}
+    }
+
+    @Override
+    public void registerConfessionDraft(Confession confession) {
+	ConfessionManager.registerConfessionDraft(confession);
+    }
+
+    @Override
+    public Confession getConfessionDraft(Long userId, String fbId) {
+	return ConfessionManager.getConfessionDraft(userId, fbId);
     }
 }

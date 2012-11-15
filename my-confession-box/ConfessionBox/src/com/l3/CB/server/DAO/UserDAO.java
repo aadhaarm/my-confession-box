@@ -63,26 +63,26 @@ public class UserDAO {
      */
     public static UserInfo registerUser(UserInfo userInfo) {
 	if(userInfo != null) {
-
-	    PersistenceManager pm = PMF.get().getPersistenceManager();
 	    long userId = 0;
-	    try {
-		//Get user details if already exist, update details if we have latest of them
-		UserDO userDO = getUserByFBId(userInfo);
+	    //Get user details if already exist, update details if we have latest of them
+	    UserDO userDO = getUserByFBId(userInfo);
 
-		if (userDO != null) {
-		    userInfo.setUserId(userDO.getUserId());
-		} else {
+	    if (userDO != null) {
+		userInfo.setUserId(userDO.getUserId());
+	    } else {
+		// Register a new user
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
 		    userDO = getUserDO(userInfo);
 		    pm.makePersistent(userDO);
 		    userId = userDO.getUserId();
 		    userInfo.setUserId(userId);
+		} catch (Exception e) {
+		    logger.log(Level.SEVERE,
+			    "Error while registering user:" + e.getMessage());
+		} finally {
+		    pm.close();
 		}
-	    } catch (Exception e) {
-		logger.log(Level.SEVERE,
-			"Error while registering user:" + e.getMessage());
-	    } finally {
-		pm.close();
 	    }
 	}
 	return userInfo;
@@ -101,8 +101,7 @@ public class UserDAO {
 	    query.setFilter("fbId == id");
 	    query.declareParameters("String id");
 	    @SuppressWarnings("unchecked")
-	    List<UserDO> result = (List<UserDO>) query
-	    .execute(userInfo.getId());
+	    List<UserDO> result = (List<UserDO>) query.execute(userInfo.getId());
 
 	    if (result != null && !result.isEmpty()) {
 		Iterator<UserDO> it = result.iterator();
@@ -126,6 +125,33 @@ public class UserDAO {
 	return userDO;
     }
 
+    /**
+     * 
+     * @param userInfo
+     * @return
+     */
+    public static boolean validateUser(Long userId, String fbId) {
+	boolean isValid = false;
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	try {
+	    Query query = pm.newQuery(UserDO.class);
+	    query.setFilter("userId == user && fbId == id");
+	    query.declareParameters("String user" + ", "  + "String id");
+	    @SuppressWarnings("unchecked")
+	    List<UserDO> result = (List<UserDO>) query.execute(userId, fbId);
+
+	    if (result != null && !result.isEmpty()) {
+		isValid = true;
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE, "Error while validating user from DB:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return isValid;
+    }
+
+    
     /**
      * Convert user TO to DO
      * @param userInfo

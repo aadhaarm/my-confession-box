@@ -97,14 +97,14 @@ public class ConfessionFeedPresenter implements Presenter {
     }
 
     private void setConfessions(final boolean clean) {
+	if(clean) {
+	    display.clearConfessions();
+	}
 	this.display.setConfessionPagesLoaded(0);
 	ConfessionBox.confessionService.getConfessions(0, filter, ConfessionBox.loggedInUserInfo.getLocale(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		if(result != null) {
-		    if(clean) {
-			display.clearConfessions();
-		    }
 		    display.setConfessions(result, true, showUserControls);
 		}
 	    }

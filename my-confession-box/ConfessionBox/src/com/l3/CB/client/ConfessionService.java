@@ -5,6 +5,7 @@
  */
 package com.l3.CB.client;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ import com.l3.CB.shared.TO.UserInfo;
 public interface ConfessionService extends XsrfProtectedService {
 
     // REGISTER USER
-    UserInfo registerUser(UserInfo userInfo);
+    Long registerUser(UserInfo userInfo);
     UserInfo isUserRegistered(String fbId);
     
     // HUMAN POINTS methods
@@ -35,7 +36,8 @@ public interface ConfessionService extends XsrfProtectedService {
     int getHumanPoints(Long userId);
     
     // REGISTER CONFESSION
-    Confession registerConfession(Confession confession);
+    void registerConfession(Confession confession);
+    void registerConfessionDraft(Confession confession);
     
     // GET Confession
     List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
@@ -43,6 +45,7 @@ public interface ConfessionService extends XsrfProtectedService {
     List<Confession> getConfessionsTOME(int page, Long userId);
     Confession getConfession(Long confId, boolean secure);
     long getNumberOfConfessionForMe(Long userId);
+    Confession getConfessionDraft(Long userId, String fbId);
 
     // USER ACTIVITY
     Long registerUserActivity(Long userId, Long confId, Activity activity);
@@ -57,6 +60,6 @@ public interface ConfessionService extends XsrfProtectedService {
     long getMyConfessionNumber(Long userId);
 
     // SUBSCRIBE
-    boolean subscribe(Long confId, Long userId);
+    boolean subscribe(Long confId, Long userId, Date timeStamp);
     boolean isSubscribed(Long confId, Long userId);
 }

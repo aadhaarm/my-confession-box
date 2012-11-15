@@ -12,11 +12,14 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.appengine.api.datastore.Text;
 import com.l3.CB.server.DO.ConfessionDO;
+import com.l3.CB.server.DO.ConfessionDraftDO;
 import com.l3.CB.server.DO.SubscribtionDO;
 import com.l3.CB.server.DO.UserActivityDO;
 import com.l3.CB.server.manager.UserManager;
 import com.l3.CB.shared.TO.Activity;
+import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionOtherDAO {
@@ -199,7 +202,7 @@ public class ConfessionOtherDAO {
 	return confIds;
     }
 
-    public static boolean isSubscribed(Long confId, Long userId, boolean changeSubscribtionStatus) {
+    public static boolean isSubscribed(Long confId, Long userId, boolean changeSubscribtionStatus, Date timeStamp) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	boolean isSubscribed = false;
 	try {
@@ -216,6 +219,7 @@ public class ConfessionOtherDAO {
 		    if(subscribtionDO != null) {
 			if(changeSubscribtionStatus) {
 			    subscribtionDO.setSubscribed(!subscribtionDO.isSubscribed());
+			    subscribtionDO.setTimeStamp(timeStamp);
 			    pm.makePersistent(subscribtionDO);
 			}
 			isSubscribed = subscribtionDO.isSubscribed();
@@ -223,6 +227,7 @@ public class ConfessionOtherDAO {
 		}
 	    } else if(changeSubscribtionStatus) {
 		SubscribtionDO subscribtionDO = new SubscribtionDO(userId, confId, true);
+		subscribtionDO.setTimeStamp(timeStamp);
 		pm.makePersistent(subscribtionDO);
 	    }
 	} catch (Exception e) {
@@ -234,7 +239,7 @@ public class ConfessionOtherDAO {
 	return isSubscribed;
     }
 
-    public static List<UserInfo> getUserSubscribed(Long confId) {
+    public static List<UserInfo> getUsersSubscribedToConf(Long confId) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	List<UserInfo> subscribedUsers = null;
 	try {
@@ -261,5 +266,98 @@ public class ConfessionOtherDAO {
 	    pm.close();
 	}
 	return subscribedUsers;
+    }
+
+    public static List<Long> getUserSubscribedConfessionIDs(Long userId, int pageSize, int page) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	List<Long> subscribedConfessions = null;
+	try {
+	    Query query = pm.newQuery(SubscribtionDO.class);
+
+	    query.setFilter("userId == user");
+	    query.declareParameters("String user");
+	    
+	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
+	    query.setOrdering("timeStamp desc");
+	    
+	    @SuppressWarnings("unchecked")
+	    List<SubscribtionDO> result = (List<SubscribtionDO>) query.execute(userId);
+
+	    if (result != null && !result.isEmpty()) {
+		subscribedConfessions = new ArrayList<Long>();
+		Iterator<SubscribtionDO> it = result.iterator();
+		while (it.hasNext()) {
+		    SubscribtionDO subscribtionDO = it.next();
+		    if(subscribtionDO != null && subscribtionDO.isSubscribed()) {
+			subscribedConfessions.add(subscribtionDO.getConfId());
+		    }
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while checking if user is subscribed:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return subscribedConfessions;
+
+    }
+    
+    public static void saveConfessionDraft(Confession confession) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	try {
+	    Query query = pm.newQuery(ConfessionDraftDO.class);
+	    query.setFilter("userId == user");
+	    query.declareParameters("String user");
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDraftDO> result = (List<ConfessionDraftDO>) query.execute(confession.getUserId());
+	    if (result != null && !result.isEmpty()) {
+		Iterator<ConfessionDraftDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDraftDO confessionDraftDO = it.next();
+		    confessionDraftDO.setConfessionTitle(confession.getConfessionTitle());
+		    confessionDraftDO.setConfession(new Text(confession.getConfession()));
+		    pm.makePersistent(confessionDraftDO);
+		}
+	    } else {
+		ConfessionDraftDO confDraftDO = new ConfessionDraftDO();
+		confDraftDO.setUserId(confession.getUserId());
+		confDraftDO.setConfessionTitle(confession.getConfessionTitle());
+		confDraftDO.setConfession(new Text(confession.getConfession()));
+		pm.makePersistent(confDraftDO);
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while registering confession DRAFT:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+    }
+
+    public static Confession getSavedConfessionDraft(Long userId) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	Confession confessionDraft = null;
+	try {
+	    Query query = pm.newQuery(ConfessionDraftDO.class);
+	    query.setFilter("userId == user");
+	    query.declareParameters("String user");
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDraftDO> result = (List<ConfessionDraftDO>) query.execute(userId);
+	    if (result != null && !result.isEmpty()) {
+		Iterator<ConfessionDraftDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDraftDO confessionDraftDO = it.next();
+		    confessionDraft = new Confession();
+		    confessionDraft.setConfessionTitle(confessionDraftDO.getConfessionTitle());
+		    confessionDraft.setConfession(confessionDraftDO.getConfession().getValue());
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while geting confession DRAFT:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return confessionDraft;
     }
 }

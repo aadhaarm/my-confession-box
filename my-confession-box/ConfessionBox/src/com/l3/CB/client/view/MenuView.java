@@ -2,11 +2,11 @@ package com.l3.CB.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.PushButton;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
@@ -18,87 +18,106 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class MenuView extends Composite implements MenuPresenter.Display {
 
-    private final VerticalPanel menuBar; 
-    private final PushButton feedItem;
-    private final PushButton confessItem;
-    private final PushButton myConItem;
-    private final PushButton conToMeItem;
-    private PushButton selectedMenuItem;
+    private final FlowPanel menuBar; 
+    private final Anchor feedItem;
+    private final Anchor confessItem;
+    private final Anchor myConItem;
+    private final Anchor conToMeItem;
+    private HTML selectedMenuItem;
     UserInfo userInfo;
     ConfessionServiceAsync confessionService;
     MenuButton btnMenuItemMyConf;
     MenuButton btnMenuItemConfToMe;
-
+    HTML link1;
+    HTML link2;
+    HTML link3;
+    HTML link4;
+    
     public MenuView() {
 	DecoratorPanel contentTableDecorator = new DecoratorPanel();
 	initWidget(contentTableDecorator);
-	menuBar = new VerticalPanel();
-	menuBar.addStyleName(Constants.STYLE_CLASS_MENU);
-
-	feedItem = new PushButton(ConfessionBox.cbText.cbMenuConfessionFeed(), new ClickHandler() {
-
+	menuBar = new FlowPanel();
+	menuBar.setStyleName(Constants.STYLE_CLASS_MENU);
+	
+	feedItem = new Anchor(ConfessionBox.cbText.cbMenuConfessionFeed());
+	feedItem.removeStyleName("gwt-Anchor");
+	link1 = new HTML(feedItem+"");
+	link1.setStyleName("link1");
+	link1.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+		link1.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		if(selectedMenuItem != null) {
 		    selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		}
-		selectedMenuItem = feedItem;
+		selectedMenuItem = link1;
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 	    }
 	});
 
-	confessItem = new PushButton(ConfessionBox.cbText.cbMenuConfessionConfess(), new ClickHandler() {
-
+	
+	confessItem = new Anchor(ConfessionBox.cbText.cbMenuConfessionConfess());
+	confessItem.removeStyleName("gwt-Anchor");
+	link2 = new HTML(confessItem+"");
+	link2.setStyleName("link2");
+	link2.addClickHandler(new ClickHandler() {
+	    
 	    @Override
 	    public void onClick(ClickEvent event) {
-		confessItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+		link2.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		if(selectedMenuItem != null) {
 		    selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		}
-		selectedMenuItem = confessItem;
-		History.newItem(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
+		selectedMenuItem = link2;
+		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 	    }
 	});
 
-	myConItem = new PushButton(ConfessionBox.cbText.cbMenuConfessionMyConfessions(), new ClickHandler() {
-
+	myConItem = new Anchor(ConfessionBox.cbText.cbMenuConfessionMyConfessions());
+	myConItem.removeStyleName("gwt-Anchor");
+	link3 = new HTML(myConItem+"");
+	link3.setStyleName("link3");
+	link3.addClickHandler(new ClickHandler() {
+	    
 	    @Override
 	    public void onClick(ClickEvent event) {
-		myConItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+		link3.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		if(selectedMenuItem != null) {
 		    selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		}
-		selectedMenuItem = myConItem;
+		selectedMenuItem = link3;
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
-
 	    }
 	});
 
-	conToMeItem = new PushButton(ConfessionBox.cbText.cbMenuConfessionConfessToMe(), new ClickHandler() {
-
+	conToMeItem = new Anchor(ConfessionBox.cbText.cbMenuConfessionConfessToMe());
+	conToMeItem.removeStyleName("gwt-Anchor");
+	link4 = new HTML(conToMeItem + "");
+	link4.setStyleName("link4");
+	link4.addClickHandler(new ClickHandler() {
+	    
 	    @Override
 	    public void onClick(ClickEvent event) {
-		conToMeItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+		link4.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		if(selectedMenuItem != null) {
 		    selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
 		}
-		selectedMenuItem = conToMeItem;
+		selectedMenuItem = link4;
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 	    }
 	});
-
-	menuBar.add(feedItem);
-	menuBar.add(confessItem);
-	btnMenuItemMyConf = getPanelWithCount(myConItem, 0);
+	
+	menuBar.add(link1);
+	menuBar.add(link2);
+	btnMenuItemMyConf = getPanelWithCount(link3, 0);
 	menuBar.add(btnMenuItemMyConf);
-	btnMenuItemConfToMe = getPanelWithCount(conToMeItem, 0);
+	btnMenuItemConfToMe = getPanelWithCount(link4, 0);
 	menuBar.add(btnMenuItemConfToMe);
 
 	contentTableDecorator.add(menuBar);
     }
 
-    private MenuButton getPanelWithCount(PushButton myConItem, int i) {
+    private MenuButton getPanelWithCount(HTML myConItem, int i) {
 	MenuButton btnMenuItem = new MenuButton(userInfo, confessionService, i, myConItem);
 	btnMenuItem.add(myConItem);
 	return btnMenuItem;
@@ -110,30 +129,30 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     }
 
     @Override
-    public PushButton setFeedItemSelected() {
-	feedItem.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	selectedMenuItem = feedItem;
-	return feedItem;
+    public HTML setFeedItemSelected() {
+	link1.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+	selectedMenuItem = link1;
+	return link1;
     }
 
     @Override
-    public PushButton getFeedItem() {
-	return feedItem;
+    public HTML getFeedItem() {
+	return link1;
     }
 
     @Override
-    public PushButton getConfessItem() {
-	return confessItem;
+    public HTML getConfessItem() {
+	return link2;
     }
 
     @Override
-    public PushButton getMyConItem() {
-	return myConItem;
+    public HTML getMyConItem() {
+	return link3;
     }
 
     @Override
-    public PushButton getConToMeItem() {
-	return conToMeItem;
+    public HTML getConToMeItem() {
+	return link4;
     }
 
     public boolean setMyConfCount(int count) {

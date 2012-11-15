@@ -1,6 +1,7 @@
 package com.l3.CB.server.DO;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -10,66 +11,78 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class SubscribtionDO implements Serializable {
 
-	/**
-	 * Default serial version ID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Default serial version ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long subfId;
-	
-	@Persistent
-	private Long userId;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long subfId;
 
-	@Persistent
-	private Long confId;
-	
-	@Persistent
-	private boolean isSubscribed;
+    @Persistent
+    private Long userId;
 
-	public Long getSubfId() {
-		return subfId;
-	}
+    @Persistent
+    private Long confId;
 
-	public void setSubfId(Long subfId) {
-		this.subfId = subfId;
-	}
+    @Persistent
+    private boolean isSubscribed;
 
-	public Long getUserId() {
-		return userId;
-	}
+    @Persistent
+    private Date timeStamp;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public Long getSubfId() {
+	return subfId;
+    }
 
-	public Long getConfId() {
-		return confId;
-	}
+    public void setSubfId(Long subfId) {
+	this.subfId = subfId;
+    }
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public boolean isSubscribed() {
-		return isSubscribed;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public void setSubscribed(boolean isSubscribed) {
-		this.isSubscribed = isSubscribed;
-	}
+    public Long getConfId() {
+	return confId;
+    }
 
-	public SubscribtionDO(Long userId, Long confId, boolean isSubscribed) {
-		super();
-		this.userId = userId;
-		this.confId = confId;
-		this.isSubscribed = isSubscribed;
-	}
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
 
-	@Override
-	public String toString() {
-		return "SubscribtionDO [subfId=" + subfId + ", userId=" + userId
-				+ ", confId=" + confId + ", isSubscribed=" + isSubscribed + "]";
-	}
+    public boolean isSubscribed() {
+	return isSubscribed;
+    }
+
+    public void setSubscribed(boolean isSubscribed) {
+	this.isSubscribed = isSubscribed;
+    }
+
+    public SubscribtionDO(Long userId, Long confId, boolean isSubscribed) {
+	super();
+	this.userId = userId;
+	this.confId = confId;
+	this.isSubscribed = isSubscribed;
+    }
+
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public String toString() {
+	return "SubscribtionDO [subfId=" + subfId + ", userId=" + userId
+		+ ", confId=" + confId + ", isSubscribed=" + isSubscribed
+		+ ", timeStamp=" + timeStamp + "]";
+    }
 }

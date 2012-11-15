@@ -5,10 +5,11 @@ import com.google.gwt.user.client.Window;
 import com.l3.CB.shared.CBText;
 
 public class Error {
+
+    private static CBText cbText = GWT.create(CBText.class);
+
+    public static void handleError(String className, String menthodName, Throwable caught) {
 	
-	private static CBText cbText = GWT.create(CBText.class);
-	
-	public static void handleError(String className, String menthodName, Throwable caught) {
-		Window.alert(cbText.applicationError());
-	}
+	Window.alert(cbText.applicationError());
+    }
 }

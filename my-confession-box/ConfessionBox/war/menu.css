@@ -1,0 +1,145 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.menu {
+	width:250px;
+	height:auto;
+	color:#666;
+	direction:ltr;
+	font-family:'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size:11px;
+	line-height:1.28;
+	text-align:left;
+	word-wrap:break-word;
+	font-weight:bold;
+	width:139px;
+}
+
+.link1 {
+	margin-bottom:3px;
+	margin-top:3px;
+	display:block;
+	background-image:url(images/globe.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	padding:5px 5px 5px 30px;
+} 
+
+/* .link1 a:hover {
+	color:#07285d;
+	display:block;
+	background-color:#D8DFEA;
+	text-decoration:none;
+	background-repeat:no-repeat;
+	background-position:left;
+} */
+ 
+.link2 {
+	margin-bottom:1px;
+	margin-top:1px;
+	display:block;
+	background-image:url(images/write.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	padding:5px 5px 5px 30px;
+} 
+
+/* .link2 a:hover {
+	background-image:url(images/write.png);
+	background-repeat:no-repeat;
+	background-position:left;
+}
+ */
+.link3 {
+	margin-bottom:1px;
+	margin-top:1px;
+	display:block;
+	background-image:url(images/myconfessions1.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	padding:5px 5px 5px 30px;
+} 
+
+/* .link3 a:hover {
+	background-image:url(images/myconfessions1.png);
+	background-repeat:no-repeat;
+	background-position:left;
+}
+ */
+
+.link4 {
+	margin-bottom:1px;
+	margin-top:1px;
+	display:block;
+	background-image:url(images/people.png);
+	background-repeat:no-repeat;
+	background-position:left;
+	padding:5px 5px 5px 30px;
+} 
+
+/* .link4 a:hover {
+	background-image:url(images/people.png);
+	background-repeat:no-repeat;
+	background-position:left;
+}
+ */
+.link5 {
+	margin-bottom:1px;
+	margin-top:1px;
+	
+	display:block;
+	background-image:url(images/people.png);
+	background-repeat:no-repeat;
+	padding:5px 5px 5px 30px;
+} 
+
+/* .link5 a:hover {
+	background-image:url(images/people.png);
+	background-repeat:no-repeat;
+}
+ */
+menu a:link, menu a:visited{
+	color:#666;
+	display:block;
+	padding:5px 5px 5px 30px;
+	text-decoration:none;
+	
+}
+
+menu a:hover {
+	color:#07285d;
+	display:block;
+	background-color:#D8DFEA;
+	padding:5px 5px 5px 30px;
+}
+
+.write {
+	vertical-align:text-top;	
+}
+
+.human_points {
+	background-color: infobackground;
+	font-size:smaller;
+	color:#666;
+	vertical-align:text-top;
+    margin-bottom: 2px;
+    margin-top: 4px;
+    width: 149px;
+}
+
+.humanPointImg {
+	float: left;
+	padding: 10px;
+}
+
+.humanPointLabel {
+
+	}
+
+#leftHandMenuDiv {
+	margin-top: 20px;
+}
+
+.menuItemSelected {
+	background-color: infobackground;
+}

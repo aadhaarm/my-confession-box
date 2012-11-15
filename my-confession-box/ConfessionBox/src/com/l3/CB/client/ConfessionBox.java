@@ -21,9 +21,9 @@ import com.google.gwt.user.client.rpc.XsrfToken;
 import com.google.gwt.user.client.rpc.XsrfTokenService;
 import com.google.gwt.user.client.rpc.XsrfTokenServiceAsync;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.l3.CB.client.controller.ConfessionController;
 import com.l3.CB.client.util.CommonUtils;
@@ -44,7 +44,8 @@ public class ConfessionBox implements EntryPoint {
     public static HandlerManager confEventBus;
     public static FacebookServiceAsync facebookService = null;
     public static ConfessionServiceAsync confessionService = null;
-
+    public static Image logo;
+    
     PopupPanel pnlApplicationLoad;
 
     /**
@@ -53,7 +54,7 @@ public class ConfessionBox implements EntryPoint {
     @Override
     public void onModuleLoad() {
 	// Application title
-	RootPanel.get(Constants.DIV_APPLN_TITLE).add(new Label(cbText.applicationTitle()));
+	logo = new Image("/images/CB-logo.png");
 
 	// Get XSRF setup
 	String cookie = Cookies.getCookie("JSESSIONID");
@@ -116,7 +117,10 @@ public class ConfessionBox implements EntryPoint {
 	pnlApplicationLoad.setGlassEnabled(true);
 	pnlApplicationLoad.setAnimationEnabled(true);
 	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
-	pnlApplicationLoad.add(loaderImage);
+	VerticalPanel a = new VerticalPanel();
+	a.add(logo);
+	a.add(loaderImage);
+	pnlApplicationLoad.add(a);
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
 	pnlApplicationLoad.center();
     }
@@ -127,5 +131,6 @@ public class ConfessionBox implements EntryPoint {
     private void removeApplicationLoad() {
 	pnlApplicationLoad.hide();
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
+	RootPanel.get(Constants.DIV_APPLN_TITLE).add(logo);
     }
 }

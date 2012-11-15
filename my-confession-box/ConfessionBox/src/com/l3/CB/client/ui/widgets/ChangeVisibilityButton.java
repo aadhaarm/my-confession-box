@@ -8,38 +8,42 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
 import com.l3.CB.client.util.Error;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 
 public class ChangeVisibilityButton extends PushButton {
 
     public ChangeVisibilityButton(final Confession confession, Image buttonImage, final boolean shareAnyn) {
 	super();
-	this.addStyleName("userControlButtonContainer");
+	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
 	if(shareAnyn) {
-	    this.setTitle("Un-Hide your identity by clicking this.");
+	    this.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	} else {
-	    this.setTitle("Hide your identity by clicking this.");
+	    this.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	}
 
 	this.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		ConfessionBox.confessionService.changeIdentityVisibility(ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), confession.getConfId(), !shareAnyn, new AsyncCallback<Boolean>() {
+		ConfessionBox.confessionService.changeIdentityVisibility(
+			ConfessionBox.loggedInUserInfo.getUserId(),
+			ConfessionBox.loggedInUserInfo.getId(),
+			confession.getConfId(), !shareAnyn,
+			new AsyncCallback<Boolean>() {
 		    @Override
 		    public void onSuccess(Boolean result) {
 			if(result) {
 			    if(shareAnyn) {
-				setTitle("Un-Hide your identity by clicking this.");
+				setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 			    } else {
-				setTitle("Hide your identity by clicking this.");
+				setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 			    }
 			    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 			}
 		    }
 		    @Override
 		    public void onFailure(Throwable caught) {
-			Error.handleError("ChangeVisibilityButton",
-				"onFailure", caught);
+			Error.handleError("ChangeVisibilityButton", "onFailure", caught);
 		    }
 		});
 	    }

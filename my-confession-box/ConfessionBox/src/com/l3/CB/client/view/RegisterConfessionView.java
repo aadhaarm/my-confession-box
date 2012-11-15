@@ -1,103 +1,131 @@
 package com.l3.CB.client.view;
 
-import java.util.List;
+import java.util.Map;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
-import com.l3.CB.client.ui.widgets.FriendsListBox;
+import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
-import com.l3.CB.shared.FacebookUtil;
+import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
-    private final Grid grdConfessionForm;
-    private final VerticalPanel identityPanel;
+    private final FlowPanel fPnlConfessionForm;
+    private final FlowPanel fPnlTop;
+    private final FlowPanel fPnlOptions;
+    private final FlowPanel fPnlConfession;
     private final CheckBox cbHideIdentity;
     private final CheckBox cbConfessTo;
-    private final HorizontalPanel hPanelShare;
-    private FriendsListBox friendsListBox;
+    private FriendsSuggestBox friendsSuggestBox;
     private final CBTextBox txtTitle;
     private final CBTextArea txtConfession;
-    private final CBTextArea txtAppendedText;
+    private final FlowPanel fPnlButtons;
     private final Button btnSubmit;
-
+    private final Button btnSave;
+    
     public RegisterConfessionView() {
 	super();
 	DecoratorPanel contentTableDecorator = new DecoratorPanel();
-	contentTableDecorator.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_PAGE);
+	contentTableDecorator.addStyleName("reg_main_container");
 	initWidget(contentTableDecorator);
 
-	grdConfessionForm = new Grid(8, 2);
+	//TOP panel
+	fPnlConfessionForm = new FlowPanel();
 
-	identityPanel = new VerticalPanel();
+	fPnlTop = new FlowPanel();
+	fPnlTop.setStyleName("selections");
+	
+	HTML topTitle = new HTML("<b>Submit your confession below</b><br/><span class=\"subtext\">Your confession is never shared to any one unless you opt for the same</span> [?]");
+	topTitle.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONFESSION_TITLE_HELP);
+	    }
+	});
+	
+	topTitle.setStyleName("header_text");
+	fPnlTop.add(topTitle);
+
+	fPnlConfessionForm.add(fPnlTop);
+	
+	// Options panel
+	fPnlOptions = new FlowPanel();
+	fPnlOptions.setStyleName("options");
+
+	HTML optionsTitle = new HTML("Confession Sharing Options [?]");
+	optionsTitle.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONFESION_OPTIONS);
+	    }
+	});
+	optionsTitle.setStyleName("options_title");
+	fPnlOptions.add(optionsTitle);
+	
 	cbHideIdentity = new CheckBox(ConfessionBox.cbText.registerPageOptionHideID());
 	cbHideIdentity.setValue(true);
+	fPnlOptions.add(cbHideIdentity);
+	
 	cbConfessTo = new CheckBox(ConfessionBox.cbText.registerPageOptionConfessToFriend());
+	fPnlOptions.add(cbConfessTo);
 
-	identityPanel.add(cbHideIdentity);
-	identityPanel.add(cbConfessTo);
-
-	hPanelShare = new HorizontalPanel();
-	hPanelShare.add(new Label(ConfessionBox.cbText.registerPageChooseFriend()));
-	hPanelShare.setVisible(false);
-
+	fPnlConfessionForm.add(fPnlOptions);
+	
+	// Confession
+	fPnlConfession = new FlowPanel();
+	fPnlConfession.setStyleName("confession");
+	
 	txtTitle = new CBTextBox();
-	txtConfession = new CBTextArea();
-	txtConfession.addStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
+	fPnlConfessionForm.add(txtTitle);
+	
+	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS);
+	txtConfession.setStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 	txtConfession.setSize("100%", "14em");
 
+	fPnlConfessionForm.add(txtConfession);
+	
+	// Buttons
+	fPnlButtons = new FlowPanel();
+	fPnlButtons.setStyleName("buttons");
+
+	btnSave = new Button("Save as draft");
+	btnSave.setStyleName("save_draft");
+	fPnlButtons.add(btnSave);
+
 	btnSubmit = new Button(ConfessionBox.cbText.buttonTextSubmitConfession());
-
-	HorizontalPanel hpnlTitle = new HorizontalPanel();
-	final Label titleLabel = new Label(ConfessionBox.cbText.confessionTitleLabel());       
-	hpnlTitle.add(titleLabel);
-	hpnlTitle.add(txtTitle);
-
-	grdConfessionForm.setWidget(0, 0, new Label(ConfessionBox.cbText.registerPageTitle()));
-	grdConfessionForm.setWidget(1, 0, identityPanel);
-	grdConfessionForm.setWidget(2, 0, hPanelShare);
-
-	grdConfessionForm.setWidget(3, 0, hpnlTitle);
-	grdConfessionForm.setWidget(4, 0, txtConfession);
+	btnSubmit.setStyleName("submit_confession");
+	fPnlButtons.add(btnSubmit);
 	
-	txtAppendedText = new CBTextArea();
-	txtAppendedText.setSize("100%", "5em");
-	txtAppendedText.setVisible(false);
-	
-	grdConfessionForm.setWidget(6, 0, btnSubmit);
+	fPnlConfessionForm.add(fPnlButtons);
+	contentTableDecorator.add(fPnlConfessionForm);	
+    }
 
-	contentTableDecorator.add(grdConfessionForm);	
+    @Override
+    public void setFriends(Map<String, UserInfo> userfriends) {
+	friendsSuggestBox = new FriendsSuggestBox(userfriends);
+	fPnlOptions.add(friendsSuggestBox);
+	friendsSuggestBox.setFocus();
     }
     
     @Override
-    public void setTxtAppendedText() {
-	txtAppendedText.setVisible(true);
-	grdConfessionForm.setWidget(5, 0, txtAppendedText);
-    }
-
-    @Override
-    public CBTextArea getTxtAppendedText() {
-        return txtAppendedText;
-    }
-
-    @Override
-    public HorizontalPanel gethPanelShare() {
-	return hPanelShare;
+    public Widget gethFriendSuggestBox() {
+	return friendsSuggestBox;
     }
 
     @Override
@@ -112,7 +140,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public String getConfession() {
-	return this.txtConfession.getHTML();
+	return this.txtConfession.getCbTextArea().getHTML();
     }
 
     @Override
@@ -122,17 +150,20 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public boolean isFriendsListNull() {
-	return (friendsListBox == null);
+	return (friendsSuggestBox == null);
     }
 
     @Override
     public String getConfessionTitle() {
-	return txtTitle.getText();
+	return txtTitle.getTxtTitle().getText();
     }
 
     @Override
     public UserInfo getSharedWith() {
-	return friendsListBox.getSelectedUser();
+	if(friendsSuggestBox.validate()) {
+	    return friendsSuggestBox.getSelectedUser();
+	}
+	return null;
     }
 
     /**
@@ -142,14 +173,10 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
      */
     @Override
     public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
-	Image profileImage = null;
-	if (!isAnyn) {
-	    profileImage = new Image(FacebookUtil.getUserImageUrl(fbId));
-	} else {
-	    profileImage = new Image(FacebookUtil.getFaceIconImage(gender));
-	}
-	grdConfessionForm.setWidget(0, 1, profileImage);
-	CommonUtils.parseXFBMLJS();
+	Image profileImage = CommonUtils.getProfilePicture(new Confession(gender, fbId), isAnyn);
+	profileImage.setStyleName("reg_image");
+	fPnlTop.add(profileImage);
+//	CommonUtils.parseXFBMLJS(profileImage.getElement());
     }
 
     @Override
@@ -165,12 +192,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     @Override
     public HasClickHandlers getCbConfessTo() {
 	return cbConfessTo;
-    }
-
-    public void setCaptchaHTMLCode(String captchaHTMLCode) {
-	//		this.captchaHTMLCode = captchaHTMLCode;
-	//		grdConfessionForm.setHTML(5, 0, captchaHTMLCode);
-	//		CommonUtils.getCaptcha("dynamic_recaptcha_1");
     }
 
     @Override
@@ -192,20 +213,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     public CheckBox getCbConfessToWidget() {
 	return cbConfessTo;
     }
-    @Override
-    public void setFriends(List<UserInfo> userfriends) {
-	friendsListBox = new FriendsListBox(userfriends);
-	hPanelShare.setSpacing(10);
-	hPanelShare.add(friendsListBox);
+
+    public Button getBtnSave() {
+        return btnSave;
     }
-
-    //	public String getCaptchaField() {
-    //		return captchaField.getValue();
-    //	}
-
-    //	public void reloadCaptchaImage(String uId) {
-    //		hpnlCaptcha.remove(captchaImage);
-    //		captchaImage = new Image("/SimpleCaptcha.jpg" + "?" + uId);
-    //        hpnlCaptcha.add(captchaImage);
-    //	}
 }

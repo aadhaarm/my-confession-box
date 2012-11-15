@@ -5,274 +5,278 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.annotations.Persistent;
-
 public class Confession implements Serializable {
 
-	/**
-	 * Default serial ID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Default serial ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	private Long confId;
+    private Long confId;
 
-	private String confessionTitle;
-	
-	private String confession;
+    private String confessionTitle;
 
-	private Date timeStamp;
+    private String confession;
 
-	private Long userId;
-	
-	private String locale;
-	
-	private String userIp;
-	
-	private boolean shareAsAnyn = true;
-	
-	private String gender;
-	
-	private String fbId;
-	
-	private String userDetailsJSON;
-	
-	private Map<String, Long> activityCount;
+    private Date timeStamp;
 
-	private List<ConfessionShare> confessedTo;
-	
-	private String userFullName;
-	
-	private String userEmailAddress;
-	
-	private String username;
+    private Long userId;
 
-	private boolean isVisibleOnPublicWall = true;
-	
-	private long numOfSameBoatVote;
-	
-	private long numOfSympathyVote;
-	
-	private long numOfLameVote;
-	
-	private long numOfShouldBePardonedVote;
-	
-	private long numOfAbuseVote;
-	
-	private long numOfShouldNotBePardonedVote;
-	
-	public Confession() {
-		super();
-	}
+    private String locale;
 
-	public Confession(String confession, boolean shareAsAnyn) {
-		super();
-		this.confession = confession;
-		this.shareAsAnyn = shareAsAnyn;
-	}
-	
-	public Confession(Long confId, String confessionTitle, String confession, Date timeStamp,
-			Long userId, boolean shareAsAnyn) {
-		super();
-		this.confId = confId;
-		this.confession = confession;
-		this.timeStamp = timeStamp;
-		this.userId = userId;
-		this.shareAsAnyn = shareAsAnyn;
-		this.confessionTitle = confessionTitle;
-	}
+    private String userIp;
 
-	public Confession(Long confId, String confession, Date timeStamp,
-			Long userId, boolean shareAsAnyn, List<ConfessionShare> confessedTo) {
-		super();
-		this.confId = confId;
-		this.confession = confession;
-		this.timeStamp = timeStamp;
-		this.userId = userId;
-		this.shareAsAnyn = shareAsAnyn;
-		this.confessedTo = confessedTo;
-	}
+    private boolean shareAsAnyn = true;
 
-	public Long getConfId() {
-		return confId;
-	}
+    private String gender;
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    private String fbId;
 
-	public String getConfession() {
-		return confession;
-	}
+    private String userDetailsJSON;
 
-	public void setConfession(String confession) {
-		this.confession = confession;
-	}
+    private Map<String, Long> activityCount;
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    private List<ConfessionShare> confessedTo;
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    private String userFullName;
 
-	public boolean isShareAsAnyn() {
-		return shareAsAnyn;
-	}
+    private String userEmailAddress;
 
-	public void setShareAsAnyn(boolean shareAsAnyn) {
-		this.shareAsAnyn = shareAsAnyn;
-	}
+    private String username;
 
-	public Long getUserId() {
-		return userId;
-	}
+    private boolean isVisibleOnPublicWall = true;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    private long numOfSameBoatVote;
 
-	public List<ConfessionShare> getConfessedTo() {
-		return confessedTo;
-	}
+    private long numOfSympathyVote;
 
-	public void setConfessedTo(List<ConfessionShare> confessedTo) {
-		this.confessedTo = confessedTo;
-	}
+    private long numOfLameVote;
 
-	public String getGender() {
-		return gender;
-	}
+    private long numOfShouldBePardonedVote;
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    private long numOfAbuseVote;
 
-	public String getFbId() {
-		return fbId;
-	}
+    private long numOfShouldNotBePardonedVote;
 
-	public void setFbId(String fbId) {
-		this.fbId = fbId;
-	}
+    public Confession() {
+	super();
+    }
 
-	public String getUserDetailsJSON() {
-		return userDetailsJSON;
-	}
+    public Confession(String confession, boolean shareAsAnyn) {
+	super();
+	this.confession = confession;
+	this.shareAsAnyn = shareAsAnyn;
+    }
 
-	public void setUserDetailsJSON(String userDetailsJSON) {
-		this.userDetailsJSON = userDetailsJSON;
-	}
+    public Confession(Long confId, String confessionTitle, String confession, Date timeStamp,
+	    Long userId, boolean shareAsAnyn) {
+	super();
+	this.confId = confId;
+	this.confession = confession;
+	this.timeStamp = timeStamp;
+	this.userId = userId;
+	this.shareAsAnyn = shareAsAnyn;
+	this.confessionTitle = confessionTitle;
+    }
 
-	public Map<String, Long> getActivityCount() {
-		return activityCount;
-	}
+    public Confession(Long confId, String confession, Date timeStamp,
+	    Long userId, boolean shareAsAnyn, List<ConfessionShare> confessedTo) {
+	super();
+	this.confId = confId;
+	this.confession = confession;
+	this.timeStamp = timeStamp;
+	this.userId = userId;
+	this.shareAsAnyn = shareAsAnyn;
+	this.confessedTo = confessedTo;
+    }
+    
+    public Confession(String gender, String fbId) {
+	super();
+	this.gender = gender;
+	this.fbId = fbId;
+    }
 
-	public void setActivityCount(Map<String, Long> activityCount) {
-		this.activityCount = activityCount;
-	}
+    public Long getConfId() {
+	return confId;
+    }
 
-	public String getConfessionTitle() {
-		return confessionTitle;
-	}
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
 
-	public void setConfessionTitle(String confessionTitle) {
-		this.confessionTitle = confessionTitle;
-	}
+    public String getConfession() {
+	return confession;
+    }
 
-	public String getUserIp() {
-		return userIp;
-	}
+    public void setConfession(String confession) {
+	this.confession = confession;
+    }
 
-	public void setUserIp(String userIp) {
-		this.userIp = userIp;
-	}
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
 
-	public String getUserFullName() {
-		return userFullName;
-	}
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
 
-	public void setUserFullName(String userFullName) {
-		this.userFullName = userFullName;
-	}
+    public boolean isShareAsAnyn() {
+	return shareAsAnyn;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setShareAsAnyn(boolean shareAsAnyn) {
+	this.shareAsAnyn = shareAsAnyn;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public String getLocale() {
-		return locale;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
+    public List<ConfessionShare> getConfessedTo() {
+	return confessedTo;
+    }
 
-	public boolean isVisibleOnPublicWall() {
-		return isVisibleOnPublicWall;
-	}
+    public void setConfessedTo(List<ConfessionShare> confessedTo) {
+	this.confessedTo = confessedTo;
+    }
 
-	public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
-		this.isVisibleOnPublicWall = isVisibleOnPublicWall;
-	}
+    public String getGender() {
+	return gender;
+    }
 
-	public long getNumOfSameBoatVote() {
-		return numOfSameBoatVote;
-	}
+    public void setGender(String gender) {
+	this.gender = gender;
+    }
 
-	public void setNumOfSameBoatVote(long numOfSameBoatVote) {
-		this.numOfSameBoatVote = numOfSameBoatVote;
-	}
+    public String getFbId() {
+	return fbId;
+    }
 
-	public long getNumOfSympathyVote() {
-		return numOfSympathyVote;
-	}
+    public void setFbId(String fbId) {
+	this.fbId = fbId;
+    }
 
-	public void setNumOfSympathyVote(long numOfSympathyVote) {
-		this.numOfSympathyVote = numOfSympathyVote;
-	}
+    public String getUserDetailsJSON() {
+	return userDetailsJSON;
+    }
 
-	public long getNumOfLameVote() {
-		return numOfLameVote;
-	}
+    public void setUserDetailsJSON(String userDetailsJSON) {
+	this.userDetailsJSON = userDetailsJSON;
+    }
 
-	public void setNumOfLameVote(long numOfLameVote) {
-		this.numOfLameVote = numOfLameVote;
-	}
+    public Map<String, Long> getActivityCount() {
+	return activityCount;
+    }
 
-	public long getNumOfShouldBePardonedVote() {
-		return numOfShouldBePardonedVote;
-	}
+    public void setActivityCount(Map<String, Long> activityCount) {
+	this.activityCount = activityCount;
+    }
 
-	public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
-		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
-	}
+    public String getConfessionTitle() {
+	return confessionTitle;
+    }
 
-	public long getNumOfAbuseVote() {
-		return numOfAbuseVote;
-	}
+    public void setConfessionTitle(String confessionTitle) {
+	this.confessionTitle = confessionTitle;
+    }
 
-	public void setNumOfAbuseVote(long numOfAbuseVote) {
-		this.numOfAbuseVote = numOfAbuseVote;
-	}
+    public String getUserIp() {
+	return userIp;
+    }
 
-	public long getNumOfShouldNotBePardonedVote() {
-		return numOfShouldNotBePardonedVote;
-	}
+    public void setUserIp(String userIp) {
+	this.userIp = userIp;
+    }
 
-	public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
-		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
-	}
+    public String getUserFullName() {
+	return userFullName;
+    }
 
-	public String getUserEmailAddress() {
-		return userEmailAddress;
-	}
+    public void setUserFullName(String userFullName) {
+	this.userFullName = userFullName;
+    }
 
-	public void setUserEmailAddress(String userEmailAddress) {
-		this.userEmailAddress = userEmailAddress;
-	}
+    public String getUsername() {
+	return username;
+    }
+
+    public void setUsername(String username) {
+	this.username = username;
+    }
+
+    public String getLocale() {
+	return locale;
+    }
+
+    public void setLocale(String locale) {
+	this.locale = locale;
+    }
+
+    public boolean isVisibleOnPublicWall() {
+	return isVisibleOnPublicWall;
+    }
+
+    public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
+	this.isVisibleOnPublicWall = isVisibleOnPublicWall;
+    }
+
+    public long getNumOfSameBoatVote() {
+	return numOfSameBoatVote;
+    }
+
+    public void setNumOfSameBoatVote(long numOfSameBoatVote) {
+	this.numOfSameBoatVote = numOfSameBoatVote;
+    }
+
+    public long getNumOfSympathyVote() {
+	return numOfSympathyVote;
+    }
+
+    public void setNumOfSympathyVote(long numOfSympathyVote) {
+	this.numOfSympathyVote = numOfSympathyVote;
+    }
+
+    public long getNumOfLameVote() {
+	return numOfLameVote;
+    }
+
+    public void setNumOfLameVote(long numOfLameVote) {
+	this.numOfLameVote = numOfLameVote;
+    }
+
+    public long getNumOfShouldBePardonedVote() {
+	return numOfShouldBePardonedVote;
+    }
+
+    public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
+	this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+    }
+
+    public long getNumOfAbuseVote() {
+	return numOfAbuseVote;
+    }
+
+    public void setNumOfAbuseVote(long numOfAbuseVote) {
+	this.numOfAbuseVote = numOfAbuseVote;
+    }
+
+    public long getNumOfShouldNotBePardonedVote() {
+	return numOfShouldNotBePardonedVote;
+    }
+
+    public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
+	this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+    }
+
+    public String getUserEmailAddress() {
+	return userEmailAddress;
+    }
+
+    public void setUserEmailAddress(String userEmailAddress) {
+	this.userEmailAddress = userEmailAddress;
+    }
 }

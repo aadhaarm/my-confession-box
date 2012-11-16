@@ -16,13 +16,16 @@ public class CBTextArea extends FlowPanel {
     private int maxCharsAllowed = 0;
     private final Label lblErrorMsg;
 
-    public CBTextArea(int numOfChars) {
+    public CBTextArea(int numOfChars, boolean big) {
 	super();
 	this.maxCharsAllowed = numOfChars;
-	
 
 	cbTextArea = new RichTextArea();
-	cbTextArea.setSize("526px", "200px");
+	if(big) {
+	    cbTextArea.setSize("526px", "200px");
+	} else {
+	    cbTextArea.setSize("526px", "70px");
+	}
 	this.add(cbTextArea);
 
 	lblRemainChar = new Label(numOfChars + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());

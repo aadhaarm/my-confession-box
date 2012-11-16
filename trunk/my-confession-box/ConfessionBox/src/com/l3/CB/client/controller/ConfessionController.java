@@ -60,7 +60,10 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 		    humanPointPresenter.go(container);
 
-		    if(null != ConfessionBox.confId) {
+		    String loadHash = Location.getHash();
+		    if(loadHash != null && loadHash.contains(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
+			CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
+		    } else if(null != ConfessionBox.confId) {
 			CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 		    } else {
 			CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);

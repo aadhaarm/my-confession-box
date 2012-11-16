@@ -85,9 +85,11 @@ public class PardonManager {
 
 	    if(totalConditions == conditionsMet) {
 		// Update pardon share with new status
-		ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, PardonStatus.PARDONED);
-		// Float required emails
-		informPardonEvent(pardonByUser, pardonedToUser, confId);
+		boolean isChange = ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, PardonStatus.PARDONED);
+		if(isChange) {
+		    // Float required emails
+		    informPardonEvent(pardonByUser, pardonedToUser, confId);
+		}
 	    } else {
 		// Update pardon share with new status
 		ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, PardonStatus.PARDONED_WITH_CONDITION);

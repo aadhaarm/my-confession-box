@@ -1,10 +1,14 @@
 package com.l3.CB.client.ui.widgets;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.FeedViewUtils;
 import com.l3.CB.shared.Constants;
@@ -20,14 +24,14 @@ public class ConfessionPanel extends FlowPanel{
     private final boolean showUserControls;
     private FlowPanel fPnlMiddleContent;    
     private Image imgProfileImage;
-    private HorizontalPanel hPnlUserControls;
+    private Widget hPnlUserControls;
     private FlowPanel fPnlName;
     private FlowPanel fPnlStatusBar;
     private Label lblConfessionTitle;
     private FlowPanel fPnlConfessionText;
     private FlowPanel fPnlPardonWidget;
     private FlowPanel fPnlActivityButtons;
-    private Label lblPardonStatus;
+    private FlowPanel lblPardonStatus;
     private HTML undoToolTip;
     private HTML shareToolTip;
 
@@ -47,7 +51,7 @@ public class ConfessionPanel extends FlowPanel{
     /**
      * @param confession
      */
-    public void getConfessionWidgetsSetup(Confession confession) {
+    public void getConfessionWidgetsSetup(final Confession confession) {
 
 	confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 	if(confessedByUserInfo != null) {
@@ -93,6 +97,56 @@ public class ConfessionPanel extends FlowPanel{
 	// Confession text
 	fPnlMiddleContent.add(fPnlConfessionText);
 
+
+	// Set USER CONTROLS
+	if(this.showUserControls) {
+	    final FlowPanel updatePanel = new FlowPanel();
+	    updatePanel.setStyleName("updateConfessionPanel");
+	    final Anchor btnEditConfession = new Anchor("Update");
+	    btnEditConfession.setTitle(ConfessionBox.cbText.editConfessionUserControlButtonTitle());
+	    updatePanel.add(btnEditConfession);
+	    fPnlMiddleContent.add(updatePanel);
+	    btnEditConfession.addClickHandler(new ClickHandler() {
+		UpdateConfessionWidget updateWidget;
+		@Override
+		public void onClick(ClickEvent event) {
+		    if(updateWidget == null){
+			updateWidget = new UpdateConfessionWidget(confession);
+			updatePanel.add(updateWidget);
+		    } else if(updateWidget.isVisible()) {
+			updateWidget.setVisible(false);
+		    } else {
+			updateWidget.setVisible(true);
+		    }
+		}
+	    });
+
+	    if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
+		final FlowPanel apealPanel = new FlowPanel();
+		apealPanel.setStyleName("appealPanel");
+		Anchor ancShareConfession = new Anchor("Appeal for pardon");
+		ancShareConfession.addStyleName("appealLink");
+		ancShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
+		apealPanel.add(ancShareConfession);
+		fPnlMiddleContent.add(apealPanel);
+		ancShareConfession.addClickHandler(new ClickHandler() {
+		    AppealPardonWidget shareConfessionPopup;
+		    @Override
+		    public void onClick(ClickEvent event) {
+			if(shareConfessionPopup == null) {
+			    shareConfessionPopup = new AppealPardonWidget(confession);
+			    //	    		    shareConfessionPopup.populateFriendsList();
+			    apealPanel.add(shareConfessionPopup);
+			} else if(shareConfessionPopup.isVisible()) {
+			    shareConfessionPopup.setVisible(false);
+			} else {
+			    shareConfessionPopup.setVisible(true);
+			}
+		    }
+		});
+	    }
+	}
+
 	// Pardon widget
 	fPnlMiddleContent.add(fPnlPardonWidget);
 
@@ -100,7 +154,7 @@ public class ConfessionPanel extends FlowPanel{
 	undoToolTip = FeedViewUtils.getUndoToolTipBar();
 	undoToolTip.setVisible(false);
 	fPnlMiddleContent.add(undoToolTip);
-	
+
 	// Share tool tip
 	shareToolTip = FeedViewUtils.getShareToolTipBar();
 	shareToolTip.setVisible(false);
@@ -131,7 +185,7 @@ public class ConfessionPanel extends FlowPanel{
 	//Profile picture
 	imgProfileImage = CommonUtils.getProfilePicture(this.confession, anonymousView);
 	// User Profile name or ANYN
-	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, anonymousView);
+	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, anonymousView, showUserControls);
 	// Status Bar (time and subscription status)
 	fPnlStatusBar = CommonUtils.getStatusBar(this.confession);
 	// Confession Text
@@ -143,15 +197,15 @@ public class ConfessionPanel extends FlowPanel{
 	// Pardon widget
 	fPnlPardonWidget = FeedViewUtils.getPardonWidget(this.confession, anonymousView, confessedByUserInfo);
     }
-    
+
     public void showUndoTooltip() {
 	undoToolTip.setVisible(true);
     }
-    
+
     public void showShareToolTip() {
 	shareToolTip.setVisible(true);
     }
-    
+
     public void hideUndoToolTip() {
 	undoToolTip.setVisible(false);
     }

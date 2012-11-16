@@ -86,21 +86,10 @@ public class MyConfessionFeedPresenter implements Presenter {
 
 	    @Override
 	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
-		Confession confessionToBepdated = event.getConfession();
-		if(confessionToBepdated != null) {
-		    ConfessionBox.confessionService.getConfession(confessionToBepdated.getConfId(), false, new AsyncCallback<Confession>() {
-			@Override
-			public void onSuccess(Confession result) {
-			    if(result != null) {
-				display.setConfessions(result);
-			    }
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-			    Error.handleError("ConfessionForMeFeedPresenter : on UpdateFeedToMeEvent - confessionService.getConfession", "onFailure", caught);
-			}
-		    });
+		Confession confessionToBeUpdated = event.getConfession();
+		if(confessionToBeUpdated != null) {
+		    confessionToBeUpdated.setFbId(ConfessionBox.loggedInUserInfo.getId());
+		    display.setConfessions(confessionToBeUpdated);
 		}
 	    }
 	   }); 

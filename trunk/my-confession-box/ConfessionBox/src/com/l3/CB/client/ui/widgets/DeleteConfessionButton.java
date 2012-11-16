@@ -14,7 +14,7 @@ public class DeleteConfessionButton extends PushButton {
 
     public DeleteConfessionButton(final Confession confession, Image buttonImage, final boolean isVisible) {
 	super();
-	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
+	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
 	if(isVisible) {
 	    this.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
 	} else {

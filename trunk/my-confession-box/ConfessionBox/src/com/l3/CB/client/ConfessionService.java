@@ -46,7 +46,8 @@ public interface ConfessionService extends XsrfProtectedService {
     Confession getConfession(Long confId, boolean secure);
     long getNumberOfConfessionForMe(Long userId);
     Confession getConfessionDraft(Long userId, String fbId);
-
+    void clearConfessionDraft(Long userId, String fbId);
+    
     // USER ACTIVITY
     Long registerUserActivity(Long userId, Long confId, Activity activity);
     Map<String, Long> getUserActivity(Long userId, Long confId);

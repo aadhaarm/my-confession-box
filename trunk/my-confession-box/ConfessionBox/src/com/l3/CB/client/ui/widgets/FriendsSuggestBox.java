@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.UserInfo;
 
@@ -25,7 +26,7 @@ public class FriendsSuggestBox extends FlowPanel {
 	super();
 	this.userfriends = userfriends;
 
-	this.setStyleName("appeal");
+	this.setStyleName(Constants.DIV_FRIENDS_SUGGEST_BOX);
 
 	if(userfriends != null && !userfriends.isEmpty()) {
 	    friendsOracle = new MultiWordSuggestOracle();
@@ -50,7 +51,7 @@ public class FriendsSuggestBox extends FlowPanel {
 			    remove(friendsImage);
 			}
 			friendsImage = new Image(FacebookUtil.getUserImageUrl(friend.getId()));
-			friendsImage.setStyleName("friend_image");
+			friendsImage.setStyleName(Constants.DIV_FRIENDS_SUGGEST_IMAGE);
 			add(friendsImage);
 		    } else {
 			if(friendsImage != null) {

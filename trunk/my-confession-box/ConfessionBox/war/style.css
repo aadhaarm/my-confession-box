@@ -78,7 +78,9 @@ main_container a:hover {
 	color: #343434;
 	/*background-color:#F8FFD7;*/
 	background-color: #FEFFED;
-	line-height: 1.38;
+	line-height: 1.36;
+	overflow: hidden;
+	text-overflow: clip;
 }
 
 .confessionText {

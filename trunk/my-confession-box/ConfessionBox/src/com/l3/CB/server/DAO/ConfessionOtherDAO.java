@@ -360,4 +360,27 @@ public class ConfessionOtherDAO {
 	}
 	return confessionDraft;
     }
+
+    public static void clearConfessionDraft(Long userId) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	try {
+	    Query query = pm.newQuery(ConfessionDraftDO.class);
+	    query.setFilter("userId == user");
+	    query.declareParameters("String user");
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDraftDO> result = (List<ConfessionDraftDO>) query.execute(userId);
+	    if (result != null && !result.isEmpty()) {
+		Iterator<ConfessionDraftDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDraftDO confessionDraftDO = it.next();
+		    pm.deletePersistent(confessionDraftDO);
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while geting confession DRAFT:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+    }
 }

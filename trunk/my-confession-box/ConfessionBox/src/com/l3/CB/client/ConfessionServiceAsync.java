@@ -54,4 +54,6 @@ public interface ConfessionServiceAsync {
 	    AsyncCallback<Void> callback);
     void getConfessionDraft(Long userId, String fbId,
 	    AsyncCallback<Confession> callback);
+    void clearConfessionDraft(Long userId, String fbId,
+	    AsyncCallback<Void> callback);
 }

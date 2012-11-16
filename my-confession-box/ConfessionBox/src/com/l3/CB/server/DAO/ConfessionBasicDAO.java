@@ -387,6 +387,11 @@ public class ConfessionBasicDAO {
 		confessionShare.setConfId(confessionShareDO.getConfId());
 		confessionShare.setShareId(confessionShareDO.getShareId());
 		confessionShare.setUserId(confessionShareDO.getUserId());
+		UserDO confessedToUser = UserDAO.getUserByUserId(new UserInfo(confessionShareDO.getUserId()));
+		if(confessedToUser != null) {
+		    confessionShare.setFbId(confessedToUser.getFbId());
+		    confessionShare.setUserFullName(confessedToUser.getName());
+		}
 	    }
 	    confessionShare.setTimeStamp(confessionShareDO.getTimeStamp());
 	    confessionShare.setPardonStatus(PardonStatus.valueOf(confessionShareDO.getPardonStatus()));
@@ -413,6 +418,7 @@ public class ConfessionBasicDAO {
 
     public static boolean updateConfessionSharePardonCondition(Long userId, Long confId, List<PardonCondition> pardonConditions, PardonStatus pardonedStatus) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
+	boolean isChange = false;
 	try {
 	    Query query = pm.newQuery(ConfessionShareDO.class);
 	    query.setFilter("userId == user && confId == conf");
@@ -424,18 +430,20 @@ public class ConfessionBasicDAO {
 		Iterator<ConfessionShareDO> it = result.iterator();
 		while (it.hasNext()) {
 		    ConfessionShareDO confessionShareDO = it.next();
-		    confessionShareDO.setPardonStatus(pardonedStatus.name());
-		    pm.makePersistent(confessionShareDO);
+		    if(!confessionShareDO.getPardonStatus().equals(pardonedStatus.name())){
+			confessionShareDO.setPardonStatus(pardonedStatus.name());
+			pm.makePersistent(confessionShareDO);
+			isChange = true;
+		    }
 		}
 	    }
 	} catch (Exception e) {
 	    logger.log(Level.SEVERE,
 		    "Error while getting user from DB:" + e.getMessage());           
-	    return false;
 	} finally {
 	    pm.close();
 	}
-	return true;
+	return isChange;
     }
 
     public static boolean addPardonCondition(Long userId, Long confId, List<PardonCondition> pardonConditions) {

@@ -91,20 +91,20 @@ public class ConfessionManager {
 		List<Long> confIDs = ConfessionOtherDAO.getUserActivity(userId, page, Constants.FEED_PAGE_SIZE);
 		if(confIDs != null) {
 		    confessions = getConfessions(confIDs, page, Constants.FEED_PAGE_SIZE, filter, locale);
-		    getUserDetails(confessions);
+		    getUserDetails(confessions, false);
 		} 
 	    } else if(filter.equals(Filters.SUBSCRIBED)) {
 		List<Long> confIDs = ConfessionOtherDAO.getUserSubscribedConfessionIDs(userId, Constants.FEED_PAGE_SIZE, page);
 		if(confIDs != null && !confIDs.isEmpty()) {
 		    confessions = getConfessions(confIDs, page, Constants.FEED_PAGE_SIZE, filter, locale);
-		    getUserDetails(confessions);
+		    getUserDetails(confessions, false);
 		} 
 	    } else {
 		String cacheKey = Integer.toString(page) + filter.name() + locale;
 		confessions = CacheManager.getCachedConfessionList(cacheKey);
 		if(confessions == null) {
 		    confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE, filter, locale);
-		    getUserDetails(confessions);
+		    getUserDetails(confessions, false);
 		    CacheManager.cacheConfessionList(cacheKey, confessions);
 		}
 	    }
@@ -123,8 +123,9 @@ public class ConfessionManager {
 
     /**
      * @param confessions
+     * @param getSharedToAllDetails 
      */
-    private static void getUserDetails(List<Confession> confessions) {
+    private static void getUserDetails(List<Confession> confessions, boolean getSharedToAllDetails) {
 	if(confessions != null && !confessions.isEmpty()) {
 	    for (Confession confession : confessions) {
 		if(!confession.isShareAsAnyn()) {
@@ -135,7 +136,7 @@ public class ConfessionManager {
 		    confession.setFbId(null);
 		}
 
-		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
+		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), getSharedToAllDetails));
 	    }
 	}
     }
@@ -143,11 +144,12 @@ public class ConfessionManager {
     /**
      * @param page
      * @param userId
+     * @param getSharedToAllDetails 
      * @return
      */
-    public static List<Confession> getConfessionsByUser(int page, Long userId) {
+    public static List<Confession> getConfessionsByUser(int page, Long userId, boolean getSharedToAllDetails) {
 	List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
-	getUserDetails(confessions);
+	getUserDetails(confessions, getSharedToAllDetails);
 	return confessions;
     }
 
@@ -156,10 +158,10 @@ public class ConfessionManager {
      * @return
      */
     public static Confession getOneConfession(Long confId, boolean secure) {
-	String cacheKey = confId.toString() + secure;
-	Confession confession = CacheManager.getCachedConfession(cacheKey);
-	if(confession == null) {
-	    confession = ConfessionBasicDAO.getConfession(confId);
+//	String cacheKey = confId.toString() + secure;
+//	Confession confession = CacheManager.getCachedConfession(cacheKey);
+//	if(confession == null) {
+	Confession confession = ConfessionBasicDAO.getConfession(confId);
 	    if(confession != null) {
 		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), false));
 		if(!confession.isShareAsAnyn() || secure) {
@@ -169,8 +171,8 @@ public class ConfessionManager {
 		    // MOST IMPORTANT CODE!!
 		    confession.setFbId(null);
 		}
-		CacheManager.cacheConfession(cacheKey, confession);
-	    }
+//		CacheManager.cacheConfession(cacheKey, confession);
+//	    }
 	}
 	return confession;
     }
@@ -238,5 +240,10 @@ public class ConfessionManager {
     public static Confession getConfessionDraft(Long userId, String fbId) {
 	// VALIDATE USER
 	return ConfessionOtherDAO.getSavedConfessionDraft(userId);
+    }
+
+    public static void clearConfessionDraft(Long userId, String fbId) {
+	// Validate User
+	ConfessionOtherDAO.clearConfessionDraft(userId);
     }
 }

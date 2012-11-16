@@ -15,7 +15,7 @@ public class ChangeVisibilityButton extends PushButton {
 
     public ChangeVisibilityButton(final Confession confession, Image buttonImage, final boolean shareAnyn) {
 	super();
-	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
+	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
 	if(shareAnyn) {
 	    this.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	} else {
@@ -38,6 +38,8 @@ public class ChangeVisibilityButton extends PushButton {
 			    } else {
 				setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 			    }
+			    
+			    confession.setShareAsAnyn(!confession.isShareAsAnyn());
 			    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 			}
 		    }

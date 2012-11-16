@@ -53,7 +53,9 @@ public class RegisterConfessionPresenter implements Presenter {
 	public CheckBox getCbConfessToWidget();
 
 	public Button getBtnSave();
-	
+	public Button getBtnDeleteDraft();
+	public void enableDeleteDraftButton(boolean isVisible);
+
 	Widget asWidget();
     }
 
@@ -76,6 +78,8 @@ public class RegisterConfessionPresenter implements Presenter {
 		if(result != null) {
 		    display.getTxtTitle().getTxtTitle().setText(result.getConfessionTitle());
 		    display.getTxtConfession().getCbTextArea().setText(result.getConfession());
+		    display.enableDeleteDraftButton(true);
+		    display.getBtnSave().setText("Saved");
 		}
 	    }
 	    @Override
@@ -208,9 +212,9 @@ public class RegisterConfessionPresenter implements Presenter {
 		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
 	    }
 	});
-	
+
 	display.getBtnSave().addClickHandler(new ClickHandler() {
-	    
+
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
@@ -220,20 +224,42 @@ public class RegisterConfessionPresenter implements Presenter {
 		    confession.setConfession(display.getConfession());
 		    confession.setUserId(ConfessionBox.loggedInUserInfo.getUserId());
 		    ConfessionBox.confessionService.registerConfessionDraft(confession, new AsyncCallback<Void>() {
-		        
-		        @Override
-		        public void onSuccess(Void result) {
-		    	// TODO Auto-generated method stub
-		    	
-		        }
-		        
-		        @Override
-		        public void onFailure(Throwable caught) {
-		    	// TODO Auto-generated method stub
-		    	
-		        }
+
+			@Override
+			public void onSuccess(Void result) {
+			    display.enableDeleteDraftButton(true);
+			    display.getBtnSave().setText("Saved");
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			    Error.handleError("RegisterConfessionPresenter",
+				    "onFailure", caught);
+			}
 		    });
 		}
+	    }
+	});
+
+	display.getBtnDeleteDraft().addClickHandler(new ClickHandler() {
+
+	    @Override
+	    public void onClick(ClickEvent event) {
+		ConfessionBox.confessionService.clearConfessionDraft(ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<Void>() {
+
+		    @Override
+		    public void onSuccess(Void result) {
+			display.getTxtTitle().getTxtTitle().setText("");
+			display.getTxtConfession().getCbTextArea().setText("");
+			display.enableDeleteDraftButton(false);
+			display.getBtnSave().setText("Save as draft");
+		    }
+
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+		    }
+		});
 	    }
 	});
 

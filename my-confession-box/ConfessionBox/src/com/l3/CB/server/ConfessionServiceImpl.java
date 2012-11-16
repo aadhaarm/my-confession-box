@@ -61,7 +61,7 @@ ConfessionService {
      */
     @Override
     public List<Confession> getConfessionsIDID(int page, Long userId) {
-	List<Confession> confessions = ConfessionManager.getConfessionsByUser(page, userId);
+	List<Confession> confessions = ConfessionManager.getConfessionsByUser(page, userId, true);
 	return confessions;
     }
 
@@ -158,5 +158,10 @@ ConfessionService {
     @Override
     public Confession getConfessionDraft(Long userId, String fbId) {
 	return ConfessionManager.getConfessionDraft(userId, fbId);
+    }
+
+    @Override
+    public void clearConfessionDraft(Long userId, String fbId) {
+	ConfessionManager.clearConfessionDraft(userId, fbId);
     }
 }

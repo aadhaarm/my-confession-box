@@ -72,6 +72,7 @@ public class Constants {
     public static final String DIV_ACTIVITY_BUTTON_CONTAINER = "activityButtonContainer";
     public static final String DIV_ACTIVITY_BUTTON_SHARE_BUTTON = "shareWrap";
     public static final String DIV_USER_CONTROL_BUTTON_CONTAINER = "userControlButtonContainer";
+    public static final String DIV_USER_CONTROL_BUTTON = "userControlButton";
     public static final String DIV_CONFESSION_PANEL_TOP_CONTAINER = "top";
     public static final String DIV_CONFESSION_PANEL_MIDDLE_CONTAINER = "middle";
     public static final String DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER = "fb_widgets";
@@ -83,6 +84,8 @@ public class Constants {
     public static final String DIV_TIME_STAMP = "time_stamp";
     public static final String DIV_PARDONED_STATUS = "pardon_status_yes";
     public static final String DIV_AWAITING_PARDON_STATUS = "pardon_status_no";
+    public static final String DIV_FRIENDS_SUGGEST_BOX = "appeal";
+    public static final String DIV_FRIENDS_SUGGEST_IMAGE = "friend_image";
 
     public static final String PARDON_GRID_ID = "pardon-confession-grid-id";
 
@@ -90,9 +93,14 @@ public class Constants {
     public static final String pardonConditionSPVotes = "MIN_SP_VOTES";
     public static final int TEXT_LENGTH_ON_LOAD = 400;
 
+    // Register confession page validation
     public static final int CONF_MIN_CHARS = 3;
     public static final int CONF_MAX_CHARS = 1500;
-    public static final int COMM_MAX_CHARS = 500;
+    public static final int COMM_MAX_CHARS = 300;
 
+    // MEMCACHE
     public static final int CONF_CACHE_EXPIRATION_SEC = 300;
+
+
+
 }

@@ -22,18 +22,14 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
-import com.l3.CB.client.event.EditConfessionEvent;
 import com.l3.CB.client.ui.widgets.ChangeVisibilityButton;
 import com.l3.CB.client.ui.widgets.DeleteConfessionButton;
-import com.l3.CB.client.ui.widgets.ShareConfessionPopup;
 import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
@@ -225,12 +221,12 @@ public class CommonUtils {
 	return profileImage;
     }
 
-    public static FlowPanel getName(Confession confession, UserInfo userInfo, boolean isAnyn) {
+    public static FlowPanel getName(Confession confession, UserInfo userInfo, boolean isAnyn, boolean showConfessedTo) {
 	FlowPanel fPnlNameWidget = null;
 	if(confession != null) {
 	    fPnlNameWidget = new FlowPanel();
 	    fPnlNameWidget.setStyleName(Constants.DIV_PROFILE_NAME);
-	    if (!confession.isShareAsAnyn() || ! isAnyn) {
+	    if (!confession.isShareAsAnyn() || !isAnyn) {
 		if (userInfo != null) {
 		    Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
 		    ancUserName.removeStyleName("gwt-Anchor");
@@ -241,6 +237,17 @@ public class CommonUtils {
 		Anchor ancAnynUser = new Anchor();
 		ancAnynUser.setText(ConfessionBox.cbText.confessedByAnynName());
 		fPnlNameWidget.add(ancAnynUser);
+	    }
+	    if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+		if(showConfessedTo) {
+		    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+			Label lblDateTimeStamp = new Label("Confessed to " + confessionShare.getUserFullName());
+			fPnlNameWidget.add(lblDateTimeStamp);
+		    }
+		} else {
+		    Label lblDateTimeStamp = new Label("Confessed to someone");
+		    fPnlNameWidget.add(lblDateTimeStamp);
+		}
 	    }
 	}
 	return fPnlNameWidget;
@@ -256,47 +263,17 @@ public class CommonUtils {
 	return null;
     }
 
-    public static HorizontalPanel getUserControls(final Confession confession) {
-	HorizontalPanel hPnlControls = new HorizontalPanel();
-	hPnlControls.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
+    public static Widget getUserControls(final Confession confession) {
+	final FlowPanel fPnlControls = new FlowPanel();
+	fPnlControls.setStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
 
 	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image("/images/sympathies.png",0,0,27,30), confession.isShareAsAnyn());
-	hPnlControls.add(btnChangeVisibility);
+	fPnlControls.add(btnChangeVisibility);
 
 	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image("/images/sympathies.png",0,0,27,30), confession.isVisibleOnPublicWall());
-	hPnlControls.add(btnDeleteConfession);
+	fPnlControls.add(btnDeleteConfession);
 
-	PushButton btnShareConfession = new PushButton();
-	btnShareConfession.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
-	btnShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
-	hPnlControls.add(btnShareConfession);
-	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
-	    btnShareConfession.setEnabled(false);
-	} else {
-	    btnShareConfession.addClickHandler(new ClickHandler() {
-		@Override
-		public void onClick(ClickEvent event) {
-		    ShareConfessionPopup shareConfessionPopup = new ShareConfessionPopup(confession);
-		    shareConfessionPopup.populateFriendsList();
-		    shareConfessionPopup.setGlassEnabled(true);
-		    shareConfessionPopup.center();
-		}
-	    });
-	}
-
-	PushButton btnEditConfession = new PushButton();
-	btnEditConfession.addStyleName(Constants.DIV_USER_CONTROL_BUTTON_CONTAINER);
-	btnEditConfession.setTitle(ConfessionBox.cbText.editConfessionUserControlButtonTitle());
-	hPnlControls.add(btnEditConfession);
-	btnEditConfession.addClickHandler(new ClickHandler() {
-
-	    @Override
-	    public void onClick(ClickEvent event) {
-		ConfessionBox.confEventBus.fireEvent(new EditConfessionEvent(confession));
-	    }
-	});
-
-	return hPnlControls;
+	return fPnlControls;
     }
 
     public static FlowPanel getTextTruncated(final String confession) {
@@ -389,12 +366,12 @@ public class CommonUtils {
 		return hours + ConfessionBox.cbText.timestampHoursAgo();
 	    }
 	} else {
-	    return DateTimeFormat.getFormat("EEE, MMM d, ''yy - h:mm a").format(date);
+	    return DateTimeFormat.getFormat("MMM d, ''yy - h:mm a").format(date);
 	}
     }
 
     public static String getDateInFormat(Date date) {
-	return DateTimeFormat.getFormat("EEE, MMM d, ''yy - h:mm a").format(date);
+	return DateTimeFormat.getFormat("MMM d, ''yy - h:mm a").format(date);
     }
 
 
@@ -418,8 +395,10 @@ public class CommonUtils {
 	return fPnlStatusBar;
     }
 
-    public static Label getPardonStatus(Confession confession) {
+    public static FlowPanel getPardonStatus(Confession confession) {
+	FlowPanel pardonStatusPanel = null;
 	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+	    pardonStatusPanel = new FlowPanel();
 	    Label pardonStatus = new Label();
 	    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
 		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
@@ -427,16 +406,18 @@ public class CommonUtils {
 		    case PARDONED:
 			pardonStatus.setText(ConfessionBox.cbText.pardonStatusLabel());
 			pardonStatus.setStyleName(Constants.DIV_PARDONED_STATUS);
-			return pardonStatus;
 		    default:
 			pardonStatus.setText(ConfessionBox.cbText.awaitingPardonStatusLabel());
 			pardonStatus.setStyleName(Constants.DIV_AWAITING_PARDON_STATUS);
-			return pardonStatus;
 		    }
 		}
+		pardonStatusPanel.add(pardonStatus);
+		Label lblDateTimeStamp = new Label("Since " + CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
+		lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
+		pardonStatusPanel.add(lblDateTimeStamp);
 	    }
 	}
-	return null;
+	return pardonStatusPanel;
     }
 
     public static Widget getConditionStatus(Confession confession) {

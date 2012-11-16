@@ -38,6 +38,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final FlowPanel fPnlButtons;
     private final Button btnSubmit;
     private final Button btnSave;
+    private final Button btnDeleteDraft;
     
     public RegisterConfessionView() {
 	super();
@@ -94,7 +95,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	txtTitle = new CBTextBox();
 	fPnlConfessionForm.add(txtTitle);
 	
-	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS);
+	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS, true);
 	txtConfession.setStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
 	txtConfession.setSize("100%", "14em");
 
@@ -107,7 +108,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	btnSave = new Button("Save as draft");
 	btnSave.setStyleName("save_draft");
 	fPnlButtons.add(btnSave);
-
+	
+	btnDeleteDraft = new Button("X");
+	btnDeleteDraft.setTitle("Delete draft");
+	btnDeleteDraft.setStyleName("save_draft");
+	btnDeleteDraft.setVisible(false);
+	fPnlButtons.add(btnDeleteDraft);
+	
 	btnSubmit = new Button(ConfessionBox.cbText.buttonTextSubmitConfession());
 	btnSubmit.setStyleName("submit_confession");
 	fPnlButtons.add(btnSubmit);
@@ -214,7 +221,18 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	return cbConfessTo;
     }
 
+    @Override
     public Button getBtnSave() {
         return btnSave;
+    }
+
+    @Override
+    public Button getBtnDeleteDraft() {
+        return btnDeleteDraft;
+    }
+    
+    @Override
+    public void enableDeleteDraftButton(boolean isVisible){
+	btnDeleteDraft.setVisible(isVisible);
     }
 }

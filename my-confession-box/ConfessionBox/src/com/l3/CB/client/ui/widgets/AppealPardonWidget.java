@@ -28,6 +28,7 @@ public class AppealPardonWidget extends FlowPanel {
 
     private final Button btnSubmit; 
     private FriendsSuggestBox friendsSuggestBox;
+    private RelationSuggestBox relationSuggestBox;
     private final Confession confession;
 
     public AppealPardonWidget(Confession confession) {
@@ -35,12 +36,15 @@ public class AppealPardonWidget extends FlowPanel {
 	this.confession = confession;
 	addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
 	btnSubmit = new Button(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
+	btnSubmit.setStyleName("appealButton");
+	
 	if(friendsSuggestBox != null) {
 	    add(friendsSuggestBox);
+	    add(relationSuggestBox);
+	    add(btnSubmit);
 	} else {
 	    populateFriendsList();
 	}
-	add(btnSubmit);
 	bind(confession.getConfId());
     }
 
@@ -49,7 +53,7 @@ public class AppealPardonWidget extends FlowPanel {
 
 	    @Override
 	    public void onClick(ClickEvent event) {
-		if(friendsSuggestBox != null && friendsSuggestBox.validate()) {
+		if(friendsSuggestBox != null && friendsSuggestBox.validate() && relationSuggestBox.validate()) {
 
 		    UserInfo selectedUser = friendsSuggestBox.getSelectedUser();
 		    if(selectedUser != null) {
@@ -69,7 +73,7 @@ public class AppealPardonWidget extends FlowPanel {
 				    ConfessionBox.loggedInUserInfo
 				    .getUserId(),
 				    ConfessionBox.loggedInUserInfo
-				    .getId(), confessTo,
+				    .getId(), confessTo, new Date(),
 				    new AsyncCallback<Void>() {
 
 				@Override
@@ -104,6 +108,7 @@ public class AppealPardonWidget extends FlowPanel {
 	    confessToWithCondition.setTimeStamp(new Date());
 	    confessToWithCondition.setFbId(sharedWithUser.getId());
 	    confessToWithCondition.setUserFullName(sharedWithUser.getName());
+	    confessToWithCondition.setRelation(relationSuggestBox.getSelectedRelation());
 	    return confessToWithCondition;
 	} 
 	return null;
@@ -115,6 +120,8 @@ public class AppealPardonWidget extends FlowPanel {
     public void populateFriendsList() {
 	if(friendsSuggestBox == null) {
 
+	    relationSuggestBox = new RelationSuggestBox();
+	    
 	    ConfessionBox.facebookService.getFriends(ConfessionBox.accessToken, new AsyncCallback<String>() {
 		@Override
 		public void onSuccess(String result) {
@@ -124,6 +131,8 @@ public class AppealPardonWidget extends FlowPanel {
 			    friendsSuggestBox = new FriendsSuggestBox(userfriends);
 			    friendsSuggestBox.setStyleName("friendsSuggestBoxMyConfPage");
 			    add(friendsSuggestBox);
+			    add(relationSuggestBox);
+			    add(btnSubmit);
 			}
 		    }
 		}

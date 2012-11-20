@@ -35,7 +35,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 	    this.display.clearConfessions();
 	}
 	this.display.setConfessionPagesLoaded(0);
-	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		if(result != null) {
@@ -58,7 +58,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 		    display.addLoaderImage();
 		    inEvent = true;
 		    display.incrementConfessionPagesLoaded();
-		    ConfessionBox.confessionService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+		    ConfessionBox.confessionService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 			    display.setConfessions(result, true, showUserControls);

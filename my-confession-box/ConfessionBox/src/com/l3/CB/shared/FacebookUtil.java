@@ -111,7 +111,6 @@ public class FacebookUtil {
 	return null;
     }
 
-    //"http://127.0.0.1:8888/images/Gerald_G_Boy_Face_Cartoon_4.svg.thumb.png"
     public static String getFaceIconImage(String gender) {
 	final StringBuilder sb = new StringBuilder();
 	if("male".equalsIgnoreCase(gender)) {

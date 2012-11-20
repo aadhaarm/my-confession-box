@@ -10,89 +10,97 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable
 public class UserActivityDO implements Serializable {
-	
-	/**
-	 * Default serial version ID.
-	 */
-	private static final long serialVersionUID = 1L;
 
-	public UserActivityDO() {
-		super();
-	}
+    /**
+     * Default serial version ID.
+     */
+    private static final long serialVersionUID = 1L;
 
-	public UserActivityDO(long userId, long confId, String activityType,
-			boolean shareAsAnyn, Date timeStamp) {
-		super();
-		this.userId = userId;
-		this.confId = confId;
-		this.activityType = activityType;
-		this.shareAsAnyn = shareAsAnyn;
-		this.timeStamp = timeStamp;
-	}
+    public UserActivityDO() {
+	super();
+    }
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long activityId;
-	
-	@Persistent
-	private long userId;
-	
-	@Persistent
-	private long confId;
-	
-	private String activityType;
-	
-	@Persistent
-	private boolean shareAsAnyn = true;
+    public UserActivityDO(long userId, long confId, String activityType,
+	    boolean shareAsAnyn, Date timeStamp) {
+	super();
+	this.userId = userId;
+	this.confId = confId;
+	this.activityType = activityType;
+	this.shareAsAnyn = shareAsAnyn;
+	this.timeStamp = timeStamp;
+    }
 
-	@Persistent
-	private Date timeStamp;
-	
-	public Long getActivityId() {
-		return activityId;
-	}
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long activityId;
 
-	public void setActivityId(Long activityId) {
-		this.activityId = activityId;
-	}
+    @Persistent
+    private long userId;
 
-	public long getUserId() {
-		return userId;
-	}
+    @Persistent
+    private long confId;
 
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
+    private String activityType;
 
-	public long getConfId() {
-		return confId;
-	}
+    @Persistent
+    private boolean shareAsAnyn = true;
 
-	public void setConfId(long confId) {
-		this.confId = confId;
-	}
+    @Persistent
+    private Date timeStamp;
 
-	public String getActivityType() {
-		return activityType;
-	}
+    public Long getActivityId() {
+	return activityId;
+    }
 
-	public void setActivityType(String activityType) {
-		this.activityType = activityType;
-	}
+    public void setActivityId(Long activityId) {
+	this.activityId = activityId;
+    }
 
-	public boolean isShareAsAnyn() {
-		return shareAsAnyn;
-	}
+    public long getUserId() {
+	return userId;
+    }
 
-	public void setShareAsAnyn(boolean shareAsAnyn) {
-		this.shareAsAnyn = shareAsAnyn;
-	}
+    public void setUserId(long userId) {
+	this.userId = userId;
+    }
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    public long getConfId() {
+	return confId;
+    }
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    public void setConfId(long confId) {
+	this.confId = confId;
+    }
+
+    public String getActivityType() {
+	return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+	this.activityType = activityType;
+    }
+
+    public boolean isShareAsAnyn() {
+	return shareAsAnyn;
+    }
+
+    public void setShareAsAnyn(boolean shareAsAnyn) {
+	this.shareAsAnyn = shareAsAnyn;
+    }
+
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public String toString() {
+	return "UserActivityDO [activityId=" + activityId + ", userId="
+		+ userId + ", confId=" + confId + ", activityType="
+		+ activityType + ", shareAsAnyn=" + shareAsAnyn
+		+ ", timeStamp=" + timeStamp + "]";
+    }
 }

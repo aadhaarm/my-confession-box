@@ -29,6 +29,7 @@ ConfessionService {
      */
     private static final long serialVersionUID = 1L;
     
+    @SuppressWarnings("unused")
     private static final CacheManager cacheManager = new CacheManager();
 
     @Override
@@ -43,6 +44,7 @@ ConfessionService {
     @Override
     public void registerConfession(Confession confession) {
 	ConfessionManager.registerConfession(confession, getThreadLocalRequest().getRemoteHost().toString());
+	clearConfessionDraft(confession.getUserId(), confession.getFbId());
     }
 
     /**
@@ -60,16 +62,19 @@ ConfessionService {
      * @param userId - {@link Long}
      */
     @Override
-    public List<Confession> getConfessionsIDID(int page, Long userId) {
-	List<Confession> confessions = ConfessionManager.getConfessionsByUser(page, userId, true);
+    public List<Confession> getConfessionsIDID(int page, Long userId, String fbId) {
+	List<Confession> confessions = null;
+	if(UserManager.validateUser(userId, fbId)) {
+	    confessions = ConfessionManager.getConfessionsByUser(page, userId, true);
+	}
 	return confessions;
     }
 
     @Override
-    public Long registerUserActivity(Long userId, Long confId, Activity activity) {
-	return ActivityManager.registerUserActivity(userId, confId, activity);
+    public Long registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp) {
+	return ActivityManager.registerUserActivity(userId, confId, activity, updateTimeStamp);
     }
-
+    
     @Override
     public Map<String, Long> getUserActivity(Long userId, Long confId) {
 	return ActivityManager.getUserActivity(userId, confId);
@@ -79,31 +84,43 @@ ConfessionService {
      * Get confession
      */
     @Override
-    public Confession getConfession(Long confId, boolean secure) {
-	// TODO: validate user
-	return ConfessionManager.getOneConfession(confId, secure);
+    public Confession getConfession(Long confId, Long userId, String fbId, boolean secure) {
+	Confession confession = null;
+	if(secure) {
+	    if(UserManager.validateUser(userId, fbId)) {
+		confession = ConfessionManager.getOneConfession(confId, secure, userId);
+	    }
+	} else {
+	    confession = ConfessionManager.getOneConfession(confId, secure, userId);
+	}
+	return confession;
     }
 
     @Override
-    public List<Confession> getConfessionsTOME(int page, Long userId) {
-	return ConfessionManager.getConfessionsConfessedToMe(page, userId);
+    public List<Confession> getConfessionsTOME(int page, Long userId, String fbId) {
+	List<Confession> confList = null;
+	if(UserManager.validateUser(userId, fbId)) {
+	    confList = ConfessionManager.getConfessionsConfessedToMe(page, userId);
+	}
+	return confList; 
     }
 
     @Override
-    public void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus) {
-	PardonManager.pardonConfession(pandonByUser, confId, pardonedToUser, pardonConditions, pardonStatus);
+    public void pardonConfession(UserInfo pardonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus, Date updateTimeStamp) {
+	if(UserManager.validateUser(pardonByUser.getUserId(), pardonByUser.getId())) {
+	    PardonManager.pardonConfession(pardonByUser, confId, pardonedToUser, pardonConditions, pardonStatus, updateTimeStamp);
+	}
     }
 
     @Override
-    public boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn) {
-	return ConfessionManager.changeIdentityVisibility(userId, fbId, confId, shareAnyn);
+    public boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp) {
+	ConfessionManager.changeIdentityVisibility(userId, fbId, confId, shareAnyn, updateTimeStamp);
+	return true;
     }
 
     @Override
-    public boolean changeConfessionVisibility(Long userId, String fbId,
-	    Long confId, boolean isVisible) {
-	// TODO Validate user
-	return ConfessionManager.changeConfessionVisibility(userId, fbId, confId, isVisible);
+    public boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp) {
+	return ConfessionManager.changeConfessionVisibility(userId, fbId, confId, isVisible, updateTimeStamp);
     }
 
     @Override
@@ -142,11 +159,12 @@ ConfessionService {
     }
 
     @Override
-    public void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare) {
-	if(confessionShare != null) {
+    public void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp) {
+	if(confessionShare != null && UserManager.validateUser(userId, fbId)) {
 	    // Get the confession by user details
 	    UserInfo confessionByUser = UserManager.getUserByUserId(userId);
 	    ConfessionManager.addConfessedToUser(confId, confessionByUser, confessionShare);
+	    ConfessionManager.updateConfessionTimeStamp(confId, updateTimeStamp);
 	}
     }
 

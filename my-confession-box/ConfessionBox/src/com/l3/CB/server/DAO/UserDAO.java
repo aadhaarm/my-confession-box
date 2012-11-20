@@ -78,8 +78,7 @@ public class UserDAO {
 		    userId = userDO.getUserId();
 		    userInfo.setUserId(userId);
 		} catch (Exception e) {
-		    logger.log(Level.SEVERE,
-			    "Error while registering user:" + e.getMessage());
+		    logger.log(Level.SEVERE, "Error while registering user:" + e.getMessage());
 		} finally {
 		    pm.close();
 		}

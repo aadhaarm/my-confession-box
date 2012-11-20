@@ -7,7 +7,9 @@ import com.l3.CB.shared.TO.UserInfo;
 public class UserManager {
 
     public static UserInfo registerUser(UserInfo userInfo) {
-	return UserDAO.registerUser(userInfo);
+	userInfo = UserDAO.registerUser(userInfo);
+	CacheManager.flushUser(userInfo.getUserId());
+	return userInfo;
     }
 
     /**
@@ -16,7 +18,12 @@ public class UserManager {
      * @return {@link UserInfo}
      */
     public static UserInfo getUserByUserId(Long userId) {
-	return getUserInfo(UserDAO.getUserByUserId(new UserInfo(userId)));
+	UserInfo userInfo = CacheManager.getCachedUser(userId);
+	if(userInfo == null) {
+	    userInfo = getUserInfo(UserDAO.getUserByUserId(new UserInfo(userId)));
+	    CacheManager.cacheUser(userInfo);
+	}
+	return userInfo;
     }
 
     /**
@@ -34,9 +41,13 @@ public class UserManager {
      * @return {@link UserInfo}
      */
     public static boolean validateUser(Long userId, String fbId) {
-	return UserDAO.validateUser(userId, fbId);
+	Boolean isValidUser = CacheManager.getCachedValidateUserResult(userId, fbId);
+	if(isValidUser == null) {
+	    isValidUser = UserDAO.validateUser(userId, fbId);
+	    CacheManager.cacheValidateUserResult(userId, fbId, isValidUser);
+	}
+	return isValidUser;
     }
-
 
     private static UserInfo getUserInfo(UserDO userDO) {
 	UserInfo userInfo = null;

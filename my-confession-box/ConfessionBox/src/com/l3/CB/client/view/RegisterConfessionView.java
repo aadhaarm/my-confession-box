@@ -18,6 +18,7 @@ import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
+import com.l3.CB.client.ui.widgets.RelationSuggestBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
@@ -33,6 +34,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final CheckBox cbHideIdentity;
     private final CheckBox cbConfessTo;
     private FriendsSuggestBox friendsSuggestBox;
+    private RelationSuggestBox relationSuggestBox;
     private final CBTextBox txtTitle;
     private final CBTextArea txtConfession;
     private final FlowPanel fPnlButtons;
@@ -128,6 +130,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	friendsSuggestBox = new FriendsSuggestBox(userfriends);
 	fPnlOptions.add(friendsSuggestBox);
 	friendsSuggestBox.setFocus();
+	
+	relationSuggestBox = new RelationSuggestBox();
+	fPnlOptions.add(relationSuggestBox);
     }
     
     @Override
@@ -234,5 +239,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     @Override
     public void enableDeleteDraftButton(boolean isVisible){
 	btnDeleteDraft.setVisible(isVisible);
+    }
+
+    public RelationSuggestBox getRelationSuggestBox() {
+        return relationSuggestBox;
     }
 }

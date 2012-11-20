@@ -23,6 +23,7 @@ import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.event.UpdateMenuEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
+import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.presenter.HumanPointPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
@@ -31,6 +32,7 @@ import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
+import com.l3.CB.client.view.FooterView;
 import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
@@ -60,6 +62,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 		    humanPointPresenter.go(container);
 
+		    FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
+		    footerPresenter.go(container);
+		    
 		    String loadHash = Location.getHash();
 		    if(loadHash != null && loadHash.contains(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
 			CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);

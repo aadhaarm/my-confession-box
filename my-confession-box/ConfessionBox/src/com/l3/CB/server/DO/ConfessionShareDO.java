@@ -34,6 +34,9 @@ public class ConfessionShareDO implements Serializable {
 
     @Persistent
     private Date timeStamp;
+    
+    @Persistent
+    private String relation;
 
     @Persistent
     private List<PardonConditionDO> pardonConditionDOs;
@@ -89,5 +92,21 @@ public class ConfessionShareDO implements Serializable {
 
     public void setPardonStatus(String pardonStatus) {
         this.pardonStatus = pardonStatus;
+    }
+
+    public String getRelation() {
+        return relation;
+    }
+
+    public void setRelation(String relation) {
+        this.relation = relation;
+    }
+
+    @Override
+    public String toString() {
+	return "ConfessionShareDO [shareId=" + shareId + ", confId=" + confId
+		+ ", userId=" + userId + ", pardonStatus=" + pardonStatus
+		+ ", timeStamp=" + timeStamp + ", pardonConditionDOs="
+		+ pardonConditionDOs + "]";
     }
 }

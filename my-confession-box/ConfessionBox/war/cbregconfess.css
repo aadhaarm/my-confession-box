@@ -101,3 +101,33 @@ a:hover {
 	margin:5px 20px 5px 10px;
 	float:right;
 }
+
+.relationSuggestBox {
+	font-size: smaller;
+}
+
+.appealButton {
+	float: right;
+}
+
+.pardonModalPopupWindow {
+	width: 415px;
+	padding-left: 5px;
+	padding-top: 5px;
+}
+
+.appealPanel {
+	margin-left: 10px;
+}
+
+.friendsSuggestBoxMyConfPage {
+	/* float: left; */
+}
+
+.appealLink {
+	padding-left: 5px;
+}
+
+.errorMessage {
+	color: red;
+}

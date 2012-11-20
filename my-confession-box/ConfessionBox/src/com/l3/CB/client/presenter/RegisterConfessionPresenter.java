@@ -21,6 +21,7 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
+import com.l3.CB.client.ui.widgets.RelationSuggestBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
@@ -39,7 +40,8 @@ public class RegisterConfessionPresenter implements Presenter {
 	public HasClickHandlers getCbHideIdentity();
 	public HasClickHandlers getCbConfessTo();
 	public Widget gethFriendSuggestBox();
-
+	public RelationSuggestBox getRelationSuggestBox();
+	
 	public boolean isIdentityHidden();
 	public boolean isFriendsListNull();
 	public UserInfo getSharedWith();
@@ -122,97 +124,19 @@ public class RegisterConfessionPresenter implements Presenter {
     }
 
     private void bind() {
-	// On Submit confession
-	this.display.getSubmitBtn().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
+	onConfessionSubmit();
 
-		if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
+	onOptionSelection();
 
-		    // Get confession to be saved
-		    final Confession confession = getConfessionToBeSaved();
+	processField();
 
-		    if(confession != null) {
+	onDraftConfessions();
+    }
 
-			//Register Shared-To info
-			if(display.isShared()) {
-			    // Check if the user confessed to is a member and send a fb notification message
-			    checkIfUserRegistered(confession);
-
-			    final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
-			    UserInfo fbSharedUser = display.getSharedWith();
-			    if(fbSharedUser != null) {
-				final ConfessionShare confessTo = getConfessedShareTO(fbSharedUser);
-				if(confessTo != null) {
-				    lstConfessTo.add(confessTo);
-				    confession.setConfessedTo(lstConfessTo);
-				    //Finally register confession
-				    finallyRegisterConfession(confession);
-				}
-			    }
-			} else  {
-			    //Finally register confession
-			    finallyRegisterConfession(confession);
-			}
-		    }
-		}
-	    }
-	});
-
-	display.getCbHideIdentity().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		display.setProfilePictureTag(display.isIdentityHidden(), ConfessionBox.loggedInUserInfo.getGender(), ConfessionBox.loggedInUserInfo.getId());
-	    }
-	});
-
-	display.getCbConfessTo().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		if(display.isShared()) {
-		    if(display.isFriendsListNull()) {
-			getMyFriends();
-		    }
-		    if(display.gethFriendSuggestBox() != null) {
-			display.gethFriendSuggestBox().setVisible(true);
-		    }
-		} else {
-		    if(display.gethFriendSuggestBox() != null) {
-			display.gethFriendSuggestBox().setVisible(false);
-		    }
-		}
-	    }
-	});
-
-	display.getTxtTitle().getTxtTitle().addBlurHandler(new BlurHandler() {
-	    @Override
-	    public void onBlur(BlurEvent event) {
-		display.getTxtTitle().validate();
-	    }
-	});
-
-	display.getTxtConfession().getCbTextArea().addBlurHandler(new BlurHandler() {
-	    @Override
-	    public void onBlur(BlurEvent event) {
-		display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
-	    }
-	});
-
-	display.getCbHideIdentity().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_HIDE_ID_CHECKBOX);
-	    }
-	});
-
-	display.getCbConfessToWidget().addClickHandler(new ClickHandler() {
-
-	    @Override
-	    public void onClick(ClickEvent event) {
-		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
-	    }
-	});
-
+    /**
+     * 
+     */
+    private void onDraftConfessions() {
 	display.getBtnSave().addClickHandler(new ClickHandler() {
 
 	    @Override
@@ -262,7 +186,111 @@ public class RegisterConfessionPresenter implements Presenter {
 		});
 	    }
 	});
+    }
 
+    /**
+     * 
+     */
+    private void processField() {
+	display.getTxtTitle().getTxtTitle().addBlurHandler(new BlurHandler() {
+	    @Override
+	    public void onBlur(BlurEvent event) {
+		display.getTxtTitle().validate();
+	    }
+	});
+
+	display.getTxtConfession().getCbTextArea().addBlurHandler(new BlurHandler() {
+	    @Override
+	    public void onBlur(BlurEvent event) {
+		display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
+	    }
+	});
+
+    }
+
+    /**
+     * 
+     */
+    private void onOptionSelection() {
+	display.getCbConfessToWidget().addClickHandler(new ClickHandler() {
+
+	    @Override
+	    public void onClick(ClickEvent event) {
+		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
+	    }
+	});
+
+	display.getCbHideIdentity().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		display.setProfilePictureTag(display.isIdentityHidden(), ConfessionBox.loggedInUserInfo.getGender(), ConfessionBox.loggedInUserInfo.getId());
+		HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_HIDE_ID_CHECKBOX);
+	    }
+	});
+
+	display.getCbConfessTo().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		if(display.isShared()) {
+		    if(display.isFriendsListNull()) {
+			getMyFriends();
+		    }
+		    if(display.gethFriendSuggestBox() != null) {
+			display.gethFriendSuggestBox().setVisible(true);
+			display.getRelationSuggestBox().setVisible(true);
+		    }
+		} else {
+		    if(display.gethFriendSuggestBox() != null) {
+			display.gethFriendSuggestBox().setVisible(false);
+			display.getRelationSuggestBox().setVisible(false);
+		    }
+		}
+	    }
+	});
+    }
+
+    /**
+     * 
+     */
+    private void onConfessionSubmit() {
+	// On Submit confession
+	this.display.getSubmitBtn().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+
+		if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
+
+		    // Get confession to be saved
+		    final Confession confession = getConfessionToBeSaved();
+
+		    if(confession != null) {
+
+			//Register Shared-To info
+			if(display.isShared()) {
+
+			    final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
+			    UserInfo fbSharedUser = display.getSharedWith();
+			    if(fbSharedUser != null && display.getRelationSuggestBox().validate()) {
+				
+				// Check if the user confessed to is a member and send a fb notification message
+				checkIfUserRegistered(confession);
+
+				final ConfessionShare confessTo = getConfessedShareTO(fbSharedUser);
+				if(confessTo != null) {
+				    lstConfessTo.add(confessTo);
+				    confession.setConfessedTo(lstConfessTo);
+				    //Finally register confession
+				    finallyRegisterConfession(confession);
+				}
+			    }
+			} else  {
+			    //Finally register confession
+			    finallyRegisterConfession(confession);
+			}
+		    }
+		}
+	    }
+	});
     }
 
     /**
@@ -273,7 +301,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	    ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
 		@Override
 		public void onSuccess(Void result) {
-		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
+		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
 		}
 
@@ -295,6 +323,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	    confessToWithCondition.setTimeStamp(new Date());
 	    confessToWithCondition.setFbId(sharedWithUser.getId());
 	    confessToWithCondition.setUserFullName(sharedWithUser.getName());
+	    confessToWithCondition.setRelation(display.getRelationSuggestBox().getSelectedRelation());
 	    return confessToWithCondition;
 	} 
 	return null;

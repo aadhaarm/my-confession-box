@@ -31,34 +31,41 @@ public class ConfessionDraftDO implements Serializable {
     private String confessionTitle;
 
     public Long getConfId() {
-        return confId;
+	return confId;
     }
 
     public void setConfId(Long confId) {
-        this.confId = confId;
+	this.confId = confId;
     }
 
     public Text getConfession() {
-        return confession;
+	return confession;
     }
 
     public void setConfession(Text confession) {
-        this.confession = confession;
+	this.confession = confession;
     }
 
     public Long getUserId() {
-        return userId;
+	return userId;
     }
 
     public void setUserId(Long userId) {
-        this.userId = userId;
+	this.userId = userId;
     }
 
     public String getConfessionTitle() {
-        return confessionTitle;
+	return confessionTitle;
     }
 
     public void setConfessionTitle(String confessionTitle) {
-        this.confessionTitle = confessionTitle;
+	this.confessionTitle = confessionTitle;
+    }
+
+    @Override
+    public String toString() {
+	return "ConfessionDraftDO [confId=" + confId + ", confession="
+		+ confession + ", userId=" + userId + ", confessionTitle="
+		+ confessionTitle + "]";
     }
 }

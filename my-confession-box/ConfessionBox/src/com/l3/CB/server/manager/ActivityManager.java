@@ -15,12 +15,13 @@ public class ActivityManager {
      * @param userId
      * @param confId
      * @param activity
+     * @param updateTimeStamp 
      * @return
      */
-    public static Long registerUserActivity(Long userId, Long confId, Activity activity) {
+    public static Long registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp) {
 
-	long updatedActivityCount = ConfessionOtherDAO.updateActivityCount(userId, confId, activity, new Date());
-	ConfessionOtherDAO.updateActivityCountInConfession(confId, activity);
+	Long updatedActivityCount = ConfessionOtherDAO.updateActivityCountInConfession(confId, activity);
+	ConfessionOtherDAO.registerUserActivity(userId, confId, activity, new Date());
 
 	if(activity.equals(Activity.SHOULD_BE_PARDONED)) {
 	    List<ConfessionShare> confessionShares = ConfessionBasicDAO.getConfessionShare(confId, false);
@@ -29,16 +30,25 @@ public class ActivityManager {
 		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
 		    switch (confessionShare.getPardonStatus()) {
 		    case PARDONED_WITH_CONDITION:
-			PardonManager.validateIfConditionsMet(confId);
+			PardonManager.validateIfAllConditionsMet(confId, updateTimeStamp, null, updatedActivityCount);
 			break;
 		    }
 		}
 	    }
 	}
+	
+	// Flush cache
+	CacheManager.flushActivityCache(userId, confId);
+	
 	return updatedActivityCount;
     }
 
     public static Map<String, Long> getUserActivity(Long userId, Long confId) {
-	return ConfessionOtherDAO.getUserActivity(userId, confId);
+	Map<String, Long> activityMap = CacheManager.getActivityMap(userId, confId);
+	if(activityMap == null) {
+	    activityMap = ConfessionOtherDAO.getUserActivity(userId, confId);
+	    CacheManager.cacheActivityMap(userId, confId, activityMap);
+	}
+	return activityMap;
     }
 }

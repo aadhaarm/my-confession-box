@@ -1,6 +1,7 @@
 package com.l3.CB.server.DAO;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.PardonStatus;
+import com.l3.CB.shared.TO.Relations;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionBasicDAO {
@@ -71,6 +73,9 @@ public class ConfessionBasicDAO {
 	    confessionShareDO = new ConfessionShareDO();
 	    confessionShareDO.setUserId(confessedTo.getUserId());
 	    confessionShareDO.setTimeStamp(confessedTo.getTimeStamp());
+	    if(confessedTo.getRelation() != null) {
+		confessionShareDO.setRelation(confessedTo.getRelation().name());
+	    }
 	}
 	return confessionShareDO;
     }
@@ -83,6 +88,7 @@ public class ConfessionBasicDAO {
 	    confessionDO.setConfessionTitle(confession.getConfessionTitle());
 	    confessionDO.setConfession(new Text(confession.getConfession()));
 	    confessionDO.setTimeStamp(confession.getTimeStamp());
+	    confessionDO.setLastUpdateTimeStamp(confession.getTimeStamp());
 	    confessionDO.setUserIp(confession.getUserIp());
 	    confessionDO.setLocale(confession.getLocale());
 	    return confessionDO;
@@ -98,7 +104,7 @@ public class ConfessionBasicDAO {
 	try {
 	    Query query = pm.newQuery(ConfessionDO.class);
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
-	    query.setOrdering("timeStamp desc");
+	    query.setOrdering("lastUpdateTimeStamp desc");
 
 	    switch (filter) {
 	    case LOCALE_SPECIFIC:
@@ -243,7 +249,7 @@ public class ConfessionBasicDAO {
 	    query.setFilter("userId == id");
 	    query.declareParameters("String id");
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
-	    query.setOrdering("timeStamp desc");
+	    query.setOrdering("lastUpdateTimeStamp desc");
 	    @SuppressWarnings("unchecked")
 	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
 
@@ -278,7 +284,8 @@ public class ConfessionBasicDAO {
 	    confession.setNumOfShouldBePardonedVote(confessionDO.getNumOfShouldBePardonedVote());
 	    confession.setNumOfShouldNotBePardonedVote(confessionDO.getNumOfShouldNotBePardonedVote());
 	    confession.setNumOfSympathyVote(confessionDO.getNumOfSympathyVote());
-
+	    confession.setUpdateTimeStamp(confessionDO.getLastUpdateTimeStamp());
+	    
 	    UserDO userDO = UserDAO.getUserByUserId(new UserInfo(confessionDO.getUserId()));
 	    if(userDO != null) {
 		confession.setFbId(userDO.getFbId());
@@ -396,6 +403,9 @@ public class ConfessionBasicDAO {
 	    confessionShare.setTimeStamp(confessionShareDO.getTimeStamp());
 	    confessionShare.setPardonStatus(PardonStatus.valueOf(confessionShareDO.getPardonStatus()));
 	    confessionShare.setPardonConditions(getPardonConditions(confessionShareDO.getPardonConditionDOs()));
+	    if(confessionShareDO.getRelation() != null) {
+		confessionShare.setRelation(Relations.valueOf(confessionShareDO.getRelation()));
+	    }
 	}
 	return confessionShare;
     }
@@ -510,6 +520,7 @@ public class ConfessionBasicDAO {
 		    PardonConditionDO pardonConditionDO = it.next();
 		    PardonCondition pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
 		    pardonCondition.setUserId(pardonConditionDO.getUserId());
+		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
 		    pardonConditions.add(pardonCondition);
 		}
 	    }
@@ -522,6 +533,34 @@ public class ConfessionBasicDAO {
 	return pardonConditions;
     }
 
+//    public static PardonCondition getConfessionCondition(Long confId, String conditionType) {
+//	PersistenceManager pm = PMF.get().getPersistenceManager();
+//	PardonCondition pardonCondition = null;
+//	try {
+//	    Query query = pm.newQuery(PardonConditionDO.class);
+//	    query.setFilter("condition == cond && confId == conf");
+//	    query.declareParameters("String cond" + ", "  + "String conf");
+//	    @SuppressWarnings("unchecked")
+//	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(conditionType, confId);
+//
+//	    if (result != null && !result.isEmpty()) {
+//		Iterator<PardonConditionDO> it = result.iterator();
+//		while (it.hasNext()) {
+//		    PardonConditionDO pardonConditionDO = it.next();
+//		    pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
+//		    pardonCondition.setUserId(pardonConditionDO.getUserId());
+//		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
+//		}
+//	    }
+//	} catch (Exception e) {
+//	    logger.log(Level.SEVERE, "Error while getting pardon condition:" + e.getMessage());
+//	} finally {
+//	    pm.close();
+//	}
+//	return pardonCondition;
+//    }
+
+    
     public static boolean updateConfessionCondition(Long confId, String condition, boolean isFulfill) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {
@@ -635,7 +674,7 @@ public class ConfessionBasicDAO {
 		    ConfessionDO confessionDO = it.next();
 		    confessionDO.setConfession(new Text(confession.getConfession()));
 		    confessionDO.setUserIp(confession.getUserIp());
-
+		    confessionDO.setLastUpdateTimeStamp(confession.getUpdateTimeStamp());
 		    pm.makePersistent(confessionDO);
 		}
 	    }
@@ -648,4 +687,28 @@ public class ConfessionBasicDAO {
 	return confession;
     }
 
+    public static void updateConfessionTimeStamp(Long confId, Date updateTimeStamp) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	try {
+	    Query query = pm.newQuery(ConfessionDO.class);
+	    query.setFilter("confId == id");
+	    query.declareParameters("String id");
+
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
+	    if (result != null && !result.isEmpty()) {
+		Iterator<ConfessionDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDO confessionDO = it.next();
+		    confessionDO.setLastUpdateTimeStamp(updateTimeStamp);
+		    pm.makePersistent(confessionDO);
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while getting confession for DB:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+    }
 }

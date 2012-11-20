@@ -100,6 +100,7 @@ public class ConfessionPanel extends FlowPanel{
 
 	// Set USER CONTROLS
 	if(this.showUserControls) {
+	    
 	    final FlowPanel updatePanel = new FlowPanel();
 	    updatePanel.setStyleName("updateConfessionPanel");
 	    final Anchor btnEditConfession = new Anchor("Update");
@@ -122,13 +123,13 @@ public class ConfessionPanel extends FlowPanel{
 	    });
 
 	    if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
-		final FlowPanel apealPanel = new FlowPanel();
-		apealPanel.setStyleName("appealPanel");
+		final FlowPanel appealPanel = new FlowPanel();
+		appealPanel.setStyleName("appealPanel");
 		Anchor ancShareConfession = new Anchor("Appeal for pardon");
 		ancShareConfession.addStyleName("appealLink");
 		ancShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
-		apealPanel.add(ancShareConfession);
-		fPnlMiddleContent.add(apealPanel);
+		appealPanel.add(ancShareConfession);
+		fPnlMiddleContent.add(appealPanel);
 		ancShareConfession.addClickHandler(new ClickHandler() {
 		    AppealPardonWidget shareConfessionPopup;
 		    @Override
@@ -136,7 +137,7 @@ public class ConfessionPanel extends FlowPanel{
 			if(shareConfessionPopup == null) {
 			    shareConfessionPopup = new AppealPardonWidget(confession);
 			    //	    		    shareConfessionPopup.populateFriendsList();
-			    apealPanel.add(shareConfessionPopup);
+			    appealPanel.add(shareConfessionPopup);
 			} else if(shareConfessionPopup.isVisible()) {
 			    shareConfessionPopup.setVisible(false);
 			} else {
@@ -177,6 +178,14 @@ public class ConfessionPanel extends FlowPanel{
 	fPnlFBWidgets.setStyleName(Constants.DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER);
 	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
 	fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+	//	Anchor ancComment = new Anchor("Comment");
+	//	fPnlFBWidgets.add(ancComment);
+	//	ancComment.addClickHandler(new ClickHandler() {
+	//	    @Override
+	//	    public void onClick(ClickEvent event) {
+	//		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	//	    }
+	//	});
 	this.add(fPnlFBWidgets);
     }
 

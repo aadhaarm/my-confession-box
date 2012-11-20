@@ -53,83 +53,9 @@ public class ConfessionOtherDAO {
 	return activityMap;
     }
 
-    public static Long getActivityCount(Long confId, String activityType) {
-	Long activityCount = new Long(0);
-	PersistenceManager pm = PMF.get().getPersistenceManager();
-	try {
-	    Query query = pm.newQuery(UserActivityDO.class);
-	    query.setFilter("confId == conf  && activityType == type");
-	    query.declareParameters("String conf" + ", "  + "String type");
-	    List result = (List) query.execute(confId, activityType);
-	    if (!result.isEmpty()) {
-		activityCount = (long) result.size();
-	    }
-	} catch (Exception e) {
-	    logger.log(Level.SEVERE,
-		    "Error while getting user from DB:" + e.getMessage());
-	} finally {
-	    pm.close();
-	}
-	return activityCount;
-    }
-
-    public static long updateActivityCount(Long userId, Long confId, Activity activity, Date timeStamp) {
+    public static Long getActivityCount(Long confId, Activity activity) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	long count = 0;
-	try {
-	    UserActivityDO userActivityDO = new UserActivityDO(userId, confId, activity.name(), true, timeStamp);
-	    pm.makePersistent(userActivityDO);
-	    count = getActivityCount(confId, activity.name());
-	} catch (Exception e) {
-	    logger.log(Level.SEVERE,
-		    "Error while registering confession:" + e.getMessage());
-	} finally {
-	    pm.close();
-	}
-
-	return count;
-    }
-
-    public static Map<String, Long> getUserActivity(Long confId) {
-	Map<String, Long> activityCount = new HashMap<String, Long>();
-	activityCount.put(Activity.ABUSE.name(), getActivityCount(confId, Activity.ABUSE.name()));		
-	activityCount.put(Activity.LAME.name(), getActivityCount(confId, Activity.LAME.name()));		
-	activityCount.put(Activity.SAME_BOAT.name(), getActivityCount(confId, Activity.SAME_BOAT.name()));		
-	activityCount.put(Activity.SHOULD_BE_PARDONED.name(), getActivityCount(confId, Activity.SHOULD_BE_PARDONED.name()));		
-	activityCount.put(Activity.SHOULD_NOT_BE_PARDONED.name(), getActivityCount(confId, Activity.SHOULD_NOT_BE_PARDONED.name()));		
-	activityCount.put(Activity.SYMPATHY.name(), getActivityCount(confId, Activity.SYMPATHY.name()));		
-	return activityCount;
-    }
-
-    public static boolean changeVisibility(Long userId, Long confId, boolean shareAnyn) {
-	PersistenceManager pm = PMF.get().getPersistenceManager();
-	try {
-	    Query query = pm.newQuery(ConfessionDO.class);
-	    query.setFilter("userId == user && confId == conf");
-	    query.declareParameters("String user" + ", "  + "String conf");
-	    @SuppressWarnings("unchecked")
-	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId, confId);
-
-	    if (!result.isEmpty()) {
-		Iterator<ConfessionDO> it = result.iterator();
-		while (it.hasNext()) {
-		    ConfessionDO confessionDO = it.next();
-		    confessionDO.setShareAsAnyn(shareAnyn);
-		    pm.makePersistent(confessionDO);
-		}
-	    }
-	} catch (Exception e) {
-	    logger.log(Level.SEVERE,
-		    "Error while Changing confession visibility:" + e.getMessage());
-	    return false;
-	} finally {
-	    pm.close();
-	}
-	return true;
-    }
-
-    public static void updateActivityCountInConfession(Long confId, Activity activity) {
-	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {
 	    Query query = pm.newQuery(ConfessionDO.class);
 	    query.setFilter("confId == id");
@@ -143,22 +69,22 @@ public class ConfessionOtherDAO {
 		    ConfessionDO confessionDO = it.next();
 		    switch (activity) {
 		    case ABUSE:
-			confessionDO.incrementAbuseVote();
+			count = confessionDO.getNumOfAbuseVote();
 			break;
 		    case LAME:
-			confessionDO.incrementLameVote();
+			count = confessionDO.getNumOfLameVote();
 			break;
 		    case SAME_BOAT:
-			confessionDO.incrementSameBoatVote();
+			count = confessionDO.getNumOfSameBoatVote();
 			break;
 		    case SHOULD_BE_PARDONED:
-			confessionDO.incrementShouldBePardonedVote();
+			count = confessionDO.getNumOfShouldBePardonedVote();
 			break;
 		    case SHOULD_NOT_BE_PARDONED:
-			confessionDO.incrementShouldNotBePardonedVote();
+			count = confessionDO.getNumOfShouldNotBePardonedVote();
 			break;
 		    case SYMPATHY:
-			confessionDO.incrementSympathyVote();
+			count = confessionDO.getNumOfSympathyVote();
 			break;
 		    }
 		    pm.makePersistent(confessionDO);
@@ -170,6 +96,109 @@ public class ConfessionOtherDAO {
 	} finally {
 	    pm.close();
 	}
+	return count;
+    }
+
+    public static Long registerUserActivity(Long userId, Long confId, Activity activity, Date timeStamp) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	long count = 0;
+	try {
+	    UserActivityDO userActivityDO = new UserActivityDO(userId, confId, activity.name(), true, timeStamp);
+	    pm.makePersistent(userActivityDO);
+	    count = getActivityCount(confId, activity);
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE, "Error while registering user activity:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+
+	return count;
+    }
+
+    public static Map<String, Long> getUserActivity(Long confId) {
+	Map<String, Long> activityCount = new HashMap<String, Long>();
+	activityCount.put(Activity.ABUSE.name(), getActivityCount(confId, Activity.ABUSE));		
+	activityCount.put(Activity.LAME.name(), getActivityCount(confId, Activity.LAME));		
+	activityCount.put(Activity.SAME_BOAT.name(), getActivityCount(confId, Activity.SAME_BOAT));		
+	activityCount.put(Activity.SHOULD_BE_PARDONED.name(), getActivityCount(confId, Activity.SHOULD_BE_PARDONED));		
+	activityCount.put(Activity.SHOULD_NOT_BE_PARDONED.name(), getActivityCount(confId, Activity.SHOULD_NOT_BE_PARDONED));		
+	activityCount.put(Activity.SYMPATHY.name(), getActivityCount(confId, Activity.SYMPATHY));		
+	return activityCount;
+    }
+
+    public static Confession changeVisibility(Long userId, Long confId, boolean shareAnyn) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	Confession confession = null;
+	try {
+	    Query query = pm.newQuery(ConfessionDO.class);
+	    query.setFilter("userId == user && confId == conf");
+	    query.declareParameters("String user" + ", "  + "String conf");
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId, confId);
+
+	    if (!result.isEmpty()) {
+		Iterator<ConfessionDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDO confessionDO = it.next();
+		    confessionDO.setShareAsAnyn(shareAnyn);
+		    pm.makePersistent(confessionDO);
+		    confession = new Confession(confId, shareAnyn); 
+		    confession.setUserId(confessionDO.getUserId());
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while Changing confession visibility:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return confession;
+    }
+
+    public static long updateActivityCountInConfession(Long confId, Activity activity) {
+	PersistenceManager pm = PMF.get().getPersistenceManager();
+	long count = 0;
+	try {
+	    Query query = pm.newQuery(ConfessionDO.class);
+	    query.setFilter("confId == id");
+	    query.declareParameters("String id");
+
+	    @SuppressWarnings("unchecked")
+	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
+	    if (result != null && !result.isEmpty()) {
+		Iterator<ConfessionDO> it = result.iterator();
+		while (it.hasNext()) {
+		    ConfessionDO confessionDO = it.next();
+		    switch (activity) {
+		    case ABUSE:
+			count = confessionDO.incrementAbuseVote();
+			break;
+		    case LAME:
+			count = confessionDO.incrementLameVote();
+			break;
+		    case SAME_BOAT:
+			count = confessionDO.incrementSameBoatVote();
+			break;
+		    case SHOULD_BE_PARDONED:
+			count = confessionDO.incrementShouldBePardonedVote();
+			break;
+		    case SHOULD_NOT_BE_PARDONED:
+			count = confessionDO.incrementShouldNotBePardonedVote();
+			break;
+		    case SYMPATHY:
+			count = confessionDO.incrementSympathyVote();
+			break;
+		    }
+		    pm.makePersistent(confessionDO);
+		}
+	    }
+	} catch (Exception e) {
+	    logger.log(Level.SEVERE,
+		    "Error while getting confession for DB:" + e.getMessage());
+	} finally {
+	    pm.close();
+	}
+	return count;
     }
 
     public static List<Long> getUserActivity(Long userId, int page, int pageSize) {

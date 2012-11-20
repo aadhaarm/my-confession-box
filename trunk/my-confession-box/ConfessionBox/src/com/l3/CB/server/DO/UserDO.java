@@ -10,97 +10,104 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class UserDO implements Serializable {
 
-	/**
-	 * Default serial ID
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Default serial ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long userId;
-	
-	@Persistent
-	private String fbId;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long userId;
 
-	@Persistent
-	private String gender;
-	
-	@Persistent
-	private String name;
-	
-	@Persistent
-	private String userName;
-	
-	@Persistent
-	private String email;
-	
-	@Persistent
-	private int humanPoints = 0;
-	
-	public Long getUserId() {
-		return userId;
-	}
+    @Persistent
+    private String fbId;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    @Persistent
+    private String gender;
 
-	public String getFbId() {
-		return fbId;
-	}
+    @Persistent
+    private String name;
 
-	public void setFbId(String fbId) {
-		this.fbId = fbId;
-	}
+    @Persistent
+    private String userName;
 
-	public UserDO(String fbId) {
-		super();
-		this.fbId = fbId;
-	}
+    @Persistent
+    private String email;
 
-	public UserDO(String fbId, String gender) {
-		super();
-		this.fbId = fbId;
-		this.gender = gender;
-	}
+    @Persistent
+    private int humanPoints = 0;
 
-	public String getGender() {
-		return gender;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getFbId() {
+	return fbId;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setFbId(String fbId) {
+	this.fbId = fbId;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public UserDO(String fbId) {
+	super();
+	this.fbId = fbId;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public UserDO(String fbId, String gender) {
+	super();
+	this.fbId = fbId;
+	this.gender = gender;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getGender() {
+	return gender;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setGender(String gender) {
+	this.gender = gender;
+    }
 
-	public int getHumanPoints() {
-		return humanPoints;
-	}
+    public String getName() {
+	return name;
+    }
 
-	public void setHumanPoints(int humanPoints) {
-		this.humanPoints = humanPoints;
-	}
+    public void setName(String name) {
+	this.name = name;
+    }
+
+    public String getUserName() {
+	return userName;
+    }
+
+    public void setUserName(String userName) {
+	this.userName = userName;
+    }
+
+    public String getEmail() {
+	return email;
+    }
+
+    public void setEmail(String email) {
+	this.email = email;
+    }
+
+    public int getHumanPoints() {
+	return humanPoints;
+    }
+
+    public void setHumanPoints(int humanPoints) {
+	this.humanPoints = humanPoints;
+    }
+
+    @Override
+    public String toString() {
+	return "UserDO [userId=" + userId + ", fbId=" + fbId + ", gender="
+		+ gender + ", name=" + name + ", userName=" + userName
+		+ ", email=" + email + ", humanPoints=" + humanPoints + "]";
+    }
 }

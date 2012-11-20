@@ -23,22 +23,31 @@ public interface ConfessionServiceAsync {
 
     // Register confession
     void registerConfession(Confession confession, AsyncCallback<Void> callback);    void getConfessions(int page, Filters filter, String locale, Long userId, AsyncCallback<List<Confession>> callback);
-    void getConfessionsIDID(int page, Long userId, AsyncCallback<List<Confession>> callback);
-    void getConfessionsTOME(int page, Long userId, AsyncCallback<List<Confession>> callback);
-    void getConfession(Long confId, boolean secure, AsyncCallback<Confession> callback);
+    void getConfessionsIDID(int page, Long userId, String fbId,
+	    AsyncCallback<List<Confession>> callback);
+    void getConfessionsTOME(int page, Long userId, String fbId,
+	    AsyncCallback<List<Confession>> callback);
+    void getConfession(Long confId, Long userId, String fbId, boolean secure,
+	    AsyncCallback<Confession> callback);
 
     void pardonConfession(UserInfo pandonByUser, Long confId,
 	    UserInfo pardonedToUser, List<PardonCondition> pardonConditions,
-	    PardonStatus pardonStatus, AsyncCallback<Void> callback);
+	    PardonStatus pardonStatus, Date updateTimeStamp,
+	    AsyncCallback<Void> callback);
     
-    // User Activity
-    void registerUserActivity(Long userId, Long confId, Activity activity, AsyncCallback<Long> callback);
+    void registerUserActivity(Long userId, Long confId, Activity activity,
+	    Date updateTimeStamp, AsyncCallback<Long> callback);
     void getUserActivity(Long userId, Long confId, AsyncCallback<Map<String, Long>> callback);
 
-    // Confession activities
-    void changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, AsyncCallback<Boolean> callback);
-    void changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, AsyncCallback<Boolean> callback);
-    void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, AsyncCallback<Void> callback);
+    void changeIdentityVisibility(Long userId, String fbId, Long confId,
+	    boolean shareAnyn, Date updateTimeStamp,
+	    AsyncCallback<Boolean> callback);
+    void changeConfessionVisibility(Long userId, String fbId, Long confId,
+	    boolean isVisible, Date updateTimeStamp,
+	    AsyncCallback<Boolean> callback);
+    void createConfessedToUser(Long confId, Long userId, String fbId,
+	    ConfessionShare confessionShare, Date updateTimeStamp,
+	    AsyncCallback<Void> callback);
 
     // Counts
     void getMyConfessionNumber(Long userId, AsyncCallback<Long> callback);

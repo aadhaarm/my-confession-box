@@ -41,22 +41,22 @@ public interface ConfessionService extends XsrfProtectedService {
     
     // GET Confession
     List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);
-    List<Confession> getConfessionsIDID(int page, Long userId);
-    List<Confession> getConfessionsTOME(int page, Long userId);
-    Confession getConfession(Long confId, boolean secure);
+    List<Confession> getConfessionsIDID(int page, Long userId, String fbId);
+    List<Confession> getConfessionsTOME(int page, Long userId, String fbId);
+    Confession getConfession(Long confId, Long userId, String fbId, boolean secure);
     long getNumberOfConfessionForMe(Long userId);
     Confession getConfessionDraft(Long userId, String fbId);
     void clearConfessionDraft(Long userId, String fbId);
     
     // USER ACTIVITY
-    Long registerUserActivity(Long userId, Long confId, Activity activity);
+    Long registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp);
     Map<String, Long> getUserActivity(Long userId, Long confId);
 
     // User control and confession changes
-    void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus);
-    boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn);
-    boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible);
-    void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare);
+    void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus, Date updateTimeStamp);
+    boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp);
+    boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp);
+    void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp);
     
     long getMyConfessionNumber(Long userId);
 

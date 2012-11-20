@@ -1,6 +1,7 @@
 package com.l3.CB.client.ui.widgets;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -100,7 +101,7 @@ public class PardonPopupPanel extends PopupPanel{
 		    ConfessionBox.confessionService.pardonConfession(
 			    ConfessionBox.loggedInUserInfo,
 			    confession.getConfId(), confessedByUser,
-			    pardonConditions, pardonStatus,
+			    pardonConditions, pardonStatus, new Date(),
 			    new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {

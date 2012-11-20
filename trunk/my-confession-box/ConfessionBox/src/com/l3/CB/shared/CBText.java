@@ -178,7 +178,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Un-Hide your confession from anonymous wall.")
     String unhideConfessionButtonTitleUserControl();
 
-    @DefaultStringValue("Please select a friends from your FB friends list")
+    @DefaultStringValue("Type your friend's name and choose from the options")
     String shareConfessionSuggestBoxErrorMessage();
 
     @DefaultStringValue("Appeal")

@@ -20,6 +20,8 @@ public class Confession implements Serializable {
 
     private Date timeStamp;
 
+    private Date updateTimeStamp;
+    
     private Long userId;
 
     private String locale;
@@ -60,6 +62,12 @@ public class Confession implements Serializable {
 
     public Confession() {
 	super();
+    }
+    
+    public Confession(Long confId, boolean shareAsAnyn) {
+	super();
+	this.confId = confId;
+	this.shareAsAnyn = shareAsAnyn;
     }
 
     public Confession(String confession, boolean shareAsAnyn) {
@@ -278,5 +286,13 @@ public class Confession implements Serializable {
 
     public void setUserEmailAddress(String userEmailAddress) {
 	this.userEmailAddress = userEmailAddress;
+    }
+
+    public Date getUpdateTimeStamp() {
+        return updateTimeStamp;
+    }
+
+    public void setUpdateTimeStamp(Date updateTimeStamp) {
+        this.updateTimeStamp = updateTimeStamp;
     }
 }

@@ -19,11 +19,14 @@ public class FriendsSuggestBox extends FlowPanel {
     private Map<String, UserInfo> userfriends = null;
     private MultiWordSuggestOracle friendsOracle;
     private final Label errMsg = new Label(ConfessionBox.cbText.shareConfessionSuggestBoxErrorMessage());
+    private final Label label = new Label("Friend's name");
     private SuggestBox friendsSuggestBox;
     private Image friendsImage;
 
     public FriendsSuggestBox(final Map<String, UserInfo> userfriends) {
 	super();
+	errMsg.setStyleName("errorMessage");
+	
 	this.userfriends = userfriends;
 
 	this.setStyleName(Constants.DIV_FRIENDS_SUGGEST_BOX);
@@ -35,6 +38,7 @@ public class FriendsSuggestBox extends FlowPanel {
 		friendsOracle.add(friendsName);
 	    }
 	    friendsSuggestBox = new SuggestBox(friendsOracle);
+	    this.add(label);
 	    this.add(friendsSuggestBox);
 	}
 	friendsSuggestBox.setWidth("150px");

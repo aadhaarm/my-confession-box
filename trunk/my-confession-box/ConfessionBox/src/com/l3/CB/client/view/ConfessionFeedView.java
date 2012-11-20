@@ -8,6 +8,7 @@ import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
@@ -122,7 +123,10 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	    for (final Confession confession : confessions) {
 		final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn);
 		vpnlConfessionList.add(fPnlConfessionMain);
-		CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
+		Element element = DOM.getElementById("confession-id-" + confession.getConfId());
+		if(element != null) {
+		    CommonUtils.parseXFBMLJS(element);
+		}
 		confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);
 	    }
 	} else {

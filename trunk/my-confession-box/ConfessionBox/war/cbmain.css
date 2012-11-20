@@ -21,11 +21,8 @@ div.header {
 }
 
 div.footer {
-	padding: 0.5em;
-	color: black;
-	clear: left;
-	text-align: center;
 	font-family: 'lucida grande';
+	padding-top: 20px;
 }
 
 h1.header {
@@ -151,8 +148,10 @@ div.helpInfoDiv {
 	display: none;
 }
 
-.pardonModalPopupWindow {
-	float: right;
+.infoModalPopupWindow {
+	background-color: white;
+	width: 700px;
+	padding: 10px;
 }
 
 .confessionGridElement {
@@ -203,17 +202,4 @@ div.helpInfoDiv {
 
 .updateConfessionPanel {
 	padding-left: 15px;
-	float: left;
-}
-
-.appealPanel {
-	margin-left: 10px;
-}
-
-.friendsSuggestBoxMyConfPage {
-	float: left;
-}
-
-.appealLink {
-	padding-left: 5px;
 }

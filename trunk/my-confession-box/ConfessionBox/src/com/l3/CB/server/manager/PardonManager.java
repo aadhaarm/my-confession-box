@@ -1,5 +1,6 @@
 package com.l3.CB.server.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import com.l3.CB.server.DAO.ConfessionBasicDAO;
@@ -19,14 +20,17 @@ public class PardonManager {
      * @param pardonedToUser
      * @param pardonConditions
      * @param pardonStatus 
+     * @param updateTimeStamp 
      */
-    public static void pardonConfession(UserInfo pardonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus) {
+    public static void pardonConfession(UserInfo pardonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus, Date updateTimeStamp) {
 	switch (pardonStatus) {
 	case PARDONED:
 	    // Update pardon share with new status
 	    ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, pardonStatus);
 	    // Float required emails
+	    ConfessionBasicDAO.updateConfessionTimeStamp(confId, updateTimeStamp);
 	    informPardonEvent(pardonByUser, pardonedToUser, confId);
+	    CacheManager.flushConfession(confId);
 	    break;
 	case PARDONED_WITH_CONDITION:
 	    // Add conditions in DB
@@ -34,47 +38,59 @@ public class PardonManager {
 	    // Update pardon share with new status
 	    ConfessionBasicDAO.updateConfessionSharePardonCondition(pardonByUser.getUserId(), confId, pardonConditions, pardonStatus);
 	    // Validate if any condition already met and update share status
-	    validateIfConditionsMet(confId);
+	    validateIfAllConditionsMet(confId, updateTimeStamp, null, null);
+	    ConfessionBasicDAO.updateConfessionTimeStamp(confId, updateTimeStamp);
+	    CacheManager.flushConfession(confId);
 	    break;
 	}
     }
 
-    public static void validateIfConditionsMet(Long confId) {
+    public static void validateIfAllConditionsMet(Long confId, Date updateTimeStamp, Confession confession, Long updatedActivityCount) {
 	int totalConditions = 0;
 	int conditionsMet = 0;
 
 	// Fetch pardon conditions
 	List<PardonCondition> pardonConditions = ConfessionBasicDAO.getConfessionCondition(confId);
+	
 	// FETCH confession
-	Confession confession = ConfessionManager.getOneConfession(confId, false);
+	if(confession == null) {
+	    confession = ConfessionManager.getOneConfession(confId, false, null);
+	}
+
 	long pardonByUserId = 0;
 
 	if(pardonConditions != null && !pardonConditions.isEmpty()) {
+
 	    // Set total number of conditions
 	    totalConditions = pardonConditions.size();
+
 	    for (PardonCondition pardonCondition : pardonConditions) {
-		pardonByUserId = pardonCondition.getUserId();
-		if(pardonCondition.isFulfil() && !Constants.pardonConditionUnhide.equals(pardonCondition.getCondition())) {
-		    conditionsMet++;
-		} else {
+		if(pardonCondition != null) {
+		    // Get pardon by user id from condition
+		    pardonByUserId = pardonCondition.getUserId();
+
 		    if(Constants.pardonConditionUnhide.equals(pardonCondition.getCondition())) {
-			// Identity OPEN
-			if(!confession.isShareAsAnyn()) {
+			if(confession != null && !confession.isShareAsAnyn()) {
 			    // Set to condition FULFILL
-			    ConfessionBasicDAO.updateConfessionCondition(confId, pardonCondition.getCondition(), true);
+			    ConfessionBasicDAO.updateConfessionCondition(confId, Constants.pardonConditionUnhide, true);
 			    conditionsMet++;
 			} else {
-			    // Identity hidden
-			    // Set to condition not met yet
-			    ConfessionBasicDAO.updateConfessionCondition(confId, pardonCondition.getCondition(), false);
+			    // Set to condition NOT MET yet
+			    ConfessionBasicDAO.updateConfessionCondition(confId, Constants.pardonConditionUnhide, false);
 			}
 		    } else {
-			long activityCount = ConfessionOtherDAO.getActivityCount(confId, Activity.SHOULD_BE_PARDONED.name());
-			// activity votes > = condition count
-			if(activityCount >= pardonCondition.getCount()) {
-			    // Set to condition FULFILL
-			    ConfessionBasicDAO.updateConfessionCondition(confId, pardonCondition.getCondition(), true);
+			if(pardonCondition.isFulfil()) {
 			    conditionsMet++;
+			} else {
+			    if(updatedActivityCount == null) {
+				updatedActivityCount = ConfessionOtherDAO.getActivityCount(confId, Activity.SHOULD_BE_PARDONED);
+			    }
+			    // activity votes > = condition count
+			    if(updatedActivityCount != null && updatedActivityCount >= pardonCondition.getCount()) {
+				// Set to condition FULFILL
+				ConfessionBasicDAO.updateConfessionCondition(confId, pardonCondition.getCondition(), true);
+				conditionsMet++;
+			    }
 			}
 		    }
 		}
@@ -89,6 +105,7 @@ public class PardonManager {
 		if(isChange) {
 		    // Float required emails
 		    informPardonEvent(pardonByUser, pardonedToUser, confId);
+		    ConfessionBasicDAO.updateConfessionTimeStamp(confId, updateTimeStamp);
 		}
 	    } else {
 		// Update pardon share with new status

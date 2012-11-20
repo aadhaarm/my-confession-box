@@ -79,7 +79,7 @@ public class ConfessionFeedPresenter implements Presenter {
     }
 
     private void setConfessions(Long confId) {
-	ConfessionBox.confessionService.getConfession(confId, false, new AsyncCallback<Confession>() {
+	ConfessionBox.confessionService.getConfession(confId, null, null, false, new AsyncCallback<Confession>() {
 	    @Override
 	    public void onSuccess(Confession result) {
 		if(result != null) {

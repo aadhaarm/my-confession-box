@@ -12,82 +12,90 @@ import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable
 public class PardonConditionDO implements Serializable {
-	
-	/**
-	 * Default serial version Id.
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Key pardonConditionId;
 
-	@Persistent
-	private Long confId;
-	
-	@Persistent
-	private Long userId;
-	
-	@Persistent
-	private boolean isFulfil;
-	
-	@Persistent
-	private String condition;
-	
-	@Persistent
-	private int count;
+    /**
+     * Default serial version Id.
+     */
+    private static final long serialVersionUID = 1L;
 
-	public int getCount() {
-		return count;
-	}
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Key pardonConditionId;
 
-	public void setCount(int count) {
-		this.count = count;
-	}
+    @Persistent
+    private Long confId;
 
-	public String getCondition() {
-		return condition;
-	}
+    @Persistent
+    private Long userId;
 
-	public void setCondition(String condition) {
-		this.condition = condition;
-	}
+    @Persistent
+    private boolean isFulfil;
 
-	public PardonConditionDO(String condition) {
-		super();
-		isFulfil = false;
-		this.condition = condition;
-	}
+    @Persistent
+    private String condition;
 
-	public Key getPardonConditionId() {
-		return pardonConditionId;
-	}
+    @Persistent
+    private int count;
 
-	public void setPardonConditionId(Key pardonConditionId) {
-		this.pardonConditionId = pardonConditionId;
-	}
+    public int getCount() {
+	return count;
+    }
 
-	public boolean isFulfil() {
-		return isFulfil;
-	}
+    public void setCount(int count) {
+	this.count = count;
+    }
 
-	public void setFulfil(boolean isFulfil) {
-		this.isFulfil = isFulfil;
-	}
+    public String getCondition() {
+	return condition;
+    }
 
-	public Long getConfId() {
-		return confId;
-	}
+    public void setCondition(String condition) {
+	this.condition = condition;
+    }
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    public PardonConditionDO(String condition) {
+	super();
+	isFulfil = false;
+	this.condition = condition;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public Key getPardonConditionId() {
+	return pardonConditionId;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public void setPardonConditionId(Key pardonConditionId) {
+	this.pardonConditionId = pardonConditionId;
+    }
+
+    public boolean isFulfil() {
+	return isFulfil;
+    }
+
+    public void setFulfil(boolean isFulfil) {
+	this.isFulfil = isFulfil;
+    }
+
+    public Long getConfId() {
+	return confId;
+    }
+
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
+
+    public Long getUserId() {
+	return userId;
+    }
+
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+	return "PardonConditionDO [pardonConditionId=" + pardonConditionId
+		+ ", confId=" + confId + ", userId=" + userId + ", isFulfil="
+		+ isFulfil + ", condition=" + condition + ", count=" + count
+		+ "]";
+    }
 }

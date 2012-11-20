@@ -13,238 +13,249 @@ import com.google.appengine.api.datastore.Text;
 @PersistenceCapable
 public class ConfessionDO implements Serializable {
 
-	/**
-	 * Default serial ID
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public ConfessionDO() {
-		super();
-		numOfAbuseVote = 0;
-		numOfLameVote = 0;
-		numOfSameBoatVote = 0;
-		numOfShouldBePardonedVote = 0;
-		numOfShouldNotBePardonedVote = 0;
-		numOfSympathyVote = 0;
-	}
+    /**
+     * Default serial ID
+     */
+    private static final long serialVersionUID = 1L;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long confId;
-	
-	@Persistent
-	private Text confession;
+    public ConfessionDO() {
+	super();
+	numOfAbuseVote = 0;
+	numOfLameVote = 0;
+	numOfSameBoatVote = 0;
+	numOfShouldBePardonedVote = 0;
+	numOfShouldNotBePardonedVote = 0;
+	numOfSympathyVote = 0;
+    }
 
-	@Persistent
-	private Date timeStamp;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private Long confId;
 
-	@Persistent
-	private Long userId;
-	
-	@Persistent
-	private boolean shareAsAnyn = true;
-	
-	@Persistent
-	private String userIp;
-	
-	@Persistent
-	private String locale;
-	
-	@Persistent
-	private String confessionTitle;
-	
-	@Persistent
-	private boolean isVisibleOnPublicWall = true;
+    @Persistent
+    private Text confession;
 
-	@Persistent
-	private long numOfSameBoatVote;
-	
-	@Persistent
-	private long numOfSympathyVote;
-	
-	@Persistent
-	private long numOfLameVote;
-	
-	@Persistent
-	private long numOfShouldBePardonedVote;
-	
-	@Persistent
-	private long numOfAbuseVote;
-	
-	@Persistent
-	private long numOfShouldNotBePardonedVote;
-	
-	public Long getConfId() {
-		return confId;
-	}
+    @Persistent
+    private Date timeStamp;
 
-	public void setConfId(Long confId) {
-		this.confId = confId;
-	}
+    @Persistent
+    private Date lastUpdateTimeStamp;
+    
+    @Persistent
+    private Long userId;
 
-	public Date getTimeStamp() {
-		return timeStamp;
-	}
+    @Persistent
+    private boolean shareAsAnyn = true;
 
-	public void setTimeStamp(Date timeStamp) {
-		this.timeStamp = timeStamp;
-	}
+    @Persistent
+    private String userIp;
 
-	public boolean isShareAsAnyn() {
-		return shareAsAnyn;
-	}
+    @Persistent
+    private String locale;
 
-	public void setShareAsAnyn(boolean shareAsAnyn) {
-		this.shareAsAnyn = shareAsAnyn;
-	}
+    @Persistent
+    private String confessionTitle;
 
-	public Long getUserId() {
-		return userId;
-	}
+    @Persistent
+    private boolean isVisibleOnPublicWall = true;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    @Persistent
+    private long numOfSameBoatVote;
 
-	public String getUserIp() {
-		return userIp;
-	}
+    @Persistent
+    private long numOfSympathyVote;
 
-	public void setUserIp(String userIp) {
-		this.userIp = userIp;
-	}
+    @Persistent
+    private long numOfLameVote;
 
-	public String getConfessionTitle() {
-		return confessionTitle;
-	}
+    @Persistent
+    private long numOfShouldBePardonedVote;
 
-	public void setConfessionTitle(String confessionTitle) {
-		this.confessionTitle = confessionTitle;
-	}
+    @Persistent
+    private long numOfAbuseVote;
 
-	public Text getConfession() {
-		return confession;
-	}
+    @Persistent
+    private long numOfShouldNotBePardonedVote;
 
-	public void setConfession(Text confession) {
-		this.confession = confession;
-	}
+    public Long getConfId() {
+	return confId;
+    }
 
-	public String getLocale() {
-		return locale;
-	}
+    public void setConfId(Long confId) {
+	this.confId = confId;
+    }
 
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
+    public Date getTimeStamp() {
+	return timeStamp;
+    }
 
-	public boolean isVisibleOnPublicWall() {
-		return isVisibleOnPublicWall;
-	}
+    public void setTimeStamp(Date timeStamp) {
+	this.timeStamp = timeStamp;
+    }
 
-	public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
-		this.isVisibleOnPublicWall = isVisibleOnPublicWall;
-	}
+    public boolean isShareAsAnyn() {
+	return shareAsAnyn;
+    }
 
-	public Long getNumOfSameBoatVote() {
-		return numOfSameBoatVote;
-	}
+    public void setShareAsAnyn(boolean shareAsAnyn) {
+	this.shareAsAnyn = shareAsAnyn;
+    }
 
-	public void setNumOfSameBoatVote(Long numOfSameBoatVote) {
-		this.numOfSameBoatVote = numOfSameBoatVote;
-	}
+    public Long getUserId() {
+	return userId;
+    }
 
-	public Long getNumOfSympathyVote() {
-		return numOfSympathyVote;
-	}
+    public void setUserId(Long userId) {
+	this.userId = userId;
+    }
 
-	public void setNumOfSympathyVote(Long numOfSympathyVote) {
-		this.numOfSympathyVote = numOfSympathyVote;
-	}
+    public String getUserIp() {
+	return userIp;
+    }
 
-	public Long getNumOfLameVote() {
-		return numOfLameVote;
-	}
+    public void setUserIp(String userIp) {
+	this.userIp = userIp;
+    }
 
-	public void setNumOfLameVote(Long numOfLameVote) {
-		this.numOfLameVote = numOfLameVote;
-	}
+    public String getConfessionTitle() {
+	return confessionTitle;
+    }
 
-	public Long getNumOfShouldBePardonedVote() {
-		return numOfShouldBePardonedVote;
-	}
+    public void setConfessionTitle(String confessionTitle) {
+	this.confessionTitle = confessionTitle;
+    }
 
-	public void setNumOfShouldBePardonedVote(Long numOfShouldBePardonedVote) {
-		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
-	}
+    public Text getConfession() {
+	return confession;
+    }
 
-	public Long getNumOfAbuseVote() {
-		return numOfAbuseVote;
-	}
+    public void setConfession(Text confession) {
+	this.confession = confession;
+    }
 
-	public void setNumOfAbuseVote(Long numOfAbuseVote) {
-		this.numOfAbuseVote = numOfAbuseVote;
-	}
+    public String getLocale() {
+	return locale;
+    }
 
-	public Long getNumOfShouldNotBePardonedVote() {
-		return numOfShouldNotBePardonedVote;
-	}
+    public void setLocale(String locale) {
+	this.locale = locale;
+    }
 
-	public void setNumOfShouldNotBePardonedVote(Long numOfShouldNotBePardonedVote) {
-		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
-	}
+    public boolean isVisibleOnPublicWall() {
+	return isVisibleOnPublicWall;
+    }
 
-	public void setNumOfSameBoatVote(long numOfSameBoatVote) {
-		this.numOfSameBoatVote = numOfSameBoatVote;
-	}
+    public void setVisibleOnPublicWall(boolean isVisibleOnPublicWall) {
+	this.isVisibleOnPublicWall = isVisibleOnPublicWall;
+    }
 
-	public void setNumOfSympathyVote(long numOfSympathyVote) {
-		this.numOfSympathyVote = numOfSympathyVote;
-	}
+    public Long getNumOfSameBoatVote() {
+	return numOfSameBoatVote;
+    }
 
-	public void setNumOfLameVote(long numOfLameVote) {
-		this.numOfLameVote = numOfLameVote;
-	}
+    public void setNumOfSameBoatVote(Long numOfSameBoatVote) {
+	this.numOfSameBoatVote = numOfSameBoatVote;
+    }
 
-	public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
-		this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
-	}
+    public Long getNumOfSympathyVote() {
+	return numOfSympathyVote;
+    }
 
-	public void setNumOfAbuseVote(long numOfAbuseVote) {
-		this.numOfAbuseVote = numOfAbuseVote;
-	}
+    public void setNumOfSympathyVote(Long numOfSympathyVote) {
+	this.numOfSympathyVote = numOfSympathyVote;
+    }
 
-	public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
-		this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
-	}
+    public Long getNumOfLameVote() {
+	return numOfLameVote;
+    }
 
-	public long incrementAbuseVote() {
-		numOfAbuseVote++;
-		return numOfAbuseVote;
-	}
+    public void setNumOfLameVote(Long numOfLameVote) {
+	this.numOfLameVote = numOfLameVote;
+    }
 
-	public long incrementSameBoatVote() {
-		numOfSameBoatVote++;
-		return numOfSameBoatVote;
-	}
+    public Long getNumOfShouldBePardonedVote() {
+	return numOfShouldBePardonedVote;
+    }
 
-	public long incrementShouldBePardonedVote() {
-		numOfShouldBePardonedVote++;
-		return numOfShouldBePardonedVote;
-	}
+    public void setNumOfShouldBePardonedVote(Long numOfShouldBePardonedVote) {
+	this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+    }
 
-	public long incrementShouldNotBePardonedVote() {
-		numOfShouldNotBePardonedVote++;
-		return numOfShouldNotBePardonedVote;
-	}
+    public Long getNumOfAbuseVote() {
+	return numOfAbuseVote;
+    }
 
-	public long incrementLameVote() {
-		numOfLameVote++;
-		return numOfLameVote;
-	}
+    public void setNumOfAbuseVote(Long numOfAbuseVote) {
+	this.numOfAbuseVote = numOfAbuseVote;
+    }
 
-	public long incrementSympathyVote() {
-		numOfSympathyVote++;
-		return numOfSympathyVote;
-	}
+    public Long getNumOfShouldNotBePardonedVote() {
+	return numOfShouldNotBePardonedVote;
+    }
+
+    public void setNumOfShouldNotBePardonedVote(Long numOfShouldNotBePardonedVote) {
+	this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+    }
+
+    public void setNumOfSameBoatVote(long numOfSameBoatVote) {
+	this.numOfSameBoatVote = numOfSameBoatVote;
+    }
+
+    public void setNumOfSympathyVote(long numOfSympathyVote) {
+	this.numOfSympathyVote = numOfSympathyVote;
+    }
+
+    public void setNumOfLameVote(long numOfLameVote) {
+	this.numOfLameVote = numOfLameVote;
+    }
+
+    public void setNumOfShouldBePardonedVote(long numOfShouldBePardonedVote) {
+	this.numOfShouldBePardonedVote = numOfShouldBePardonedVote;
+    }
+
+    public void setNumOfAbuseVote(long numOfAbuseVote) {
+	this.numOfAbuseVote = numOfAbuseVote;
+    }
+
+    public void setNumOfShouldNotBePardonedVote(long numOfShouldNotBePardonedVote) {
+	this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
+    }
+
+    public long incrementAbuseVote() {
+	numOfAbuseVote++;
+	return numOfAbuseVote;
+    }
+
+    public long incrementSameBoatVote() {
+	numOfSameBoatVote++;
+	return numOfSameBoatVote;
+    }
+
+    public long incrementShouldBePardonedVote() {
+	numOfShouldBePardonedVote++;
+	return numOfShouldBePardonedVote;
+    }
+
+    public long incrementShouldNotBePardonedVote() {
+	numOfShouldNotBePardonedVote++;
+	return numOfShouldNotBePardonedVote;
+    }
+
+    public long incrementLameVote() {
+	numOfLameVote++;
+	return numOfLameVote;
+    }
+
+    public long incrementSympathyVote() {
+	numOfSympathyVote++;
+	return numOfSympathyVote;
+    }
+
+    public Date getLastUpdateTimeStamp() {
+        return lastUpdateTimeStamp;
+    }
+
+    public void setLastUpdateTimeStamp(Date lastUpdateTimeStamp) {
+        this.lastUpdateTimeStamp = lastUpdateTimeStamp;
+    }
 }

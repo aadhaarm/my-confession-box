@@ -1,5 +1,7 @@
 package com.l3.CB.client.ui.widgets;
 
+import java.util.Date;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,7 +29,7 @@ public class DeleteConfessionButton extends PushButton {
 		ConfessionBox.confessionService.changeConfessionVisibility(
 			ConfessionBox.loggedInUserInfo.getUserId(),
 			ConfessionBox.loggedInUserInfo.getId(),
-			confession.getConfId(), !isVisible,
+			confession.getConfId(), !isVisible, new Date(),
 			new AsyncCallback<Boolean>() {
 		    @Override
 		    public void onSuccess(Boolean result) {

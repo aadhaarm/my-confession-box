@@ -1,12 +1,10 @@
 package com.l3.CB.client.util;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -170,37 +168,37 @@ public class FeedViewUtils {
 	final ActivityButton btnSNP = (ActivityButton) getSNPButton(confession);
 	final ActivityButton btnAB = (ActivityButton) getABButton(confession);
 
-	ConfessionBox.confessionService.getUserActivity(ConfessionBox.loggedInUserInfo.getUserId(),
-		confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
-	    int i = 0;
-	    @Override
-	    public void onSuccess(Map<String, Long> result) {
+//	ConfessionBox.confessionService.getUserActivity(ConfessionBox.loggedInUserInfo.getUserId(),
+//		confession.getConfId(), new AsyncCallback<Map<String, Long>>() {
+//	    @Override
+//	    public void onSuccess(Map<String, Long> result) {
+		int i = 0;
 
-		if (result != null) {
-		    if (result.containsKey(Activity.ABUSE.name())) {
+		if (confession.getActivityCount() != null) {
+		    if (confession.getActivityCount().containsKey(Activity.ABUSE.name())) {
 			i++;
 			btnAB.disableBtn();
 		    }
-		    if (result.containsKey(Activity.LAME.name())) {
+		    if (confession.getActivityCount().containsKey(Activity.LAME.name())) {
 			i++;
 			btnLM.disableBtn();
 		    }
-		    if (result.containsKey(Activity.SAME_BOAT.name())) {
+		    if (confession.getActivityCount().containsKey(Activity.SAME_BOAT.name())) {
 			i++;
 			btnSB.disableBtn();
 		    }
-		    if (result.containsKey(Activity.SHOULD_BE_PARDONED
+		    if (confession.getActivityCount().containsKey(Activity.SHOULD_BE_PARDONED
 			    .name())) {
 			i++;
 			btnSP.disableBtn();
 		    }
-		    if (result
+		    if (confession.getActivityCount()
 			    .containsKey(Activity.SHOULD_NOT_BE_PARDONED
 				    .name())) {
 			i++;
 			btnSNP.disableBtn();
 		    }
-		    if (result.containsKey(Activity.SYMPATHY.name())) {
+		    if (confession.getActivityCount().containsKey(Activity.SYMPATHY.name())) {
 			i++;
 			btnSY.disableBtn();
 		    }
@@ -215,13 +213,13 @@ public class FeedViewUtils {
 		fPlaneUserActivity.add(btnSP);
 		fPlaneUserActivity.add(btnSNP);
 		fPlaneUserActivity.add(btnAB);
-	    }
-
-	    @Override
-	    public void onFailure(Throwable caught) {
-		Error.handleError("ConfessionFeedView", "onFailure", caught);
-	    }
-	});
+//	    }
+//
+//	    @Override
+//	    public void onFailure(Throwable caught) {
+//		Error.handleError("ConfessionFeedView", "onFailure", caught);
+//	    }
+//	});
 
 	return fPlaneUserActivity;
     }

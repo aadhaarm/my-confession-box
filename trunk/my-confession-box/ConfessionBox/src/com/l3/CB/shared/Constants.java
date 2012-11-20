@@ -20,6 +20,7 @@ public class Constants {
     public static final String DIV_AUTH_ID = "auth-id";
     public static final String DIV_LEFT_TOOL_TIP = "leftHandToolTipDiv";
     public static final String DIV_LEFT_HUMAN_POINT = "humanPointDiv";
+    public static final String DIV_FOOTER = "footerDiv";
 
     //Request param name
     public static final String REQ_PARAM_CONF_ID = "conf";
@@ -99,8 +100,8 @@ public class Constants {
     public static final int COMM_MAX_CHARS = 300;
 
     // MEMCACHE
-    public static final int CONF_CACHE_EXPIRATION_SEC = 300;
-
-
+    public static final int CONF_CACHE_EXPIRATION_SEC = 300; // 5 minuts
+    public static final int USER_CACHE_EXPIRATION_SEC = 3600; // 1 hour
+    public static final Object JSON_CACHE_EXPIRATION_SEC = 3600; // 1 hour
 
 }

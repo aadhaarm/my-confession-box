@@ -42,7 +42,7 @@ public class UpdateConfessionWidget extends FlowPanel {
 			    .concat(CommonUtils.getDateInFormat(updateTimeStamp)
 				    .concat("<hr/>")
 				    .concat(CommonUtils.checkForNull(txtUpdate.getCbTextArea().getText()))));
-		    
+		    confession.setUpdateTimeStamp(updateTimeStamp);
 		    ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {

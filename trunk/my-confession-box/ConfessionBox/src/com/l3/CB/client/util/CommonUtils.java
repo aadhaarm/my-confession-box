@@ -36,6 +36,7 @@ import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
+import com.l3.CB.shared.TO.Relations;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class CommonUtils {
@@ -131,6 +132,13 @@ public class CommonUtils {
         $wnd.FB.ui(obj, callback);
     }-*/;
 
+    public static native void inviteFriends(String userFullName) /*-{
+	if($wnd.FB) {
+          $wnd.FB.ui({method: 'apprequests',
+            message: userFullName + ' invites you to Confession Box'
+          });
+	}
+    }-*/;
 
     public static String getString(JSONValue jsonValue) {
 	String returnVal = null;
@@ -239,18 +247,26 @@ public class CommonUtils {
 		fPnlNameWidget.add(ancAnynUser);
 	    }
 	    if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
-		if(showConfessedTo) {
-		    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-			Label lblDateTimeStamp = new Label("Confessed to " + confessionShare.getUserFullName());
+		for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+		    if(showConfessedTo) {
+			Anchor ancUserName = new Anchor(confessionShare.getUserFullName(), "http://www.facebook.com/"+confessionShare.getFbId());
+			ancUserName.setTarget("_BLANK");
+			fPnlNameWidget.add(new HTML("Confessed to " + ancUserName + " (as '" +checkForNullConfessedTo(confessionShare.getRelation()) + "' for feed wall)"));
+		    } else {
+			Label lblDateTimeStamp = new Label("Confessed to " + checkForNullConfessedTo(confessionShare.getRelation()));
 			fPnlNameWidget.add(lblDateTimeStamp);
 		    }
-		} else {
-		    Label lblDateTimeStamp = new Label("Confessed to someone");
-		    fPnlNameWidget.add(lblDateTimeStamp);
 		}
 	    }
 	}
 	return fPnlNameWidget;
+    }
+
+    private static String checkForNullConfessedTo(Relations relation) {
+	if(relation != null) {
+	    return relation.getDisplayText();
+	}
+	return "world";
     }
 
     public static Widget getConfession(Confession confession) {
@@ -406,6 +422,7 @@ public class CommonUtils {
 		    case PARDONED:
 			pardonStatus.setText(ConfessionBox.cbText.pardonStatusLabel());
 			pardonStatus.setStyleName(Constants.DIV_PARDONED_STATUS);
+			break;
 		    default:
 			pardonStatus.setText(ConfessionBox.cbText.awaitingPardonStatusLabel());
 			pardonStatus.setStyleName(Constants.DIV_AWAITING_PARDON_STATUS);

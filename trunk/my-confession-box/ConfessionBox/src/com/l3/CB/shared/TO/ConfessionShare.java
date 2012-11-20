@@ -29,6 +29,8 @@ public class ConfessionShare implements Serializable {
 
     private String username;
 
+    private Relations relation;
+    
     public ConfessionShare() {
 	super();
     }
@@ -103,5 +105,13 @@ public class ConfessionShare implements Serializable {
 
     public void setPardonStatus(PardonStatus pardonStatus) {
 	this.pardonStatus = pardonStatus;
+    }
+
+    public Relations getRelation() {
+        return relation;
+    }
+
+    public void setRelation(Relations relation) {
+        this.relation = relation;
     }
 }

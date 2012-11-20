@@ -1,5 +1,7 @@
 package com.l3.CB.client.ui.widgets;
 
+import java.util.Date;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -154,7 +156,7 @@ public class ActivityButton extends AbsolutePanel {
 		    count--;
 		} else {
 		    cancel();
-		    ConfessionBox.confessionService.registerUserActivity(ConfessionBox.loggedInUserInfo.getUserId(), confession.getConfId(), activity, new AsyncCallback<Long>() {
+		    ConfessionBox.confessionService.registerUserActivity(ConfessionBox.loggedInUserInfo.getUserId(), confession.getConfId(), activity, new Date(), new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(Long result) {
 			    timerCount.setVisible(false);

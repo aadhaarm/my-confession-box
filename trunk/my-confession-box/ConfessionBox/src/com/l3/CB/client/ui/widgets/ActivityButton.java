@@ -30,10 +30,10 @@ import com.l3.CB.shared.TO.Confession;
 public class ActivityButton extends AbsolutePanel {
 
     final PushButton btn;
-    Label timerCount = null;
+    Label lblTimerCount = null;
     Image loader = null;
     Button btnShare = null;
-    int count = 5;
+    int timerCountNumber = 5;
 
     public ActivityButton(final Activity activity, final Confession confession, String titleText, String btnStyleName, final Image buttonImage) {
 	super();
@@ -52,17 +52,22 @@ public class ActivityButton extends AbsolutePanel {
 	btnShare.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		// POST ON WALL popup
-		CommonUtils.postOnWall(
-			FacebookUtil.getActivityUrl(confession.getConfId()),
-			getImageUrl(buttonImage.getUrl()),
-			getActivityTitle(activity),
-			getActivityCaption(confession),
-			getActivityDescription(activity),
-			activity.getActivitySharePoints());
+		if(ConfessionBox.isLoggedIn) {
+
+		    // POST ON WALL popup
+		    CommonUtils.postOnWall(
+			    FacebookUtil.getActivityUrl(confession.getConfId()),
+			    getImageUrl(buttonImage.getUrl()),
+			    getActivityTitle(activity),
+			    getActivityCaption(confession),
+			    getActivityDescription(activity),
+			    activity.getActivitySharePoints());
+		} else {
+		    CommonUtils.login();
+		}
 	    }
 	});
-	
+
 	// Register activity with TIMER
 	final Timer timer = getActivityTimer(activity, confession, btnCount);
 
@@ -79,7 +84,7 @@ public class ActivityButton extends AbsolutePanel {
     }
 
     private String getActivityDescription(Activity activity) {
-	return ConfessionBox.loggedInUserInfo.getName()
+	return ConfessionBox.getLoggedInUserInfo().getFirst_name()
 		+ ConfessionBox.cbText.activityButtonShareClickText1()
 		+ Integer.toString(activity.getActivitySharePoints())
 		+ ConfessionBox.cbText.activityButtonShareClickText2();
@@ -90,7 +95,7 @@ public class ActivityButton extends AbsolutePanel {
     }
 
     private String getActivityTitle(Activity activity) {
-	return ConfessionBox.loggedInUserInfo.getName() + activity.getActivityAsVerb();
+	return ConfessionBox.getLoggedInUserInfo().getName() + " " + activity.getActivityAsVerb() + " to a confession.";
     }
 
     /**
@@ -101,18 +106,22 @@ public class ActivityButton extends AbsolutePanel {
 	    boolean inEvent = false;
 	    @Override
 	    public void onClick(ClickEvent event) {
-		if(inEvent) {
-		    inEvent = false;
-		    timer.cancel();
-		    timerCount.setVisible(false);
-		    loader.setVisible(false);
+		if(ConfessionBox.isLoggedIn) {
+		    if(inEvent) {
+			inEvent = false;
+			timer.cancel();
+			lblTimerCount.setVisible(false);
+			loader.setVisible(false);
+		    } else {
+			inEvent = true;
+			lblTimerCount.setVisible(true);
+			loader.setVisible(true);
+			timer.scheduleRepeating(1000);
+			add(loader, btn.getElement());
+			add(lblTimerCount, btn.getElement());
+		    }
 		} else {
-		    inEvent = true;
-		    timerCount.setVisible(true);
-		    loader.setVisible(true);
-		    timer.scheduleRepeating(1000);
-		    add(loader, btn.getElement());
-		    add(timerCount, btn.getElement());
+		    CommonUtils.login();
 		}
 	    }
 	});
@@ -122,9 +131,9 @@ public class ActivityButton extends AbsolutePanel {
      * TIMER ANIMATION
      */
     private void getTimerWrapAnimation() {
-	timerCount = new Label(Integer.toString(count));
-	timerCount.setStyleName("timerCountWrap");
-	loader = new Image("/images/loader_progress.gif");
+	lblTimerCount = new Label(Integer.toString(timerCountNumber));
+	lblTimerCount.setStyleName("timerCountWrap");
+	loader = new Image(Constants.LOAD_ACTIVITY_TIMER_PROGRESS);
 	loader.setStyleName("loaderWrap");
     }
 
@@ -138,28 +147,28 @@ public class ActivityButton extends AbsolutePanel {
      */
     private Timer getActivityTimer(final Activity activity, final Confession confession, final Label btnCount) {
 	final Timer timer = new Timer() {
-	    int count = ActivityButton.this.count-1;
+	    int count = ActivityButton.this.timerCountNumber-1;
 
 	    @Override
 	    public void cancel() {
 		super.cancel();
 		ConfessionBox.confEventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
-		count = ActivityButton.this.count-1;
-		timerCount.setText(Integer.toString(ActivityButton.this.count));
+		count = ActivityButton.this.timerCountNumber-1;
+		lblTimerCount.setText(Integer.toString(ActivityButton.this.timerCountNumber));
 	    }
 
 	    @Override
 	    public void run() {
 		ConfessionBox.confEventBus.fireEvent(new ActivityEvent(confession.getConfId()));
 		if(count > 0) {
-		    timerCount.setText(Integer.toString(count));
+		    lblTimerCount.setText(Integer.toString(count));
 		    count--;
 		} else {
 		    cancel();
-		    ConfessionBox.confessionService.registerUserActivity(ConfessionBox.loggedInUserInfo.getUserId(), confession.getConfId(), activity, new Date(), new AsyncCallback<Long>() {
+		    ConfessionBox.confessionService.registerUserActivity(ConfessionBox.getLoggedInUserInfo().getUserId(), confession.getConfId(), activity, new Date(), new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(Long result) {
-			    timerCount.setVisible(false);
+			    lblTimerCount.setVisible(false);
 			    loader.setVisible(false);
 			    btnCount.setText(getCountToDisplay(result.toString()));
 
@@ -183,6 +192,12 @@ public class ActivityButton extends AbsolutePanel {
 	return timer;
     }
 
+    /**
+     * Bind user events
+     * 
+     * @param activity
+     * @param btn
+     */
     private void bind(Activity activity, PushButton btn) {
 	if(activity != null) {
 	    switch (activity) {
@@ -240,6 +255,13 @@ public class ActivityButton extends AbsolutePanel {
 	}
     }
 
+    /**
+     * Get count of votes
+     * 
+     * @param confession
+     * @param activity
+     * @return
+     */
     private long getCount(Confession confession, Activity activity) {
 	long count = 0;
 	if(confession != null && activity != null) {
@@ -267,6 +289,11 @@ public class ActivityButton extends AbsolutePanel {
 	return count;
     }
 
+    /**
+     * Get counts in ago format
+     * @param count
+     * @return
+     */
     private String getCountToDisplay(String count) {
 	if(count == null) {
 	    return "";
@@ -281,6 +308,10 @@ public class ActivityButton extends AbsolutePanel {
 	return count;
     }
 
+    /**
+     * Disable activity button
+     * Enable the Share button
+     */
     public void disableBtn() {
 	btn.setEnabled(false);
 	btnShare.setVisible(true);

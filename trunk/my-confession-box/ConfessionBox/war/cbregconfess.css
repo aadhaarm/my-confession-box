@@ -104,6 +104,7 @@ a:hover {
 
 .relationSuggestBox {
 	font-size: smaller;
+	font-weight: 600;
 }
 
 .appealButton {
@@ -111,13 +112,15 @@ a:hover {
 }
 
 .pardonModalPopupWindow {
-	width: 415px;
-	padding-left: 5px;
-	padding-top: 5px;
+	width: 550px;
+	padding: 10px;
+	z-index: 1000;
+	background-color: white;
 }
 
 .appealPanel {
-	margin-left: 10px;
+	margin-left: 19px;
+	font-size: 11px;
 }
 
 .friendsSuggestBoxMyConfPage {
@@ -125,9 +128,19 @@ a:hover {
 }
 
 .appealLink {
-	padding-left: 5px;
+	/* padding-left: 14px; */
 }
 
 .errorMessage {
 	color: red;
+}
+
+.buttonShowUpdate {
+	/* float: right; */	
+}
+
+.confessionPreview {
+	font-weight: bold;
+    padding-left: 15px;
+    padding-top: 5px;
 }

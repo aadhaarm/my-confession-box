@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.FooterPresenter;
 
 public class FooterView extends Composite implements FooterPresenter.Display {
@@ -25,10 +26,10 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 
 	VerticalPanel fPnlFooter = new VerticalPanel();
 	fPnlFooter.setWidth("140px");
-	ancAbout = new Anchor("About CB");
-	ancPrivacy = new Anchor("Privacy policy");
+	ancAbout = new Anchor(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel());
+	ancPrivacy = new Anchor(ConfessionBox.cbText.privacyPolicyFooterLinkLabel());
 
-	Label lblAppText = new Label("L3 Confession Box");
+	Label lblAppText = new Label(ConfessionBox.cbText.cbNameFooterTextLabel());
 
 
 	setupAbout();

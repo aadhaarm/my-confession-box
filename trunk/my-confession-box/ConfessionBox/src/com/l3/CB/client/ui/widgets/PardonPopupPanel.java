@@ -9,14 +9,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateFeedToMeEvent;
+import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -26,27 +28,65 @@ import com.l3.CB.shared.TO.PardonStatus;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class PardonPopupPanel extends PopupPanel{
-
     private final Button btnPardon;
     private final Button btnCancel;
     private final CheckBox cbPardonActivityCondition;
     private final CheckBox cbOpenIdentityCondition;
     private final ListBox lbPardonActivityCondition;
 
+    private Confession confession;
+    private UserInfo confessedByUserInfo;
+    private Image imgProfileImage;
+    private FlowPanel fPnlName;
+    private Label lblConfessionTitle;
+    private FlowPanel fPnlConfessionText;
+
     public PardonPopupPanel(Confession confession, UserInfo confessionByUser, Button btnPardonHome) {
 	super();
-	Grid grid = new Grid(5, 2);
-	int row = 0;
+	this.confession = confession;
+	FlowPanel fPnlpardonPopup = new FlowPanel();
+	
+	//Profile picture
+	imgProfileImage = CommonUtils.getProfilePicture(this.confession, false);
+	// User Profile name or ANYN
+	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, false, true);
+	// Confession Text
+	fPnlConfessionText = CommonUtils.getTextTruncated(this.confession.getConfession());
 
-	grid.setWidget(row, 0, CommonUtils.getProfilePicture(confession, false));
-	grid.setWidget(row, 1, CommonUtils.getConfession(confession));
-	row++;
+	// TOP Container
+	FlowPanel fPnlTopContent = new FlowPanel();
+	fPnlTopContent.setStyleName(Constants.DIV_CONFESSION_PANEL_TOP_CONTAINER);
+
+	// Set USER PROFILE PIC or ANYN PIC 
+	fPnlTopContent.add(imgProfileImage);
+
+	// Set USER NAME
+	fPnlTopContent.add(fPnlName);
+
+	fPnlpardonPopup.add(fPnlTopContent);
+
+	// MIDDLE Container
+	FlowPanel fPnlMiddleContent = new FlowPanel();
+	fPnlMiddleContent.setStyleName(Constants.DIV_CONFESSION_PANEL_MIDDLE_CONTAINER);
+
+	// Confession Title
+	lblConfessionTitle = new Label(confession.getConfessionTitle());
+	lblConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
+	fPnlMiddleContent.add(lblConfessionTitle);
+
+	// Confession text
+	fPnlMiddleContent.add(fPnlConfessionText);
+	fPnlpardonPopup.add(fPnlMiddleContent);
+	
 
 	VerticalPanel vPnlPardonConditions = new VerticalPanel();
 
 	HorizontalPanel hPnlPardonActivityCondition = new HorizontalPanel();
 	lbPardonActivityCondition = new ListBox();
+	
+	//TODO: remove 1 option
 	lbPardonActivityCondition.addItem("1");
+	
 	lbPardonActivityCondition.addItem("5");
 	lbPardonActivityCondition.addItem("10");
 	lbPardonActivityCondition.addItem("20");
@@ -57,21 +97,25 @@ public class PardonPopupPanel extends PopupPanel{
 	hPnlPardonActivityCondition.add(cbPardonActivityCondition);
 	hPnlPardonActivityCondition.add(lbPardonActivityCondition);
 	hPnlPardonActivityCondition.add(new Label(ConfessionBox.cbText.pardonPopupPardonActivityConditionPartTwo()));
+	hPnlPardonActivityCondition.setSpacing(5);
 	vPnlPardonConditions.add(hPnlPardonActivityCondition);
 
+	HorizontalPanel hPnlPardonHideCondition = new HorizontalPanel();
 	cbOpenIdentityCondition = new CheckBox(ConfessionBox.cbText.pardonPopupOpenIdentityCondition());
-	vPnlPardonConditions.add(cbOpenIdentityCondition);
+	hPnlPardonHideCondition.add(cbOpenIdentityCondition);
+	hPnlPardonHideCondition.setSpacing(5);
+	vPnlPardonConditions.add(hPnlPardonHideCondition);
 
-	grid.setWidget(row, 1, vPnlPardonConditions);
-	row++;
-	CheckBox cbAcceptance = new CheckBox(ConfessionBox.cbText.pardonPopupAcceptance());
-	grid.setWidget(row, 1, cbAcceptance);
-	row++;
+	fPnlpardonPopup.add(vPnlPardonConditions);
+
 	btnPardon = new Button(ConfessionBox.cbText.pardonPopupPardonButtonText());
+	btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
 	btnCancel = new Button(ConfessionBox.cbText.pardonPopupCancelButtonText());
-	grid.setWidget(row, 0, btnPardon);
-	grid.setWidget(row, 1, btnCancel);
-	setWidget(grid);
+	btnCancel.setStyleName("popupCancelButton");
+	fPnlpardonPopup.add(btnPardon);
+	fPnlpardonPopup.add(btnCancel);
+	
+	setWidget(fPnlpardonPopup);
 
 	bind(confession, confessionByUser, btnPardonHome);
     }
@@ -99,24 +143,25 @@ public class PardonPopupPanel extends PopupPanel{
 			pardonStatus = PardonStatus.PARDONED_WITH_CONDITION;
 		    }
 		    ConfessionBox.confessionService.pardonConfession(
-			    ConfessionBox.loggedInUserInfo,
+			    ConfessionBox.getLoggedInUserInfo(),
 			    confession.getConfId(), confessedByUser,
 			    pardonConditions, pardonStatus, new Date(),
 			    new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-			    btnPardon.setEnabled(false);
-			    btnPardonHome.setEnabled(false);
-			    hidePopup();
-			    ConfessionBox.confEventBus.fireEvent(new UpdateFeedToMeEvent(confession));
-			}
+				@Override
+				public void onSuccess(Void result) {
+				    btnPardon.setEnabled(false);
+				    btnPardonHome.setEnabled(false);
+				    hidePopup();
+				    ConfessionBox.confEventBus.fireEvent(new UpdateFeedToMeEvent(confession));
+				    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_PARDONING));
+				}
 
-			@Override
-			public void onFailure(Throwable caught) {
-			    btnPardon.setEnabled(true);
-			    Error.handleError("PardonPopupPanel", "bind", caught);
-			}
-		    });
+				@Override
+				public void onFailure(Throwable caught) {
+				    btnPardon.setEnabled(true);
+				    Error.handleError("PardonPopupPanel", "bind", caught);
+				}
+			    });
 
 		}
 	    }

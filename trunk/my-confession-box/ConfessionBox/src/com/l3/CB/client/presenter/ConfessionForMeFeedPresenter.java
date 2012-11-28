@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateFeedToMeEvent;
 import com.l3.CB.client.event.UpdateFeedToMeEventHandler;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
+import com.l3.CB.client.event.UpdateIdentityVisibilityEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -35,7 +37,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	    this.display.clearConfessions();
 	}
 	this.display.setConfessionPagesLoaded(0);
-	ConfessionBox.confessionService.getConfessionsTOME(0, ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
+	ConfessionBox.confessionService.getConfessionsTOME(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		display.setConfessions(result, false, showUserControls);
@@ -51,6 +53,28 @@ public class ConfessionForMeFeedPresenter implements Presenter {
     }
 
     private void bind() {
+	ConfessionBox.confEventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
+	    @Override
+	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
+		Confession confessionToBeUpdated = event.getConfession();
+		ConfessionBox.confessionService.getConfession(confessionToBeUpdated.getConfId(), null, null, false, new AsyncCallback<Confession>() {
+
+		    @Override
+		    public void onSuccess(Confession result) {
+			if(result != null) {
+			    result.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+			    display.setConfessions(result);
+			}
+		    }
+
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
+		    }
+		});
+	    }
+	});
+
 	/*
 	 * LOAD MORE CONFESSIONS on scroll
 	 */
@@ -62,7 +86,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 		    display.addLoaderImage();
 		    inEvent = true;
 		    display.incrementConfessionPagesLoaded();
-		    ConfessionBox.confessionService.getConfessionsTOME(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
+		    ConfessionBox.confessionService.getConfessionsTOME(display.getConfessionPagesLoaded(), ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 			    display.setConfessions(result, false, showUserControls);
@@ -93,7 +117,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	    public void updateFeedToMeConfessions(UpdateFeedToMeEvent event) {
 		Confession confessionToBepdated = event.getConfession();
 		if(confessionToBepdated != null) {
-		    ConfessionBox.confessionService.getConfession(confessionToBepdated.getConfId(), ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), true, new AsyncCallback<Confession>() {
+		    ConfessionBox.confessionService.getConfession(confessionToBepdated.getConfId(), ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), true, new AsyncCallback<Confession>() {
 			@Override
 			public void onSuccess(Confession result) {
 			    if(result != null) {

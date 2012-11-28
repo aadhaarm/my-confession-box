@@ -10,6 +10,8 @@ public class Error {
 
     public static void handleError(String className, String menthodName, Throwable caught) {
 	
-	Window.alert(cbText.applicationError());
+	if(Window.confirm(cbText.applicationError())) {
+	    Window.Location.reload();
+	}
     }
 }

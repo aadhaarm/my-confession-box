@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.l3.CB.shared.Constants;
@@ -12,13 +13,11 @@ import com.l3.CB.shared.FieldVerifier;
 public class CBTextBox extends FlowPanel {
 
     private final TextBox txtTitle;
-//    private final Label lblErrorMsg;
     private final String defaultValue;
 
     public CBTextBox() {
 	super();
 	defaultValue = "Enter Confession Title here..";
-//	lblErrorMsg = new Label(ConfessionBox.cbText.confessionTitleErrorMessage());
 	this.setStyleName("reg_confession_title");
 
 	txtTitle = new TextBox();
@@ -50,12 +49,14 @@ public class CBTextBox extends FlowPanel {
     }
 
     public boolean validate() {
+	String text = txtTitle.getText();
+	text = text.trim();
+	text = SimpleHtmlSanitizer.sanitizeHtml(text).asString();
+	txtTitle.setText(text);
 	boolean isValid = FieldVerifier.isValidTitle(txtTitle.getText());
 	if(!isValid || defaultValue.equals(txtTitle.getText())) {
-//	    this.add(lblErrorMsg);
 	    txtTitle.setStyleName(Constants.STYLE_CLASS_FIELD_ERROR);
 	} else {
-//	    this.remove(lblErrorMsg);
 	    txtTitle.removeStyleName(Constants.STYLE_CLASS_FIELD_ERROR);
 	}
 	return isValid;

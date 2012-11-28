@@ -4,16 +4,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
 import com.l3.CB.server.manager.CacheManager;
 import com.l3.CB.server.manager.ConfessionManager;
 import com.l3.CB.server.manager.PardonManager;
+import com.l3.CB.server.manager.UpdateManager;
 import com.l3.CB.server.manager.UserManager;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.PardonStatus;
@@ -21,14 +23,13 @@ import com.l3.CB.shared.TO.UserInfo;
 /**
  * The server side implementation of the RPC service.
  */
-public class ConfessionServiceImpl extends XsrfProtectedServiceServlet implements
-ConfessionService {
+public class ConfessionServiceImpl extends RemoteServiceServlet implements ConfessionService {
 
     /**
      * Default serial version ID
      */
     private static final long serialVersionUID = 1L;
-    
+
     @SuppressWarnings("unused")
     private static final CacheManager cacheManager = new CacheManager();
 
@@ -74,7 +75,7 @@ ConfessionService {
     public Long registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp) {
 	return ActivityManager.registerUserActivity(userId, confId, activity, updateTimeStamp);
     }
-    
+
     @Override
     public Map<String, Long> getUserActivity(Long userId, Long confId) {
 	return ActivityManager.getUserActivity(userId, confId);
@@ -181,5 +182,15 @@ ConfessionService {
     @Override
     public void clearConfessionDraft(Long userId, String fbId) {
 	ConfessionManager.clearConfessionDraft(userId, fbId);
+    }
+
+    @Override
+    public void registerConfessionUpdate(ConfessionUpdate confessionUpdate) {
+	UpdateManager.registerConfessionUpdate(confessionUpdate);
+    }
+
+    @Override
+    public List<ConfessionUpdate> getConfessionUpdates(Long confId) {
+	return UpdateManager.getConfessionUpdates(confId);
     }
 }

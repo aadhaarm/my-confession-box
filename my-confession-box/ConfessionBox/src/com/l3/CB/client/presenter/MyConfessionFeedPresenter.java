@@ -35,7 +35,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 	    this.display.clearConfessions();
 	}
 	this.display.setConfessionPagesLoaded(0);
-	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
+	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		if(result != null) {
@@ -58,7 +58,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 		    display.addLoaderImage();
 		    inEvent = true;
 		    display.incrementConfessionPagesLoaded();
-		    ConfessionBox.confessionService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.loggedInUserInfo.getUserId(), ConfessionBox.loggedInUserInfo.getId(), new AsyncCallback<List<Confession>>() {
+		    ConfessionBox.confessionService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
 			    display.setConfessions(result, true, showUserControls);
@@ -83,14 +83,23 @@ public class MyConfessionFeedPresenter implements Presenter {
 	});
 
 	ConfessionBox.confEventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
-
 	    @Override
 	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
 		Confession confessionToBeUpdated = event.getConfession();
-		if(confessionToBeUpdated != null) {
-		    confessionToBeUpdated.setFbId(ConfessionBox.loggedInUserInfo.getId());
-		    display.setConfessions(confessionToBeUpdated);
-		}
+		ConfessionBox.confessionService.getConfession(confessionToBeUpdated.getConfId(), null, null, false, new AsyncCallback<Confession>() {
+		    @Override
+		    public void onSuccess(Confession result) {
+			if(result != null) {
+			    result.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+			    display.setConfessions(result);
+			}
+		    }
+
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("ConfessionForMeFeedPresenter", "onFailure", caught);
+		    }
+		});
 	    }
 	   }); 
 	}

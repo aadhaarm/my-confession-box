@@ -77,11 +77,11 @@ public class ConfessionPanel extends FlowPanel{
 	// Set USER PROFILE PIC or ANYN PIC 
 	fPnlTopContent.add(imgProfileImage);
 
-	// Set USER NAME
-	fPnlTopContent.add(fPnlName);
-
 	// Set STATUS BAR
 	fPnlTopContent.add(fPnlStatusBar);
+
+	// Set USER NAME
+	fPnlTopContent.add(fPnlName);
 
 	this.add(fPnlTopContent);
 
@@ -97,16 +97,19 @@ public class ConfessionPanel extends FlowPanel{
 	// Confession text
 	fPnlMiddleContent.add(fPnlConfessionText);
 
+	final FlowPanel updatePanel = new FlowPanel();
+	UpdatePanelWidget updatePanelWidget = new UpdatePanelWidget(confession.getConfId());
+	updatePanel.setStyleName("updateConfessionPanel");
+	updatePanel.add(updatePanelWidget);
+	fPnlMiddleContent.add(updatePanel);
 
-	// Set USER CONTROLS
-	if(this.showUserControls) {
-	    
-	    final FlowPanel updatePanel = new FlowPanel();
-	    updatePanel.setStyleName("updateConfessionPanel");
-	    final Anchor btnEditConfession = new Anchor("Update");
+	if(!anonymousView || this.showUserControls) {
+	    final Anchor btnEditConfession = new Anchor(ConfessionBox.cbText.addUpdateLinkText());
+	    if(!anonymousView) {
+		btnEditConfession.setText(ConfessionBox.cbText.addResponseLinkText());
+	    }
 	    btnEditConfession.setTitle(ConfessionBox.cbText.editConfessionUserControlButtonTitle());
 	    updatePanel.add(btnEditConfession);
-	    fPnlMiddleContent.add(updatePanel);
 	    btnEditConfession.addClickHandler(new ClickHandler() {
 		UpdateConfessionWidget updateWidget;
 		@Override
@@ -121,35 +124,39 @@ public class ConfessionPanel extends FlowPanel{
 		    }
 		}
 	    });
+	}
 
+	// Set USER CONTROLS
+	if(this.showUserControls) {
 	    if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
 		final FlowPanel appealPanel = new FlowPanel();
 		appealPanel.setStyleName("appealPanel");
-		Anchor ancShareConfession = new Anchor("Appeal for pardon");
+		Anchor ancShareConfession = new Anchor(ConfessionBox.cbText.appealForPardonLinkText());
 		ancShareConfession.addStyleName("appealLink");
 		ancShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
 		appealPanel.add(ancShareConfession);
 		fPnlMiddleContent.add(appealPanel);
 		ancShareConfession.addClickHandler(new ClickHandler() {
-		    AppealPardonWidget shareConfessionPopup;
+		    AppealPardonWidget appealForPardonWidget;
 		    @Override
 		    public void onClick(ClickEvent event) {
-			if(shareConfessionPopup == null) {
-			    shareConfessionPopup = new AppealPardonWidget(confession);
-			    //	    		    shareConfessionPopup.populateFriendsList();
-			    appealPanel.add(shareConfessionPopup);
-			} else if(shareConfessionPopup.isVisible()) {
-			    shareConfessionPopup.setVisible(false);
+			if(appealForPardonWidget == null) {
+			    appealForPardonWidget = new AppealPardonWidget(confession);
+			    appealPanel.add(appealForPardonWidget);
+			} else if(appealForPardonWidget.isVisible()) {
+			    appealForPardonWidget.setVisible(false);
 			} else {
-			    shareConfessionPopup.setVisible(true);
+			    appealForPardonWidget.setVisible(true);
 			}
 		    }
 		});
 	    }
 	}
+	//Middle widget
+	this.add(fPnlMiddleContent);
 
 	// Pardon widget
-	fPnlMiddleContent.add(fPnlPardonWidget);
+	this.add(fPnlPardonWidget);
 
 	// UNDO tool tip
 	undoToolTip = FeedViewUtils.getUndoToolTipBar();
@@ -161,31 +168,25 @@ public class ConfessionPanel extends FlowPanel{
 	shareToolTip.setVisible(false);
 	fPnlMiddleContent.add(shareToolTip);
 
-	this.add(fPnlMiddleContent);
 
 	// BUTTONS
 	FlowPanel fPnlButtonEtc = new FlowPanel();
+	fPnlButtonEtc.setStyleName("activityButtonDiv");
 	// User ACTIVITY Buttons
 	fPnlButtonEtc.add(fPnlActivityButtons);
+	this.add(fPnlButtonEtc);
+	
 	// Show Pardon status
 	if(lblPardonStatus != null) {
-	    fPnlButtonEtc.add(lblPardonStatus);
+	    this.add(lblPardonStatus);
 	}
-	this.add(fPnlButtonEtc);
 
 	// FB WIDGETS
 	final FlowPanel fPnlFBWidgets = new FlowPanel();
 	fPnlFBWidgets.setStyleName(Constants.DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER);
 	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
 	fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-	//	Anchor ancComment = new Anchor("Comment");
-	//	fPnlFBWidgets.add(ancComment);
-	//	ancComment.addClickHandler(new ClickHandler() {
-	//	    @Override
-	//	    public void onClick(ClickEvent event) {
-	//		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-	//	    }
-	//	});
+	CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
 	this.add(fPnlFBWidgets);
     }
 

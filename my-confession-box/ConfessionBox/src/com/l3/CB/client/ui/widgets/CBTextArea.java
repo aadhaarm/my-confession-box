@@ -71,6 +71,7 @@ public class CBTextArea extends FlowPanel {
     }
 
     private String removeHtmlTags(String html) {
+	html = html.trim();
 	String regex = "\\<(?!br).*?\\>";
 	html = html.replaceAll(regex, "");
 	return html;

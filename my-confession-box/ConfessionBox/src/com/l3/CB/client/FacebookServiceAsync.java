@@ -7,9 +7,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface FacebookServiceAsync {
 
-	void getUserLoggedInDetails(String accessToken, AsyncCallback<String> callback);
+    void getUserLoggedInDetails(String accessToken, AsyncCallback<String> callback);
 
-	void getFriends(String accessToken, AsyncCallback<String> callback);
+    void getFriends(String accessToken, AsyncCallback<String> callback);
 
-	void getUserDetails(String fbId, String accessToken, AsyncCallback<String> callback);
+    void getUserDetails(String fbId, String accessToken, AsyncCallback<String> callback);
 }

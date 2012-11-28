@@ -19,6 +19,7 @@ import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
 import com.l3.CB.client.ui.widgets.RelationSuggestBox;
+import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
@@ -34,13 +35,14 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final CheckBox cbHideIdentity;
     private final CheckBox cbConfessTo;
     private FriendsSuggestBox friendsSuggestBox;
-    private RelationSuggestBox relationSuggestBox;
+    private final RelationSuggestBox relationSuggestBox;
     private final CBTextBox txtTitle;
     private final CBTextArea txtConfession;
     private final FlowPanel fPnlButtons;
     private final Button btnSubmit;
     private final Button btnSave;
     private final Button btnDeleteDraft;
+    private final HTML htmlConfessionPreview;    
     
     public RegisterConfessionView() {
 	super();
@@ -54,7 +56,10 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlTop = new FlowPanel();
 	fPnlTop.setStyleName("selections");
 	
-	HTML topTitle = new HTML("<b>Submit your confession below</b><br/><span class=\"subtext\">Your confession is never shared to any one unless you opt for the same</span> [?]");
+	HTML topTitle = new HTML(
+		Templates.TEMPLATES.registerConfessionInstructionText(
+			ConfessionBox.cbText.registerConfessionInstructionTextOne(),
+			ConfessionBox.cbText.registerConfessionInstructionTextTwo()));
 	topTitle.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
@@ -80,6 +85,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	});
 	optionsTitle.setStyleName("options_title");
 	fPnlOptions.add(optionsTitle);
+
+	relationSuggestBox = new RelationSuggestBox();
+	relationSuggestBox.setVisible(false);
 	
 	cbHideIdentity = new CheckBox(ConfessionBox.cbText.registerPageOptionHideID());
 	cbHideIdentity.setValue(true);
@@ -94,6 +102,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName("confession");
 	
+	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld()));
+	fPnlConfessionForm.add(htmlConfessionPreview);
+	
 	txtTitle = new CBTextBox();
 	fPnlConfessionForm.add(txtTitle);
 	
@@ -107,12 +118,12 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlButtons = new FlowPanel();
 	fPnlButtons.setStyleName("buttons");
 
-	btnSave = new Button("Save as draft");
+	btnSave = new Button(ConfessionBox.cbText.saveAsDraftButtonLabelText());
 	btnSave.setStyleName("save_draft");
 	fPnlButtons.add(btnSave);
 	
 	btnDeleteDraft = new Button("X");
-	btnDeleteDraft.setTitle("Delete draft");
+	btnDeleteDraft.setTitle(ConfessionBox.cbText.deleteDraftButtonLabelText());
 	btnDeleteDraft.setStyleName("save_draft");
 	btnDeleteDraft.setVisible(false);
 	fPnlButtons.add(btnDeleteDraft);
@@ -130,9 +141,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	friendsSuggestBox = new FriendsSuggestBox(userfriends);
 	fPnlOptions.add(friendsSuggestBox);
 	friendsSuggestBox.setFocus();
-	
-	relationSuggestBox = new RelationSuggestBox();
 	fPnlOptions.add(relationSuggestBox);
+	relationSuggestBox.setVisible(true);
     }
     
     @Override
@@ -241,7 +251,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	btnDeleteDraft.setVisible(isVisible);
     }
 
+    @Override
     public RelationSuggestBox getRelationSuggestBox() {
         return relationSuggestBox;
+    }
+
+    @Override
+    public HTML getHtmlConfessionPreview() {
+        return htmlConfessionPreview;
     }
 }

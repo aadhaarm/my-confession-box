@@ -23,9 +23,10 @@ main_container a:hover {
 	text-decoration: line-through;
 }
 /*Top div styling*/
-.top {
+.confessionTop {
 	height: auto;
 	width: auto;
+	height: 50px;
 	padding: 10px 12px 10px 12px;
 }
 /*3 divs are put inside top div for image placehosder, name and status bar (time stamp), we can also add more divs to top panel later*/
@@ -56,27 +57,29 @@ main_container a:hover {
 	float: right;
 	position: relative;
 	padding-left: 4px;
+	font-size: smaller;
+	color: #999999;
+	padding-right: 15px;
 }
 
 /*Middle div styling*/
 .middle {
 	position: relative;
-	margin: 10px 0 10px 0;
+	margin: 0px 0 10px 0;
 }
 
 .confession_title {
 	font-weight: 600;
-	padding-top: 25px;
+	padding-top: 0px;
 	padding-left: 19px;
 	padding-right: 19px;
 }
 
 .confession_body {
-	padding: 5px 19px 15px 19px;
+	padding: 5px 19px 0px 19px;
 	margin: 0 0px 0 0px;
 	font-size: 12px;
 	color: #343434;
-	/*background-color:#F8FFD7;*/
 	background-color: #FEFFED;
 	line-height: 1.36;
 	overflow: hidden;
@@ -95,15 +98,17 @@ main_container a:hover {
 .condition {
 	background-color: #73883e;
 	padding: 4px 5px 2px 10px;
-	margin: 0 25px 0px 15px;
+	margin: 0 15px 0px 15px;
 	color: #FFF;
 	font-size: smaller !important;
 	line-height: 15px;
+	overflow: auto;
 }
 
 .pardonCondition {
 	float: left;
 	font-size: smaller;
+	width: 500px;
 }
 
 .conditionTick {
@@ -111,7 +116,7 @@ main_container a:hover {
 }
 
 .pardonConditionList {
-	width: auto;
+	width: 450px;
 }
 
 .condition_label a {
@@ -189,19 +194,25 @@ main_container a:hover {
 
 /*pardon status div*/
 .pardon_status_yes {
-	float: right;
-	padding: 4px 20px;
-	margin: -41px 10px 0 0;
-	position: relative;
-	background-color: #73883e;
-	color: #FFF;
-	font-size: 18px;
+	background-color: #73883E;
+    color: #FFFFFF;
+    float: right;
+    font-size: 18px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 15px;
+    margin-top: 1px;
+    padding-bottom: 4px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 4px;
+    position: relative;
 }
 
 .pardon_status_no {
 	float: right;
-	padding: 4px 15px;
-	margin: -39px 10px 0 0;
+	padding: 3px 15px;
+	margin: 3px 15px 0 0;
 	position: relative;
 	background-color: #999;
 	color: #FFF;
@@ -211,4 +222,39 @@ main_container a:hover {
 .fb_widgets {
 	padding: 5px 15px;
 	font-size: 11px;
+}
+
+.confessedToName {
+    font-weight: normal;
+    font-size: x-small;
+}
+
+.feedViewLink {
+	color: #999999;
+	font-size: x-small;
+	display: block;
+}
+
+.pardonButtonDiv {
+	padding-right: 14px;
+	float: right;	
+}
+
+.popupCancelButton {
+	float: right;	
+}
+
+
+.pardonButton {
+	width: 116px;
+}
+
+.activityButtonDiv {
+	float: left;
+	overflow: auto;
+}
+
+.pardonStatusDiv {
+	float: right;
+	width: 195px;
 }

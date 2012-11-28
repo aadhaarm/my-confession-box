@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.HumanPointPresenter;
 
 public class HumanPointView extends Composite implements HumanPointPresenter.Display {
@@ -20,7 +21,7 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	Image imgHumanPoint = new Image("images/human-points.jpg");
 	imgHumanPoint.setStyleName("humanPointImg");
 
-	Label humanPoint = new Label("Human Point");
+	Label humanPoint = new Label(ConfessionBox.cbText.humanPointWidgetLabelText());
 	points = new Label();
 	points.addStyleName("humanPointLabel");
 

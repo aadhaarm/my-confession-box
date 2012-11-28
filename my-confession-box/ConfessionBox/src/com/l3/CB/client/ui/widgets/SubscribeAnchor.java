@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 
 public class SubscribeAnchor extends Anchor {
@@ -18,20 +19,24 @@ public class SubscribeAnchor extends Anchor {
 
 	setTitle(ConfessionBox.cbText.subscribeLinkToolTipText());
 
-	ConfessionBox.confessionService.isSubscribed(confId, ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Boolean>() {
+	if(ConfessionBox.isLoggedIn) {
+	    ConfessionBox.confessionService.isSubscribed(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Boolean>() {
 
-	    @Override
-	    public void onSuccess(Boolean result) {
-		isSubscribed = result;
-		setLinkText();
-	    }
+		@Override
+		public void onSuccess(Boolean result) {
+		    isSubscribed = result;
+		    setLinkText();
+		}
 
 
-	    @Override
-	    public void onFailure(Throwable caught) {
-		Error.handleError("SubscribeAnchor", "onFailure", caught);
-	    }
-	});
+		@Override
+		public void onFailure(Throwable caught) {
+		    Error.handleError("SubscribeAnchor", "onFailure", caught);
+		}
+	    });
+	} else {
+	    setLinkText();
+	}
 
 	bind(confId);
     }
@@ -40,8 +45,12 @@ public class SubscribeAnchor extends Anchor {
      * Set anchor text
      */
     private void setLinkText() {
-	if(isSubscribed){
-	    setText(ConfessionBox.cbText.unSubscribeAnchorLabel());
+	if(ConfessionBox.isLoggedIn) {
+	    if(isSubscribed){
+		setText(ConfessionBox.cbText.unSubscribeAnchorLabel());
+	    } else {
+		setText(ConfessionBox.cbText.subscribeAnchorLabel());
+	    }
 	} else {
 	    setText(ConfessionBox.cbText.subscribeAnchorLabel());
 	}
@@ -52,19 +61,24 @@ public class SubscribeAnchor extends Anchor {
 
 	    @Override
 	    public void onClick(ClickEvent event) {
-		ConfessionBox.confessionService.subscribe(confId, ConfessionBox.loggedInUserInfo.getUserId(), new Date(), new AsyncCallback<Boolean>() {
+		if(ConfessionBox.isLoggedIn) {
 
-		    @Override
-		    public void onSuccess(Boolean result) {
-			isSubscribed = !isSubscribed;						
-			setLinkText();
-		    }
+		    ConfessionBox.confessionService.subscribe(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new Date(), new AsyncCallback<Boolean>() {
 
-		    @Override
-		    public void onFailure(Throwable caught) {
-			Error.handleError("SubscribeAnchor", "onFailure", caught);
-		    }
-		});
+			@Override
+			public void onSuccess(Boolean result) {
+			    isSubscribed = !isSubscribed;						
+			    setLinkText();
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+			    Error.handleError("SubscribeAnchor", "onFailure", caught);
+			}
+		    });
+		} else {
+		    CommonUtils.login();
+		}
 	    }
 	});
     }

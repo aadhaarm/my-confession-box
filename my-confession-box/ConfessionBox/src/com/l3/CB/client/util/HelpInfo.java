@@ -43,7 +43,7 @@ public class HelpInfo {
 	    break;
 	case SHOULD_NOT_BE_PARDONED_BUTTON:
 	    sPnlToolTip
-		    .add(new Label(cbText.shouldNotBePardonedButtonToolTip()));
+	    .add(new Label(cbText.shouldNotBePardonedButtonToolTip()));
 	    break;
 	case SYMPATHY_BUTTON:
 	    sPnlToolTip.add(new Label(cbText.sympathyButtonToolTip()));
@@ -84,5 +84,9 @@ public class HelpInfo {
 
 	sPnlToolTip.setStyleName(Constants.STYLE_CLASS_HELP_INFO);
 	RootPanel.get(Constants.DIV_LEFT_TOOL_TIP).add(sPnlToolTip);
+    }
+    
+    public static void cleanToolTip() {
+	sPnlToolTip.clear();
     }
 }

@@ -37,22 +37,24 @@ public class ConfessionFeedPresenter implements Presenter {
 
     public interface Display {
 	Widget asWidget();
+
 	public void setConfessionPagesLoaded(int confessionPagesLoaded);
 	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls);
-	public int getConfessionPagesLoaded();
-	public Image getLoaderImage();
-	public boolean isMoreConfessions();
-	public VerticalPanel getVpnlConfessionList();
 	public void addLoaderImage();
 	public void incrementConfessionPagesLoaded();
 	public void removeLoaderImage();
 	public void showConfessionFilters();
+	public void clearConfessions();
+	public void setConfessions(Confession confession);
+	public void showEmptyScreen();
+
+	public int getConfessionPagesLoaded();
+	public boolean isMoreConfessions();
+	public Image getLoaderImage();
+	public VerticalPanel getVpnlConfessionList();
 	public HasChangeHandlers getConfessionFilterListBox();
 	public HasFocusHandlers getConfessionFilterListBoxForHelp();
-	public void clearConfessions();
 	public HasClickHandlers getRefreshButton();
-	void showEmptyScreen();
-	public void setConfessions(Confession confession);
     }
 
     private final Display display;
@@ -79,6 +81,7 @@ public class ConfessionFeedPresenter implements Presenter {
     }
 
     private void setConfessions(Long confId) {
+	// Get confessions - Non secure info only
 	ConfessionBox.confessionService.getConfession(confId, null, null, false, new AsyncCallback<Confession>() {
 	    @Override
 	    public void onSuccess(Confession result) {
@@ -101,7 +104,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	    display.clearConfessions();
 	}
 	this.display.setConfessionPagesLoaded(0);
-	ConfessionBox.confessionService.getConfessions(0, filter, ConfessionBox.loggedInUserInfo.getLocale(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+	ConfessionBox.confessionService.getConfessions(0, filter, ConfessionBox.getLoggedInUserInfo().getLocale(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		if(result != null) {
@@ -115,6 +118,9 @@ public class ConfessionFeedPresenter implements Presenter {
 	});
     }
 
+    /**
+     * Bind events
+     */
     private void bind() {
 	Window.addWindowScrollHandler(new Window.ScrollHandler() {
 	    boolean inEvent = false;
@@ -125,7 +131,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		    inEvent = true;
 		    display.incrementConfessionPagesLoaded();
 
-		    ConfessionBox.confessionService.getConfessions(display.getConfessionPagesLoaded(), filter, ConfessionBox.loggedInUserInfo.getLocale(), ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<List<Confession>>() {
+		    ConfessionBox.confessionService.getConfessions(display.getConfessionPagesLoaded(), filter, ConfessionBox.getLoggedInUserInfo().getLocale(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<List<Confession>>() {
 
 			@Override
 			public void onSuccess(List<Confession> result) {

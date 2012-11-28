@@ -19,7 +19,7 @@ public class FriendsSuggestBox extends FlowPanel {
     private Map<String, UserInfo> userfriends = null;
     private MultiWordSuggestOracle friendsOracle;
     private final Label errMsg = new Label(ConfessionBox.cbText.shareConfessionSuggestBoxErrorMessage());
-    private final Label label = new Label("Friend's name");
+    private final Label label = new Label(ConfessionBox.cbText.friendsSuggestionBoxLabel());
     private SuggestBox friendsSuggestBox;
     private Image friendsImage;
 

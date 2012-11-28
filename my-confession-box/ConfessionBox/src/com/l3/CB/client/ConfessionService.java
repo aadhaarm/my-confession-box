@@ -9,12 +9,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.google.gwt.user.client.rpc.XsrfProtectedService;
 import com.google.gwt.user.server.rpc.XsrfProtect;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.PardonStatus;
@@ -25,7 +26,7 @@ import com.l3.CB.shared.TO.UserInfo;
  */
 @XsrfProtect
 @RemoteServiceRelativePath("confession-box")
-public interface ConfessionService extends XsrfProtectedService {
+public interface ConfessionService extends RemoteService {
 
     // REGISTER USER
     Long registerUser(UserInfo userInfo);
@@ -37,7 +38,11 @@ public interface ConfessionService extends XsrfProtectedService {
     
     // REGISTER CONFESSION
     void registerConfession(Confession confession);
+    void registerConfessionUpdate(ConfessionUpdate confessionUpdate);
+
+    // Confession Update
     void registerConfessionDraft(Confession confession);
+    List<ConfessionUpdate> getConfessionUpdates(Long confId);
     
     // GET Confession
     List<Confession> getConfessions(int page, Filters filter, String locale, Long userId);

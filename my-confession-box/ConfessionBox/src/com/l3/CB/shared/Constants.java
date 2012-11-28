@@ -41,6 +41,8 @@ public class Constants {
     public static final Level LOG_LEVEL = Level.OFF;
 
     //Loader image animation
+    public static final String APPLICATION_LOGO_IMAGE = "/images/CB-logo.png";
+    public static final String LOAD_ACTIVITY_TIMER_PROGRESS = "/images/loader_progress.gif";
     public static final String LOADER_IMAGE_PATH = "/images/ajax-loader.gif";
     public static final String LOAD_APPLICATION_IMAGE_PATH = "/images/loading.gif";
     public static final String APPLICATION_IMAGE_PATH = "/images/confession_box_smiley_face.jpg";
@@ -72,15 +74,15 @@ public class Constants {
     public static final String STYLE_CLASS_HELP_INFO = "helpInfoPanel";
     public static final String DIV_ACTIVITY_BUTTON_CONTAINER = "activityButtonContainer";
     public static final String DIV_ACTIVITY_BUTTON_SHARE_BUTTON = "shareWrap";
-    public static final String DIV_USER_CONTROL_BUTTON_CONTAINER = "userControlButtonContainer";
+    public static final String STYLE_CLASS_USER_CONTROL_BUTTON_CONTAINER = "userControlButtonContainer";
     public static final String DIV_USER_CONTROL_BUTTON = "userControlButton";
-    public static final String DIV_CONFESSION_PANEL_TOP_CONTAINER = "top";
+    public static final String DIV_CONFESSION_PANEL_TOP_CONTAINER = "confessionTop";
     public static final String DIV_CONFESSION_PANEL_MIDDLE_CONTAINER = "middle";
     public static final String DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER = "fb_widgets";
     public static final String DIV_PROFILE_IMAGE = "image";
     public static final String DIV_PROFILE_NAME = "name";
     public static final String DIV_CONFESSION_TEXT = "confessionText";
-    public static final String DIV_MORE_LINK = "moreLink";
+    public static final String STYLE_CLASS_MORE_LINK = "moreLink";
     public static final String DIV_STATUS_BAR = "status_bar";
     public static final String DIV_TIME_STAMP = "time_stamp";
     public static final String DIV_PARDONED_STATUS = "pardon_status_yes";
@@ -103,5 +105,29 @@ public class Constants {
     public static final int CONF_CACHE_EXPIRATION_SEC = 300; // 5 minuts
     public static final int USER_CACHE_EXPIRATION_SEC = 3600; // 1 hour
     public static final Object JSON_CACHE_EXPIRATION_SEC = 3600; // 1 hour
+
+    public static final String STYLE_CLASS_CONFESSED_TO_TEXT = "confessedToName";
+
+    public static final String STYLE_CLASS_FEED_VIEW_LINK = "feedViewLink";
+
+    public static final String IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY = "/images/sympathies.png";
+
+    public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/sympathies.png";
+
+    public static final String DATE_TIME_FORMAT = "MMM d, ''yy, h:mm a";
+
+    public static final String STYLE_CLASS_TOOLTIP_RIGHT = "tooltip_right";
+
+    public static final String STYLE_CLASS_TOOLTIP_LEFT = "tooltip_left";
+
+    public static final String STYLE_CLASS_PARDON_BUTTON = "pardonButton";
+
+    public static final int POINTS_ON_PARDONING = 10;
+
+    public static final int POINTS_ON_APPEAL_PARDON = 5;
+
+    public static final int POINTS_ON_CONFESSING = 5;
+
+    public static final int POINTS_ON_UNHIDING_IDENTITY = 5;
 
 }

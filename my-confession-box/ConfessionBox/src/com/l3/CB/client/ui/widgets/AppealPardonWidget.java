@@ -11,6 +11,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
@@ -37,7 +38,7 @@ public class AppealPardonWidget extends FlowPanel {
 	addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
 	btnSubmit = new Button(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
 	btnSubmit.setStyleName("appealButton");
-	
+
 	if(friendsSuggestBox != null) {
 	    add(friendsSuggestBox);
 	    add(relationSuggestBox);
@@ -60,7 +61,7 @@ public class AppealPardonWidget extends FlowPanel {
 			// Open a fb notification message dialog
 			CommonUtils.sendConfessionNotification(
 				selectedUser.getId(), selectedUser.getName(),
-				ConfessionBox.loggedInUserInfo.getName(),
+				ConfessionBox.getLoggedInUserInfo().getName(),
 				FacebookUtil.getConfessionNotificationUrl(),
 				FacebookUtil.getApplicationImage(),
 				ConfessionBox.cbText.shareConfessionFBWallMessage());
@@ -68,14 +69,8 @@ public class AppealPardonWidget extends FlowPanel {
 			final ConfessionShare confessTo = getConfessedShareTO(selectedUser);
 
 			if(confessTo != null) {
-			    ConfessionBox.confessionService
-			    .createConfessedToUser(confId,
-				    ConfessionBox.loggedInUserInfo
-				    .getUserId(),
-				    ConfessionBox.loggedInUserInfo
-				    .getId(), confessTo, new Date(),
-				    new AsyncCallback<Void>() {
-
+			    ConfessionBox.confessionService.createConfessedToUser(confId, ConfessionBox.getLoggedInUserInfo().getUserId(),
+				    ConfessionBox.getLoggedInUserInfo().getId(), confessTo, new Date(),new AsyncCallback<Void>() {
 				@Override
 				public void onSuccess(Void result) {
 				    List<ConfessionShare> aa = new ArrayList<ConfessionShare>();
@@ -83,6 +78,7 @@ public class AppealPardonWidget extends FlowPanel {
 				    aa.add(confessTo);
 				    confession.setConfessedTo(aa);
 				    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+				    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_APPEAL_PARDON));
 				    setVisible(false);
 				}
 
@@ -119,28 +115,35 @@ public class AppealPardonWidget extends FlowPanel {
      */
     public void populateFriendsList() {
 	if(friendsSuggestBox == null) {
-
 	    relationSuggestBox = new RelationSuggestBox();
-	    
-	    ConfessionBox.facebookService.getFriends(ConfessionBox.accessToken, new AsyncCallback<String>() {
-		@Override
-		public void onSuccess(String result) {
-		    if(result != null) {
-			userfriends = CommonUtils.getFriendsUserInfo(result);
-			if(userfriends != null && !userfriends.isEmpty()) {
-			    friendsSuggestBox = new FriendsSuggestBox(userfriends);
-			    friendsSuggestBox.setStyleName("friendsSuggestBoxMyConfPage");
-			    add(friendsSuggestBox);
-			    add(relationSuggestBox);
-			    add(btnSubmit);
+	    userfriends = CommonUtils.friendsMap;
+	    if(userfriends != null && !userfriends.isEmpty()) {
+		friendsSuggestBox = new FriendsSuggestBox(userfriends);
+		friendsSuggestBox.setStyleName("friendsSuggestBoxMyConfPage");
+		add(friendsSuggestBox);
+		add(relationSuggestBox);
+		add(btnSubmit);
+	    } else {
+		ConfessionBox.facebookService.getFriends(ConfessionBox.accessToken, new AsyncCallback<String>() {
+		    @Override
+		    public void onSuccess(String result) {
+			if(result != null) {
+			    userfriends = CommonUtils.getFriendsUserInfo(result);
+			    if(userfriends != null && !userfriends.isEmpty()) {
+				friendsSuggestBox = new FriendsSuggestBox(userfriends);
+				friendsSuggestBox.setStyleName("friendsSuggestBoxMyConfPage");
+				add(friendsSuggestBox);
+				add(relationSuggestBox);
+				add(btnSubmit);
+			    }
 			}
 		    }
-		}
-		@Override
-		public void onFailure(Throwable caught) {
-		    Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
-		}
-	    });
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+		    }
+		});
+	    }
 	}
     }
 }

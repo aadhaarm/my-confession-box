@@ -3,6 +3,7 @@ package com.l3.CB.shared;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.l3.CB.shared.TO.UserInfo;
 
 
@@ -15,20 +16,20 @@ public class FacebookUtil {
     //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
     //    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
 
-    //    public static final String APPLICATION_ID = "153945264667385"; // replace with real values from Facebook app configuration
-    //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-    //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-    //    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-    //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    //    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfess/";
-
-
-    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+    public static final String APPLICATION_ID = "153945264667385"; // replace with real values from Facebook app configuration
     public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
     public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
     public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
     public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
+    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfess/";
+
+
+    //    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+    //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+    //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+    //    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+    //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+    //    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessalfa/";
 
     public static String getApplicationId() {
 	return APPLICATION_ID;
@@ -132,10 +133,24 @@ public class FacebookUtil {
     }
 
     public static String getConfessionNotificationUrl() {
-	return REDIRECT_URL + "#FeedToMe";
+	return REDIRECT_URL + "?" + Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED;
     }
 
     public static String getApplicationImage() {
 	return "http://fbconfess.appspot.com/images/confession_box_smiley_face.jpg";
+    }
+
+    /**
+     * @param confessionShare
+     * @return
+     */
+    public static SafeUri getProfileFBLink(final String fbId) {
+	SafeUri safeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return "http://www.facebook.com/" + fbId;
+	    }
+	};
+	return safeUri;
     }
 }

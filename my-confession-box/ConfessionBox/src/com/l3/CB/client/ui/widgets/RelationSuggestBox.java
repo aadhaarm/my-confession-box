@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.TO.Relations;
 
@@ -16,10 +17,9 @@ public class RelationSuggestBox extends FlowPanel{
 
     SuggestBox relationSuggestBox;
     MultiWordSuggestOracle relationsOracle;
-    private final Label label = new Label("Your relation");
-    private final Label errMsg = new Label("Please choose one of the options provided (Choose 'FRIEND' if not in the options)");
+    private final Label label = new Label(ConfessionBox.cbText.relationsSuggestionBoxLabel());
+    private final Label errMsg = new Label(ConfessionBox.cbText.relationsSuggestionBoxErrorMessage());
     Map<String, Relations> relationMap;
-    
     
     public RelationSuggestBox() {
 	super();
@@ -60,5 +60,12 @@ public class RelationSuggestBox extends FlowPanel{
 	remove(errMsg);
 	return true;
     }
-    
+
+    public SuggestBox getRelationSuggestBox() {
+        return relationSuggestBox;
+    }
+
+    public void setRelationSuggestBox(SuggestBox relationSuggestBox) {
+        this.relationSuggestBox = relationSuggestBox;
+    }
 }

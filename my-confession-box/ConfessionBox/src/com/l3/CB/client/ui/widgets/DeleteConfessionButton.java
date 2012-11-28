@@ -27,8 +27,8 @@ public class DeleteConfessionButton extends PushButton {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		ConfessionBox.confessionService.changeConfessionVisibility(
-			ConfessionBox.loggedInUserInfo.getUserId(),
-			ConfessionBox.loggedInUserInfo.getId(),
+			ConfessionBox.getLoggedInUserInfo().getUserId(),
+			ConfessionBox.getLoggedInUserInfo().getId(),
 			confession.getConfId(), !isVisible, new Date(),
 			new AsyncCallback<Boolean>() {
 		    @Override

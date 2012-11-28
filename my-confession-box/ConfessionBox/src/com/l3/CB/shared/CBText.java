@@ -4,7 +4,7 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface CBText extends Constants {
 
-    @DefaultStringValue("Error while communication with server. Please try reloading the application after some time.")
+    @DefaultStringValue("Error while communication with server. Do you want to reload the application.")
     String applicationError();
 
     @DefaultStringValue("Feed")
@@ -25,6 +25,9 @@ public interface CBText extends Constants {
     @DefaultStringValue("Anonymous")
     String confessedByAnynName();
 
+    @DefaultStringValue("World")
+    String confessedToWorld();
+    
     @DefaultStringValue("Report Abuse!")
     String buttonTitleReportAbuse();
 
@@ -94,7 +97,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Filters to choose the confessions you want to read.")
     String feedPageFilterToolTip();
 
-    @DefaultStringValue("Vote if you are or were once in kind of same situation. This vote will not be disclosed to anyone.")
+    @DefaultStringValue("If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing ‘Same Boat’ button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee and you get to earn ‘human’ points.")
     String sameBoatButtonToolTip();
 
     @DefaultStringValue("Vote if you find the confession inappropriate for the confession wall.")
@@ -147,14 +150,14 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("The confessee is pardoned when the required number number of 'Should be Pardoned' votes are given by the all.")
     String pardonConditionSPVoteHelpInfoToolTip();
-    
+
     @DefaultStringValue("share")
     String activityButtonShareButtonLabel();
 
-    @DefaultStringValue(" has been given ")
+    @DefaultStringValue(" has earned ")
     String activityButtonShareClickText1();
 
-    @DefaultStringValue(" 'Human Points'.")
+    @DefaultStringValue(" 'Human Points' for sharing on wall.")
     String activityButtonShareClickText2();
 
     @DefaultStringValue(" characters remaining")
@@ -252,4 +255,109 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("These are the options you can opt for while confessing.")
     String registerConfessionOptionsHelpInfoToolTip();
+
+    @DefaultStringValue("invites you to Confession Box.")
+    String inviteFriendsTextMessage();
+
+    @DefaultStringValue("Shows the Feed preview of the confession visible to the world.")
+    String feedPreviewLinkToolTip();
+
+    @DefaultStringValue("world")
+    String relationDefaultDisplayText();
+
+    @DefaultStringValue("*View on feed wall, view to the world")
+    String feedViewPreviewLink();
+
+    @DefaultStringValue("Pardoned with condition: This Confession has been pardoned with the following conditions.")
+    String pardonConditionInfoText();
+
+    @DefaultStringValue("Saved")
+    String saveDraftButtonText();
+    
+    @DefaultStringValue("Your confession is now being submitted. Press OK if you want to proceed with submitting the confession or press 'Cancel' if you want to recheck and be sure about what you confession.")
+    String confirmMessageWhenSubmittingCOnfession();
+
+    @DefaultStringValue("Add update")
+    String addUpdateLinkText();
+
+    @DefaultStringValue("Add response")
+    String addResponseLinkText();
+
+    @DefaultStringValue("Appeal for pardon")
+    String appealForPardonLinkText();
+
+    @DefaultStringValue("Name of the person you confessing to")
+    String friendsSuggestionBoxLabel();
+
+    @DefaultStringValue("Your relation to the person")
+    String relationsSuggestionBoxLabel();
+
+    @DefaultStringValue("Please choose one of the options provided (Choose 'FRIEND' if not in the options)")
+    String relationsSuggestionBoxErrorMessage();
+
+    @DefaultStringValue("Share your vote on you FB wall")
+    String undoToolTipBar();
+
+    @DefaultStringValue("Share your vote on you FB wall")
+    String shareToolTipBar();
+
+    @DefaultStringValue("Submit")
+    String confessionUpdateButtonLabelText();
+
+    @DefaultStringValue("Confessee")
+    String confesseeRelationNameUpdateLabel();
+
+    @DefaultStringValue("Show updates")
+    String updateWidgetShowUpdatesLabelText();
+
+    @DefaultStringValue("No updates")
+    String updateWidgetNoUpdatesText();
+
+    @DefaultStringValue("Hide updates")
+    String updateWidgetHideUpdatesLabelText();
+
+    @DefaultStringValue("You are logged out now!")
+    String logoutInfoMessage();
+
+    @DefaultStringValue("You need to login and provide required permissions to the app.")
+    String requireLoginToBeActiveInfoMessage();
+
+    @DefaultStringValue("Since")
+    String dateTimeStampPrefix();
+
+    @DefaultStringValue("Pardon")
+    String pardonButtonLabelText();
+
+    @DefaultStringValue("About Confession Box")
+    String aboutConfessionBoxFooterLinkLabel();
+
+    @DefaultStringValue("Privacy policy")
+    String privacyPolicyFooterLinkLabel();
+
+    @DefaultStringValue("L3 Confession-Box")
+    String cbNameFooterTextLabel();
+
+    @DefaultStringValue("Human Point")
+    String humanPointWidgetLabelText();
+
+    @DefaultStringValue("Invite friends")
+    String inviteFriendsLinkLabelText();
+
+    @DefaultStringValue("CB RuleBook")
+    String cbRuleBookLinkLabelText();
+
+    @DefaultStringValue("Logout")
+    String logoutLinkLabelText();
+
+    @DefaultStringValue("Submit your confession below")
+    String registerConfessionInstructionTextOne();
+
+    @DefaultStringValue("Your confession is never shared to any one unless you opt for the same")
+    String registerConfessionInstructionTextTwo();
+
+    @DefaultStringValue("Save as draft")
+    String saveAsDraftButtonLabelText();
+
+    @DefaultStringValue("Delete draft")
+    String deleteDraftButtonLabelText();
 }

@@ -1,6 +1,6 @@
 package com.l3.CB.server;
 
-import com.google.gwt.user.server.rpc.XsrfProtectedServiceServlet;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.FacebookService;
 import com.l3.CB.server.utils.ServerUtils;
 import com.l3.CB.shared.FacebookUtil;
@@ -8,7 +8,7 @@ import com.l3.CB.shared.FacebookUtil;
 /**
  * The server side implementation of the RPC service.
  */
-public class FacebookServiceImpl extends XsrfProtectedServiceServlet implements
+public class FacebookServiceImpl extends RemoteServiceServlet implements
 FacebookService {
 
     /**

@@ -13,6 +13,8 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.ConfessionUpdate;
 
 public class UpdateConfessionWidget extends FlowPanel {
 
@@ -24,7 +26,7 @@ public class UpdateConfessionWidget extends FlowPanel {
 	txtUpdate = new CBTextArea(Constants.COMM_MAX_CHARS, false);
 	this.add(txtUpdate);
 
-	btnSubmit = new Button("Update");
+	btnSubmit = new Button(ConfessionBox.cbText.confessionUpdateButtonLabelText());
 	this.add(btnSubmit);
 
 	bind(confession);
@@ -36,24 +38,35 @@ public class UpdateConfessionWidget extends FlowPanel {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(txtUpdate.validate(Constants.CONF_MIN_CHARS, Constants.COMM_MAX_CHARS)) {
+		    btnSubmit.setEnabled(false);
 		    Date updateTimeStamp = new Date();
-		    confession.setConfession(confession.getConfession()
-			    .concat("<br/>Update - ")
-			    .concat(CommonUtils.getDateInFormat(updateTimeStamp)
-				    .concat("<hr/>")
-				    .concat(CommonUtils.checkForNull(txtUpdate.getCbTextArea().getText()))));
-		    confession.setUpdateTimeStamp(updateTimeStamp);
-		    ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
+
+		    String relationName = ConfessionBox.cbText.confesseeRelationNameUpdateLabel();
+		    if(!ConfessionBox.getLoggedInUserInfo().getUserId().equals(confession.getUserId())) {
+			if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+			    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+				if(confessionShare != null && confessionShare.getRelation() != null && confessionShare.getRelation().getDisplayText() != null) {
+				    relationName = confessionShare.getRelation().getDisplayText();
+				}
+			    }
+			}
+		    }
+
+		    ConfessionUpdate confessionUpdate = new ConfessionUpdate(
+			    confession.getConfId(), updateTimeStamp,
+			    CommonUtils.checkForNull(txtUpdate.getCbTextArea().getText()), 
+			    relationName, ConfessionBox.getLoggedInUserInfo().getUserId());
+
+		    ConfessionBox.confessionService.registerConfessionUpdate(confessionUpdate , new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 			    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 			}
 			@Override
 			public void onFailure(Throwable caught) {
-			    Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+			    Error.handleError("UpdateConfessionWidget", "onFailure", caught);
 			}
-		    });  
-
+		    });
 		}
 	    }
 	});

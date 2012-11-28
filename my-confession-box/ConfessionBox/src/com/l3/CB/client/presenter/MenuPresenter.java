@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.Error;
+import com.l3.CB.client.view.MenuView;
 import com.l3.CB.shared.Constants;
 
 public class MenuPresenter implements Presenter {
@@ -34,14 +35,16 @@ public class MenuPresenter implements Presenter {
     }
 
     private void bind() {
-	initializeMenuCounts();
+	if(ConfessionBox.isLoggedIn) {
+	    initializeMenuCounts();
+	}
     }
 
     /**
      * Set menu counts
      */
     public void initializeMenuCounts() {
-	ConfessionBox.confessionService.getMyConfessionNumber(ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Long>() {
+	ConfessionBox.confessionService.getMyConfessionNumber(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Long>() {
 
 	    @Override
 	    public void onSuccess(Long result) {
@@ -54,7 +57,7 @@ public class MenuPresenter implements Presenter {
 	    }
 	});
 
-	ConfessionBox.confessionService.getNumberOfConfessionForMe(ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Long>() {
+	ConfessionBox.confessionService.getNumberOfConfessionForMe(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Long>() {
 
 	    @Override
 	    public void onSuccess(Long result) {
@@ -72,5 +75,9 @@ public class MenuPresenter implements Presenter {
     public void go(HasWidgets container) {
 	RootPanel.get(Constants.DIV_LEFT_MENU).clear();
 	RootPanel.get(Constants.DIV_LEFT_MENU).add(display.asWidget());		
+    }
+    
+    public void selectMenuItem(int item) {
+	MenuView.selectMenuItem(item);
     }
 }

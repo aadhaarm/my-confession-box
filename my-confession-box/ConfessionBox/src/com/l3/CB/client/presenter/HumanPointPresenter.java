@@ -35,7 +35,7 @@ public class HumanPointPresenter implements Presenter {
     }
 
     public void update() {
-	ConfessionBox.confessionService.getHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), new AsyncCallback<Integer>() {
+	ConfessionBox.confessionService.getHumanPoints(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Integer>() {
 
 	    @Override
 	    public void onSuccess(Integer result) {
@@ -54,7 +54,7 @@ public class HumanPointPresenter implements Presenter {
      * @param activity
      */
     public void updateHumanPoints(final int points) {
-	ConfessionBox.confessionService.updateHumanPoints(ConfessionBox.loggedInUserInfo.getUserId(), points, new AsyncCallback<Integer>() {
+	ConfessionBox.confessionService.updateHumanPoints(ConfessionBox.getLoggedInUserInfo().getUserId(), points, new AsyncCallback<Integer>() {
 
 	    @Override
 	    public void onSuccess(Integer result) {

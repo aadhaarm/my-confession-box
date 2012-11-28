@@ -1,12 +1,12 @@
 package com.l3.CB.shared.TO;
 
 public enum Relations {
-    FRIEND("Friend"), MOTHER("Mother"), FATHER("father"), BROTHER("Brother"), SISTER("Sister"), 
+    FRIEND("Friend"), MOTHER("Mother"), FATHER("Father"), BROTHER("Brother"), SISTER("Sister"), 
     GRAND_FATHER("Grand-father"), GRAND_MOTHER("Grand-mother"), TEACHER("Teacher"), COLLEAGUE ("Colleague"),
     ACQUAINTANCE ("acquaintance"), STRANGER ("Stranger"), BOY_FRIEND ("Boy-Friend"), GIRL_FRIEND ("Girl-Friend"),
     ENEMY ("Enemy"), PET ("Pet"), UNCLE ("Uncle"), ANT ("Ant"), COUSIN ("Cousin"), DEBTER ("Debter"), GURU ("Guru"),
-    X_BOY_FRIEND ("X-BoyFriend"), X_GIRL_FRIEND ("X-GirlFriend"), CELEBRITY ("Celebrity"), WIFE ("Wife"),
-    HUSBAND ("Husband"), DAUGHTER ("Daughter"), SON ("Son"), X_WIFE ("X-Wife"), X_HUSBAND ("X-Husband"),
+    EX_BOY_FRIEND ("Ex-BoyFriend"), EX_GIRL_FRIEND ("Ex-GirlFriend"), CELEBRITY ("Celebrity"), WIFE ("Wife"),
+    HUSBAND ("Husband"), DAUGHTER ("Daughter"), SON ("Son"), EX_WIFE ("Ex-Wife"), EX_HUSBAND ("Ex-Husband"),
     BOSS ("Boss"), JONIOR ("Junior"), SENIOR("Senior");
 
     private String displayText;

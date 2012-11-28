@@ -210,16 +210,17 @@ public class ConfessionOtherDAO {
 	    query.declareParameters("String id");
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
 	    query.setOrdering("timeStamp desc");
-
+	    query.setUnique(false);
+	    
 	    @SuppressWarnings("unchecked")
 	    List<UserActivityDO> result = (List<UserActivityDO>) query.execute(userId);
-
+	    
 	    if (result != null && !result.isEmpty()) {
-		confIds = new ArrayList<Long>();
-		Iterator<UserActivityDO> it = result.iterator();
+		Map<Long, Long> confessionIDs = new HashMap<Long, Long>();
 		for (UserActivityDO userActivityDO : result) {
-		    confIds.add(userActivityDO.getConfId());
+		    confessionIDs.put(userActivityDO.getConfId(), userActivityDO.getConfId());
 		}
+		confIds = new ArrayList<Long>(confessionIDs.values());
 	    }
 	} catch (Exception e) {
 	    logger.log(Level.SEVERE,
@@ -313,14 +314,15 @@ public class ConfessionOtherDAO {
 	    List<SubscribtionDO> result = (List<SubscribtionDO>) query.execute(userId);
 
 	    if (result != null && !result.isEmpty()) {
-		subscribedConfessions = new ArrayList<Long>();
+		Map<Long, Long> confessionIDs = new HashMap<Long, Long>();
 		Iterator<SubscribtionDO> it = result.iterator();
 		while (it.hasNext()) {
 		    SubscribtionDO subscribtionDO = it.next();
 		    if(subscribtionDO != null && subscribtionDO.isSubscribed()) {
-			subscribedConfessions.add(subscribtionDO.getConfId());
+			confessionIDs.put(subscribtionDO.getConfId(), subscribtionDO.getConfId());
 		    }
 		}
+		subscribedConfessions = new ArrayList<Long>(confessionIDs.values());
 	    }
 	} catch (Exception e) {
 	    logger.log(Level.SEVERE,

@@ -152,6 +152,7 @@ div.helpInfoDiv {
 	background-color: white;
 	width: 700px;
 	padding: 10px;
+	z-index: 1000;
 }
 
 .confessionGridElement {
@@ -201,5 +202,37 @@ div.helpInfoDiv {
 }
 
 .updateConfessionPanel {
-	padding-left: 15px;
+	padding-left: 19px;
+	font-size: 11px;
+}
+
+.confessionRelation {
+    font-weight: bold;
+}
+
+.confessionUpdate {
+    background-color: #FEFFED;
+    color: #343434;
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 18px;
+    padding-top: 5px;
+    width: 496px;
+    overflow: auto;
+    border-bottom-color: #999999;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+.updateText {
+	float: left;
+}
+
+.questionMark {
+	cursor: pointer;
 }

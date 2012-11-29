@@ -23,7 +23,7 @@ public class UpdateDAO {
 	    Query query = pm.newQuery(ConfessionUpdateDO.class);
 	    query.setFilter("confId == id");
 	    query.declareParameters("String id");
-	    query.setOrdering("timeStamp desc");
+	    query.setOrdering("timeStamp asc");
 	    @SuppressWarnings("unchecked")
 	    List<ConfessionUpdateDO> result = (List<ConfessionUpdateDO>) query.execute(confId);
 

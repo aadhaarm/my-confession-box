@@ -179,11 +179,31 @@ div.helpInfoDiv {
 }
 
 .refreshButton {
-	background: url(/images/sprite_black2.png) -63px -21px no-repeat;
-	height: 23px;
-	width: 23px;
+	background-attachment: scroll;
+    background-clip: border-box;
+    background-color: mintcream;
+    background-image: url("/images/sprite_black2.png");
+    background-origin: padding-box;
+    background-position: -61px -19px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 27px;
+    width: 27px;
 }
 
+.confessionFilterOptionsList {
+    background-color: mintcream;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-family: Comic Sans MS;
+    font-size: large;
+}
 .confessionTitleText {
 	font-size: large;
 	font-weight: bold;
@@ -218,11 +238,11 @@ div.helpInfoDiv {
     margin-left: 0;
     margin-right: 0;
     margin-top: 0;
-    padding-bottom: 15px;
+    padding-bottom: 5px;
     padding-left: 10px;
-    padding-right: 18px;
+    padding-right: 10px;
     padding-top: 5px;
-    width: 496px;
+    width: 522px;
     overflow: auto;
     border-bottom-color: #999999;
     border-bottom-width: 1px;
@@ -235,4 +255,5 @@ div.helpInfoDiv {
 
 .questionMark {
 	cursor: pointer;
+	color: white;
 }

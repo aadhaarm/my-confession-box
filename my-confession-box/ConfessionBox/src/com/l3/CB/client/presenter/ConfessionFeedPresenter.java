@@ -55,6 +55,8 @@ public class ConfessionFeedPresenter implements Presenter {
 	public HasChangeHandlers getConfessionFilterListBox();
 	public HasFocusHandlers getConfessionFilterListBoxForHelp();
 	public HasClickHandlers getRefreshButton();
+	
+	public void setMoreConfessions(boolean moreConfessions);
     }
 
     private final Display display;
@@ -101,6 +103,7 @@ public class ConfessionFeedPresenter implements Presenter {
 
     private void setConfessions(final boolean clean) {
 	if(clean) {
+	    display.setMoreConfessions(true);
 	    display.clearConfessions();
 	}
 	this.display.setConfessionPagesLoaded(0);

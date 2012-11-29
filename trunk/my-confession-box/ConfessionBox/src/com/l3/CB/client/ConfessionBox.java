@@ -10,9 +10,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.l3.CB.client.controller.ConfessionController;
@@ -161,7 +163,15 @@ public class ConfessionBox implements EntryPoint {
 	vPnlApplnLoad.add(loaderImage);
 	pnlApplicationLoad.add(vPnlApplnLoad);
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
-	pnlApplicationLoad.center();
+
+	pnlApplicationLoad.setPopupPositionAndShow(new PositionCallback() {
+	    @Override
+	    public void setPosition(int offsetWidth, int offsetHeight) {
+		pnlApplicationLoad.setPopupPosition((Window.getClientWidth()/2)-(offsetWidth/2), (Window.getClientHeight()/2)-(offsetHeight));
+	    }
+	});
+	
+//	pnlApplicationLoad.center();
     }
 
     /**

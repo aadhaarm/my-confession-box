@@ -38,7 +38,7 @@ main_container a:hover {
 
 .name {
 	margin-left: 80px;
-	/* font-weight:600; */
+	margin-top: 3px;
 }
 
 .status_bar {
@@ -49,7 +49,7 @@ main_container a:hover {
 }
 
 .status_bar a {
-	color: #999;
+	color: #0066CC;
 	cursor: pointer;
 }
 
@@ -62,6 +62,14 @@ main_container a:hover {
 	padding-right: 15px;
 }
 
+.time_stamp_update {
+	float: right;
+	position: relative;
+	padding-left: 4px;
+	font-size: smaller;
+	color: #999999;
+}
+
 /*Middle div styling*/
 .middle {
 	position: relative;
@@ -71,19 +79,20 @@ main_container a:hover {
 .confession_title {
 	font-weight: 600;
 	padding-top: 0px;
-	padding-left: 19px;
-	padding-right: 19px;
+	padding-left: 8px;
+	padding-right: 8px;
 }
 
 .confession_body {
-	padding: 5px 19px 0px 19px;
-	margin: 0 0px 0 0px;
+	padding: 2px 8px 2px 8px;
+	margin: 0 2px 0 2px;
 	font-size: 12px;
 	color: #343434;
 	background-color: #FEFFED;
 	line-height: 1.36;
 	overflow: hidden;
 	text-overflow: clip;
+	border-radius: 10px;
 }
 
 .confessionText {
@@ -98,11 +107,12 @@ main_container a:hover {
 .condition {
 	background-color: #73883e;
 	padding: 4px 5px 2px 10px;
-	margin: 0 15px 0px 15px;
+	margin: -10px 15px 5px 15px;
 	color: #FFF;
 	font-size: smaller !important;
 	line-height: 15px;
 	overflow: auto;
+	border-radius: 5px;
 }
 
 .pardonCondition {
@@ -136,7 +146,7 @@ main_container a:hover {
 
 .tooltip_left {
 	margin-left: 15px;
-	margin-right: 25px;
+	margin-right: 15px;
 	padding: 2px 0 2px 5px;
 	border: #CCC;
 	color: #999;
@@ -146,11 +156,11 @@ main_container a:hover {
 
 .tooltip_right {
 	margin-left: 15px;
-	margin-right: 25px;
-	padding: 2px 0 2px 5px;
+	margin-right: 15px;
+	padding: 2px 0 2px 10px;
 	border: #CCC;
-	color: #999;
-	font-size: 12px;
+	color: white;;
+	font-size: 11px;
 	background-color: #333;
 }
 
@@ -168,6 +178,7 @@ main_container a:hover {
 	width: auto;
 	height: 45px;
 	padding-left: 15px;
+	padding-bottom: 5px;
 }
 
 .buttons ul {
@@ -195,18 +206,19 @@ main_container a:hover {
 /*pardon status div*/
 .pardon_status_yes {
 	background-color: #73883E;
-    color: #FFFFFF;
-    float: right;
-    font-size: 18px;
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 15px;
-    margin-top: 1px;
-    padding-bottom: 4px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 4px;
-    position: relative;
+	color: #FFFFFF;
+	float: right;
+	font-size: 15px;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 15px;
+	margin-top: 1px;
+	padding-bottom: 4px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 4px;
+	position: relative;
+	border-radius: 5px;
 }
 
 .pardon_status_no {
@@ -216,17 +228,17 @@ main_container a:hover {
 	position: relative;
 	background-color: #999;
 	color: #FFF;
-	font-size: 16px;
+	font-size: 14px;
+	border-radius: 5px;
 }
 
 .fb_widgets {
-	padding: 5px 15px;
-	font-size: 11px;
+	padding: 0 15px;
 }
 
 .confessedToName {
-    font-weight: normal;
-    font-size: x-small;
+	font-weight: normal;
+	font-size: x-small;
 }
 
 .feedViewLink {
@@ -237,13 +249,12 @@ main_container a:hover {
 
 .pardonButtonDiv {
 	padding-right: 14px;
-	float: right;	
+	float: right;
 }
 
 .popupCancelButton {
-	float: right;	
+	float: right;
 }
-
 
 .pardonButton {
 	width: 116px;

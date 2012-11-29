@@ -4,10 +4,10 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface CBText extends Constants {
 
-    @DefaultStringValue("Error while communication with server. Do you want to reload the application.")
+    @DefaultStringValue("Oops! Error while communicating with server. Do you want to reload the application?")
     String applicationError();
 
-    @DefaultStringValue("Feed")
+    @DefaultStringValue("Confession wall")
     String cbMenuConfessionFeed();
 
     @DefaultStringValue("Confess")
@@ -16,7 +16,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("My Confessions")
     String cbMenuConfessionMyConfessions();
 
-    @DefaultStringValue("Confessed to me")
+    @DefaultStringValue("Confessed To Me")
     String cbMenuConfessionConfessToMe ();
 
     @DefaultStringValue("Confession Box")
@@ -49,19 +49,19 @@ public interface CBText extends Constants {
     @DefaultStringValue("Hide my identity")
     String registerPageOptionHideID();
 
-    @DefaultStringValue("Appeal for pardon to someone")
+    @DefaultStringValue("Appeal for pardon")
     String registerPageOptionConfessToFriend();
 
     @DefaultStringValue("Choose a friend")
     String registerPageChooseFriend();
 
-    @DefaultStringValue("Submit your confession")
+    @DefaultStringValue("Submit confession")
     String buttonTextSubmitConfession();
 
     @DefaultStringValue("Please submit your confession here. (Your confession is never shared to any one unless you want it)")
     String registerPageTitle();
 
-    @DefaultStringValue("I pardon you on one condition, Only when you Un-Hide your identity to the world.")
+    @DefaultStringValue("Un-Hide your identity to the world.")
     String pardonPopupOpenIdentityCondition();
 
     @DefaultStringValue("Get ")
@@ -82,28 +82,19 @@ public interface CBText extends Constants {
     @DefaultStringValue("Pardoned")
     String pardonedStatus();
 
-    @DefaultStringValue("Yet to be pardoned")
-    String yetToBePardonedStatus();
-
     @DefaultStringValue("Reveal your Identity")
     String pardonPopupOpenIdentityConditionView();
 
-    @DefaultStringValue("people should give you 'Should be pardoned' vote: Condition fulfilled")
-    String pardonPopupPardonActivityConditionFulfilled();
-
-    @DefaultStringValue("people should give you 'Should be pardoned' vote: Yet to be fulfilled")
-    String pardonPopupPardonActivityConditionYetToBoFulfilled();
-
-    @DefaultStringValue("Filters to choose the confessions you want to read.")
+    @DefaultStringValue("Choose the confessions you want to read.")
     String feedPageFilterToolTip();
 
-    @DefaultStringValue("If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing ‘Same Boat’ button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee and you get to earn ‘human’ points.")
+    @DefaultStringValue("If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing 'Same Boat' button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee and you get to earn 'human' points.")
     String sameBoatButtonToolTip();
 
     @DefaultStringValue("Vote if you find the confession inappropriate for the confession wall.")
     String abuseButtonToolTip();
 
-    @DefaultStringValue("Vote if the confession is just lame and you done find its a real confession.")
+    @DefaultStringValue("Vote if the confession is just lame and you don't find it a real confession.")
     String lameButtonToolTip();
 
     @DefaultStringValue("Vote if you have sympathies for the confesser.")
@@ -124,9 +115,6 @@ public interface CBText extends Constants {
     @DefaultStringValue("Tick this if you want to confess to one of your friends. You need to cheoose your friend in the box below. Your identity with be disclosed to the person you confess to.")
     String registerConfShareWithCheckBoxToolTip();
 
-    @DefaultStringValue("'Like', 'Comments' & 'Send'...")
-    String getMeJustOpenLinkText();
-
     @DefaultStringValue("Subscribe")
     String subscribeAnchorLabel();
 
@@ -136,7 +124,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Subscribe to comments and pardon status updates of this confession")
     String subscribeLinkToolTipText();
 
-    @DefaultStringValue("You can always click the voting button again to STOP your vote to be registered, till the timer reaches 0.")
+    @DefaultStringValue("You can click the voting button again to STOP your vote to be registered, till the timer reaches '0'.")
     String undoVoteToolTip();
 
     @DefaultStringValue("You can share your vote on your FB wall by clicking 'Share' on the vote button you just clicked.")
@@ -145,10 +133,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Following are the conditions that the pardoner has put and the confesee shall only be pardoned when these conditions are met.")
     String pardonConditionHelpInfoToolTip();
 
-    @DefaultStringValue("The confessee is pardoned only when the identity is revealed on public wall.")
+    @DefaultStringValue("The confessee is pardoned only when the Confessee reveals his/her identity to the world.")
     String pardonConditionUnHideHelpInfoToolTip();
 
-    @DefaultStringValue("The confessee is pardoned when the required number number of 'Should be Pardoned' votes are given by the all.")
+    @DefaultStringValue("The confessee is pardoned when the required number of 'Should be Pardoned' votes are given by the all.")
     String pardonConditionSPVoteHelpInfoToolTip();
 
     @DefaultStringValue("share")
@@ -169,16 +157,16 @@ public interface CBText extends Constants {
     @DefaultStringValue("Please enter a valid title.")
     String confessionTitleErrorMessage();
 
-    @DefaultStringValue("Un-Hide your identity by clicking this.")
+    @DefaultStringValue("Un-Hide your identity to the world by clicking this.")
     String unHideIdentityButtonTitleUserControl();
 
-    @DefaultStringValue("Hide your identity by clicking this.")
+    @DefaultStringValue("Hide your identity from the world by clicking this.")
     String hideIdentityButtonTitleUserControl();
 
-    @DefaultStringValue("Hide your confession from anonymous wall.")
+    @DefaultStringValue("Hide your confession from the world.")
     String hideConfessionButtonTitleUserControl();
 
-    @DefaultStringValue("Un-Hide your confession from anonymous wall.")
+    @DefaultStringValue("Un-Hide your confession to the world.")
     String unhideConfessionButtonTitleUserControl();
 
     @DefaultStringValue("Type your friend's name and choose from the options")
@@ -190,10 +178,10 @@ public interface CBText extends Constants {
     @DefaultStringValue(" has confessed to you on Confession Box.")
     String shareConfessionFBWallMessage();
 
-    @DefaultStringValue("Ask for pardon from some one in your friends.")
+    @DefaultStringValue("Ask for pardon from some one.")
     String shareConfessionUserControlButtonTitle();
 
-    @DefaultStringValue("Add update text to your confession.")
+    @DefaultStringValue("Update your confession.")
     String editConfessionUserControlButtonTitle();
 
     @DefaultStringValue("more..")
@@ -202,13 +190,13 @@ public interface CBText extends Constants {
     @DefaultStringValue("less..")
     String lessLink();
 
-    @DefaultStringValue("All confessions")
+    @DefaultStringValue("All Confessions")
     String filterAllConfessions();
 
-    @DefaultStringValue("Subscribed")
+    @DefaultStringValue("Your Subscribed")
     String filterSubscribedConfessions();
 
-    @DefaultStringValue("Hidden identity")
+    @DefaultStringValue("With Hidden-Identity")
     String filterHiddenIdlConfessions();
 
     @DefaultStringValue("Your language")
@@ -220,16 +208,16 @@ public interface CBText extends Constants {
     @DefaultStringValue("Most 'LAME'")
     String filterLameVotedConfessions();
 
-    @DefaultStringValue("Most SYMPATHAISED")
+    @DefaultStringValue("Most 'SYMPATHAISED'")
     String filterSymVoteConfessions();
 
     @DefaultStringValue("Most 'SHOULD BE PARDONED'")
     String filterSPVoteConfessions();
 
-    @DefaultStringValue("Open identity")
+    @DefaultStringValue("With Open-Identity")
     String filterOpenIdConfessions();
 
-    @DefaultStringValue("Your activity")
+    @DefaultStringValue("With Your Activity")
     String filterUserActivityConfessions();
 
     @DefaultStringValue("less than a min ago")    
@@ -319,7 +307,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("You are logged out now!")
     String logoutInfoMessage();
 
-    @DefaultStringValue("You need to login and provide required permissions to the app.")
+    @DefaultStringValue("You need to login and provide required permissions to the Confession Box.")
     String requireLoginToBeActiveInfoMessage();
 
     @DefaultStringValue("Since")
@@ -352,7 +340,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Submit your confession below")
     String registerConfessionInstructionTextOne();
 
-    @DefaultStringValue("Your confession is never shared to any one unless you opt for the same")
+    @DefaultStringValue("Your confession is never shared to any one unless you opt to share your identity")
     String registerConfessionInstructionTextTwo();
 
     @DefaultStringValue("Save as draft")

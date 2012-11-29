@@ -23,8 +23,7 @@ public class HelpInfo {
      * 
      */
     public static void showHelpInfo(type confessionFilter) {
-	RootPanel.get(Constants.DIV_LEFT_TOOL_TIP).remove(sPnlToolTip);
-	sPnlToolTip.clear();
+	cleanToolTip();
 	switch (confessionFilter) {
 	case CONFESSION_FILTER:
 	    sPnlToolTip.add(new Label(cbText.feedPageFilterToolTip()));
@@ -87,6 +86,7 @@ public class HelpInfo {
     }
     
     public static void cleanToolTip() {
+	RootPanel.get(Constants.DIV_LEFT_TOOL_TIP).remove(sPnlToolTip);
 	sPnlToolTip.clear();
     }
 }

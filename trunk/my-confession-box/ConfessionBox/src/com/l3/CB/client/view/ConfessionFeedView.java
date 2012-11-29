@@ -59,6 +59,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	isMoreConfessionsAvailable = true;
 
 	vpnlConfessionList = new VerticalPanel();
+	vpnlConfessionList.setHorizontalAlignment(HorizontalPanel.ALIGN_JUSTIFY);
 	vpnlConfessionList.add(hPnlTopBar);
 
 	contentTableDecorator = new DecoratorPanel();

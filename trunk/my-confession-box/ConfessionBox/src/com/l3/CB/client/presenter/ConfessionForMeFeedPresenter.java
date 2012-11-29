@@ -35,6 +35,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
     private void setConfessions(boolean clean) {
 	if(clean) {
 	    this.display.clearConfessions();
+	    display.setMoreConfessions(true);
 	}
 	this.display.setConfessionPagesLoaded(0);
 	ConfessionBox.confessionService.getConfessionsTOME(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {

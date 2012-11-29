@@ -12,7 +12,7 @@ public class Templates {
 	@Template("<div class=\"confessionPreview\">'{0} confessed to {1}'</div>")
 	SafeHtml confessonPreview(String confesee, String confessor);
 
-	@Template("<div class=\"updateText\"><span class=\"confessionRelation\">{0}</span>: {1}</div><div class=\"time_stamp\">{2}</div>")
+	@Template("<div class=\"updateText\"><span class=\"confessionRelation\">{0}</span>: {1}</div><div class=\"time_stamp_update\">{2}</div>")
 	SafeHtml confessonUpdate(String confessionRelation, String updateText, String timeStamp);
 
 	@Template("Confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")

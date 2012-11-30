@@ -27,18 +27,21 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	VerticalPanel fPnlFooter = new VerticalPanel();
 	fPnlFooter.setWidth("140px");
 	ancAbout = new Anchor(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel());
+	ancAbout.setStyleName("footerLink");
 	ancPrivacy = new Anchor(ConfessionBox.cbText.privacyPolicyFooterLinkLabel());
-
+	ancPrivacy.setStyleName("footerLink");
+	
 	Label lblAppText = new Label(ConfessionBox.cbText.cbNameFooterTextLabel());
-
-
+	lblAppText.setStyleName("footerLink");
+	
 	setupAbout();
 	setupPrivacy();
 
 	fPnlFooter.add(ancAbout);
 	fPnlFooter.add(ancPrivacy);
 	fPnlFooter.add(lblAppText);
-	
+
+	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
 	contentTableDecorator.add(fPnlFooter);
     }
 

@@ -28,33 +28,36 @@ public class ChangeVisibilityButton extends PushButton {
 	this.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		ConfessionBox.confessionService.changeIdentityVisibility(
-			ConfessionBox.getLoggedInUserInfo().getUserId(),
-			ConfessionBox.getLoggedInUserInfo().getId(),
-			confession.getConfId(), !shareAnyn, new Date(),
-			new AsyncCallback<Boolean>() {
-			    @Override
-			    public void onSuccess(Boolean result) {
-				if(result) {
-				    if(shareAnyn) {
-					// Give human points
-					ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
-					setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
-				    } else {
-					//Deduct human points
-					ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
-					setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
-				    }
+		if(ConfessionBox.isLoggedIn) {
 
-				    confession.setShareAsAnyn(!confession.isShareAsAnyn());
-				    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+		    ConfessionBox.confessionService.changeIdentityVisibility(
+			    ConfessionBox.getLoggedInUserInfo().getUserId(),
+			    ConfessionBox.getLoggedInUserInfo().getId(),
+			    confession.getConfId(), !shareAnyn, new Date(),
+			    new AsyncCallback<Boolean>() {
+				@Override
+				public void onSuccess(Boolean result) {
+				    if(result) {
+					if(shareAnyn) {
+					    // Give human points
+					    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
+					    setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
+					} else {
+					    //Deduct human points
+					    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
+					    setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
+					}
+
+					confession.setShareAsAnyn(!confession.isShareAsAnyn());
+					ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+				    }
 				}
-			    }
-			    @Override
-			    public void onFailure(Throwable caught) {
-				Error.handleError("ChangeVisibilityButton", "onFailure", caught);
-			    }
-			});
+				@Override
+				public void onFailure(Throwable caught) {
+				    Error.handleError("ChangeVisibilityButton", "onFailure", caught);
+				}
+			    });
+		}
 	    }
 	});
     }

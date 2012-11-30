@@ -26,27 +26,30 @@ public class DeleteConfessionButton extends PushButton {
 	this.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		ConfessionBox.confessionService.changeConfessionVisibility(
-			ConfessionBox.getLoggedInUserInfo().getUserId(),
-			ConfessionBox.getLoggedInUserInfo().getId(),
-			confession.getConfId(), !isVisible, new Date(),
-			new AsyncCallback<Boolean>() {
-		    @Override
-		    public void onSuccess(Boolean result) {
-			if(result) {
-			    if(isVisible) {
-				setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
-			    } else {
-				setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
-			    }
-			}
-		    }
+		if(ConfessionBox.isLoggedIn) {
 
-		    @Override
-		    public void onFailure(Throwable caught) {
-			Error.handleError("DeleteConfessionButton", "onFailure", caught);
-		    }
-		});
+		    ConfessionBox.confessionService.changeConfessionVisibility(
+			    ConfessionBox.getLoggedInUserInfo().getUserId(),
+			    ConfessionBox.getLoggedInUserInfo().getId(),
+			    confession.getConfId(), !isVisible, new Date(),
+			    new AsyncCallback<Boolean>() {
+				@Override
+				public void onSuccess(Boolean result) {
+				    if(result) {
+					if(isVisible) {
+					    setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
+					} else {
+					    setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
+					}
+				    }
+				}
+
+				@Override
+				public void onFailure(Throwable caught) {
+				    Error.handleError("DeleteConfessionButton", "onFailure", caught);
+				}
+			    });
+		}
 	    }
 	});
     }

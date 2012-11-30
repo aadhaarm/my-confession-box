@@ -20,9 +20,50 @@ div.header {
 	font-family: 'lucida grande';
 }
 
-div.footer {
-	font-family: 'lucida grande';
-	padding-top: 20px;
+.footer {
+	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	padding-top: 4px;
+}
+
+.footerLink {
+	font-size: 10px !important;
+	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	color: #3B5998;
+	margin-left: 5px;
+	line-height: 0.2 !important;
+}
+
+.footerLink a.hover {
+	color: #07285d;
+}
+
+.logoLink{
+    background-color: #E9E9E9;
+    color: #3B5998;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    padding-bottom: 13px;
+    padding-left: 7px;
+    padding-right: 8px;
+    padding-top: 5px;
+	margin-left: 0px;
+	margin-right: 8px;
+	position: fixed;
+    text-align: center;
+    border-bottom: 1px solid #3B5998;
+    border-top: 1px solid #3B5998;
+    border-left: 1px solid #3B5998;
+}
+
+.tagLineText {
+	 color: dimgrey;
+    font-size: 10px;
+    margin-bottom: 20px;
+    margin-left: 14px;
+    margin-right: 14px;
+    margin-top: 19px;
+    position: fixed;
 }
 
 h1.header {
@@ -62,14 +103,6 @@ div.helpInfoDiv {
 	
 }
 
-/* .confession {
-	color: #333333;
-    line-height: 1.38;
-    margin-left: 10px;
-    font-family: lucida Grande;
-    font-size: 13px;
-}
- */
 .activityButton {
 	height: 40px;
 	width: 44px;
@@ -82,6 +115,17 @@ div.helpInfoDiv {
 	text-align: right;
 	top: -2px;
 	z-index: 1;
+}
+
+.btnWrapperMenu {
+	position: absolute;
+	right: 3px;
+	text-align: right;
+	top: 4px;
+	z-index: 1;
+	background-color: #D8DFEA;
+	padding: 2px;
+	color: #3B5998;
 }
 
 .loaderWrap {
@@ -140,10 +184,6 @@ div.helpInfoDiv {
 	margin-right: auto
 }
 
-.menuItemSelected {
-	background-color: #DAF7CF !important;
-}
-
 #auth-id {
 	display: none;
 }
@@ -181,28 +221,21 @@ div.helpInfoDiv {
 .refreshButton {
 	background-attachment: scroll;
     background-clip: border-box;
-    background-color: mintcream;
     background-image: url("/images/sprite_black2.png");
     background-origin: padding-box;
     background-position: -61px -19px;
     background-repeat: no-repeat;
     background-size: auto auto;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    height: 27px;
-    width: 27px;
+    margin-left: 5px;
+    height: 26px;
+    width: 28px;
 }
 
 .confessionFilterOptionsList {
-    background-color: mintcream;
-    border-bottom-left-radius: 7px;
-    border-bottom-right-radius: 7px;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    color: #333333;
     font-family: Comic Sans MS;
-    font-size: large;
+    font-size: small;
+    margin-left: 11px;
 }
 .confessionTitleText {
 	font-size: large;
@@ -214,11 +247,17 @@ div.helpInfoDiv {
 }
 
 .helpInfoPanel {
-	border-color: black;
-	margin-top: 6px;
-	padding: 3px;
-	border-style: solid;
-	width: 137px;
+	color: #333333;
+	background-color: #FFFF99;
+    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+    font-size: 10px;
+    line-height: 1.30;
+    margin-top: 4px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 2px;
+    padding-top: 4px;
+    width: 148px;
 }
 
 .updateConfessionPanel {
@@ -232,7 +271,7 @@ div.helpInfoDiv {
 
 .confessionUpdate {
     background-color: #FEFFED;
-    color: #343434;
+    color: #333333;
     font-size: 12px;
     margin-bottom: 0;
     margin-left: 0;

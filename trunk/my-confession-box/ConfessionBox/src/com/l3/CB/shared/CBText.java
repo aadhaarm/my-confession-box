@@ -7,10 +7,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Oops! Error while communicating with server. Do you want to reload the application?")
     String applicationError();
 
-    @DefaultStringValue("Confession wall")
+    @DefaultStringValue("Confession Wall")
     String cbMenuConfessionFeed();
 
-    @DefaultStringValue("Confess")
+    @DefaultStringValue("Write Confession")
     String cbMenuConfessionConfess();
 
     @DefaultStringValue("My Confessions")
@@ -118,7 +118,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Subscribe")
     String subscribeAnchorLabel();
 
-    @DefaultStringValue("Un-Subscribe")
+    @DefaultStringValue("Unsubscribe")
     String unSubscribeAnchorLabel();
 
     @DefaultStringValue("Subscribe to comments and pardon status updates of this confession")
@@ -190,16 +190,19 @@ public interface CBText extends Constants {
     @DefaultStringValue("less..")
     String lessLink();
 
-    @DefaultStringValue("All Confessions")
+    @DefaultStringValue("Select view")
     String filterAllConfessions();
 
-    @DefaultStringValue("Your Subscribed")
+    @DefaultStringValue("Confessions I Subscribed")
     String filterSubscribedConfessions();
 
-    @DefaultStringValue("With Hidden-Identity")
+    @DefaultStringValue("All Anonymous confessions")
     String filterHiddenIdlConfessions();
 
-    @DefaultStringValue("Your language")
+    @DefaultStringValue("Global confession wall")
+    String filterGlobalConfessions();
+    
+    @DefaultStringValue("Local confession wall")
     String filterLocaleConfessions();
 
     @DefaultStringValue("Most 'SAME BOAT'")
@@ -214,10 +217,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Most 'SHOULD BE PARDONED'")
     String filterSPVoteConfessions();
 
-    @DefaultStringValue("With Open-Identity")
+    @DefaultStringValue("All Open confessions")
     String filterOpenIdConfessions();
 
-    @DefaultStringValue("With Your Activity")
+    @DefaultStringValue("Confessions I voted")
     String filterUserActivityConfessions();
 
     @DefaultStringValue("less than a min ago")    
@@ -322,13 +325,13 @@ public interface CBText extends Constants {
     @DefaultStringValue("Privacy policy")
     String privacyPolicyFooterLinkLabel();
 
-    @DefaultStringValue("L3 Confession-Box")
+    @DefaultStringValue("Confession Box community")
     String cbNameFooterTextLabel();
 
-    @DefaultStringValue("Human Point")
+    @DefaultStringValue("Human Points")
     String humanPointWidgetLabelText();
 
-    @DefaultStringValue("Invite friends")
+    @DefaultStringValue("Invite Friends")
     String inviteFriendsLinkLabelText();
 
     @DefaultStringValue("CB RuleBook")
@@ -348,4 +351,7 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("Delete draft")
     String deleteDraftButtonLabelText();
+
+    @DefaultStringValue("The person has chosen not to reveal identity to the world.")
+    String profileNameAnonymousTileText();
 }

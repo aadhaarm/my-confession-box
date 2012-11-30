@@ -15,11 +15,11 @@ public class Templates {
 	@Template("<div class=\"updateText\"><span class=\"confessionRelation\">{0}</span>: {1}</div><div class=\"time_stamp_update\">{2}</div>")
 	SafeHtml confessonUpdate(String confessionRelation, String updateText, String timeStamp);
 
-	@Template("Confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")
+	@Template("confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")
 	SafeHtml confessedToPersomalWall(SafeUri profileLink, String name, String relation);
 
-	@Template("Confessed to {0}")
-	SafeHtml confessedToFeedWall(String userName);
+	@Template("confessed to {0} {1}")
+	SafeHtml confessedToFeedWall(String pronoun,String userName);
 
 	@Template("{0} [<a class=\"questionMark\">?</a>]")
 	SafeHtml undoToolTip(String tooltip);
@@ -35,6 +35,9 @@ public class Templates {
     
 	@Template("<b>{0}</b><br/><span class=\"subtext\">{1}</span> [<a class=\"questionMark\">?</a>]")
 	SafeHtml registerConfessionInstructionText(String mainText, String subText);
+
+	@Template("<div class=\"logoLink\">CONFESSION BOX</div><div class=\"tagLineText\">speak your heart, live free</div>")
+	SafeHtml applicationLogoAndTagLine();
     }
     
     public static final CBTemplates TEMPLATES = GWT.create(CBTemplates.class);

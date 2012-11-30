@@ -65,6 +65,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	contentTableDecorator = new DecoratorPanel();
 	contentTableDecorator.add(vpnlConfessionList);
 
+	contentTableDecorator.setStyleName("confessionListDecoratoePanel");
 	initWidget(contentTableDecorator);
 
 	bind();

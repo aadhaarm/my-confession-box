@@ -362,12 +362,17 @@ public class CommonUtils {
 	    if (!confession.isShareAsAnyn() || !isAnyn) {
 		if (userInfo != null) {
 		    Anchor ancUserName = new Anchor(userInfo.getName(),	userInfo.getLink());
-		    ancUserName.removeStyleName("gwt-Anchor");
+		    ancUserName.setStyleName("profileName");
 		    ancUserName.setTarget("_BLANK");
 		    fPnlNameWidget.add(ancUserName);
 		}
 	    } else {
+		// Anonymous user
 		Anchor ancAnynUser = new Anchor();
+		ancAnynUser.setStyleName("profileName");
+		// Tooltil HTML title
+		ancAnynUser.setTitle(ConfessionBox.cbText.profileNameAnonymousTileText());
+		// Confessed by anonymous
 		ancAnynUser.setText(ConfessionBox.cbText.confessedByAnynName());
 		fPnlNameWidget.add(ancAnynUser);
 	    }
@@ -383,12 +388,17 @@ public class CommonUtils {
 
 			fPnlNameWidget.add(confessedToHtml);
 		    } else {
-			HTML confessedToHtml = new HTML(Templates.TEMPLATES.confessedToFeedWall(checkForNullConfessedTo(confessionShare.getRelation())));
+			HTML confessedToHtml = new HTML(Templates.TEMPLATES.confessedToFeedWall(getPronoun(confession.getGender()) ,checkForNullConfessedTo(confessionShare.getRelation())));
 			confessedToHtml.setStyleName(Constants.STYLE_CLASS_CONFESSED_TO_TEXT);
 
 			fPnlNameWidget.add(confessedToHtml);
 		    }
 		}
+	    } else {
+		HTML confessedToHtml = new HTML("confessed to World");
+		confessedToHtml.setStyleName(Constants.STYLE_CLASS_CONFESSED_TO_TEXT);
+
+		fPnlNameWidget.add(confessedToHtml);
 	    }
 	    // Link to Feed preview of the confession
 	    if(showConfessedTo) {
@@ -406,6 +416,13 @@ public class CommonUtils {
 	    }
 	}
 	return fPnlNameWidget;
+    }
+
+    private static String getPronoun(String gender) {
+	if(gender != null && gender.equalsIgnoreCase("male")) {
+	    return "his";
+	}
+	return "her";
     }
 
     /**
@@ -535,14 +552,15 @@ public class CommonUtils {
 	    lstFilterOptions.setStyleName("confessionFilterOptionsList");
 	    lstFilterOptions.setVisible(false);
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterAllConfessions(), Filters.ALL.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterGlobalConfessions(), Filters.ALL.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLocaleConfessions(), Filters.LOCALE_SPECIFIC.name());
-	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSubscribedConfessions(), Filters.SUBSCRIBED .name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterUserActivityConfessions(), Filters.USER_ACTIVITY.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSubscribedConfessions(), Filters.SUBSCRIBED .name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterHiddenIdlConfessions(), Filters.CLOSED .name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterOpenIdConfessions(), Filters.OPEN.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSBVoteConfessions(), Filters.MOST_SAME_BOATS.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSymVoteConfessions(), Filters.MOST_SYMPATHY.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSPVoteConfessions(), Filters.MOST_SHOULD_BE_PARDONED.name());
-	    lstFilterOptions.addItem(ConfessionBox.cbText.filterHiddenIdlConfessions(), Filters.CLOSED .name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLameVotedConfessions(), Filters.MOST_LAME.name());
 	}
 	return lstFilterOptions;

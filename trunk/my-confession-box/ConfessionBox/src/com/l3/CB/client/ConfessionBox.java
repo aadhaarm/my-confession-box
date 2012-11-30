@@ -12,12 +12,14 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.l3.CB.client.controller.ConfessionController;
+import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
@@ -49,7 +51,8 @@ public class ConfessionBox implements EntryPoint {
     public static FacebookServiceAsync facebookService = null;
     public static ConfessionServiceAsync confessionService = null;
     public static Image logo;
-
+    public static HTML logoAndTag;
+    
     /*
      * Pop-up panel showing LOADING
      */
@@ -63,7 +66,8 @@ public class ConfessionBox implements EntryPoint {
 	
 	// Application title/LOGO image
 	logo = new Image(Constants.APPLICATION_LOGO_IMAGE);
-
+	logoAndTag = new HTML(Templates.TEMPLATES.applicationLogoAndTagLine());
+	
 	// Get XSRF setup
 //	String cookie = Cookies.getCookie("JSESSIONID");
 //	if(cookie == null) {
@@ -180,7 +184,8 @@ public class ConfessionBox implements EntryPoint {
     public static void removeApplicationLoad() {
 	pnlApplicationLoad.hide();
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
-	RootPanel.get(Constants.DIV_APPLN_TITLE).add(logo);
+	RootPanel.get(Constants.DIV_APPLN_TITLE).add(logoAndTag);
+	
     }
 
     /**

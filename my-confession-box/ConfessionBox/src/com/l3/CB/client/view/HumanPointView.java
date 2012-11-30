@@ -22,15 +22,18 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	imgHumanPoint.setStyleName("humanPointImg");
 
 	Label humanPoint = new Label(ConfessionBox.cbText.humanPointWidgetLabelText());
+	humanPoint.setStyleName("humanPointLabel");
+	
 	points = new Label();
-	points.addStyleName("humanPointLabel");
+	points.setStyleName("humanPointLabel");
 
 	FlowPanel fPnlHumanPoint = new FlowPanel();
 	fPnlHumanPoint.setWidth("140px");
 	fPnlHumanPoint.add(imgHumanPoint);
-	fPnlHumanPoint.add(humanPoint);
 	fPnlHumanPoint.add(points);
+	fPnlHumanPoint.add(humanPoint);
 
+	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
 	contentTableDecorator.add(fPnlHumanPoint);
     }
 

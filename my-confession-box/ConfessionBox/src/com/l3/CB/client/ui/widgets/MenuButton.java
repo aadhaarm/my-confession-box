@@ -19,7 +19,7 @@ public class MenuButton extends AbsolutePanel {
 
 	lblButtonCount = new Label(Integer.toString(count));
 	this.add(menuBtn);
-	lblButtonCount.setStyleName(Constants.STYLE_CLASS_BUTTON_WRAPPER);
+	lblButtonCount.setStyleName("btnWrapperMenu");
 	this.add(lblButtonCount, menuBtn.getElement());
     }
 

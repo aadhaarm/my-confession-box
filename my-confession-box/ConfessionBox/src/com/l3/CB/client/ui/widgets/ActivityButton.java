@@ -10,7 +10,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
@@ -31,13 +31,14 @@ public class ActivityButton extends AbsolutePanel {
 
     final PushButton btn;
     Label lblTimerCount = null;
+    Label lblBtnName = null;
     Image loader = null;
-    Button btnShare = null;
+    Anchor ancShare = null;
     int timerCountNumber = 5;
 
     public ActivityButton(final Activity activity, final Confession confession, String titleText, String btnStyleName, final Image buttonImage) {
 	super();
-	this.addStyleName(Constants.DIV_ACTIVITY_BUTTON_CONTAINER);
+	this.setStyleName(Constants.DIV_ACTIVITY_BUTTON_CONTAINER);
 	long count = getCount(confession, activity);
 
 	btn = new PushButton(buttonImage);
@@ -47,9 +48,10 @@ public class ActivityButton extends AbsolutePanel {
 
 	getTimerWrapAnimation();
 
-	btnShare = new Button(ConfessionBox.cbText.activityButtonShareButtonLabel()); 
-	btnShare.setStyleName(Constants.DIV_ACTIVITY_BUTTON_SHARE_BUTTON);
-	btnShare.addClickHandler(new ClickHandler() {
+	ancShare = new Anchor(ConfessionBox.cbText.activityButtonShareButtonLabel());
+	ancShare.setTitle("Share this vote on your Facebook wall.");
+	ancShare.setStyleName(Constants.DIV_ACTIVITY_BUTTON_SHARE_BUTTON);
+	ancShare.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
@@ -76,6 +78,12 @@ public class ActivityButton extends AbsolutePanel {
 	this.add(btn);
 	btnCount.setStyleName(Constants.STYLE_CLASS_BUTTON_WRAPPER);
 	this.add(btnCount, btn.getElement());
+
+	lblBtnName = new Label("✔");
+	lblBtnName.setStyleName("btnNameText");
+	lblBtnName.setVisible(false);
+	this.add(lblBtnName, btn.getElement());
+	
 	bind(activity, btn);
     }
 
@@ -174,8 +182,8 @@ public class ActivityButton extends AbsolutePanel {
 
 			    btn.setEnabled(false);
 
-			    btnShare.setVisible(true);
-			    add(btnShare, btn.getElement());
+			    ancShare.setVisible(true);
+			    add(ancShare);
 			    EventUtils.raiseUpdateHPEvent(activity.getActivityPoints());
 			    ConfessionBox.confEventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
 			}
@@ -314,7 +322,8 @@ public class ActivityButton extends AbsolutePanel {
      */
     public void disableBtn() {
 	btn.setEnabled(false);
-	btnShare.setVisible(true);
-	add(btnShare, btn.getElement());
+	ancShare.setVisible(true);
+	lblBtnName.setVisible(true);
+	add(ancShare);
     }
 }

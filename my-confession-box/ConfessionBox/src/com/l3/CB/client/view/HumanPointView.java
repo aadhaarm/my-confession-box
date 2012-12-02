@@ -25,7 +25,7 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	humanPoint.setStyleName("humanPointLabel");
 	
 	points = new Label();
-	points.setStyleName("humanPointLabel");
+	points.setStyleName("humanPointNumbers");
 
 	FlowPanel fPnlHumanPoint = new FlowPanel();
 	fPnlHumanPoint.setWidth("140px");
@@ -34,6 +34,7 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	fPnlHumanPoint.add(humanPoint);
 
 	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
+	contentTableDecorator.setTitle("right now nothing happens..");
 	contentTableDecorator.add(fPnlHumanPoint);
     }
 

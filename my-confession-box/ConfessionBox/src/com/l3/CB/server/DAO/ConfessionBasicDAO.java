@@ -215,15 +215,33 @@ public class ConfessionBasicDAO {
 			confessions.add(confession);
 		    }
 		}
-		break;					
-	    default:
-		List<ConfessionDO> resultSet8 = null;
+		break;
+		
+	    case MOST_SHOULD_NOT_BE_PARDONED:
 		query.setFilter("isVisibleOnPublicWall == status");
 		query.declareParameters("String status");
+		query.setOrdering("numOfShouldNotBePardonedVote desc");					
+		List<ConfessionDO> resultSet8 = null;
 		resultSet8 = (List<ConfessionDO>) query.execute(true);
 		if (resultSet8 != null && !resultSet8.isEmpty()) {
 		    confessions = new ArrayList<Confession>();
 		    Iterator<ConfessionDO> it = resultSet8.iterator();
+		    while (it.hasNext()) {
+			ConfessionDO confessionDO = it.next();
+			Confession confession = getConfession(confessionDO);
+			confessions.add(confession);
+		    }
+		}
+		break;
+		
+	    default:
+		List<ConfessionDO> resultSet9 = null;
+		query.setFilter("isVisibleOnPublicWall == status");
+		query.declareParameters("String status");
+		resultSet9 = (List<ConfessionDO>) query.execute(true);
+		if (resultSet9 != null && !resultSet9.isEmpty()) {
+		    confessions = new ArrayList<Confession>();
+		    Iterator<ConfessionDO> it = resultSet9.iterator();
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);

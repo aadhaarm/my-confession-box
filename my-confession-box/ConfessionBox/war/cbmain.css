@@ -6,6 +6,8 @@ div.container {
 	float: inherit;
 	margin-left: auto;
 	margin-right: auto;
+	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	color: #333333;
 }
 
 div.header {
@@ -21,49 +23,51 @@ div.header {
 }
 
 .footer {
-	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	padding-top: 4px;
 }
 
 .footerLink {
 	font-size: 10px !important;
-	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	color: #3B5998;
 	margin-left: 5px;
-	line-height: 0.2 !important;
+	display: block;
+	height: 14px;
+	cursor: pointer;
 }
 
 .footerLink a.hover {
 	color: #07285d;
 }
 
-.logoLink{
-    background-color: #E9E9E9;
-    color: #3B5998;
-    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
-    font-size: 15px;
-    font-weight: bold;
-    padding-bottom: 13px;
-    padding-left: 7px;
-    padding-right: 8px;
-    padding-top: 5px;
+.logoLink {
+	background-color: #E9E9E9;
+	color: #3B5998;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	padding-bottom: 13px;
+	padding-left: 7px;
+	padding-right: 8px;
+	padding-top: 5px;
 	margin-left: 0px;
 	margin-right: 8px;
 	position: fixed;
-    text-align: center;
-    border-bottom: 1px solid #3B5998;
-    border-top: 1px solid #3B5998;
-    border-left: 1px solid #3B5998;
+	text-align: center;
+	border-bottom: 1px solid #3B5998;
+	border-top: 1px solid #3B5998;
+	border-left: 1px solid #3B5998;
 }
 
 .tagLineText {
-	 color: dimgrey;
-    font-size: 10px;
-    margin-bottom: 20px;
-    margin-left: 14px;
-    margin-right: 14px;
-    margin-top: 19px;
-    position: fixed;
+	color: dimgrey;
+	font-size: 10px;
+	margin-bottom: 20px;
+	margin-left: 14px;
+	margin-right: 14px;
+	margin-top: 19px;
+	position: fixed;
 }
 
 h1.header {
@@ -104,8 +108,8 @@ div.helpInfoDiv {
 }
 
 .activityButton {
-	height: 40px;
-	width: 44px;
+	height: 36px;
+	width: 40px;
 	float: left;
 }
 
@@ -115,6 +119,7 @@ div.helpInfoDiv {
 	text-align: right;
 	top: -2px;
 	z-index: 1;
+	font-size: 10px;
 }
 
 .btnWrapperMenu {
@@ -145,24 +150,37 @@ div.helpInfoDiv {
 }
 
 .shareWrap {
+	color: #D8DFEA;
+	cursor: pointer;
+	font-size: xx-small;
+	padding-bottom: 1px;
+	padding-left: 11px;
+	padding-right: 1px;
+	padding-top: 0;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.btnNameText {
+	color: black;
+	font-size: 17px;
 	position: absolute;
-	text-align: right;
-	right: 3px;
-	top: 24px;
-	font-size: x-small;
+	right: -18px;
+	text-align: center;
+	top: 26px;
+	width: 51px;
 	z-index: 1;
-	font-weight: bold;
-	background-color: white;
 }
 
 .activityButtonContainer {
 	float: left;
-	width: 57px;
+	width: 53px;
 }
 
 .userControlButtonContainer {
 	float: right;
 	height: 30px;
+	width: 30px;
 }
 
 .userControlButton {
@@ -220,23 +238,31 @@ div.helpInfoDiv {
 
 .refreshButton {
 	background-attachment: scroll;
-    background-clip: border-box;
-    background-image: url("/images/sprite_black2.png");
-    background-origin: padding-box;
-    background-position: -61px -19px;
-    background-repeat: no-repeat;
-    background-size: auto auto;
-    margin-left: 5px;
-    height: 26px;
-    width: 28px;
+	background-clip: border-box;
+	background-image: url("/images/sprite_black2.png");
+	background-origin: padding-box;
+	background-position: -61px -19px;
+	background-repeat: no-repeat;
+	background-size: auto auto;
+	margin-left: 5px;
+	height: 26px;
+	width: 28px;
+}
+
+.filterInfo {
+	text-align: left;
+	border: 1px solid gray;
+	margin: 2px;
+	text-align: center;
 }
 
 .confessionFilterOptionsList {
-    color: #333333;
-    font-family: Comic Sans MS;
-    font-size: small;
-    margin-left: 11px;
+	color: #333333;
+	font-family: Comic Sans MS;
+	font-size: small;
+	margin-left: 11px;
 }
+
 .confessionTitleText {
 	font-size: large;
 	font-weight: bold;
@@ -249,15 +275,15 @@ div.helpInfoDiv {
 .helpInfoPanel {
 	color: #333333;
 	background-color: #FFFF99;
-    font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
-    font-size: 10px;
-    line-height: 1.30;
-    margin-top: 4px;
-    padding-bottom: 2px;
-    padding-left: 6px;
-    padding-right: 2px;
-    padding-top: 4px;
-    width: 148px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 10px;
+	line-height: 1.30;
+	margin-top: 4px;
+	padding-bottom: 2px;
+	padding-left: 6px;
+	padding-right: 2px;
+	padding-top: 4px;
+	width: 148px;
 }
 
 .updateConfessionPanel {
@@ -266,26 +292,26 @@ div.helpInfoDiv {
 }
 
 .confessionRelation {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .confessionUpdate {
-    background-color: #FEFFED;
-    color: #333333;
-    font-size: 12px;
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 0;
-    padding-bottom: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    width: 522px;
-    overflow: auto;
-    border-bottom-color: #999999;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
+	background-color: #FEFFED;
+	color: #333333;
+	font-size: 12px;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	width: 522px;
+	overflow: auto;
+	border-bottom-color: #999999;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
 }
 
 .updateText {
@@ -295,4 +321,18 @@ div.helpInfoDiv {
 .questionMark {
 	cursor: pointer;
 	color: white;
+}
+
+.questionMark_bl {
+	color: black;
+	cursor: pointer;
+}
+
+.emptyPageText {
+	font-size: 15px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	width: 475px;
 }

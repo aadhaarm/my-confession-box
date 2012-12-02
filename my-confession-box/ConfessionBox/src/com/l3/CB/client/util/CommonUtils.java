@@ -299,7 +299,7 @@ public class CommonUtils {
 		    if(jsonValue != null) {
 			JSONObject jsonObject = jsonValue.isObject();
 
-			if(jsonObject != null) {
+			if(jsonObject != null && jsonObject.get("data") != null) {
 			    JSONArray jsonArray = jsonObject.get("data").isArray();
 
 			    if(jsonArray != null) {
@@ -418,7 +418,7 @@ public class CommonUtils {
 	return fPnlNameWidget;
     }
 
-    private static String getPronoun(String gender) {
+    public static String getPronoun(String gender) {
 	if(gender != null && gender.equalsIgnoreCase("male")) {
 	    return "his";
 	}
@@ -480,7 +480,7 @@ public class CommonUtils {
      * @return Confession text with more and less links
      */
     public static FlowPanel getTextTruncated(final String confession) {
-	final String DEFAULT_TEXT_HEIGHT = "90px";
+	final String DEFAULT_TEXT_HEIGHT = "84px";
 	final FlowPanel fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 
@@ -547,7 +547,8 @@ public class CommonUtils {
      * @param lstFilterOptions
      * @return list box with all filter options
      */
-    public static ListBox getMeFilterListBox(ListBox lstFilterOptions) {
+    public static ListBox getFilterListBox() {
+	final ListBox lstFilterOptions = new ListBox();
 	if(lstFilterOptions != null) {
 	    lstFilterOptions.setStyleName("confessionFilterOptionsList");
 	    lstFilterOptions.setVisible(false);
@@ -561,6 +562,7 @@ public class CommonUtils {
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSBVoteConfessions(), Filters.MOST_SAME_BOATS.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSymVoteConfessions(), Filters.MOST_SYMPATHY.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSPVoteConfessions(), Filters.MOST_SHOULD_BE_PARDONED.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterSNPVoteConfessions(), Filters.MOST_SHOULD_NOT_BE_PARDONED.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLameVotedConfessions(), Filters.MOST_LAME.name());
 	}
 	return lstFilterOptions;
@@ -608,8 +610,9 @@ public class CommonUtils {
      * NO confessions for you in this view
      * @return widget
      */
-    public static Widget getEmptyWidget() {
-	Label lblEmptyPage = new Label(ConfessionBox.cbText.noConfessionsInViewMessage());
+    public static Widget getEmptyWidget(String emptyPageText) {
+	Label lblEmptyPage = new Label(emptyPageText);
+	lblEmptyPage.setStyleName("emptyPageText");
 	return lblEmptyPage;
     }
 

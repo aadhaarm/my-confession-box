@@ -19,9 +19,9 @@ import com.l3.CB.shared.TO.UserInfo;
 public class ConfessionPanel extends FlowPanel{
 
     private Confession confession;
-    private final boolean anonymousView;
+    private boolean anonymousView;
     private UserInfo confessedByUserInfo;
-    private final boolean showUserControls;
+    private boolean showUserControls;
     private FlowPanel fPnlMiddleContent;    
     private Image imgProfileImage;
     private Widget hPnlUserControls;
@@ -37,15 +37,17 @@ public class ConfessionPanel extends FlowPanel{
 
     public ConfessionPanel(Confession confession, boolean showUserControls, boolean isAnyn) {
 	super();
+	if(confession != null) {
 
-	this.confession = confession;
-	this.anonymousView = isAnyn;
-	this.showUserControls = showUserControls;
+	    this.confession = confession;
+	    this.anonymousView = isAnyn;
+	    this.showUserControls = showUserControls;
 
-	this.getElement().setId("confession-id-" + confession.getConfId());
-	this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
+	    this.getElement().setId("confession-id-" + confession.getConfId());
+	    this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
-	getConfessionWidgetsSetup(confession);
+	    getConfessionWidgetsSetup(confession);
+	}
     }
 
     /**
@@ -175,7 +177,7 @@ public class ConfessionPanel extends FlowPanel{
 	// User ACTIVITY Buttons
 	fPnlButtonEtc.add(fPnlActivityButtons);
 	this.add(fPnlButtonEtc);
-	
+
 	// Show Pardon status
 	if(lblPardonStatus != null) {
 	    this.add(lblPardonStatus);

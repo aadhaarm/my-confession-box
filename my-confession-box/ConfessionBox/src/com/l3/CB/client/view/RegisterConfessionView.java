@@ -56,8 +56,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlTop = new FlowPanel();
 	fPnlTop.setStyleName("selections");
 	
-	HTML topTitle = new HTML(
-		Templates.TEMPLATES.registerConfessionInstructionText(
+	HTML topTitle = new HTML(Templates.TEMPLATES.registerConfessionInstructionText(
 			ConfessionBox.cbText.registerConfessionInstructionTextOne(),
 			ConfessionBox.cbText.registerConfessionInstructionTextTwo()));
 	topTitle.addClickHandler(new ClickHandler() {
@@ -102,7 +101,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName("confession");
 	
-	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld()));
+	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
 	fPnlConfessionForm.add(htmlConfessionPreview);
 	
 	txtTitle = new CBTextBox();

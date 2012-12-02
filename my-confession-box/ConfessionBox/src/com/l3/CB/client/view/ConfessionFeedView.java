@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -27,6 +28,7 @@ import com.l3.CB.client.ui.widgets.ConfessionPanel;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.Filters;
 
 public class ConfessionFeedView extends Composite implements ConfessionFeedPresenter.Display {
 
@@ -39,11 +41,13 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
     private final Button btnRefresh;
     private final HorizontalPanel hPnlTopBar;
     private Map<Long, ConfessionPanel> confessionsThisView;
+    private final Label lblfilterInfo;
 
     public ConfessionFeedView() {
 	super();
-	lstFilterOptions = new ListBox();
-	CommonUtils.getMeFilterListBox(lstFilterOptions);
+	lstFilterOptions = CommonUtils.getFilterListBox();
+	lblfilterInfo = new Label();
+	lblfilterInfo.setStyleName("filterInfo");
 
 	btnRefresh = new Button();
 	btnRefresh.setTitle("Refresh");
@@ -53,6 +57,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	hPnlTopBar.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
 	hPnlTopBar.add(lstFilterOptions);
 	hPnlTopBar.add(btnRefresh);
+	hPnlTopBar.add(lblfilterInfo);
 
 	confessionPagesLoaded = 1;
 	getMeLoaderImage();
@@ -115,21 +120,22 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
     }
 
     @Override
-    public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls) {
+    public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter) {
 	if(confessionsThisView == null) {
 	    confessionsThisView = new HashMap<Long, ConfessionPanel>();
 	}
 	if (confessions != null && !confessions.isEmpty()) {
 	    for (final Confession confession : confessions) {
-		final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn);
-		vpnlConfessionList.add(fPnlConfessionMain);
-//		Element element = DOM.getElementById("confession-id-" + confession.getConfId());
-//		if(element != null) {
-//		    CommonUtils.parseXFBMLJS(element);
-//		}
-		confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);
+		if(confession != null) {
+		    final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn);
+		    vpnlConfessionList.add(fPnlConfessionMain);
+		    confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);
+		}
 	    }
 	} else {
+	    if(confessionsThisView == null || confessionsThisView.isEmpty()) {
+		vpnlConfessionList.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
+	    }
 	    isMoreConfessionsAvailable = false;
 	}
     }
@@ -145,7 +151,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	    if(fPnlConfessionMain != null) {
 		fPnlConfessionMain.clear();
 		fPnlConfessionMain.getConfessionWidgetsSetup(confession);
-//		CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
+		//		CommonUtils.parseXFBMLJS(DOM.getElementById("confession-id-" + confession.getConfId()));
 	    }
 	}
     }
@@ -219,6 +225,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	vpnlConfessionList.clear();
 	hPnlTopBar.add(lstFilterOptions);
 	hPnlTopBar.add(btnRefresh);
+	hPnlTopBar.add(lblfilterInfo);
 	vpnlConfessionList.add(hPnlTopBar);
     }
 
@@ -229,5 +236,13 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public void showEmptyScreen() {
+    }
+
+    public void setFilterInfo(String filterInfoText) {
+	lblfilterInfo.setText(filterInfoText);
+    }
+
+    public void resetConfessionsThisView() {
+	confessionsThisView = null;
     }
 }

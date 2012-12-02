@@ -275,8 +275,12 @@ public class RegisterConfessionPresenter implements Presenter {
 		confessor = display.getRelationSuggestBox().getSelectedRelation().getDisplayText();
 	    }
 	}
+	if(display.isShared() && display.getRelationSuggestBox() != null && display.getRelationSuggestBox().getSelectedRelation() != null) {
+	    display.getHtmlConfessionPreview().setHTML(Templates.TEMPLATES.confessonPreview(confesee, confessor, CommonUtils.getPronoun(ConfessionBox.loggedInUserInfo.getGender())));
+	} else {
+	    display.getHtmlConfessionPreview().setHTML(Templates.TEMPLATES.confessonPreview(confesee, confessor, "the"));
+	}
 
-	display.getHtmlConfessionPreview().setHTML(Templates.TEMPLATES.confessonPreview(confesee, confessor));
 	display.getHtmlConfessionPreview().setVisible(true);
     }
 

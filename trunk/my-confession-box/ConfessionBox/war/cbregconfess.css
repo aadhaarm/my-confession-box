@@ -34,7 +34,9 @@ a:hover {
 }
 
 .subtext {
-	font-size:smaller;	
+	font-size:smaller;
+	width: 486px;	
+	line-height: 1.38;
 }
 
 .reg_image {
@@ -67,6 +69,7 @@ a:hover {
     margin-right: 5px;
     margin-top: 3px;
     width: 25px;
+	cursor: pointer;
 }
 	
 .confession {

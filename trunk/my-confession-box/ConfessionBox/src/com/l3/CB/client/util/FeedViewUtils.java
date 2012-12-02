@@ -240,32 +240,32 @@ public class FeedViewUtils {
 
     public static Widget getABButton(final Confession confession) {
 	return new ActivityButton(Activity.ABUSE, confession, ConfessionBox.cbText.buttonTitleReportAbuse(),
-		Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
+		Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/blank.png",0,0,32,36));
     }
 
     public static Widget getSNPButton(final Confession confession) {
 	return new ActivityButton(Activity.SHOULD_NOT_BE_PARDONED, confession, ConfessionBox.cbText.buttonTitleShouldNotBePardoned(),
-		Constants.STYLE_CLASS_SNP_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
+		Constants.STYLE_CLASS_SNP_ACTIVITY, new Image("/images/SNBP.png",0,0,32,36));
     }
 
     public static Widget getSPButton(final Confession confession) {
 	return new ActivityButton(Activity.SHOULD_BE_PARDONED, confession, ConfessionBox.cbText.buttonTitleShouldBePardoned(),
-		Constants.STYLE_CLASS_SP_ACTIVITY, new Image("/images/shouldBepardoned.png",0,0,37,40));
+		Constants.STYLE_CLASS_SP_ACTIVITY, new Image("/images/SBP.png",0,0,32,36));
     }
 
     public static Widget getLMButton(final Confession confession) {
 	return new ActivityButton(Activity.LAME, confession, ConfessionBox.cbText.buttonTitleLameConfession(),
-		Constants.STYLE_CLASS_LAME_ACTIVITY, new Image("/images/blank.png",0,0,37,40));
+		Constants.STYLE_CLASS_LAME_ACTIVITY, new Image("/images/lame.png",0,0,32,36));
     }
 
     public static Widget getSYButton(final Confession confession) {
 	return new ActivityButton(Activity.SYMPATHY, confession, ConfessionBox.cbText.buttonTitleSympathy(),
-		Constants.STYLE_CLASS_SYM_ACTIVITY, new Image("/images/sympathies.png",0,0,37,40));
+		Constants.STYLE_CLASS_SYM_ACTIVITY, new Image("/images/sympathies.png",0,0,32,36));
     }
 
     public static Widget getSBButton(final Confession confession) {
 	return new ActivityButton(Activity.SAME_BOAT, confession, ConfessionBox.cbText.buttonTitleSameBoat(),
-		Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,37,40));
+		Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,32,36));
     }
 
     public static Widget getLikeButton(Long confId) {

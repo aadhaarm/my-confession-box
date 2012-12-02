@@ -39,7 +39,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	Widget asWidget();
 
 	public void setConfessionPagesLoaded(int confessionPagesLoaded);
-	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls);
+	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter);
 	public void addLoaderImage();
 	public void incrementConfessionPagesLoaded();
 	public void removeLoaderImage();
@@ -55,7 +55,9 @@ public class ConfessionFeedPresenter implements Presenter {
 	public HasChangeHandlers getConfessionFilterListBox();
 	public HasFocusHandlers getConfessionFilterListBoxForHelp();
 	public HasClickHandlers getRefreshButton();
+	public void setFilterInfo(String filterInfoText);
 	
+	public void resetConfessionsThisView();	
 	public void setMoreConfessions(boolean moreConfessions);
     }
 
@@ -90,7 +92,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		if(result != null) {
 		    ArrayList<Confession> confessionList = new ArrayList<Confession>();
 		    confessionList.add(result);
-		    display.setConfessions(confessionList, true, showUserControls);
+		    display.setConfessions(confessionList, true, showUserControls, filter);
 		}
 	    }
 
@@ -105,14 +107,13 @@ public class ConfessionFeedPresenter implements Presenter {
 	if(clean) {
 	    display.setMoreConfessions(true);
 	    display.clearConfessions();
+	    display.resetConfessionsThisView();
 	}
 	this.display.setConfessionPagesLoaded(0);
 	ConfessionBox.confessionService.getConfessions(0, filter, ConfessionBox.getLoggedInUserInfo().getLocale(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
-		if(result != null) {
-		    display.setConfessions(result, true, showUserControls);
-		}
+		display.setConfessions(result, true, showUserControls, filter);
 	    }
 	    @Override
 	    public void onFailure(Throwable caught) {
@@ -138,7 +139,7 @@ public class ConfessionFeedPresenter implements Presenter {
 
 			@Override
 			public void onSuccess(List<Confession> result) {
-			    display.setConfessions(result, true, showUserControls);
+			    display.setConfessions(result, true, showUserControls, filter);
 			    inEvent = false;
 			    display.removeLoaderImage();
 			}
@@ -159,6 +160,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		ListBox lstBoxFilter = (ListBox)event.getSource();
 		String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
 		filter = Filters.valueOf(selectedFilter);
+		display.setFilterInfo(filter.getFilterInfoText());
 		setConfessions(true);
 	    }
 	});

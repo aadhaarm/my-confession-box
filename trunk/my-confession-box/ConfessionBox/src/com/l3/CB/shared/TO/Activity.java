@@ -1,81 +1,38 @@
 package com.l3.CB.shared.TO;
 
 public enum Activity {
-	SAME_BOAT, SYMPATHY, LAME, SHOULD_BE_PARDONED, SHOULD_NOT_BE_PARDONED, ABUSE;
+    SAME_BOAT("Same boat", "has voted 'same boat'", 10, 1), 
+    SYMPATHY("Sympathy", "has sympathised", 5, 1), 
+    LAME("Lame", "has voted 'lame'", 5, 1), 
+    SHOULD_BE_PARDONED("Pardon", "has voted 'Should be pardoned'", 10, 1), 
+    SHOULD_NOT_BE_PARDONED("No pardon", "has voted 'Should not be pardoned'", 2, 1), 
+    ABUSE("Flag", "has reported abuse", 0, 0);
 
-	public String getActivityAsVerb() {
-		String returnVal = "";
-		switch (this) {
-		case ABUSE:
-			returnVal = "has reported abuse";
-			break;
-		case SAME_BOAT:
-			returnVal = "has voted 'same boat'";
-			break;
-		case LAME:
-			returnVal = "has voted 'lame'";
-			break;
-		case SHOULD_BE_PARDONED:
-			returnVal = "has voted 'Should be pardoned'";
-			break;
-		case SHOULD_NOT_BE_PARDONED:
-			returnVal = "has voted 'Should not be pardoned'";
-			break;
-		case SYMPATHY:
-			returnVal = "has sympathised";
-			break;
-		}
-		return returnVal;
-	}
+    String activityName;
+    String activityVerb;
+    int activitySharePoints;
+    int activityPoints;
 
-	public int getActivitySharePoints() {
-		int returnVal = 0;
-		switch (this) {
-		case ABUSE:
-			returnVal = 10;
-			break;
-		case SAME_BOAT:
-			returnVal = 10;
-			break;
-		case LAME:
-			returnVal = 5;
-			break;
-		case SHOULD_BE_PARDONED:
-			returnVal = 10;
-			break;
-		case SHOULD_NOT_BE_PARDONED:
-			returnVal = 2;
-			break;
-		case SYMPATHY:
-			returnVal = 5;
-			break;
-		}
-		return returnVal;
-	}
-	
-	public int getActivityPoints() {
-		int returnVal = 0;
-		switch (this) {
-		case ABUSE:
-			returnVal = 0;
-			break;
-		case SAME_BOAT:
-			returnVal = 1;
-			break;
-		case LAME:
-			returnVal = 1;
-			break;
-		case SHOULD_BE_PARDONED:
-			returnVal = 1;
-			break;
-		case SHOULD_NOT_BE_PARDONED:
-			returnVal = 1;
-			break;
-		case SYMPATHY:
-			returnVal = 1;
-			break;
-		}
-		return returnVal;
-	}
+    private Activity(String activityName, String activityVerb, int activitySharePoints, int activityPoints) {
+	this.activityName = activityName;
+	this.activityVerb = activityVerb;
+	this.activitySharePoints = activitySharePoints;
+	this.activityPoints = activityPoints;
+    }
 
+    public String getActivityName() {
+	return activityName;
+    }
+
+    public String getActivityAsVerb() {
+	return activityVerb;
+    }
+
+    public int getActivitySharePoints() {
+	return activitySharePoints;
+    }
+
+    public int getActivityPoints() {
+	return activityPoints;
+    }
 }

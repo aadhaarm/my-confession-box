@@ -18,6 +18,7 @@ import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.Filters;
 
 public class ConfessionForMeFeedPresenter implements Presenter {
 
@@ -41,7 +42,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	ConfessionBox.confessionService.getConfessionsTOME(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
-		display.setConfessions(result, false, showUserControls);
+		display.setConfessions(result, false, showUserControls, Filters.ALL);
 		if(result == null || result.isEmpty()) {
 		    display.showEmptyScreen();
 		}
@@ -90,7 +91,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 		    ConfessionBox.confessionService.getConfessionsTOME(display.getConfessionPagesLoaded(), ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
-			    display.setConfessions(result, false, showUserControls);
+			    display.setConfessions(result, false, showUserControls, Filters.ALL);
 			    inEvent = false;
 			    display.removeLoaderImage();
 			}

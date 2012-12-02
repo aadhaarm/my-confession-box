@@ -3,12 +3,15 @@ package com.l3.CB.client.ui.widgets;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.TO.Relations;
@@ -43,6 +46,12 @@ public class RelationSuggestBox extends FlowPanel{
 	relationSuggestBox.addValueChangeHandler(new ValueChangeHandler<String>() {
 	    @Override
 	    public void onValueChange(ValueChangeEvent<String> event) {
+		validate();
+	    }
+	});
+	relationSuggestBox.addSelectionHandler(new SelectionHandler<MultiWordSuggestOracle.Suggestion>() {
+	    @Override
+	    public void onSelection(SelectionEvent<Suggestion> event) {
 		validate();
 	    }
 	});

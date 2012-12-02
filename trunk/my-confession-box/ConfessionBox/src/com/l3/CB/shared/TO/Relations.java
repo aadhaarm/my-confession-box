@@ -7,7 +7,9 @@ public enum Relations {
     ENEMY ("Enemy"), PET ("Pet"), UNCLE ("Uncle"), ANT ("Ant"), COUSIN ("Cousin"), DEBTER ("Debter"), GURU ("Guru"),
     EX_BOY_FRIEND ("Ex-boyfriend"), EX_GIRL_FRIEND ("Ex-girlfriend"), CELEBRITY ("Celebrity"), WIFE ("Wife"),
     HUSBAND ("Husband"), DAUGHTER ("Daughter"), SON ("Son"), EX_WIFE ("Ex-wife"), EX_HUSBAND ("Ex-husband"),
-    BOSS ("Boss"), JONIOR ("Junior"), SENIOR("Senior");
+    BOSS ("Boss"), JONIOR ("Junior"), SENIOR("Senior"), NEPHEW("Nephew"), NIECE("Niece"), GRAND_SON("Grand son"),
+    GRAND_DAUGHTER("Grand daughter"), GOD("God"), RELATIVE("Relative"), BEST_FRIEND("Best friend"),
+    SON_IN_LAW("Son in-law"), DAUGHTER_IN_LAW("Daughter in-law");
 
     private String displayText;
 

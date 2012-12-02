@@ -167,6 +167,7 @@ public class ConfessionManager {
      */
     public static List<Confession> getConfessionsByUser(int page, Long userId, boolean getSharedToAllDetails) {
 	List<Confession> confessions = ConfessionBasicDAO.getConfessions(userId, page, Constants.FEED_PAGE_SIZE);
+	if(confessions != null && !confessions.isEmpty())
 	getUserDetails(confessions, getSharedToAllDetails);
 	setUserActivity(userId, confessions);
 	return confessions;
@@ -204,9 +205,11 @@ public class ConfessionManager {
 	List<Confession> confessions = ConfessionBasicDAO.getConfessionsForMe(userId, page, Constants.FEED_PAGE_SIZE);
 	if(confessions != null && !confessions.isEmpty()) {
 	    for (Confession confession : confessions) {
-		String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
-		confession.setUserDetailsJSON(userDetailsJSON);
-		confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), true));
+		if(confession != null) {
+		    String userDetailsJSON = ServerUtils.fetchURL(FacebookUtil.getUserByIdUrl(confession.getFbId()));
+		    confession.setUserDetailsJSON(userDetailsJSON);
+		    confession.setConfessedTo(ConfessionBasicDAO.getConfessionShare(confession.getConfId(), true));
+		}
 	    }
 	    setUserActivity(userId, confessions);
 	}

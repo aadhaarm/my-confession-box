@@ -49,7 +49,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Hide my identity")
     String registerPageOptionHideID();
 
-    @DefaultStringValue("Appeal for pardon")
+    @DefaultStringValue("Request for pardon")
     String registerPageOptionConfessToFriend();
 
     @DefaultStringValue("Choose a friend")
@@ -217,6 +217,9 @@ public interface CBText extends Constants {
     @DefaultStringValue("Most 'SHOULD BE PARDONED'")
     String filterSPVoteConfessions();
 
+    @DefaultStringValue("Most 'SHOULD NOT BE PARDONED'")
+    String filterSNPVoteConfessions();
+    
     @DefaultStringValue("All Open confessions")
     String filterOpenIdConfessions();
 
@@ -280,7 +283,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Name of the person you confessing to")
     String friendsSuggestionBoxLabel();
 
-    @DefaultStringValue("Your relation to the person")
+    @DefaultStringValue("Relation of this person to you. (example: friend, brother, wife, uncle, boss etc)")
     String relationsSuggestionBoxLabel();
 
     @DefaultStringValue("Please choose one of the options provided (Choose 'FRIEND' if not in the options)")
@@ -343,7 +346,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Submit your confession below")
     String registerConfessionInstructionTextOne();
 
-    @DefaultStringValue("Your confession is never shared to any one unless you opt to share your identity")
+    @DefaultStringValue("Your identity is never revealed to anyone unless you choose to do so. The confession is not posted on Facebook wall by default.")
     String registerConfessionInstructionTextTwo();
 
     @DefaultStringValue("Save as draft")

@@ -1,6 +1,6 @@
 package com.l3.CB.client.presenter;
 
-import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -9,8 +9,8 @@ import com.l3.CB.shared.Constants;
 public class FooterPresenter implements Presenter {
 
     public interface Display {
-	public Anchor getAncAbout();
-	public Anchor getAncPrivacy();
+	public HTML getAncAbout();
+	public HTML getAncPrivacy();
 	Widget asWidget();
     }
 

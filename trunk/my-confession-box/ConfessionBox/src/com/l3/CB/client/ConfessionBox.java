@@ -12,6 +12,8 @@ import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.Window.Navigator;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -35,6 +37,8 @@ public class ConfessionBox implements EntryPoint {
      */
     public static CBText cbText = GWT.create(CBText.class);
 
+    public static boolean applicationLoaded = false;
+
     /*
      *  Login status and variables
      */
@@ -52,7 +56,8 @@ public class ConfessionBox implements EntryPoint {
     public static ConfessionServiceAsync confessionService = null;
     public static Image logo;
     public static HTML logoAndTag;
-    
+    public static boolean isSmallScreen;
+
     /*
      * Pop-up panel showing LOADING
      */
@@ -63,41 +68,68 @@ public class ConfessionBox implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
+	// Decide whether to consider device screen to be small or large?
+	CommonUtils.setupScreen();
 	
 	// Application title/LOGO image
 	logo = new Image(Constants.APPLICATION_LOGO_IMAGE);
 	logoAndTag = new HTML(Templates.TEMPLATES.applicationLogoAndTagLine());
-	
-	// Get XSRF setup
-//	String cookie = Cookies.getCookie("JSESSIONID");
-//	if(cookie == null) {
-//	    Cookies.setCookie("JSESSIONID", Double.toString(Random.nextDouble()));
-//	}
 
-	// Exchange token with server
-//	XsrfTokenServiceAsync xsrf = (XsrfTokenServiceAsync)GWT.create(XsrfTokenService.class);
-//	((ServiceDefTarget)xsrf).setServiceEntryPoint(GWT.getModuleBaseURL() + "xsrf");
-//	
-//	xsrf.getNewXsrfToken(new AsyncCallback<XsrfToken>() {
-//	    @Override
-//	    public void onFailure(Throwable caught) {
-//		Window.Location.assign(Window.Location.createUrlBuilder().setProtocol("https").buildString());
-//		Error.handleError("ConfessionBox", "onFailure", caught);
-//	    }
-//	    @Override
-//	    public void onSuccess(XsrfToken result) {
-		confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
-//		((HasRpcToken) confessionService).setRpcToken(result);
-
-		facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
-//		((HasRpcToken) facebookService).setRpcToken(result);
-//	    }
-//	});
+	confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
+	facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
 
 	// Get Facebook access token and other information
 	confEventBus = new HandlerManager(null);
-	
-	initializeUserInfo(true);
+
+	String authCode = Location.getParameter("code");
+
+	String error = Location.getParameter("error_reason");
+	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+
+	if (null != error && error.equals("user_denied")) {
+	    proceedToApp(confessionService, facebookService, confEventBus);
+	} else if (authCode != null) {
+	    if(confId == null || "".equals(confId)) {
+		confId = Location.getParameter("state");
+	    }
+	    
+	    facebookService.login(authCode, new AsyncCallback<String>() {
+		@Override
+		public void onSuccess(String resultAccessToken) {
+		    if(resultAccessToken != null) {
+			accessToken = CommonUtils.processAccessToken(resultAccessToken);
+			if(accessToken != null && !"".equals(accessToken)) {
+			    ConfessionBox.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
+				@Override
+				public void onSuccess(String result) {
+				    if(result != null){
+					// parse the response text into JSON
+					ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(result);
+					if(loggedInUserInfo != null) {
+					    isLoggedIn = true;
+					    loginStatus = "login";
+					}
+					proceedToApp(confessionService, facebookService, confEventBus);
+				    }
+				}
+				@Override
+				public void onFailure(Throwable caught) {
+				    Window.alert("ERROR:" + caught.getLocalizedMessage());
+				}
+			    });
+			}
+		    }
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+		    Window.alert("ERROR:" + caught.getLocalizedMessage());
+		}
+	    });
+	} else {
+//	    proceedToApp(confessionService, facebookService, confEventBus);
+	    initializeUserInfo(true);
+	}
     }
 
     /**
@@ -108,30 +140,44 @@ public class ConfessionBox implements EntryPoint {
 	if(proceedFirstLoad) {
 	    showApplicationLoad();
 	}
-	CommonUtils.loginInFB(false);
-	Timer timer = new Timer() {
-	    @Override
-	    public void run() {
-		if(loginStatus != null) {
-		    ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo();
-		    
-		    if(confessionService != null && facebookService != null) {
-			
+
+//	Window.alert("User Agent:" + Navigator.getUserAgent()
+//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
+//		+ Navigator.getPlatform() + " App name:"
+//		+ Navigator.getAppName() + " Java enabled:"
+//		+ Boolean.toString(Navigator.isJavaEnabled()));
+
+	if(Navigator.isJavaEnabled()) {
+	    CommonUtils.loginInFB(false);
+	    Timer timer = new Timer() {
+		int count = 0;
+		@Override
+		public void run() {
+		    if(loginStatus != null) {
+			ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo(1);
+			if(confessionService != null && facebookService != null) {
+			    if(proceedFirstLoad) {
+				proceedToApp(confessionService, facebookService, confEventBus);
+			    }
+			    // Cancel timer
+			    this.cancel();
+			}   
+		    } else if(count < 5){
+			count++;
+			// Timer to reschedule for 1 sec
+			this.schedule(1000);
+		    } else {
 			if(proceedFirstLoad) {
 			    proceedToApp(confessionService, facebookService, confEventBus);
 			}
-			
-			// Cancel timer
-			this.cancel();
-		    }   
-		} else {
-		    // Timer to reschedule for 1 sec
-		    this.schedule(1000);
+		    }
 		}
-	    }
-	};
-	// 0.5 second to start first load
-	timer.schedule(500);
+	    };
+	    // 0.5 second to start first load
+	    timer.schedule(500);
+	} else {
+	    CommonUtils.login(1);
+	}
     }
 
     /**
@@ -141,7 +187,8 @@ public class ConfessionBox implements EntryPoint {
      * @param facebookService
      * @param confEventBus
      */
-    private static void proceedToApp(final ConfessionServiceAsync confessionService, final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
+    public static void proceedToApp(final ConfessionServiceAsync confessionService, final FacebookServiceAsync facebookService, final HandlerManager confEventBus) {
+	applicationLoaded = true;
 	if(!isLoggedIn) {
 	    // If user chose to deny giving permission to CB or user isn't logged-in Facebook
 	    loggedInUserInfo = new UserInfo();
@@ -174,18 +221,17 @@ public class ConfessionBox implements EntryPoint {
 		pnlApplicationLoad.setPopupPosition((Window.getClientWidth()/2)-(offsetWidth/2), (Window.getClientHeight()/2)-(offsetHeight));
 	    }
 	});
-	
-//	pnlApplicationLoad.center();
     }
 
     /**
      * Remove animation
      */
     public static void removeApplicationLoad() {
-	pnlApplicationLoad.hide();
-	RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
+	if(pnlApplicationLoad != null) {
+	    pnlApplicationLoad.hide();
+	    RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
+	}
 	RootPanel.get(Constants.DIV_APPLN_TITLE).add(logoAndTag);
-	
     }
 
     /**
@@ -202,7 +248,10 @@ public class ConfessionBox implements EntryPoint {
      * 
      * @param loggedInUserInfo
      */
-    public static void setLoggedInUserInfo(UserInfo loggedInUserInfo) {
+    public static void setLoggedInUserInfoAndResetApp(UserInfo loggedInUserInfo) {
 	ConfessionBox.loggedInUserInfo = loggedInUserInfo;
+	if(applicationLoaded) {
+	    ConfessionController.updateUserInfoAndInitializeAPP();
+	}
     }
 }

@@ -7,6 +7,8 @@ package com.l3.CB.client.controller;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
@@ -43,9 +45,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     /**
      * Application variables
      */
-    private HasWidgets container;
-    private HumanPointPresenter humanPointPresenter = null;
-    private MenuPresenter menuPresenter = null;
+    private static HasWidgets container;
+    private static HumanPointPresenter humanPointPresenter = null;
+    private static MenuPresenter menuPresenter = null;
 
     /**
      * Constructors
@@ -54,6 +56,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      */
     public ConfessionController(String confId) {
 	super();
+	updateUserInfoAndInitializeAPP();
+	// Bind events
+	bind();
+    }
+
+    /**
+     * 
+     */
+    public static void updateUserInfoAndInitializeAPP() {
 	/**
 	 * Call server with logged in user info
 	 * Register if new, update info or just bring the user UserID with the user info
@@ -68,7 +79,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		public void onSuccess(Long result) {
 		    if(result != null) {
 			ConfessionBox.getLoggedInUserInfo().setUserId(result);
-			initializeApp();
+			initializeApp(true);
 		    } else {
 			Window.alert(ConfessionBox.cbText.applicationError());
 		    }
@@ -80,14 +91,12 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		}
 	    });
 	}
-	// Bind events
-	bind();
     }
 
     /**
      * Initialize Application for first view
      */
-    private void initializeApp() {
+    public static void initializeApp(boolean loadAll) {
 	// Initialize MENU
 	menuPresenter = new MenuPresenter(new MenuView());
 	menuPresenter.go(container);
@@ -102,13 +111,17 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
 
-	String loadHash = Window.Location.getParameter(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
-	if(loadHash != null) {
-	    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
-	} else if(null != ConfessionBox.confId) {
-	    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
-	} else {
-	    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
+	if(loadAll) {
+	    String loadHash = Window.Location.getParameter(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
+	    if(loadHash != null) {
+		if(null != ConfessionBox.confId) {
+		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+		} else {
+		    CommonUtils.fireHistoryEvent(loadHash);
+		}
+	    } else {
+		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
+	    }
 	}
     }
 
@@ -116,6 +129,21 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * Bind various events
      */
     private void bind() {
+
+	Window.addResizeHandler(new ResizeHandler() {
+	    @Override
+	    public void onResize(ResizeEvent event) {
+		if(Window.getClientWidth() <= 1024 && !ConfessionBox.isSmallScreen) {
+		    CommonUtils.setupScreen();
+		    initializeApp(true);
+		    // Window.Location.reload();
+		} else if(Window.getClientWidth() > 1024 && ConfessionBox.isSmallScreen){
+		    CommonUtils.setupScreen();
+		    initializeApp(true);
+		    // Window.Location.reload();
+		}
+	    }
+	});
 
 	ConfessionBox.logo.addClickHandler(new ClickHandler() {
 	    @Override
@@ -195,7 +223,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     public void go(HasWidgets container) {
 	// If not logged-in
 	if(!ConfessionBox.isLoggedIn) {
-	    initializeApp();
+	    initializeApp(true);
 	}
 	this.container = container;
 	// Remove loading Animation

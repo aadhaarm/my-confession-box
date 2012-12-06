@@ -164,9 +164,11 @@ public class CacheManager {
 
     public static String getCachedJsonObject(String url) {
 	String jsonString = "";
-	Object jsonObject = jsonCache.get(url);
-	if(jsonObject != null) {
-	    jsonString = (String)jsonObject;
+	if(url != null && !"".equals(url) && jsonCache != null && jsonCache.get(url) != null) {
+	    Object jsonObject = jsonCache.get(url);
+	    if(jsonObject != null) {
+		jsonString = (String)jsonObject;
+	    }
 	}
 	return jsonString;
     }

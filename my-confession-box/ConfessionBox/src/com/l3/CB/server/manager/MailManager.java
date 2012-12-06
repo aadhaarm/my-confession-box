@@ -59,7 +59,7 @@ public class MailManager {
 	sb.append("Dear ").append(confessionTo).append(",\n");
 	sb.append(confessssionBy).append(" has confessed to you.\n");
 	sb.append("To see what ").append(confessssionBy).append(" has confessed, please check the link ");
-	sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId);
+	sb.append(FacebookUtil.FB_APP_URL).append("?conf=").append(confId);
 	return sb.toString();
     }
 
@@ -99,7 +99,7 @@ public class MailManager {
 	sb.append("Dear ").append(pardonedToUser.getName()).append(",\n");
 	sb.append("You have been pardoned by ").append(pardonedByUser.getName()).append("\n");
 	sb.append("Please check the link ");
-	sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId);
+	sb.append(FacebookUtil.FB_APP_URL).append("?conf=").append(confId);
 	return sb.toString();	
     }
 
@@ -131,7 +131,7 @@ public class MailManager {
 	sb.append("Dear ").append(subscribedUser.getName()).append(",\n");
 	sb.append("Confession you have subscribed to has been pardoned").append("\n");
 	sb.append("Please check the link ");
-	sb.append(FacebookUtil.REDIRECT_URL).append("?conf=").append(confId);
+	sb.append(FacebookUtil.FB_APP_URL).append("?conf=").append(confId);
 	return sb.toString();	
     }
 }

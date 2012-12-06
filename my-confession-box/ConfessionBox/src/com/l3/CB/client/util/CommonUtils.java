@@ -21,6 +21,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -96,9 +97,25 @@ public class CommonUtils {
 	}
     }-*/;
 
-    public static void login() {
-	if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
-	    Window.Location.reload();
+    public static void login(int i) {
+	String confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+
+	if(i == 0) {
+	    if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
+		if(null != confId){
+		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+		} else {
+		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+		}
+	    } else {
+		ConfessionBox.proceedToApp(ConfessionBox.confessionService, ConfessionBox.facebookService, ConfessionBox.confEventBus);
+	    }
+	} else {
+	    if(null != confId){
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+	    } else {
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+	    }
 	}
     }
 
@@ -122,6 +139,8 @@ public class CommonUtils {
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserGender = response.gender;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserEmail = response.email;
+		    	var i = 0;
+        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(I)(i));
         		@com.l3.CB.client.ConfessionBox::loginStatus = "login";
         	});
             } else {
@@ -137,6 +156,8 @@ public class CommonUtils {
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserUsername = response.username;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserGender = response.gender;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
+		    	var i = 0;
+        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(I)(i));
      		    	@com.l3.CB.client.ConfessionBox::loginStatus = "login";
      		    } else {
      		        @com.l3.CB.client.ConfessionBox::isLoggedIn = false;
@@ -145,6 +166,9 @@ public class CommonUtils {
         	});
    		}
            }, {scope: 'email'});
+	} else {
+	    	var i = 0;
+		$entry(@com.l3.CB.client.util.CommonUtils::login(I)(i));
 	}
     }-*/;
 
@@ -263,7 +287,6 @@ public class CommonUtils {
 		}
 	    }
 	}
-	ConfessionBox.setLoggedInUserInfo(userInfo);
 	return userInfo;
     }
 
@@ -480,7 +503,7 @@ public class CommonUtils {
      * @return Confession text with more and less links
      */
     public static FlowPanel getTextTruncated(final String confession) {
-	final String DEFAULT_TEXT_HEIGHT = "84px";
+	final String DEFAULT_TEXT_HEIGHT = "88px";
 	final FlowPanel fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 
@@ -672,9 +695,10 @@ public class CommonUtils {
 
     /**
      * Get logged-in user info just returned from FB
+     * @param int 1: set user details automatically, 0: Do not set user details in CB
      * @return {@link UserInfo}
      */
-    public static UserInfo getLoggedInUserInfo() {
+    public static UserInfo getLoggedInUserInfo(int i) {
 	UserInfo userInfo = new UserInfo();
 	if(loggedInUserFbId != null && !loggedInUserFbId.isEmpty()) {
 	    userInfo.setId(loggedInUserFbId);
@@ -689,6 +713,36 @@ public class CommonUtils {
 	} else {
 	    userInfo.setLocale(LocaleInfo.getCurrentLocale().getLocaleName());
 	}
+	// Set login userinfo and reset app
+	if(i == 0) {
+	    ConfessionBox.setLoggedInUserInfoAndResetApp(userInfo);
+	}
 	return userInfo;
+    }
+
+    public static String processAccessToken(String result) {
+	String accessToken = null;
+	if(result != null) {
+	    String [] resultArgs = result.split("&");
+	    if(resultArgs != null && resultArgs.length > 0) {
+		String [] accessTokenParam = resultArgs[0].split("=");
+		if(accessTokenParam != null && accessTokenParam.length >= 2) {
+		    accessToken = accessTokenParam[1];
+		}
+	    }
+	}
+	return accessToken;
+    }
+
+    /**
+     * Decide when to consider device to be small.
+     */
+    public static void setupScreen() {
+	int screenWidth = Window.getClientWidth();
+	if(screenWidth <= 1024) {
+	    ConfessionBox.isSmallScreen = true;
+	} else {
+	    ConfessionBox.isSmallScreen = false;
+	}
     }
 }

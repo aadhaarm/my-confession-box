@@ -240,7 +240,7 @@ public class FeedViewUtils {
 
     public static Widget getABButton(final Confession confession) {
 	return new ActivityButton(Activity.ABUSE, confession, ConfessionBox.cbText.buttonTitleReportAbuse(),
-		Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/blank.png",0,0,32,36));
+		Constants.STYLE_CLASS_ABUSE_ACTIVITY, new Image("/images/flag.png",0,0,32,36));
     }
 
     public static Widget getSNPButton(final Confession confession) {
@@ -265,7 +265,7 @@ public class FeedViewUtils {
 
     public static Widget getSBButton(final Confession confession) {
 	return new ActivityButton(Activity.SAME_BOAT, confession, ConfessionBox.cbText.buttonTitleSameBoat(),
-		Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/sameBoat.png",0,0,32,36));
+		Constants.STYLE_CLASS_SB_ACTIVITY, new Image("/images/SameBoat.png",0,0,32,36));
     }
 
     public static Widget getLikeButton(Long confId) {

@@ -1,0 +1,1008 @@
+div.container {
+	max-width: 984px;
+	line-height: 150%;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	color: #333333;
+}
+
+div.header {
+	text-align: center;
+}
+
+.footer {
+	display: none;	
+}
+
+/* 
+.footerLink {
+	font-size: 11px !important;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	color: #3B5998;
+	margin-left: 5px;
+	display: block;
+	height: 14px;
+	cursor: pointer;
+}
+
+.footerLink a.hover {
+	color: #07285d;
+}
+ */
+.logoLink {
+	background-color: #E9E9E9;
+	color: #3B5998;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 5px 0 5px 0;
+	text-align: center;
+	border: 1px solid #3B5998;
+}
+
+.tagLineText {
+	font-size: 12px;
+}
+
+/* h1.header {
+	font-size: larger;
+	padding: 0;
+	margin: 0;
+}
+ */
+/* div.left {
+	float: left;
+	padding-left: 1em;
+	display: none;
+ 	width: 130px;
+	margin: 0;
+	padding-bottom: 1em;
+	padding-right: 1em;
+	padding-top: 3em;
+
+ }
+
+div.right {
+	float: right;
+	width: auto;
+	margin: 0;
+	padding: 1em;
+} */
+
+div.content {
+	min-height: 100px;
+	margin-left: auto;
+	padding-left: 0em;
+/* 	padding-top: 1em;
+	padding-right: 1em;
+	padding-bottom: 1em;
+ */
+}
+
+div.helpInfoDiv {
+	display: none;
+}
+
+.activityButton {
+	height: 42px;
+	width: 33px;
+	float: left;
+}
+
+.btnWrapper {
+	font-size: 10px;
+	position: absolute;
+	right: 7px;
+	text-align: right;
+	top: 35px;
+	z-index: 1;
+}
+
+.btnWrapperMenu {
+	position: absolute;
+	right: 3px;
+	text-align: right;
+	top: 4px;
+	z-index: 1;
+	background-color: #D8DFEA;
+	padding: 2px;
+	color: #3B5998;
+}
+
+.loaderWrap {
+	position: absolute;
+	right: 33px;
+	top: 0px;
+	z-index: 1;
+}
+
+.timerCountWrap {
+	position: absolute;
+	text-align: right;
+	right: 6px;
+	top: -1px;
+	font-size: small;
+	z-index: 1;
+}
+
+.shareWrap {
+	color: #D8DFEA;
+	cursor: pointer;
+	font-size: xx-small;
+	padding-bottom: 1px;
+	padding-left: 2px;
+	padding-right: 1px;
+	padding-top: 0;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+.btnNameText {
+	color: black;
+	font-size: 17px;
+	position: absolute;
+	right: -18px;
+	text-align: center;
+	top: -5px;
+	width: 47px;
+	z-index: 1;
+}
+
+.activityButtonContainer {
+	float: left;
+	width: 50px;
+}
+
+.userControlButtonContainer {
+	float: right;
+	height: 30px;
+	width: 30px;
+}
+
+.userControlButton {
+	width: 20px;
+	height: 20px;
+	float: left;
+}
+
+.confessionScrollPanel {
+	height: auto;
+	width: 559;
+	max-width: 1400px;
+	min-width: 545px;
+}
+
+.loaderImage {
+	display: block;
+	margin-left: auto;
+	margin-right: auto
+}
+
+#auth-id {
+	display: none;
+}
+
+.infoModalPopupWindow {
+	background-color: white;
+	width: 700px;
+	padding: 10px;
+	z-index: 1000;
+}
+
+.confessionGridElement {
+	border-top-style: solid;
+	border-top-color: silver;
+	border-top-width: 1px;
+	width: 563px;
+}
+
+.pardonStatusPanel {
+	
+}
+
+.dateTimeStamp {
+	color: gray;
+	font-style: italic;
+	font-size: small;
+}
+
+.fieldError {
+	border-bottom-color: red !important;
+	border-bottom-style: dashed !important;
+	border-width: 2px !important;
+}
+
+.refreshButton {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-image: url("/images/sprite_black2.png");
+	background-origin: padding-box;
+	background-position: -61px -19px;
+	background-repeat: no-repeat;
+	background-size: auto auto;
+	margin-left: 5px;
+	height: 26px;
+	width: 28px;
+	float: right;
+}
+
+.filterInfo {
+	color: #666666;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 1.2;
+	margin: 2px 2px 2px 3px;
+	text-align: start;
+	text-transform: capitalize;
+	float: right;
+}
+
+.confessionFilterOptionsList {
+	color: #333333;
+	font-family: Comic Sans MS;
+	font-size: small;
+	margin-left: 0px;
+	float: right;
+	width: 22px;
+	height: 22px;
+}
+
+.confessionTopBar {
+	display: block;
+	max-width: 872px;
+	
+}
+
+.confessionTitleText {
+	font-size: large;
+	font-weight: bold;
+}
+
+.moreTextLink {
+	float: right;
+}
+
+.helpInfoPanel {
+	color: #333333;
+	background-color: #FFFF99;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 10px;
+	line-height: 1.30;
+	margin-top: 4px;
+	padding-bottom: 2px;
+	padding-left: 6px;
+	padding-right: 2px;
+	padding-top: 4px;
+	width: 138px;
+}
+
+.updateConfessionPanel {
+	padding-left: 16px;
+	font-size: 11px;
+}
+
+.confessionRelation {
+	font-weight: bold;
+}
+
+.confessionUpdate {
+	background-color: #FEFFED;
+	color: #333333;
+	font-size: 12px;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 0;
+	margin-top: 0;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	width: 522px;
+	overflow: auto;
+	border-bottom-color: #999999;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.updateText {
+	float: left;
+}
+
+.questionMark {
+	cursor: pointer;
+	color: white;
+}
+
+.questionMark_bl {
+	color: black;
+	cursor: pointer;
+}
+
+.emptyPageText {
+	font-size: 15px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	width: 475px;
+}
+
+@charset "UTF-8";
+/* CSS Document */
+.menu {
+	height: auto;
+	color: #333 !important;
+	direction: ltr;
+	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+	font-size: 12px;
+	line-height: 1.28;
+	text-align: left;
+	word-wrap: break-word;
+	width: auto;
+	border: none;
+}
+
+.link1 {
+	margin-bottom: 1px;
+	margin-top: 1px;
+	display: block;
+	background-image: url(../../images/globe.png);
+	background-repeat: no-repeat;
+	padding: 5px 5px 5px 30px;
+	color: #333;
+}
+
+.link2 {
+	margin-bottom: 1px;
+	margin-top: 1px;
+	display: block;
+	background-image: url(../images/write.png);
+	background-repeat: no-repeat;
+	padding: 5px 5px 5px 30px;
+	color: #333;
+}
+
+.link3 {
+	margin-bottom: 1px;
+	margin-top: 1px;
+	display: block;
+	background-image: url(../images/myconfessions1.png);
+	background-repeat: no-repeat;
+	padding: 5px 5px 5px 30px;
+	color: #333;
+}
+
+.link4 {
+	margin-bottom: 1px;
+	margin-top: 1px;
+	display: block;
+	background-image: url(../images/people.png);
+	background-repeat: no-repeat;
+	padding: 5px 5px 5px 30px;
+	color: #333;
+}
+
+.link5 {
+	margin-bottom: 1px;
+	margin-top: 1px;
+	display: block;
+	background-image: url(../images/people.png);
+	background-repeat: no-repeat;
+	padding: 5px 5px 5px 30px;
+	color: #333;
+}
+
+menu a:link,menu a:visited {
+	color: #666;
+	display: block;
+	padding: 5px 5px 5px 30px;
+	text-decoration: none;
+}
+
+.menu a:hover {
+	color: #07285d;
+	display: block;
+	background-color: #E9E9E9;
+	padding: 5px 5px 5px 30px;
+	text-decoration: none;
+}
+
+.write {
+	vertical-align: text-top;
+}
+
+.human_points {
+	display: none;
+/* 	background-color: #E9E9E9;
+	font-size: smaller;
+	color: #333333;
+	vertical-align: text-top;
+	margin-bottom: 2px;
+	margin-top: 4px;
+	width: 156px;
+ */
+ }
+
+.humanPointImg {
+	float: left;
+	padding: 3px;
+}
+
+.humanPointLabel {
+	float: left;
+	font-size: 10px;
+	margin-left: 3px;
+	margin-top: 4px;
+	font-weight: bold;
+	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+}
+
+.humanPointNumbers {
+	float: left;
+	font-size: 10px;
+	margin-left: 3px;
+	margin-top: 4px;
+	font-weight: bold;
+	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
+	background-color: #D8DFEA !important;
+	padding: 0 2px 0 2px;
+}
+
+#leftHandMenuDiv {
+	/* margin-top: 20px; */
+}
+
+.menuItemSelected {
+	background-color: #D8DFEA !important;
+	font-weight: bold;
+}
+
+.toolTipTitle {
+	text-align: center;
+	font-weight: bold;
+}
+
+@charset "UTF-8";
+/* CSS Document */
+
+/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
+
+
+.reg_main_container{
+	background:#f5f5f5;
+	padding:0 0px 0 0px;
+	width:572px;
+	height:auto;
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size:normal;
+	border-bottom:solid 1px #CCC;
+}
+
+reg_main_container a:link, reg_main_container a:visited {
+	color:#415896;
+}
+
+a:hover {
+	color:#07285d;
+	}
+
+/*confession css begins here*/
+
+.selections {
+	padding:10px 0 0 5px;
+	}
+
+.header_text {
+	border-bottom:solid 1px #CCC;
+	margin:10px 15px 0 10px;
+}
+
+.subtext {
+	font-size:small;
+	width: 486px;	
+	line-height: 1.38;
+}
+
+.reg_image {
+	float: right;
+	margin:-55px 10px 0 5px;
+	}
+
+.options {
+	background-color:#FF9;
+	padding: 5px 20px 10px 20px;
+	margin: 2px 15px 0 15px;
+	font-size:small;
+}
+
+.options_title{
+	font-weight:600;
+}
+
+.appeal {
+	font-size:small;
+	font-weight:600;
+	margin-top: 8px;
+}
+
+.friend_image {
+	height: 25px;
+	height: 25px;
+    margin-bottom: -7px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 25px;
+	cursor: pointer;
+}
+	
+.confession {
+	}
+
+.reg_confession_title {
+	font-weight:600;
+	font-size:small;
+	margin:10px 0 10px 15px;
+}
+
+.confession_text {
+	margin:5px 5px 0 15px;	
+}
+
+.ch_remaining{
+	font-size:small;
+	margin:2px 25px 10px 0;
+	float:right;
+}
+
+.save_draft {
+	margin:5px 0 5px 15px;
+	float:left;
+}
+
+.submit_confession {
+	margin:5px 20px 5px 10px;
+	float:right;
+}
+
+.relationSuggestBox {
+	font-size: small;
+	font-weight: 600;
+}
+
+.appealButton {
+	float: right;
+}
+
+.pardonModalPopupWindow {
+	width: 550px;
+	padding: 10px;
+	z-index: 1000;
+	background-color: white;
+}
+
+.appealPanel {
+	margin-left: 19px;
+	font-size: 12px;
+}
+
+.friendsSuggestBoxMyConfPage {
+	/* float: left; */
+}
+
+.appealLink {
+	/* padding-left: 14px; */
+}
+
+.errorMessage {
+	color: orangered;
+}
+
+.buttonShowUpdate {
+	/* float: right; */	
+}
+
+.confessionPreview {
+	font-weight: bold;
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+.regConfButtons {
+	display: block;
+	height: 45px;
+	margin-top: 60px;
+	overflow-x: auto;
+	overflow-y: auto;
+	padding-top: 7px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	position: relative;
+	width: auto;
+}
+
+.confessionTextEditor {
+	font-size: 12px;
+}
+
+@charset "UTF-8";
+/* CSS Document */
+/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
+.main_container {
+	background: #f5f5f5;
+	max-width: 972px;
+	height: auto;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: normal;
+	border-bottom: solid 1px #CCC;
+}
+
+.content a:link,a:visited {
+	color: #3B5998 !important;
+	font-size: 13px;
+}
+
+main_container a:hover {
+	color: #07285d;
+}
+
+.text_decoration {
+	text-decoration: line-through;
+}
+/*Top div styling*/
+.confessionTop {
+	height: auto;
+	width: auto;
+	height: 50px;
+	padding: 10px 12px 10px 12px;
+}
+/*3 divs are put inside top div for image placehosder, name and status bar (time stamp), we can also add more divs to top panel later*/
+.image {
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.name {
+	margin-left: 66px;
+	margin-top: 3px;
+	vertical-align: middle;
+}
+
+.status_bar {
+	float: right;
+	text-align: right;
+	color: #999;
+	font-size: small;
+}
+
+.status_bar a {
+	cursor: pointer;
+	color: #3B5998 !important;
+}
+
+.time_stamp {
+	float: right;
+	position: relative;
+	padding-left: 4px;
+	font-size: small;
+	color: #999999;
+	padding-right: 15px;
+}
+
+.time_stamp_update {
+	float: right;
+	position: relative;
+	padding-left: 4px;
+	font-size: small;
+	color: #999999;
+}
+
+/*Middle div styling*/
+.middle {
+	position: relative;
+	margin: 0px 0 10px 0;
+}
+
+.confession_title {
+	padding-top: 0px;
+	padding-left: 11px;
+	padding-right: 8px;
+}
+
+.confession_body {
+	padding: 6px 8px 2px 8px;
+	margin: 0 4px 0 4px;
+	font-size: 14px;
+	color: #333333;
+	background-color: #FEFFED;
+	line-height: 1.36;
+	overflow: hidden;
+	text-overflow: clip;
+	border-radius: 10px;
+}
+
+.confessionText {
+	overflow: hidden;
+}
+
+.moreLink {
+	float: right;
+	position: relative;
+}
+
+.condition {
+	background-color: #5B74A8;
+	padding: 4px 5px 2px 10px;
+	margin: -10px 15px 5px 15px;
+	color: #FFF;
+	font-size: small !important;
+	line-height: 15px;
+	overflow: auto;
+	border-radius: 5px;
+}
+
+.pardonCondition {
+	float: left;
+	font-size: small;
+	width: 500px;
+}
+
+.conditionTick {
+	float: left;
+}
+
+.pardonConditionList {
+	width: 450px;
+}
+
+.condition_label a {
+	font-weight: 600;
+	color: #fff;
+}
+
+.condition_status {
+	float: right;
+	margin-top: -42px;
+	margin-right: 45px;
+	color: #FFF;
+	background-color: #39F;
+	padding: 3px 5px 3px 5px;
+	font-size: 12px;
+}
+
+.tooltip_left {
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 2px 0 2px 5px;
+	border: #CCC;
+	color: #999;
+	font-size: 13px;
+	background-color: #333;
+}
+
+.tooltip_right {
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 2px 0 2px 10px;
+	border: #CCC;
+	color: white;;
+	font-size: 12px;
+	background-color: #333;
+}
+
+.tooltip_left a {
+	color: #fff;
+}
+
+.tooltip_right a {
+	color: #fff;
+}
+
+/*bottom div is below middle div for all buttons and pardon staus area. This div will have 2 more sub divs - buttons and pardon_status*/
+.buttons {
+	position: relative;
+	width: auto;
+	height: 45px;
+	padding-left: 15px;
+	padding-bottom: 5px;
+}
+
+.buttons ul {
+	width: auto;
+	margin: 0 auto 0 auto;
+}
+
+.buttons ul li {
+	float: left;
+	padding: 0 2px 0 2px;
+	border-right: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	height: 41px;
+	list-style: none;
+	display: block;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.buttons li:hover {
+	
+}
+
+/*pardon status div*/
+.pardon_status_yes {
+	background-color: #73883E;
+	color: #FFFFFF;
+	float: right;
+	font-size: 16px;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 15px;
+	margin-top: 1px;
+	padding-bottom: 4px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 4px;
+	position: relative;
+	border-radius: 5px;
+}
+
+.pardon_status_no {
+	float: right;
+	padding: 3px 15px;
+	margin: 3px 15px 0 0;
+	position: relative;
+	background-color: #999;
+	color: #FFF;
+	font-size: 15px;
+	border-radius: 5px;
+}
+
+.fb_widgets {
+	display: block;
+	overflow-x: auto;
+	overflow-y: auto;
+	padding-bottom: 0;
+	padding-left: 15px;
+	padding-top: 0;
+	width: auto;
+	float: left;
+}
+
+.confessedToName {
+	font-weight: normal;
+	font-size: normal;
+	color: gray;
+	text-align: left;
+}
+
+.feedViewLink {
+	color: #999999;
+	font-size: small;
+	display: block;
+}
+
+.pardonButtonDiv {
+	padding-right: 14px;
+	float: right;
+}
+
+.popupCancelButton {
+	float: right;
+}
+
+.pardonButton {
+	width: 116px;
+}
+
+.activityButtonDiv {
+	float: left;
+	overflow: auto;
+}
+
+.pardonStatusDiv {
+	float: right;
+	width: 195px;
+}
+
+.profileName {
+	float: left;
+	padding-right: 3px;
+	cursor: pointer;
+}
+
+.confessionListDecoratoePanel {
+/* 	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #cccccc; */
+	min-height: 600px
+}
+
+<!-- TOOLTIPS -->
+.tooltip {
+	border-bottom: 1px dotted #000000;
+	color: #000000;
+	outline: none;
+	cursor: pointer;
+	text-decoration: none;
+	position: relative;
+}
+
+.tooltip span {
+	margin-left: -999em;
+	position: absolute;
+}
+
+.tooltip:hover span {
+	border-radius: 5px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+	font-family: Calibri, Tahoma, Geneva, sans-serif;
+	position: absolute;
+	left: 5em;
+	top: 50em;
+	z-index: 99;
+	margin-left: 0;
+	width: 250px;
+}
+
+.tooltip:hover img {
+	border: 0;
+	margin: -10px 0 0 -55px;
+	float: left;
+	position: absolute;
+}
+
+.tooltip:hover em {
+	font-family: Candara, Tahoma, Geneva, sans-serif;
+	font-size: 1.4em;
+	font-weight: bold;
+	display: block;
+	padding: 0.2em 0 0.6em 0;
+}
+
+.classic {
+	padding: 0.8em 1em;
+}
+
+.custom {
+	padding: 0.5em 0.8em 0.8em 2em;
+}
+
+* html a:hover {
+	background: transparent;
+}
+
+.classic {
+	background: #FFFFAA;
+	border: 1px solid #FFAD33;
+}
+
+.critical {
+	background: #FFCCAA;
+	border: 1px solid #FF3334;
+}
+
+.help {
+	background: #9FDAEE;
+	border: 1px solid #2BB0D7;
+}
+
+.info {
+	background: #9FDAEE;
+	border: 1px solid #2BB0D7;
+}
+
+.warning {
+	background: #FFFFAA;
+	border: 1px solid #FFAD33;
+}
+
+.showMenuButton {
+	width: 22px;
+	height: 22px;
+}

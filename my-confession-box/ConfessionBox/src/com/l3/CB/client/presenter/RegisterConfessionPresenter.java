@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -73,6 +75,8 @@ public class RegisterConfessionPresenter implements Presenter {
 	public Button getBtnDeleteDraft();
 	public void enableDeleteDraftButton(boolean isVisible);
 
+	public void setFriendsTrans();
+
 	Widget asWidget();
     }
 
@@ -122,14 +126,13 @@ public class RegisterConfessionPresenter implements Presenter {
 	if(userfriends != null && !userfriends.isEmpty()) {
 	    display.setFriends(userfriends);
 	} else {
+	    display.setFriendsTrans();
 	    ConfessionBox.facebookService.getFriends(ConfessionBox.accessToken, new AsyncCallback<String>() {
 		@Override
 		public void onSuccess(String result) {
 		    if(result != null) {
 			userfriends = CommonUtils.getFriendsUserInfo(result);
-			if(userfriends != null) {
-			    display.setFriends(userfriends);
-			}
+			display.setFriends(userfriends);
 		    }
 		}
 		@Override
@@ -254,7 +257,7 @@ public class RegisterConfessionPresenter implements Presenter {
 		display.getTxtTitle().validate();
 	    }
 	});
-	
+
     }
 
     /**
@@ -292,13 +295,25 @@ public class RegisterConfessionPresenter implements Presenter {
      * CbConfessTo - AddClickHandler
      */
     private void onOptionSelection() {
+	if(display.getRelationSuggestBox().getRelationSuggestBox() != null) {
 
-	display.getRelationSuggestBox().getRelationSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
-	    @Override
-	    public void onSelection(SelectionEvent<Suggestion> event) {
-		handlePreview();
-	    }
-	});
+	    display.getRelationSuggestBox().getRelationSuggestBox().addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
+		@Override
+		public void onSelection(SelectionEvent<Suggestion> event) {
+		    handlePreview();
+		}
+	    });
+	}
+
+	if(display.getRelationSuggestBox().getRelationSuggestList() != null) {
+
+	    display.getRelationSuggestBox().getRelationSuggestList().addChangeHandler(new ChangeHandler() {
+		@Override
+		public void onChange(ChangeEvent event) {
+		    handlePreview();
+		}
+	    });
+	}
 
 	display.getCbHideIdentity().addClickHandler(new ClickHandler() {
 	    @Override
@@ -386,10 +401,10 @@ public class RegisterConfessionPresenter implements Presenter {
 	if(Window.confirm(ConfessionBox.cbText.confirmMessageWhenSubmittingCOnfession())) {
 
 	    ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
-		
+
 		// Human points when submitting a confession
 		int pointsToBeAdded = Constants.POINTS_ON_CONFESSING;
-		
+
 		@Override
 		public void onSuccess(Void result) {
 		    if(!display.isIdentityHidden()) {

@@ -8,7 +8,9 @@ public class UserManager {
 
     public static UserInfo registerUser(UserInfo userInfo) {
 	userInfo = UserDAO.registerUser(userInfo);
-	CacheManager.flushUser(userInfo.getUserId());
+	if(userInfo != null) {
+	    CacheManager.flushUser(userInfo.getUserId());
+	}
 	return userInfo;
     }
 

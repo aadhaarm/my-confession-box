@@ -39,16 +39,16 @@ public class Templates {
 	@Template("<div class=\"logoLink\">CONFESSION BOX</div><div class=\"tagLineText\">speak your heart, live free</div>")
 	SafeHtml applicationLogoAndTagLine();
 
-	@Template("<a class=\"tooltip\">{0}<span class=\"custom warning\"><img src=\"/images/Warning.png\" alt=\"Warning\" height=\"48\" width=\"48\" /><em>Warning</em>{1}</span></a>")
-	SafeHtml warningToolTip(String linkText, String toolTip);
-
-	@Template("<a class=\"tooltip\">{0}<span class=\"custom critical\"><img src=\"/images/Critical.png\" alt=\"Error\" height=\"48\" width=\"48\" /><em>Critical</em>{1}</span></a>")
-	SafeHtml errorToolTip(String linkText, String toolTip);
-	
-	@Template("<a class=\"tooltip\">{0}<span class=\"custom help\"><img src=\"/images/Help.png\" alt=\"Help\" height=\"48\" width=\"48\" /><em>Help</em>{1}</span></a>")
-	SafeHtml helpToolTip(String linkText, String toolTip);
-	
-	@Template("<a class=\"tooltip\">{0}<span class=\"custom info\"><img src=\"/images/Info.png\" alt=\"Information\" height=\"48\" width=\"48\" /><em>Information</em>{1}</span></a>")
+//	@Template("<a>{0}<span class=\"custom warning\">{1}</span></a>")
+//	SafeHtml warningToolTip(String linkText, String toolTip);
+//
+//	@Template("<a>{0}<span class=\"custom critical\">{1}</span></a>")
+//	SafeHtml errorToolTip(String linkText, String toolTip);
+//	
+//	@Template("<a>{0}<span class=\"custom help\">{1}</span></a>")
+//	SafeHtml helpToolTip(String linkText, String toolTip);
+//	
+	@Template("<a title=\"{1}\">{0}</a>")
 	SafeHtml infoToolTip(String linkText, String toolTip);
     }
     

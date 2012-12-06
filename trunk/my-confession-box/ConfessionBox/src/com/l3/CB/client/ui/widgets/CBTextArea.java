@@ -1,5 +1,9 @@
 package com.l3.CB.client.ui.widgets;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -15,25 +19,58 @@ public class CBTextArea extends FlowPanel {
     private final Label lblRemainChar;
     private int maxCharsAllowed = 0;
     private final Label lblErrorMsg;
+    private String defaultValue = null;
 
     public CBTextArea(int numOfChars, boolean big) {
 	super();
 	this.maxCharsAllowed = numOfChars;
-
+	
+	
 	cbTextArea = new RichTextArea();
+	cbTextArea.setStyleName("confessionTextEditor");
+	
+	// Default value
+	defaultValue = "write your confession here..";
+	// Set default text
+	setUpDefaultText();
+	
 	if(big) {
 	    cbTextArea.setSize("526px", "200px");
 	} else {
 	    cbTextArea.setSize("526px", "70px");
 	}
 	this.add(cbTextArea);
-
+	
 	lblRemainChar = new Label(numOfChars + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
 	lblRemainChar.setStyleName("ch_remaining");
 	this.add(lblRemainChar);
 
 	lblErrorMsg = new Label(ConfessionBox.cbText.confessionTextBoxErrorMessage());
 	bind();
+    }
+
+    /**
+     * 
+     */
+    private void setUpDefaultText() {
+	cbTextArea.setText(defaultValue);
+	cbTextArea.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		if(defaultValue.equals(cbTextArea.getText())) {
+		    cbTextArea.setText("");
+		}
+	    }
+	});
+
+	cbTextArea.addBlurHandler(new BlurHandler() {
+	    @Override
+	    public void onBlur(BlurEvent event) {
+		if("".equals(cbTextArea.getText())) {
+		    cbTextArea.setText(defaultValue);
+		}
+	    }
+	});
     }
 
     private void bind() {
@@ -60,7 +97,7 @@ public class CBTextArea extends FlowPanel {
 	updateCharsLeft();
 
 	boolean isValid = FieldVerifier.isValidConfession(cbTextArea.getText(), min, max);
-	if(!isValid) {
+	if(!isValid || defaultValue.equals(cbTextArea.getText())) {
 	    this.add(lblErrorMsg);
 	    cbTextArea.setStylePrimaryName(Constants.STYLE_CLASS_FIELD_ERROR);
 	} else {

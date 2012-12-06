@@ -40,9 +40,11 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	setupAbout();
 	setupPrivacy();
 
-	fPnlFooter.add(ancAbout);
-	fPnlFooter.add(ancPrivacy);
-	fPnlFooter.add(ancAppText);
+	if(!ConfessionBox.isSmallScreen) {
+	    fPnlFooter.add(ancAbout);
+	    fPnlFooter.add(ancPrivacy);
+	    fPnlFooter.add(ancAppText);
+	}
 
 	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
 	contentTableDecorator.add(fPnlFooter);

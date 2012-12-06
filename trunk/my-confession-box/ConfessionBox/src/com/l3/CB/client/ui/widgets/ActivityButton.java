@@ -31,7 +31,7 @@ public class ActivityButton extends AbsolutePanel {
 
     final PushButton btn;
     Label lblTimerCount = null;
-    Label lblBtnName = null;
+    Label lblTick = null;
     Image loader = null;
     Anchor ancShare = null;
     int timerCountNumber = 5;
@@ -65,7 +65,7 @@ public class ActivityButton extends AbsolutePanel {
 			    getActivityDescription(activity),
 			    activity.getActivitySharePoints());
 		} else {
-		    CommonUtils.login();
+		    CommonUtils.login(0);
 		}
 	    }
 	});
@@ -79,10 +79,10 @@ public class ActivityButton extends AbsolutePanel {
 	btnCount.setStyleName(Constants.STYLE_CLASS_BUTTON_WRAPPER);
 	this.add(btnCount, btn.getElement());
 
-	lblBtnName = new Label("✔");
-	lblBtnName.setStyleName("btnNameText");
-	lblBtnName.setVisible(false);
-	this.add(lblBtnName, btn.getElement());
+	lblTick = new Label("✔");
+	lblTick.setStyleName("btnNameText");
+	lblTick.setVisible(false);
+	this.add(lblTick, btn.getElement());
 	
 	bind(activity, btn);
     }
@@ -129,7 +129,7 @@ public class ActivityButton extends AbsolutePanel {
 			add(lblTimerCount, btn.getElement());
 		    }
 		} else {
-		    CommonUtils.login();
+		    CommonUtils.login(0);
 		}
 	    }
 	});
@@ -181,6 +181,7 @@ public class ActivityButton extends AbsolutePanel {
 			    btnCount.setText(getCountToDisplay(result.toString()));
 
 			    btn.setEnabled(false);
+			    lblTick.setVisible(true);
 
 			    ancShare.setVisible(true);
 			    add(ancShare);
@@ -323,7 +324,7 @@ public class ActivityButton extends AbsolutePanel {
     public void disableBtn() {
 	btn.setEnabled(false);
 	ancShare.setVisible(true);
-	lblBtnName.setVisible(true);
+	lblTick.setVisible(true);
 	add(ancShare);
     }
 }

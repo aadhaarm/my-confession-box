@@ -77,7 +77,7 @@ public class SubscribeAnchor extends Anchor {
 			}
 		    });
 		} else {
-		    CommonUtils.login();
+		    CommonUtils.login(0);
 		}
 	    }
 	});

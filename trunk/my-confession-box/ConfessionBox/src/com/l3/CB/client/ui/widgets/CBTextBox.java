@@ -4,9 +4,13 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
+import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FieldVerifier;
 
@@ -14,7 +18,9 @@ public class CBTextBox extends FlowPanel {
 
     private final TextBox txtTitle;
     private final String defaultValue;
-
+    private final Label lblRemainChar;
+    private int numOfChars = 70;
+    
     public CBTextBox() {
 	super();
 	defaultValue = "Enter Confession Title here..";
@@ -26,7 +32,19 @@ public class CBTextBox extends FlowPanel {
 	txtTitle.removeStyleName("gwt-TextBox");
 	txtTitle.setText(defaultValue);
 	this.add(txtTitle);
-
+	
+	lblRemainChar = new Label(numOfChars + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	lblRemainChar.setStyleName("ch_remaining");
+	this.add(lblRemainChar);
+	txtTitle.addKeyPressHandler(new KeyPressHandler() {
+	    @Override
+	    public void onKeyPress(KeyPressEvent event) {
+		updateCharsLeft();
+	    }
+	});
+	
+	
+	
 	txtTitle.addClickHandler(new ClickHandler() {
 
 	    @Override
@@ -49,6 +67,7 @@ public class CBTextBox extends FlowPanel {
     }
 
     public boolean validate() {
+	updateCharsLeft();
 	String text = txtTitle.getText();
 	text = text.trim();
 	text = SimpleHtmlSanitizer.sanitizeHtml(text).asString();
@@ -64,5 +83,9 @@ public class CBTextBox extends FlowPanel {
 
     public TextBox getTxtTitle() {
 	return txtTitle;
+    }
+    
+    private void updateCharsLeft() {
+	lblRemainChar.setText(numOfChars - txtTitle.getText().length() + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
     }
 }

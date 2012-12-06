@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
@@ -43,6 +44,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final Button btnSave;
     private final Button btnDeleteDraft;
     private final HTML htmlConfessionPreview;    
+    private Image loaderImage;    
     
     public RegisterConfessionView() {
 	super();
@@ -115,7 +117,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	
 	// Buttons
 	fPnlButtons = new FlowPanel();
-	fPnlButtons.setStyleName("buttons");
+	fPnlButtons.setStyleName("regConfButtons");
 
 	btnSave = new Button(ConfessionBox.cbText.saveAsDraftButtonLabelText());
 	btnSave.setStyleName("save_draft");
@@ -135,13 +137,32 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	contentTableDecorator.add(fPnlConfessionForm);	
     }
 
+    private void getMeLoaderImage() {
+	loaderImage = new Image(Constants.LOADER_IMAGE_PATH);
+	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
+    }
+
+    public void setFriendsTrans() {
+	getMeLoaderImage();
+	if(loaderImage != null) {
+	    fPnlOptions.add(loaderImage);
+	}
+	relationSuggestBox.setVisible(true);
+    }
+    
     @Override
     public void setFriends(Map<String, UserInfo> userfriends) {
-	friendsSuggestBox = new FriendsSuggestBox(userfriends);
-	fPnlOptions.add(friendsSuggestBox);
-	friendsSuggestBox.setFocus();
-	fPnlOptions.add(relationSuggestBox);
-	relationSuggestBox.setVisible(true);
+	if(userfriends != null && !userfriends.isEmpty()) {
+	    friendsSuggestBox = new FriendsSuggestBox(userfriends);
+	    fPnlOptions.add(friendsSuggestBox);
+	    friendsSuggestBox.setFocus();
+	    fPnlOptions.add(relationSuggestBox);
+	} else {
+	    fPnlOptions.add(new Label("No friends details available."));
+	}
+	if(loaderImage != null) {
+	    fPnlOptions.remove(loaderImage);
+	}
     }
     
     @Override

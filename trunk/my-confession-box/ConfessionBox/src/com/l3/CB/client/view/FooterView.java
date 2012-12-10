@@ -3,7 +3,6 @@ package com.l3.CB.client.view;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -20,11 +19,8 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancAppText;
 
     public FooterView() {
-	DecoratorPanel contentTableDecorator = new DecoratorPanel();
-	initWidget(contentTableDecorator);
 
 	FlowPanel fPnlFooter = new FlowPanel();
-	fPnlFooter.setWidth("140px");
 
 	ancAbout = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel(), "This is all about Confession Box!"));;
 	ancAbout.setStyleName("footerLink");
@@ -40,14 +36,16 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	setupAbout();
 	setupPrivacy();
 
-	if(!ConfessionBox.isSmallScreen) {
+	if(!ConfessionBox.isMobile) {
 	    fPnlFooter.add(ancAbout);
 	    fPnlFooter.add(ancPrivacy);
 	    fPnlFooter.add(ancAppText);
 	}
 
-	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
-	contentTableDecorator.add(fPnlFooter);
+//	DecoratorPanel contentTableDecorator = new DecoratorPanel();
+//	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
+//	contentTableDecorator.add(fPnlFooter);
+	initWidget(fPnlFooter);
     }
 
     /**

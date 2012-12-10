@@ -40,16 +40,16 @@ public class ChangeVisibilityButton extends PushButton {
 				    if(result) {
 					if(shareAnyn) {
 					    // Give human points
-					    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
+					    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
 					    setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 					} else {
 					    //Deduct human points
-					    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
+					    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
 					    setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 					}
 
 					confession.setShareAsAnyn(!confession.isShareAsAnyn());
-					ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+					ConfessionBox.eventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 				    }
 				}
 				@Override

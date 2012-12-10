@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.Window.Navigator;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -70,6 +71,25 @@ public class CommonUtils {
 	Window.Location.reload();
     }
 
+    public static native boolean isTouchEnabled()/*-{
+ 	var is_touch_device = 'ontouchstart' in document.documentElement;
+    	if(is_touch_device) { 
+		return true;
+	} else {
+		return false;
+	}
+    }-*/;
+
+    public static boolean isMobile() {
+	boolean isMobile = false;
+	String userAgent = Navigator.getUserAgent();
+	if(userAgent != null) {
+	    userAgent = userAgent.toLowerCase();
+	    isMobile = userAgent.contains("mobile");
+	}
+	return isMobile;
+    }
+
     /**
      * Redirect the browser to the given url
      * @param url
@@ -107,8 +127,6 @@ public class CommonUtils {
 		} else {
 		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
 		}
-	    } else {
-		ConfessionBox.proceedToApp(ConfessionBox.confessionService, ConfessionBox.facebookService, ConfessionBox.confEventBus);
 	    }
 	} else {
 	    if(null != confId){
@@ -363,6 +381,8 @@ public class CommonUtils {
 	} else {
 	    profileImage = new Image(FacebookUtil.getFaceIconImage(confession.getGender()));
 	}
+	profileImage.setWidth("50px");
+	profileImage.setHeight("50px");
 	profileImage.setStyleName(Constants.DIV_PROFILE_IMAGE);
 	return profileImage;
     }
@@ -443,9 +463,9 @@ public class CommonUtils {
 
     public static String getPronoun(String gender) {
 	if(gender != null && gender.equalsIgnoreCase("male")) {
-	    return "his";
+	    return ConfessionBox.cbText.malePronoun();
 	}
-	return "her";
+	return ConfessionBox.cbText.femalePronoun();
     }
 
     /**
@@ -517,7 +537,6 @@ public class CommonUtils {
 		final Anchor anchMore = new Anchor(ConfessionBox.cbText.moreLink());
 		anchMore.setStyleName(Constants.STYLE_CLASS_MORE_LINK);
 		fPnlConfession.add(anchMore);
-
 		anchMore.addClickHandler(new ClickHandler() {
 		    @Override
 		    public void onClick(ClickEvent event) {
@@ -530,6 +549,9 @@ public class CommonUtils {
 			}
 		    }
 		});
+		if(ConfessionBox.isTouchEnabled) {
+		    anchMore.addStyleName(Constants.STYLE_CLASS_MORE_LINK_TO_BTN);
+		}
 	    } else {
 		HTML lblConfession = new HTML(SafeHtmlUtils.fromSafeConstant(confession));
 		fPnlConfession.add(lblConfession);
@@ -738,11 +760,26 @@ public class CommonUtils {
      * Decide when to consider device to be small.
      */
     public static void setupScreen() {
-	int screenWidth = Window.getClientWidth();
-	if(screenWidth <= 1024) {
-	    ConfessionBox.isSmallScreen = true;
-	} else {
-	    ConfessionBox.isSmallScreen = false;
+	ConfessionBox.isMobile = isMobile();
+	ConfessionBox.isTouchEnabled = isTouchEnabled();
+    }
+
+    public static boolean isNotNullAndNotEmpty(String str) {
+
+	if((null != str) && (str.length() > 0)) {
+	    return true;
+	}
+	else {
+	    return false;
+	}
+    }
+
+    public static boolean isNullOrEmpty(String str) {
+	if((null == str) || (str.length() == 0)) {
+	    return true;
+	}
+	else {
+	    return false;
 	}
     }
 }

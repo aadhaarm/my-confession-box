@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
@@ -77,10 +76,6 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     }
 
     public MenuView() {
-	DecoratorPanel contentTableDecorator = new DecoratorPanel();
-	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
-	initWidget(contentTableDecorator);
-
 	feedItem = new Anchor(ConfessionBox.cbText.cbMenuConfessionFeed());
 	feedItem.removeStyleName("gwt-Anchor");
 	feedItem.setStyleName("link1");
@@ -88,7 +83,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	link1.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 		HelpInfo.cleanToolTip();
 	    }
@@ -104,7 +99,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 		    HelpInfo.cleanToolTip();
 		} else {
@@ -122,7 +117,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 		    HelpInfo.cleanToolTip();
 		} else {
@@ -140,7 +135,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 		    HelpInfo.cleanToolTip();
 		} else {
@@ -190,7 +185,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	menuBar = new FlowPanel();
 	menuBar.setStyleName(Constants.STYLE_CLASS_MENU);
 
-	if(!ConfessionBox.isSmallScreen) {
+	if(!ConfessionBox.isMobile) {
 	    menuBar.add(link1);
 	    menuBar.add(link2);
 	    menuBar.add(btnMenuItemMyConf);
@@ -200,10 +195,14 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    if(ConfessionBox.isLoggedIn) {
 		menuBar.add(ancLogout);
 	    }
-	} else {
-	    setupSmallMenu(ancLogout);
-	}
-	contentTableDecorator.add(menuBar);
+	} 
+//	else {
+//	    setupSmallMenu(ancLogout);
+//	}
+//	DecoratorPanel contentTableDecorator = new DecoratorPanel();
+//	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
+//	contentTableDecorator.add(menuBar);
+	initWidget(menuBar);
     }
 
     /**
@@ -226,25 +225,25 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    ListBox a = ((ListBox)event.getSource());
 	    String newValue = a.getValue(a.getSelectedIndex());
 	    if("link1".equals(newValue)) {
-		ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 	    } else if("link2".equals(newValue)) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 		} else {
 		    CommonUtils.login(0);
 		}
 	    } else if("link3".equals(newValue)) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 		} else {
 		    CommonUtils.login(0);
 		}
 	    } else if("link4".equals(newValue)) {
 		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 		    HelpInfo.cleanToolTip();
 		} else {

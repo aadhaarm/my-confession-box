@@ -9,10 +9,31 @@ div.container {
 
 div.header {
 	text-align: center;
+    z-index: 1;
+	cursor: pointer;
+}
+
+.pointsPanel {
+	display: block;
+	margin: 0 auto 0 auto;
+	background-color: papayawhip;
+}
+
+.pointsLabel {
+}
+
+.menu {
+	float: left;
+	padding: 5px 0 0 5px;
+	width: 20px;
 }
 
 .footer {
 	display: none;	
+}
+
+.confessionPanel {
+	width: 300px;
 }
 
 /* 
@@ -92,9 +113,9 @@ div.helpInfoDiv {
 .btnWrapper {
 	font-size: 10px;
 	position: absolute;
-	right: 7px;
+	right: 1px;
 	text-align: right;
-	top: 35px;
+	top: 33px;
 	z-index: 1;
 }
 
@@ -150,7 +171,7 @@ div.helpInfoDiv {
 
 .activityButtonContainer {
 	float: left;
-	width: 50px;
+	width: 45px;
 }
 
 .userControlButtonContainer {
@@ -165,13 +186,13 @@ div.helpInfoDiv {
 	float: left;
 }
 
-.confessionScrollPanel {
+/* .confessionScrollPanel {
 	height: auto;
 	width: 559;
 	max-width: 1400px;
 	min-width: 545px;
 }
-
+ */
 .loaderImage {
 	display: block;
 	margin-left: auto;
@@ -193,7 +214,7 @@ div.helpInfoDiv {
 	border-top-style: solid;
 	border-top-color: silver;
 	border-top-width: 1px;
-	width: 563px;
+	/* width: 563px; */
 }
 
 .pardonStatusPanel {
@@ -241,16 +262,13 @@ div.helpInfoDiv {
 	color: #333333;
 	font-family: Comic Sans MS;
 	font-size: small;
-	margin-left: 0px;
 	float: right;
-	width: 22px;
-	height: 22px;
+	margin: 2px 2px 0 0;
+	width: 20px;
 }
 
 .confessionTopBar {
 	display: block;
-	max-width: 872px;
-	
 }
 
 .confessionTitleText {
@@ -288,16 +306,15 @@ div.helpInfoDiv {
 .confessionUpdate {
 	background-color: #FEFFED;
 	color: #333333;
-	font-size: 12px;
+	font-size: 13px;
 	margin-bottom: 0;
 	margin-left: 0;
-	margin-right: 0;
+	margin-right: 16px;
 	margin-top: 0;
 	padding-bottom: 5px;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 5px;
-	width: 522px;
 	overflow: auto;
 	border-bottom-color: #999999;
 	border-bottom-width: 1px;
@@ -327,151 +344,17 @@ div.helpInfoDiv {
 	width: 475px;
 }
 
-@charset "UTF-8";
-/* CSS Document */
-.menu {
-	height: auto;
-	color: #333 !important;
-	direction: ltr;
-	font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-	font-size: 12px;
-	line-height: 1.28;
-	text-align: left;
-	word-wrap: break-word;
-	width: auto;
-	border: none;
-}
-
-.link1 {
-	margin-bottom: 1px;
-	margin-top: 1px;
-	display: block;
-	background-image: url(../../images/globe.png);
-	background-repeat: no-repeat;
-	padding: 5px 5px 5px 30px;
-	color: #333;
-}
-
-.link2 {
-	margin-bottom: 1px;
-	margin-top: 1px;
-	display: block;
-	background-image: url(../images/write.png);
-	background-repeat: no-repeat;
-	padding: 5px 5px 5px 30px;
-	color: #333;
-}
-
-.link3 {
-	margin-bottom: 1px;
-	margin-top: 1px;
-	display: block;
-	background-image: url(../images/myconfessions1.png);
-	background-repeat: no-repeat;
-	padding: 5px 5px 5px 30px;
-	color: #333;
-}
-
-.link4 {
-	margin-bottom: 1px;
-	margin-top: 1px;
-	display: block;
-	background-image: url(../images/people.png);
-	background-repeat: no-repeat;
-	padding: 5px 5px 5px 30px;
-	color: #333;
-}
-
-.link5 {
-	margin-bottom: 1px;
-	margin-top: 1px;
-	display: block;
-	background-image: url(../images/people.png);
-	background-repeat: no-repeat;
-	padding: 5px 5px 5px 30px;
-	color: #333;
-}
-
-menu a:link,menu a:visited {
-	color: #666;
-	display: block;
-	padding: 5px 5px 5px 30px;
-	text-decoration: none;
-}
-
-.menu a:hover {
-	color: #07285d;
-	display: block;
-	background-color: #E9E9E9;
-	padding: 5px 5px 5px 30px;
-	text-decoration: none;
-}
-
 .write {
 	vertical-align: text-top;
 }
 
 .human_points {
 	display: none;
-/* 	background-color: #E9E9E9;
-	font-size: smaller;
-	color: #333333;
-	vertical-align: text-top;
-	margin-bottom: 2px;
-	margin-top: 4px;
-	width: 156px;
- */
  }
-
-.humanPointImg {
-	float: left;
-	padding: 3px;
-}
-
-.humanPointLabel {
-	float: left;
-	font-size: 10px;
-	margin-left: 3px;
-	margin-top: 4px;
-	font-weight: bold;
-	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
-}
-
-.humanPointNumbers {
-	float: left;
-	font-size: 10px;
-	margin-left: 3px;
-	margin-top: 4px;
-	font-weight: bold;
-	font-family: "Lucida Sans Unicode","Lucida Grande",sans-serif;
-	background-color: #D8DFEA !important;
-	padding: 0 2px 0 2px;
-}
-
-#leftHandMenuDiv {
-	/* margin-top: 20px; */
-}
-
-.menuItemSelected {
-	background-color: #D8DFEA !important;
-	font-weight: bold;
-}
-
-.toolTipTitle {
-	text-align: center;
-	font-weight: bold;
-}
-
-@charset "UTF-8";
-/* CSS Document */
-
-/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
-
 
 .reg_main_container{
 	background:#f5f5f5;
 	padding:0 0px 0 0px;
-	width:572px;
 	height:auto;
 	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	font-size:normal;
@@ -551,8 +434,7 @@ a:hover {
 
 .ch_remaining{
 	font-size:small;
-	margin:2px 25px 10px 0;
-	float:right;
+	margin:2px 0 0 0;
 }
 
 .save_draft {
@@ -624,13 +506,8 @@ a:hover {
 .confessionTextEditor {
 	font-size: 12px;
 }
-
-@charset "UTF-8";
-/* CSS Document */
-/*The main_container div is the main div divided into 3 parts Top, Middle & Bottom*/
 .main_container {
 	background: #f5f5f5;
-	max-width: 972px;
 	height: auto;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	font-size: normal;
@@ -638,7 +515,7 @@ a:hover {
 }
 
 .content a:link,a:visited {
-	color: #3B5998 !important;
+	color: #3B5998;
 	font-size: 13px;
 }
 
@@ -654,9 +531,9 @@ main_container a:hover {
 	height: auto;
 	width: auto;
 	height: 50px;
-	padding: 10px 12px 10px 12px;
+	padding: 10px 0 10px 0;
 }
-/*3 divs are put inside top div for image placehosder, name and status bar (time stamp), we can also add more divs to top panel later*/
+
 .image {
 	float: left;
 	border-style: solid;
@@ -674,21 +551,23 @@ main_container a:hover {
 	text-align: right;
 	color: #999;
 	font-size: small;
+	padding-right: 20px;
 }
 
 .status_bar a {
 	cursor: pointer;
-	color: #3B5998 !important;
+	color: #3B5998;
 }
 
 .time_stamp {
-	float: right;
-	position: relative;
-	padding-left: 4px;
 	font-size: small;
 	color: #999999;
+
+/* 	float: right;
+	position: relative;
+	padding-left: 4px;
 	padding-right: 15px;
-}
+ */}
 
 .time_stamp_update {
 	float: right;
@@ -701,7 +580,7 @@ main_container a:hover {
 /*Middle div styling*/
 .middle {
 	position: relative;
-	margin: 0px 0 10px 0;
+	margin: 0px 10px 10px 0;
 }
 
 .confession_title {
@@ -846,6 +725,8 @@ main_container a:hover {
 	padding-top: 4px;
 	position: relative;
 	border-radius: 5px;
+	width: 118px;
+	text-align: center;
 }
 
 .pardon_status_no {
@@ -859,15 +740,13 @@ main_container a:hover {
 	border-radius: 5px;
 }
 
-.fb_widgets {
-	display: block;
-	overflow-x: auto;
-	overflow-y: auto;
-	padding-bottom: 0;
-	padding-left: 15px;
-	padding-top: 0;
+.btnAbdPardonstatusDiv {
 	width: auto;
-	float: left;
+	height: 50px;
+}
+
+.fb_widgets {
+	/* float: right; */
 }
 
 .confessedToName {
@@ -1003,6 +882,4 @@ main_container a:hover {
 }
 
 .showMenuButton {
-	width: 22px;
-	height: 22px;
 }

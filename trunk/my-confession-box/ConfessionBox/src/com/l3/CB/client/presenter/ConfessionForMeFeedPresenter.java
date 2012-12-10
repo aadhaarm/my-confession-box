@@ -55,7 +55,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
     }
 
     private void bind() {
-	ConfessionBox.confEventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
+	ConfessionBox.eventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
 	    @Override
 	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
 		Confession confessionToBeUpdated = event.getConfession();
@@ -114,7 +114,7 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	    }
 	});
 
-	ConfessionBox.confEventBus.addHandler(UpdateFeedToMeEvent.TYPE, new UpdateFeedToMeEventHandler() {
+	ConfessionBox.eventBus.addHandler(UpdateFeedToMeEvent.TYPE, new UpdateFeedToMeEventHandler() {
 	    @Override
 	    public void updateFeedToMeConfessions(UpdateFeedToMeEvent event) {
 		Confession confessionToBepdated = event.getConfession();

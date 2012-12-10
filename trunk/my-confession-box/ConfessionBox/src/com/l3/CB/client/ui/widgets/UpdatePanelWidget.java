@@ -4,6 +4,11 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -28,6 +33,9 @@ public class UpdatePanelWidget extends FlowPanel {
     public UpdatePanelWidget(Long confId) {
 	super();
 	this.setStyleName("buttonShowUpdate");
+	if(ConfessionBox.isTouchEnabled) {
+	    this.addStyleName(Constants.STYLE_CLASS_UPDATE_LINK_TO_BTN);
+	}
 	this.confId = confId;
 	this.add(btnShowUpdates);
 	getMeLoaderImage();
@@ -49,44 +57,62 @@ public class UpdatePanelWidget extends FlowPanel {
 
 
     private void bind() {
-	btnShowUpdates.addClickHandler(new ClickHandler() {
 
-	    @Override
-	    public void onClick(ClickEvent event) {
-		if(vPnlUpdates != null && vPnlUpdates.isVisible()) {
-		    vPnlUpdates.setVisible(false);
-		    btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
-		} else {
-		    addLoaderImage();
-		    ConfessionBox.confessionService.getConfessionUpdates(confId, new AsyncCallback<List<ConfessionUpdate>>() {
-			@Override
-			public void onSuccess(List<ConfessionUpdate> result) {
-			    if(result != null && !result.isEmpty()) {
-				vPnlUpdates = new VerticalPanel();
-				for (ConfessionUpdate confessionUpdate : result) {
-				    if(confessionUpdate != null && confessionUpdate.getUpdate() != null && confessionUpdate.getUpdate() != null) {
-					HTML update = new HTML(Templates.TEMPLATES.confessonUpdate(confessionUpdate.getCommentAs(),
-						confessionUpdate.getUpdate(), CommonUtils.getDateInAGOFormat(confessionUpdate.getTimeStamp())));
-					update.setStyleName("confessionUpdate");
-					vPnlUpdates.add(update);
-				    }
-				}
-				add(vPnlUpdates);
-				btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetHideUpdatesLabelText()); 
-			    } else {
-				btnShowUpdates.setVisible(false);
-				add(lblNoUpdates);
-			    }
-			    remmoveLoaderImage();
-			}
+	if(ConfessionBox.isTouchEnabled) {
+	    btnShowUpdates.addTouchEndHandler(new TouchEndHandler() {
 
-			@Override
-			public void onFailure(Throwable caught) {
-			    Error.handleError("UpdatePanelWidget", "onFailure", caught);
-			}
-		    });
+		@Override
+		public void onTouchEnd(TouchEndEvent event) {
+		    onShowUpdatePress();
 		}
-	    }
-	});
+	    });
+	} else {
+	    btnShowUpdates.addClickHandler(new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+		    onShowUpdatePress();
+		}
+
+	    });
+	}
     }
+    /**
+     * 
+     */
+     private void onShowUpdatePress() {
+	 if(vPnlUpdates != null && vPnlUpdates.isVisible()) {
+	     vPnlUpdates.setVisible(false);
+	     btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
+	 } else {
+	     addLoaderImage();
+	     ConfessionBox.confessionService.getConfessionUpdates(confId, new AsyncCallback<List<ConfessionUpdate>>() {
+		 @Override
+		 public void onSuccess(List<ConfessionUpdate> result) {
+		     if(result != null && !result.isEmpty()) {
+			 vPnlUpdates = new VerticalPanel();
+			 vPnlUpdates.setWidth((Window.getClientWidth() - 20) + "px");
+			 for (ConfessionUpdate confessionUpdate : result) {
+			     if(confessionUpdate != null && confessionUpdate.getUpdate() != null && confessionUpdate.getUpdate() != null) {
+				 HTML update = new HTML(Templates.TEMPLATES.confessonUpdate(confessionUpdate.getCommentAs(),
+					 confessionUpdate.getUpdate(), CommonUtils.getDateInAGOFormat(confessionUpdate.getTimeStamp())));
+				 update.setStyleName(Constants.STYLE_CLASS_CONF_UPDATE_TEXT_ROW);
+				 vPnlUpdates.add(update);
+			     }
+			 }
+			 add(vPnlUpdates);
+			 btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetHideUpdatesLabelText()); 
+		     } else {
+			 btnShowUpdates.setVisible(false);
+			 add(lblNoUpdates);
+		     }
+		     remmoveLoaderImage();
+		 }
+
+		 @Override
+		 public void onFailure(Throwable caught) {
+		     Error.handleError("UpdatePanelWidget", "onFailure", caught);
+		 }
+	     });
+	 }
+     }
 }

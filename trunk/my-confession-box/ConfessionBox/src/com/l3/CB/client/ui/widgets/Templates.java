@@ -9,7 +9,7 @@ public class Templates {
     
     public interface CBTemplates extends SafeHtmlTemplates {
 	
-	@Template("<div class=\"confessionPreview\">'{0} confessed to {2} {1}'</div>")
+	@Template("'{0} confessed to {2} {1}'")
 	SafeHtml confessonPreview(String confesee, String confessor, String pronoun);
 
 	@Template("<div class=\"updateText\"><span class=\"confessionRelation\">{0}</span>: {1}</div><div class=\"time_stamp_update\">{2}</div>")
@@ -36,8 +36,11 @@ public class Templates {
 	@Template("<b>{0}</b><br/><div class=\"subtext\">{1} [<a class=\"questionMark_bl\">?</a>]</div>")
 	SafeHtml registerConfessionInstructionText(String mainText, String subText);
 
-	@Template("<div class=\"logoLink\">CONFESSION BOX</div><div class=\"tagLineText\">speak your heart, live free</div>")
-	SafeHtml applicationLogoAndTagLine();
+	@Template("CONFESSION BOX")
+	SafeHtml applicationTitle();
+
+	@Template("speak your heart, live free")
+	SafeHtml applicationTagLine();
 
 //	@Template("<a>{0}<span class=\"custom warning\">{1}</span></a>")
 //	SafeHtml warningToolTip(String linkText, String toolTip);
@@ -50,6 +53,7 @@ public class Templates {
 //	
 	@Template("<a title=\"{1}\">{0}</a>")
 	SafeHtml infoToolTip(String linkText, String toolTip);
+
     }
     
     public static final CBTemplates TEMPLATES = GWT.create(CBTemplates.class);

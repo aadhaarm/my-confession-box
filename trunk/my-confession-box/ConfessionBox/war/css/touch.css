@@ -1,0 +1,47 @@
+.linkToButton {
+  display: block;
+  background-color: #4E9CAF;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  border-radius: 5px;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 76px;
+}
+
+.updateLinkToButton {
+  display: block;
+  background-color: #4E9CAF;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  border-radius: 5px;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 100px;
+}
+
+
+.moreLinkToButton {
+  display: block;
+  background-color: #4E9CAF;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  border-radius: 5px;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 33px;
+}
+
+.shareLinkToButton {
+  background-color: #4E9CAF;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  border-radius: 5px;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 100px;
+}

@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
@@ -27,6 +28,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.FilterEvent;
+import com.l3.CB.client.event.FilterEventHandler;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
@@ -51,12 +54,12 @@ public class ConfessionFeedPresenter implements Presenter {
 	public int getConfessionPagesLoaded();
 	public boolean isMoreConfessions();
 	public Image getLoaderImage();
-	public VerticalPanel getVpnlConfessionList();
+	public FlowPanel getVpnlConfessionList();
 	public HasChangeHandlers getConfessionFilterListBox();
 	public HasFocusHandlers getConfessionFilterListBoxForHelp();
 	public HasClickHandlers getRefreshButton();
 	public void setFilterInfo(String filterInfoText);
-	
+
 	public void resetConfessionsThisView();	
 	public void setMoreConfessions(boolean moreConfessions);
     }
@@ -153,24 +156,35 @@ public class ConfessionFeedPresenter implements Presenter {
 	    }
 
 	});
+	if(display.getConfessionFilterListBox() != null) {
+	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
+		@Override
+		public void onChange(ChangeEvent event) {
+		    ListBox lstBoxFilter = (ListBox)event.getSource();
+		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
+		    filter = Filters.valueOf(selectedFilter);
+		    display.setFilterInfo(filter.getFilterInfoText());
+		    setConfessions(true);
+		}
+	    });
 
-	display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
+	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
+		@Override
+		public void onFocus(FocusEvent event) {
+		    HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
+		}
+	    });
+	}
+	ConfessionBox.eventBus.addHandler(FilterEvent.TYPE, new FilterEventHandler() {
+
 	    @Override
-	    public void onChange(ChangeEvent event) {
-		ListBox lstBoxFilter = (ListBox)event.getSource();
-		String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
-		filter = Filters.valueOf(selectedFilter);
-		display.setFilterInfo(filter.getFilterInfoText());
+	    public void filter(FilterEvent event) {
+		display.setFilterInfo(event.getSelectedFilter().getFilterInfoText());
+		filter = event.getSelectedFilter();
 		setConfessions(true);
 	    }
 	});
 
-	display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
-	    @Override
-	    public void onFocus(FocusEvent event) {
-		HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
-	    }
-	});
 
 	display.getRefreshButton().addClickHandler(new ClickHandler() {
 	    @Override

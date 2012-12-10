@@ -84,7 +84,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 	    }
 	});
 
-	ConfessionBox.confEventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
+	ConfessionBox.eventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
 	    @Override
 	    public void updateIdentityVisibility(UpdateIdentityVisibilityEvent event) {
 		Confession confessionToBeUpdated = event.getConfession();

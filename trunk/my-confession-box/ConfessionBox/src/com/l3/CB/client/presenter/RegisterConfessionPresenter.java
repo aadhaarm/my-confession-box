@@ -416,8 +416,8 @@ public class RegisterConfessionPresenter implements Presenter {
 		    }
 
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
-		    ConfessionBox.confEventBus.fireEvent(new UpdateMenuEvent());
-		    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(pointsToBeAdded));
+		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
+		    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(pointsToBeAdded));
 		}
 
 		@Override

@@ -5,15 +5,10 @@
  */
 package com.l3.CB.client.controller;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
@@ -26,6 +21,7 @@ import com.l3.CB.client.event.UpdateMenuEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
 import com.l3.CB.client.presenter.FooterPresenter;
+import com.l3.CB.client.presenter.HeaderPresenter;
 import com.l3.CB.client.presenter.HumanPointPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
@@ -35,6 +31,7 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.FooterView;
+import com.l3.CB.client.view.HeaderView;
 import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
@@ -48,7 +45,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private static HasWidgets container;
     private static HumanPointPresenter humanPointPresenter = null;
     private static MenuPresenter menuPresenter = null;
-
+    private static HeaderPresenter headerPresenter = null;
+    
     /**
      * Constructors
      * 
@@ -65,15 +63,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * 
      */
     public static void updateUserInfoAndInitializeAPP() {
-	/**
-	 * Call server with logged in user info
-	 * Register if new, update info or just bring the user UserID with the user info
-	 */
+	 /* Call server with logged in user info Register if new, update info or just bring the user UserID with the user info */
 	if(ConfessionBox.isLoggedIn) {
-
-	    /*
-	     * Register user and get User ID
-	     */
+	     // Register user and get User ID
 	    ConfessionBox.confessionService.registerUser(ConfessionBox.getLoggedInUserInfo(), new AsyncCallback<Long>() {
 		@Override
 		public void onSuccess(Long result) {
@@ -81,10 +73,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 			ConfessionBox.getLoggedInUserInfo().setUserId(result);
 			initializeApp(true);
 		    } else {
-			Window.alert(ConfessionBox.cbText.applicationError());
+			Error.handleError("ConfessionController", "onSuccess", null);
 		    }
 		}
-
 		@Override
 		public void onFailure(Throwable caught) {
 		    Error.handleError("ConfessionController", "onFailure", caught);
@@ -100,17 +91,17 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	// Initialize MENU
 	menuPresenter = new MenuPresenter(new MenuView());
 	menuPresenter.go(container);
-
+	// Initialize Header
+	headerPresenter = new HeaderPresenter(new HeaderView());
+	headerPresenter.go(container);
 	// Initialize Human points
 	if(ConfessionBox.isLoggedIn) {
 	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 	    humanPointPresenter.go(container);
 	}
-
 	// Initialize Footer
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
-
 	if(loadAll) {
 	    String loadHash = Window.Location.getParameter(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 	    if(loadHash != null) {
@@ -129,40 +120,17 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * Bind various events
      */
     private void bind() {
-
-	Window.addResizeHandler(new ResizeHandler() {
-	    @Override
-	    public void onResize(ResizeEvent event) {
-		if(Window.getClientWidth() <= 1024 && !ConfessionBox.isSmallScreen) {
-		    CommonUtils.setupScreen();
-		    initializeApp(true);
-		    // Window.Location.reload();
-		} else if(Window.getClientWidth() > 1024 && ConfessionBox.isSmallScreen){
-		    CommonUtils.setupScreen();
-		    initializeApp(true);
-		    // Window.Location.reload();
-		}
-	    }
-	});
-
-	ConfessionBox.logo.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		Location.reload();
-	    }
-	});
-
 	// Listen all history new item addition
 	History.addValueChangeHandler(this);
-
-	ConfessionBox.confEventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
+	// Handle update human points event
+	ConfessionBox.eventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
 	    @Override
 	    public void updateHPContact(UpdateHPEvent event) {
 		humanPointPresenter.updateHumanPoints(event.getUpdatedCount());
 	    }
 	});
-
-	ConfessionBox.confEventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
+	// Update update menu event
+	ConfessionBox.eventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
 	    @Override
 	    public void updateMenuCount(UpdateMenuEvent event) {
 		if(ConfessionBox.isLoggedIn) {
@@ -170,9 +138,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		}
 	    }
 	});
-
-	ConfessionBox.confEventBus.addHandler(EditConfessionEvent.TYPE, new EditConfessionEventHandler() {
-
+	// Update edit confession event
+	ConfessionBox.eventBus.addHandler(EditConfessionEvent.TYPE, new EditConfessionEventHandler() {
 	    @Override
 	    public void editConfession(EditConfessionEvent event) {
 		Presenter presenter = new RegisterConfessionPresenter(new RegisterConfessionView(), event.getConfessionToBeEdited());
@@ -187,10 +154,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
 	String token = event.getValue();
-
 	if (token != null) {
 	    Presenter presenter = null;
-
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
 		MenuView.selectMenuItem(1);
@@ -209,7 +174,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		    presenter = new ConfessionForMeFeedPresenter(new ConfessionFeedView());
 		}
 	    } 
-
 	    if(presenter != null) {
 		presenter.go(container);
 	    }

@@ -184,10 +184,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Update your confession.")
     String editConfessionUserControlButtonTitle();
 
-    @DefaultStringValue("more..")
+    @DefaultStringValue("more")
     String moreLink();
 
-    @DefaultStringValue("less..")
+    @DefaultStringValue("less")
     String lessLink();
 
     @DefaultStringValue("Select view")
@@ -289,7 +289,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Please choose one of the options provided (Choose 'FRIEND' if not in the options)")
     String relationsSuggestionBoxErrorMessage();
 
-    @DefaultStringValue("Share your vote on you FB wall")
+    @DefaultStringValue("Click again to undo your vote")
     String undoToolTipBar();
 
     @DefaultStringValue("Share your vote on you FB wall")
@@ -357,4 +357,13 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("The person has chosen not to reveal identity to the world.")
     String profileNameAnonymousTileText();
+
+    @DefaultStringValue("Refresh")
+    String refreshButtonToolTipText();
+
+    @DefaultStringValue("his")
+    String malePronoun();
+
+    @DefaultStringValue("her")
+    String femalePronoun();
 }

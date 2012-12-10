@@ -15,7 +15,7 @@ public class Constants {
 
     //Page DIVs
     public static final String DIV_MAIN_CONTENT = "bodyDiv";
-    public static final String DIV_LEFT_MENU = "leftHandMenuDiv";
+    public static final String DIV_LEFT_MENU = "menuDiv";
     public static final String DIV_APPLN_TITLE = "appTitle";
     public static final String DIV_AUTH_ID = "auth-id";
     public static final String DIV_LEFT_TOOL_TIP = "leftHandToolTipDiv";
@@ -41,7 +41,7 @@ public class Constants {
     public static final Level LOG_LEVEL = Level.OFF;
 
     //Loader image animation
-    public static final String APPLICATION_LOGO_IMAGE = "/images/CB-logo.png";
+    public static final String IMAGE_APPLICATION_LOGO_PATH = "/images/CB-logo.png";
     public static final String LOAD_ACTIVITY_TIMER_PROGRESS = "/images/loader_progress.gif";
     public static final String LOADER_IMAGE_PATH = "/images/ajax-loader.gif";
     public static final String LOAD_APPLICATION_IMAGE_PATH = "/images/loading.gif";
@@ -129,5 +129,37 @@ public class Constants {
     public static final int POINTS_ON_CONFESSING = 5;
 
     public static final int POINTS_ON_UNHIDING_IDENTITY = 5;
+
+    public static final String STYLE_CLASS_CONFESION_FILTER_DESCRIPTION_INFO = "filterInfo";
+
+    public static final String STYLE_CLASS_UPDATE_CONFESSION_PANEL = "updateConfessionPanel";
+
+    public static final String PARDON_APPEAL_PANEL = "appealPanel";
+
+    public static final String STYLE_CLASS_PARDON_APPEAL_LINK = "appealLink";
+
+    public static final String STYLE_CLASS_ACTIVITY_BUTTON_PANEL = "activityButtonDiv";
+
+    public static final String STYLE_CLASS_ACTIVITY_BTN_AND_PARDON_STATUS_DIV = "btnAbdPardonstatusDiv";
+
+    public static final String STYLE_CLASS_PARDON_CONDITION_PANEL = "condition";
+
+    public static final String STYLE_CLASS_PARDON_CONDITION = "pardonCondition";
+
+    public static final String STYLE_CLASS_PARDON_BUTTON_PANEL = "pardonButtonDiv";
+
+    public static final String TICK_MARK = "✔";
+
+    public static final String STYLE_CLASS_ACTIVITY_BUTTON_DIV = "buttons";
+
+    public static final String STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN = "linkToButton";
+
+    public static final String STYLE_CLASS_CONF_UPDATE_TEXT_ROW = "confessionUpdate";
+
+    public static final String STYLE_CLASS_SHARE_LINK_TO_BTN = "shareLinkToButton";
+
+    public static final String STYLE_CLASS_MORE_LINK_TO_BTN = "moreLinkToButton";
+
+    public static final String STYLE_CLASS_UPDATE_LINK_TO_BTN = "updateLinkToButton";
 
 }

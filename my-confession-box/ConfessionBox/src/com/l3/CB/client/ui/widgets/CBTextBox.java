@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -28,7 +29,7 @@ public class CBTextBox extends FlowPanel {
 
 	txtTitle = new TextBox();
 	txtTitle.setMaxLength(70);
-	txtTitle.setWidth("526px");
+	txtTitle.setWidth(Integer.toString(getCommentWidth()) + "px");
 	txtTitle.removeStyleName("gwt-TextBox");
 	txtTitle.setText(defaultValue);
 	this.add(txtTitle);
@@ -66,6 +67,19 @@ public class CBTextBox extends FlowPanel {
 	});
     }
 
+    /**
+     * @return
+     */
+    private int getCommentWidth() {
+	int width = Window.getClientWidth() - 60;
+	if(ConfessionBox.isMobile) {
+	    return width;
+	} else {
+	    return 526;
+	}
+    }
+
+    
     public boolean validate() {
 	updateCharsLeft();
 	String text = txtTitle.getText();

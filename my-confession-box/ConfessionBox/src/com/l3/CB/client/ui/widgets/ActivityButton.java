@@ -6,6 +6,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -51,24 +55,25 @@ public class ActivityButton extends AbsolutePanel {
 	ancShare = new Anchor(ConfessionBox.cbText.activityButtonShareButtonLabel());
 	ancShare.setTitle("Share this vote on your Facebook wall.");
 	ancShare.setStyleName(Constants.DIV_ACTIVITY_BUTTON_SHARE_BUTTON);
-	ancShare.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		if(ConfessionBox.isLoggedIn) {
 
-		    // POST ON WALL popup
-		    CommonUtils.postOnWall(
-			    FacebookUtil.getActivityUrl(confession.getConfId()),
-			    getImageUrl(buttonImage.getUrl()),
-			    getActivityTitle(activity),
-			    getActivityCaption(confession),
-			    getActivityDescription(activity),
-			    activity.getActivitySharePoints());
-		} else {
-		    CommonUtils.login(0);
+
+	if(ConfessionBox.isTouchEnabled && ConfessionBox.isMobile) {
+	    ancShare.addStyleName(Constants.STYLE_CLASS_SHARE_LINK_TO_BTN);
+	    ancShare.addTouchEndHandler(new TouchEndHandler() {
+		@Override
+		public void onTouchEnd(TouchEndEvent event) {
+		    onSharePress(activity, confession, buttonImage);
 		}
-	    }
-	});
+	    });
+	} else {
+	    ancShare.addClickHandler(new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+		    onSharePress(activity, confession, buttonImage);
+		}
+
+	    });
+	}
 
 	// Register activity with TIMER
 	final Timer timer = getActivityTimer(activity, confession, btnCount);
@@ -83,8 +88,29 @@ public class ActivityButton extends AbsolutePanel {
 	lblTick.setStyleName("btnNameText");
 	lblTick.setVisible(false);
 	this.add(lblTick, btn.getElement());
-	
+
 	bind(activity, btn);
+    }
+
+    /**
+     * @param activity
+     * @param confession
+     * @param buttonImage
+     */
+    private void onSharePress(final Activity activity,
+	    final Confession confession, final Image buttonImage) {
+	if(ConfessionBox.isLoggedIn) {
+	    // POST ON WALL popup
+	    CommonUtils.postOnWall(
+		    FacebookUtil.getActivityUrl(confession.getConfId()),
+		    getImageUrl(buttonImage.getUrl()),
+		    getActivityTitle(activity),
+		    getActivityCaption(confession),
+		    getActivityDescription(activity),
+		    activity.getActivitySharePoints());
+	} else {
+	    CommonUtils.login(0);
+	}
     }
 
     private String getImageUrl(String url) {
@@ -110,29 +136,56 @@ public class ActivityButton extends AbsolutePanel {
      * @param timer
      */
     private void addVoteButtonClickEvent(final Timer timer) {
-	btn.addClickHandler(new ClickHandler() {
-	    boolean inEvent = false;
-	    @Override
-	    public void onClick(ClickEvent event) {
-		if(ConfessionBox.isLoggedIn) {
-		    if(inEvent) {
-			inEvent = false;
-			timer.cancel();
-			lblTimerCount.setVisible(false);
-			loader.setVisible(false);
+	if(ConfessionBox.isTouchEnabled) {
+	    btn.addTouchEndHandler(new TouchEndHandler() {
+		boolean inEvent = false;
+		@Override
+		public void onTouchEnd(TouchEndEvent event) {
+		    if(ConfessionBox.isLoggedIn) {
+			if(inEvent) {
+			    inEvent = false;
+			    timer.cancel();
+			    lblTimerCount.setVisible(false);
+			    loader.setVisible(false);
+			} else {
+			    inEvent = true;
+			    lblTimerCount.setVisible(true);
+			    loader.setVisible(true);
+			    timer.scheduleRepeating(1000);
+			    add(loader, btn.getElement());
+			    add(lblTimerCount, btn.getElement());
+			}
 		    } else {
-			inEvent = true;
-			lblTimerCount.setVisible(true);
-			loader.setVisible(true);
-			timer.scheduleRepeating(1000);
-			add(loader, btn.getElement());
-			add(lblTimerCount, btn.getElement());
+			CommonUtils.login(0);
 		    }
-		} else {
-		    CommonUtils.login(0);
 		}
-	    }
-	});
+	    });
+	} else {
+	    btn.addClickHandler(new ClickHandler() {
+		boolean inEvent = false;
+		@Override
+		public void onClick(ClickEvent event) {
+		    if(ConfessionBox.isLoggedIn) {
+			if(inEvent) {
+			    inEvent = false;
+			    timer.cancel();
+			    lblTimerCount.setVisible(false);
+			    loader.setVisible(false);
+			} else {
+			    inEvent = true;
+			    lblTimerCount.setVisible(true);
+			    loader.setVisible(true);
+			    timer.scheduleRepeating(1000);
+			    add(loader, btn.getElement());
+			    add(lblTimerCount, btn.getElement());
+			}
+		    } else {
+			CommonUtils.login(0);
+		    }
+		}
+	    });
+
+	}
     }
 
     /**
@@ -160,14 +213,14 @@ public class ActivityButton extends AbsolutePanel {
 	    @Override
 	    public void cancel() {
 		super.cancel();
-		ConfessionBox.confEventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
+		ConfessionBox.eventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
 		count = ActivityButton.this.timerCountNumber-1;
 		lblTimerCount.setText(Integer.toString(ActivityButton.this.timerCountNumber));
 	    }
 
 	    @Override
 	    public void run() {
-		ConfessionBox.confEventBus.fireEvent(new ActivityEvent(confession.getConfId()));
+		ConfessionBox.eventBus.fireEvent(new ActivityEvent(confession.getConfId()));
 		if(count > 0) {
 		    lblTimerCount.setText(Integer.toString(count));
 		    count--;
@@ -186,7 +239,7 @@ public class ActivityButton extends AbsolutePanel {
 			    ancShare.setVisible(true);
 			    add(ancShare);
 			    EventUtils.raiseUpdateHPEvent(activity.getActivityPoints());
-			    ConfessionBox.confEventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
+			    ConfessionBox.eventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
 			}
 
 			@Override

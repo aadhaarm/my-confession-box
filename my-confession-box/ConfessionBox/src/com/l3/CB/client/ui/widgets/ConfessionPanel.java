@@ -2,7 +2,13 @@ package com.l3.CB.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
+import com.google.gwt.event.dom.client.TouchStartEvent;
+import com.google.gwt.event.dom.client.TouchStartHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -37,8 +43,11 @@ public class ConfessionPanel extends FlowPanel{
 
     public ConfessionPanel(Confession confession, boolean showUserControls, boolean isAnyn) {
 	super();
-	if(confession != null) {
+//	if(ConfessionBox.isMobile) {
+//	    this.setWidth((Window.getClientWidth() - 10) + "px");
+//	}
 
+	if(confession != null) {
 	    this.confession = confession;
 	    this.anonymousView = isAnyn;
 	    this.showUserControls = showUserControls;
@@ -101,7 +110,7 @@ public class ConfessionPanel extends FlowPanel{
 
 	final FlowPanel updatePanel = new FlowPanel();
 	UpdatePanelWidget updatePanelWidget = new UpdatePanelWidget(confession.getConfId());
-	updatePanel.setStyleName("updateConfessionPanel");
+	updatePanel.setStyleName(Constants.STYLE_CLASS_UPDATE_CONFESSION_PANEL);
 	updatePanel.add(updatePanelWidget);
 	fPnlMiddleContent.add(updatePanel);
 
@@ -132,9 +141,9 @@ public class ConfessionPanel extends FlowPanel{
 	if(this.showUserControls) {
 	    if(confession.getConfessedTo() == null || confession.getConfessedTo().isEmpty()) {
 		final FlowPanel appealPanel = new FlowPanel();
-		appealPanel.setStyleName("appealPanel");
+		appealPanel.setStyleName(Constants.PARDON_APPEAL_PANEL);
 		Anchor ancShareConfession = new Anchor(ConfessionBox.cbText.appealForPardonLinkText());
-		ancShareConfession.addStyleName("appealLink");
+		ancShareConfession.addStyleName(Constants.STYLE_CLASS_PARDON_APPEAL_LINK);
 		ancShareConfession.setTitle(ConfessionBox.cbText.shareConfessionUserControlButtonTitle());
 		appealPanel.add(ancShareConfession);
 		fPnlMiddleContent.add(appealPanel);
@@ -171,24 +180,46 @@ public class ConfessionPanel extends FlowPanel{
 	fPnlMiddleContent.add(shareToolTip);
 
 
+	FlowPanel btnActivityAndPardonstatus = new FlowPanel();
+	btnActivityAndPardonstatus.setStyleName(Constants.STYLE_CLASS_ACTIVITY_BTN_AND_PARDON_STATUS_DIV);
 	// BUTTONS
 	FlowPanel fPnlButtonEtc = new FlowPanel();
-	fPnlButtonEtc.setStyleName("activityButtonDiv");
+	fPnlButtonEtc.setStyleName(Constants.STYLE_CLASS_ACTIVITY_BUTTON_PANEL);
 	// User ACTIVITY Buttons
 	fPnlButtonEtc.add(fPnlActivityButtons);
-	this.add(fPnlButtonEtc);
+	btnActivityAndPardonstatus.add(fPnlButtonEtc);
 
 	// Show Pardon status
 	if(lblPardonStatus != null) {
-	    this.add(lblPardonStatus);
+	    btnActivityAndPardonstatus.add(lblPardonStatus);
 	}
+	this.add(btnActivityAndPardonstatus);
 
 	// FB WIDGETS
 	final FlowPanel fPnlFBWidgets = new FlowPanel();
 	fPnlFBWidgets.setStyleName(Constants.DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER);
 	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
-	fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-	CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	if(ConfessionBox.isMobile) {
+	    final Button btnShowFBWidgets = new Button("Comment");
+	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
+	        @Override
+	        public void onTouchEnd(TouchEndEvent event) {
+	            btnShowFBWidgets.setVisible(false);
+	            fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+	            if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
+	        	CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	            }
+	        }
+	    });
+	    fPnlFBWidgets.add(btnShowFBWidgets);
+	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	} else {
+	    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+	    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
+		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	    }
+	}
+
 	this.add(fPnlFBWidgets);
     }
 

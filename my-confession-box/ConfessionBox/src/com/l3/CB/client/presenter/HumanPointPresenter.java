@@ -30,8 +30,10 @@ public class HumanPointPresenter implements Presenter {
 
     @Override
     public void go(HasWidgets container) {
-	RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).clear();
-	RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).add(display.asWidget());		
+	if(!ConfessionBox.isMobile) {
+	    RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).clear();
+	    RootPanel.get(Constants.DIV_LEFT_HUMAN_POINT).add(display.asWidget());		
+	}
     }
 
     public void update() {

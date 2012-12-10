@@ -48,10 +48,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     
     public RegisterConfessionView() {
 	super();
-	DecoratorPanel contentTableDecorator = new DecoratorPanel();
-	contentTableDecorator.addStyleName("reg_main_container");
-	initWidget(contentTableDecorator);
-
 	//TOP panel
 	fPnlConfessionForm = new FlowPanel();
 
@@ -90,6 +86,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	relationSuggestBox = new RelationSuggestBox();
 	relationSuggestBox.setVisible(false);
 	
+//	SliderBarSimpleHorizontal a = new SliderBarSimpleHorizontal(1, "80px", false);
+//	fPnlOptions.add(a);
 	cbHideIdentity = new CheckBox(ConfessionBox.cbText.registerPageOptionHideID());
 	cbHideIdentity.setValue(true);
 	fPnlOptions.add(cbHideIdentity);
@@ -104,6 +102,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlConfession.setStyleName("confession");
 	
 	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
+	htmlConfessionPreview.setStyleName("confessionPreview");
 	fPnlConfessionForm.add(htmlConfessionPreview);
 	
 	txtTitle = new CBTextBox();
@@ -134,7 +133,10 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	fPnlButtons.add(btnSubmit);
 	
 	fPnlConfessionForm.add(fPnlButtons);
-	contentTableDecorator.add(fPnlConfessionForm);	
+
+	fPnlConfessionForm.setStyleName("reg_main_container");
+	initWidget(fPnlConfessionForm);
+
     }
 
     private void getMeLoaderImage() {

@@ -40,10 +40,10 @@ public class FBCommentWidget {
      */
     private int getCommentWidth() {
 	int width = Window.getClientWidth() - 60;
-	if(ConfessionBox.isSmallScreen) {
+	if(ConfessionBox.isMobile) {
 	    return width;
 	} else {
-	    return width < 750? width : 750;
+	    return 542;
 	}
     }
 

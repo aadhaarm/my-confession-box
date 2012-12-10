@@ -60,7 +60,7 @@ public class UpdateConfessionWidget extends FlowPanel {
 		    ConfessionBox.confessionService.registerConfessionUpdate(confessionUpdate , new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
-			    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+			    ConfessionBox.eventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
 			}
 			@Override
 			public void onFailure(Throwable caught) {

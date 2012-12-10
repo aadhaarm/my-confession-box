@@ -27,7 +27,7 @@ public class HelpInfo {
      * 
      */
     public static void showHelpInfo(type confessionFilter) {
-	if(!ConfessionBox.isSmallScreen) {
+	if(!ConfessionBox.isMobile) {
 
 	    sPnlToolTip.setHeight("89px");
 	    cleanToolTip();

@@ -19,6 +19,9 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	initWidget(contentTableDecorator);
 
 	Image imgHumanPoint = new Image("images/human-points.jpg");
+	imgHumanPoint.setWidth("27px");
+	imgHumanPoint.setHeight("27px");
+
 	imgHumanPoint.setStyleName("humanPointImg");
 
 	Label humanPoint = new Label(ConfessionBox.cbText.humanPointWidgetLabelText());

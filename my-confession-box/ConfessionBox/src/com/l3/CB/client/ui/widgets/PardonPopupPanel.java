@@ -152,8 +152,8 @@ public class PardonPopupPanel extends PopupPanel{
 				    btnPardon.setEnabled(false);
 				    btnPardonHome.setEnabled(false);
 				    hidePopup();
-				    ConfessionBox.confEventBus.fireEvent(new UpdateFeedToMeEvent(confession));
-				    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_PARDONING));
+				    ConfessionBox.eventBus.fireEvent(new UpdateFeedToMeEvent(confession));
+				    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_PARDONING));
 				}
 
 				@Override

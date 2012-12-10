@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
@@ -35,7 +36,7 @@ public class CBTextArea extends FlowPanel {
 	setUpDefaultText();
 	
 	if(big) {
-	    cbTextArea.setSize("526px", "200px");
+	    cbTextArea.setSize(Integer.toString(getCommentWidth()) + "px", "200px");
 	} else {
 	    cbTextArea.setSize("526px", "70px");
 	}
@@ -48,6 +49,19 @@ public class CBTextArea extends FlowPanel {
 	lblErrorMsg = new Label(ConfessionBox.cbText.confessionTextBoxErrorMessage());
 	bind();
     }
+    
+    /**
+     * @return
+     */
+    private int getCommentWidth() {
+	int width = Window.getClientWidth() - 60;
+	if(ConfessionBox.isMobile) {
+	    return width;
+	} else {
+	    return 526;
+	}
+    }
+
 
     /**
      * 

@@ -79,10 +79,10 @@ public class FeedViewUtils {
 	    for (ConfessionShare confessionShare : confessionShares) {
 		
 		if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty()) {
-		    fPnlPardon.setStyleName("condition");
+		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION_PANEL);
 		    
 		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonConditionInfoText(ConfessionBox.cbText.pardonConditionInfoText()));
-		    pardonConditionInfoText.setStyleName("pardonCondition");
+		    pardonConditionInfoText.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION);
 
 		    pardonConditionInfoText.addClickHandler(new ClickHandler() {
 			@Override
@@ -97,7 +97,7 @@ public class FeedViewUtils {
 		    addPardonConditionStatus(confessionShare.getPardonConditions(), fPnlPardon);
 		    
 		} else if(!anynView) {
-		    fPnlPardon.setStyleName("pardonButtonDiv");
+		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON_PANEL);
 		    final Button btnPardon = new Button(ConfessionBox.cbText.pardonButtonLabelText());
 		    btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
 		    if(confessionShare.getPardonStatus() != null) {
@@ -145,7 +145,7 @@ public class FeedViewUtils {
 		    
 		    String statusTick = "";
 		    if(pardonCondition.isFulfil()) {
-			statusTick = "✔";
+			statusTick = Constants.TICK_MARK;
 		    }
 		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". "
 			    + ConfessionBox.cbText.pardonPopupOpenIdentityConditionView() + ".", statusTick));
@@ -162,7 +162,7 @@ public class FeedViewUtils {
 		} else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
 		    String statusTick = "";
 		    if(pardonCondition.isFulfil()) {
-			statusTick = "✔";
+			statusTick = Constants.TICK_MARK;
 		    }
 		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". " + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartOne()
 			    + pardonCondition.getCount() + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartTwo(),
@@ -185,7 +185,7 @@ public class FeedViewUtils {
 
     public static FlowPanel getUserActivityButtons(final Confession confession) {
 	final FlowPanel fPlaneUserActivity = new FlowPanel();
-	fPlaneUserActivity.setStyleName("buttons");
+	fPlaneUserActivity.setStyleName(Constants.STYLE_CLASS_ACTIVITY_BUTTON_DIV);
 	final ActivityButton btnSB = (ActivityButton) getSBButton(confession);
 	final ActivityButton btnSY = (ActivityButton) getSYButton(confession);
 	final ActivityButton btnLM = (ActivityButton) getLMButton(confession);
@@ -224,7 +224,7 @@ public class FeedViewUtils {
 		btnSY.disableBtn();
 	    }
 	    if(i > 0) {
-		ConfessionBox.confEventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
+		ConfessionBox.eventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
 	    }
 	}
 

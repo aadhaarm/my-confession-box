@@ -2,6 +2,15 @@
 <html xmlns:fb="http://ogp.me/ns/fb#">
 	<head>
  		<title>Confession Box</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+		<link type="text/css" rel="stylesheet" href="css/touch.css">
+		
+ 		<!-- Basic browser -->
+		<link type="text/css" rel="stylesheet" href="css/cbstyle.css" media="screen and (min-device-width: 1025px)">
+ 		<!-- Small screen device browser -->
+		<link type="text/css" rel="stylesheet" href="css/mobile/cbstyle.css" media="screen and (max-device-width: 1024px)">
  		
  		<meta property="og:title" content="Confession Box" />
 		<meta property="og:type" content="cause" />
@@ -9,12 +18,7 @@
 		<meta property="og:image" content="http://fbconfess.appspot.com/images/confession_box_smiley_face.jpg" />
 		<meta property="og:site_name" content="Confession Box" />
 		<meta property="fb:app_id" content="153945264667385" />
- 		
- 		<!-- Basic browser -->
-		<link type="text/css" rel="stylesheet" href="css/cbstyle.css" media="all and (min-width: 1025px)">
- 		<!-- tablet portrait -->
-		<link href="css/mobile/cbstyle.css" rel="stylesheet" media="all and (max-width: 1024px)">
- 		
+
  		<script type="text/javascript" src="confessionbox/confessionbox.nocache.js"></script>
 	</head>
 	
@@ -36,18 +40,19 @@
 		<!-- Web app will not function without JavaScript enabled -->
 		<noscript>
 			<div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-				Your web browser must have JavaScript enabled in order for confession box to display correctly.</div>
+				Your web browser must have JavaScript enabled in order for confession box application to display correctly.</div>
 		</noscript>
 	
 		<div class="container">
-			<div class="header"><a href="#" id="appTitle"></a></div>
+			<div class="header" id="header"></div>
 			<div id="leftHandDiv" class="left">
-				<div id="leftHandMenuDiv"></div>
+				<div id="menuDiv"></div>
 				<div id="humanPointDiv" class="human_points"></div>
 				<div id="leftHandToolTipDiv" class="helpInfoDiv"></div>
 				<div id="footerDiv" class="footer"></div>
 			</div>
 			<div id="bodyDiv" class="content"></div>
 		</div>
+
 	</body>
 </html>

@@ -77,8 +77,8 @@ public class AppealPardonWidget extends FlowPanel {
 				    confessTo.setPardonStatus(PardonStatus.AWAITING_PARDON);
 				    aa.add(confessTo);
 				    confession.setConfessedTo(aa);
-				    ConfessionBox.confEventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
-				    ConfessionBox.confEventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_APPEAL_PARDON));
+				    ConfessionBox.eventBus.fireEvent(new UpdateIdentityVisibilityEvent(confession));
+				    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_APPEAL_PARDON));
 				    setVisible(false);
 				}
 

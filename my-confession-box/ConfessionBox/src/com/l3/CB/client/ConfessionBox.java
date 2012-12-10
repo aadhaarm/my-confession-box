@@ -14,15 +14,14 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.Window.Navigator;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.l3.CB.client.controller.ConfessionController;
-import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.CBText;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.UserInfo;
@@ -51,12 +50,12 @@ public class ConfessionBox implements EntryPoint {
     /*
      * Application variables 
      */
-    public static HandlerManager confEventBus;
+    public static HandlerManager eventBus;
     public static FacebookServiceAsync facebookService = null;
     public static ConfessionServiceAsync confessionService = null;
-    public static Image logo;
-    public static HTML logoAndTag;
-    public static boolean isSmallScreen;
+    public static Image imgLogo;
+    public static boolean isMobile;
+    public static boolean isTouchEnabled;
 
     /*
      * Pop-up panel showing LOADING
@@ -64,72 +63,85 @@ public class ConfessionBox implements EntryPoint {
     static PopupPanel pnlApplicationLoad;
 
     /**
-     * ONLOAD This is the entry point method.
+     * ON-LOAD This is the entry point method.
      */
     @Override
     public void onModuleLoad() {
+//	Window.alert("User Agent:" + Navigator.getUserAgent()
+//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
+//		+ Navigator.getPlatform() + " App name:"
+//		+ Navigator.getAppName() + " Java enabled:"
+//		+ Boolean.toString(Navigator.isJavaEnabled()) + " Screen dim:"
+//		+ Window.getClientWidth() + "*" + Window.getClientHeight());
+
 	// Decide whether to consider device screen to be small or large?
 	CommonUtils.setupScreen();
-	
 	// Application title/LOGO image
-	logo = new Image(Constants.APPLICATION_LOGO_IMAGE);
-	logoAndTag = new HTML(Templates.TEMPLATES.applicationLogoAndTagLine());
-
+	imgLogo = new Image(Constants.IMAGE_APPLICATION_LOGO_PATH);
+	// Initialize services
 	confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
 	facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
-
-	// Get Facebook access token and other information
-	confEventBus = new HandlerManager(null);
-
+	// Get application event bus
+	eventBus = new HandlerManager(null);
+	// Get application auth-code that facebook might have sent
 	String authCode = Location.getParameter("code");
-
+	// FB might have also sent an error message
 	String error = Location.getParameter("error_reason");
+	// Get confession ID from request if any
 	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
-
 	if (null != error && error.equals("user_denied")) {
-	    proceedToApp(confessionService, facebookService, confEventBus);
+	    // Proceed to app if user did not give permissions or an error has occurred
+	    proceedToApp(confessionService, facebookService, eventBus);
 	} else if (authCode != null) {
-	    if(confId == null || "".equals(confId)) {
+	    if(CommonUtils.isNullOrEmpty(confId)) {
 		confId = Location.getParameter("state");
 	    }
-	    
-	    facebookService.login(authCode, new AsyncCallback<String>() {
-		@Override
-		public void onSuccess(String resultAccessToken) {
-		    if(resultAccessToken != null) {
-			accessToken = CommonUtils.processAccessToken(resultAccessToken);
-			if(accessToken != null && !"".equals(accessToken)) {
-			    ConfessionBox.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
-				@Override
-				public void onSuccess(String result) {
-				    if(result != null){
-					// parse the response text into JSON
-					ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(result);
-					if(loggedInUserInfo != null) {
-					    isLoggedIn = true;
-					    loginStatus = "login";
-					}
-					proceedToApp(confessionService, facebookService, confEventBus);
-				    }
-				}
-				@Override
-				public void onFailure(Throwable caught) {
-				    Window.alert("ERROR:" + caught.getLocalizedMessage());
-				}
-			    });
-			}
-		    }
-		}
-
-		@Override
-		public void onFailure(Throwable caught) {
-		    Window.alert("ERROR:" + caught.getLocalizedMessage());
-		}
-	    });
+	    // Login user and initialize application
+	    loginAndInitializeApplication(authCode);
 	} else {
-//	    proceedToApp(confessionService, facebookService, confEventBus);
+	    //	    proceedToApp(confessionService, facebookService, eventBus);
 	    initializeUserInfo(true);
 	}
+    }
+
+    /**
+     * Login user and initialize application
+     * 
+     * @param authCode
+     */
+    private void loginAndInitializeApplication(String authCode) {
+	facebookService.login(authCode, new AsyncCallback<String>() {
+	    @Override
+	    public void onSuccess(String resultAccessToken) {
+		if(resultAccessToken != null) {
+		    accessToken = CommonUtils.processAccessToken(resultAccessToken);
+		    if(CommonUtils.isNotNullAndNotEmpty(accessToken)) {
+			ConfessionBox.facebookService.getUserDetails(accessToken, new AsyncCallback<String>() {
+			    @Override
+			    public void onSuccess(String userDetailsJSON) {
+				if(CommonUtils.isNotNullAndNotEmpty(userDetailsJSON)){
+				    // parse the response text into JSON
+				    ConfessionBox.loggedInUserInfo = CommonUtils.getUserInfo(userDetailsJSON);
+				    if(loggedInUserInfo != null) {
+					isLoggedIn = true;
+					loginStatus = "login";
+				    }
+				    proceedToApp(confessionService, facebookService, eventBus);
+				}
+			    }
+			    @Override
+			    public void onFailure(Throwable caught) {
+				Error.handleError("ConfessionBox", "onFailure",	caught);
+			    }
+			});
+		    }
+		}
+	    }
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("ConfessionBox", "onFailure", caught);
+	    }
+	});
     }
 
     /**
@@ -141,12 +153,6 @@ public class ConfessionBox implements EntryPoint {
 	    showApplicationLoad();
 	}
 
-//	Window.alert("User Agent:" + Navigator.getUserAgent()
-//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
-//		+ Navigator.getPlatform() + " App name:"
-//		+ Navigator.getAppName() + " Java enabled:"
-//		+ Boolean.toString(Navigator.isJavaEnabled()));
-
 	if(Navigator.isJavaEnabled()) {
 	    CommonUtils.loginInFB(false);
 	    Timer timer = new Timer() {
@@ -157,7 +163,7 @@ public class ConfessionBox implements EntryPoint {
 			ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo(1);
 			if(confessionService != null && facebookService != null) {
 			    if(proceedFirstLoad) {
-				proceedToApp(confessionService, facebookService, confEventBus);
+				proceedToApp(confessionService, facebookService, eventBus);
 			    }
 			    // Cancel timer
 			    this.cancel();
@@ -168,7 +174,7 @@ public class ConfessionBox implements EntryPoint {
 			this.schedule(1000);
 		    } else {
 			if(proceedFirstLoad) {
-			    proceedToApp(confessionService, facebookService, confEventBus);
+			    proceedToApp(confessionService, facebookService, eventBus);
 			}
 		    }
 		}
@@ -210,7 +216,7 @@ public class ConfessionBox implements EntryPoint {
 	pnlApplicationLoad.setAnimationEnabled(true);
 	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
 	VerticalPanel vPnlApplnLoad = new VerticalPanel();
-	vPnlApplnLoad.add(logo);
+	vPnlApplnLoad.add(imgLogo);
 	vPnlApplnLoad.add(loaderImage);
 	pnlApplicationLoad.add(vPnlApplnLoad);
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(pnlApplicationLoad);
@@ -231,7 +237,6 @@ public class ConfessionBox implements EntryPoint {
 	    pnlApplicationLoad.hide();
 	    RootPanel.get(Constants.DIV_MAIN_CONTENT).remove(pnlApplicationLoad);
 	}
-	RootPanel.get(Constants.DIV_APPLN_TITLE).add(logoAndTag);
     }
 
     /**

@@ -17,11 +17,14 @@ import com.l3.CB.shared.TO.Confession;
 public class ChangeVisibilityButton extends PushButton {
 
     public ChangeVisibilityButton(final Confession confession, Image buttonImage, final boolean shareAnyn) {
-	super();
+	super(buttonImage);
 	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
+	
 	if(shareAnyn) {
+	    this.setDown(false);
 	    this.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	} else {
+	    this.setDown(true);
 	    this.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	}
 

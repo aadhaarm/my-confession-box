@@ -211,10 +211,10 @@ public class ConfessionOtherDAO {
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
 	    query.setOrdering("timeStamp desc");
 	    query.setUnique(false);
-	    
+
 	    @SuppressWarnings("unchecked")
 	    List<UserActivityDO> result = (List<UserActivityDO>) query.execute(userId);
-	    
+
 	    if (result != null && !result.isEmpty()) {
 		Map<Long, Long> confessionIDs = new HashMap<Long, Long>();
 		for (UserActivityDO userActivityDO : result) {
@@ -306,10 +306,10 @@ public class ConfessionOtherDAO {
 
 	    query.setFilter("userId == user");
 	    query.declareParameters("String user");
-	    
+
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
 	    query.setOrdering("timeStamp desc");
-	    
+
 	    @SuppressWarnings("unchecked")
 	    List<SubscribtionDO> result = (List<SubscribtionDO>) query.execute(userId);
 
@@ -333,7 +333,7 @@ public class ConfessionOtherDAO {
 	return subscribedConfessions;
 
     }
-    
+
     public static void saveConfessionDraft(Confession confession) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {
@@ -348,6 +348,9 @@ public class ConfessionOtherDAO {
 		    ConfessionDraftDO confessionDraftDO = it.next();
 		    confessionDraftDO.setConfessionTitle(confession.getConfessionTitle());
 		    confessionDraftDO.setConfession(new Text(confession.getConfession()));
+		    confessionDraftDO.setShareAsAnyn(confession.isShareAsAnyn());
+		    confessionDraftDO.setShareToUserIDForSave(confession.getShareToUserIDForSave());
+		    confessionDraftDO.setShareToRelationForSave(confession.getShareToRelationForSave());
 		    pm.makePersistent(confessionDraftDO);
 		}
 	    } else {
@@ -355,6 +358,9 @@ public class ConfessionOtherDAO {
 		confDraftDO.setUserId(confession.getUserId());
 		confDraftDO.setConfessionTitle(confession.getConfessionTitle());
 		confDraftDO.setConfession(new Text(confession.getConfession()));
+		confDraftDO.setShareAsAnyn(confession.isShareAsAnyn());
+		confDraftDO.setShareToUserIDForSave(confession.getShareToUserIDForSave());
+		confDraftDO.setShareToRelationForSave(confession.getShareToRelationForSave());
 		pm.makePersistent(confDraftDO);
 	    }
 	} catch (Exception e) {
@@ -381,6 +387,9 @@ public class ConfessionOtherDAO {
 		    confessionDraft = new Confession();
 		    confessionDraft.setConfessionTitle(confessionDraftDO.getConfessionTitle());
 		    confessionDraft.setConfession(confessionDraftDO.getConfession().getValue());
+		    confessionDraft.setShareAsAnyn(confessionDraftDO.isShareAsAnyn());
+		    confessionDraft.setShareToUserIDForSave(confessionDraftDO.getShareToUserIDForSave());
+		    confessionDraft.setShareToRelationForSave(confessionDraftDO.getShareToRelationForSave());
 		}
 	    }
 	} catch (Exception e) {

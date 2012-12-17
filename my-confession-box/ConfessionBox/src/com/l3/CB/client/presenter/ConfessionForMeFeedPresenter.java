@@ -43,9 +43,6 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
 		display.setConfessions(result, false, showUserControls, Filters.ALL);
-		if(result == null || result.isEmpty()) {
-		    display.showEmptyScreen();
-		}
 	    }
 	    @Override
 	    public void onFailure(Throwable caught) {

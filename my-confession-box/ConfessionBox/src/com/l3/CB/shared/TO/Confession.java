@@ -39,7 +39,11 @@ public class Confession implements Serializable {
     private Map<String, Long> activityCount;
 
     private List<ConfessionShare> confessedTo;
+    
+    private String shareToUserIDForSave;
 
+    private String shareToRelationForSave;
+    
     private String userFullName;
 
     private String userEmailAddress;
@@ -294,5 +298,21 @@ public class Confession implements Serializable {
 
     public void setUpdateTimeStamp(Date updateTimeStamp) {
         this.updateTimeStamp = updateTimeStamp;
+    }
+
+    public String getShareToUserIDForSave() {
+        return shareToUserIDForSave;
+    }
+
+    public void setShareToUserIDForSave(String shareToUserIDForSave) {
+        this.shareToUserIDForSave = shareToUserIDForSave;
+    }
+
+    public String getShareToRelationForSave() {
+        return shareToRelationForSave;
+    }
+
+    public void setShareToRelationForSave(String shareToRelationForSave) {
+        this.shareToRelationForSave = shareToRelationForSave;
     }
 }

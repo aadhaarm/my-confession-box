@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.shared.FacebookUtil;
 
 public class HeaderPresenter implements Presenter {
 
@@ -30,7 +31,7 @@ public class HeaderPresenter implements Presenter {
 	display.getApplnTitle().addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		Window.Location.reload();
+		Window.Location.assign(FacebookUtil.FB_APP_URL);
 	    }
 	});
     }

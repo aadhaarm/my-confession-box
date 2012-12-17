@@ -14,10 +14,14 @@ import com.l3.CB.shared.TO.Confession;
 
 public class DeleteConfessionButton extends PushButton {
 
+    boolean isVisibleToWorld;
+    
     public DeleteConfessionButton(final Confession confession, Image buttonImage, final boolean isVisible) {
-	super();
+	super(buttonImage);
+	isVisibleToWorld = isVisible;
+	
 	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
-	if(isVisible) {
+	if(isVisibleToWorld) {
 	    this.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
 	} else {
 	    this.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
@@ -27,22 +31,23 @@ public class DeleteConfessionButton extends PushButton {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
-
 		    ConfessionBox.confessionService.changeConfessionVisibility(
 			    ConfessionBox.getLoggedInUserInfo().getUserId(),
 			    ConfessionBox.getLoggedInUserInfo().getId(),
-			    confession.getConfId(), !isVisible, new Date(),
+			    confession.getConfId(), !isVisibleToWorld, new Date(),
 			    new AsyncCallback<Boolean>() {
 				@Override
 				public void onSuccess(Boolean result) {
 				    if(result) {
-					if(isVisible) {
+					changeVisibility();
+					if(isVisibleToWorld) {
 					    setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
 					} else {
 					    setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
 					}
 				    }
 				}
+
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -52,5 +57,8 @@ public class DeleteConfessionButton extends PushButton {
 		}
 	    }
 	});
+    }
+    private void changeVisibility() {
+	isVisibleToWorld = !isVisibleToWorld;
     }
 }

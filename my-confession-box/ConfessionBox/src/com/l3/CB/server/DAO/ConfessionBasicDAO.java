@@ -216,7 +216,7 @@ public class ConfessionBasicDAO {
 		    }
 		}
 		break;
-		
+
 	    case MOST_SHOULD_NOT_BE_PARDONED:
 		query.setFilter("isVisibleOnPublicWall == status");
 		query.declareParameters("String status");
@@ -233,7 +233,7 @@ public class ConfessionBasicDAO {
 		    }
 		}
 		break;
-		
+
 	    default:
 		List<ConfessionDO> resultSet9 = null;
 		query.setFilter("isVisibleOnPublicWall == status");
@@ -303,7 +303,7 @@ public class ConfessionBasicDAO {
 	    confession.setNumOfShouldNotBePardonedVote(confessionDO.getNumOfShouldNotBePardonedVote());
 	    confession.setNumOfSympathyVote(confessionDO.getNumOfSympathyVote());
 	    confession.setUpdateTimeStamp(confessionDO.getLastUpdateTimeStamp());
-	    
+
 	    UserDO userDO = UserDAO.getUserByUserId(new UserInfo(confessionDO.getUserId()));
 	    if(userDO != null) {
 		confession.setFbId(userDO.getFbId());
@@ -318,11 +318,11 @@ public class ConfessionBasicDAO {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {
 	    Query query = pm.newQuery(ConfessionDO.class);
-	    query.setFilter("confId == id");
-	    query.declareParameters("String id");
+	    query.setFilter("confId == id && isVisibleOnPublicWall == status");
+	    query.declareParameters("String id" + ", "  + "String status");
 
 	    @SuppressWarnings("unchecked")
-	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
+	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId, true);
 	    if (result != null && !result.isEmpty()) {
 		Iterator<ConfessionDO> it = result.iterator();
 		while (it.hasNext()) {
@@ -551,34 +551,34 @@ public class ConfessionBasicDAO {
 	return pardonConditions;
     }
 
-//    public static PardonCondition getConfessionCondition(Long confId, String conditionType) {
-//	PersistenceManager pm = PMF.get().getPersistenceManager();
-//	PardonCondition pardonCondition = null;
-//	try {
-//	    Query query = pm.newQuery(PardonConditionDO.class);
-//	    query.setFilter("condition == cond && confId == conf");
-//	    query.declareParameters("String cond" + ", "  + "String conf");
-//	    @SuppressWarnings("unchecked")
-//	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(conditionType, confId);
-//
-//	    if (result != null && !result.isEmpty()) {
-//		Iterator<PardonConditionDO> it = result.iterator();
-//		while (it.hasNext()) {
-//		    PardonConditionDO pardonConditionDO = it.next();
-//		    pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
-//		    pardonCondition.setUserId(pardonConditionDO.getUserId());
-//		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
-//		}
-//	    }
-//	} catch (Exception e) {
-//	    logger.log(Level.SEVERE, "Error while getting pardon condition:" + e.getMessage());
-//	} finally {
-//	    pm.close();
-//	}
-//	return pardonCondition;
-//    }
+    //    public static PardonCondition getConfessionCondition(Long confId, String conditionType) {
+    //	PersistenceManager pm = PMF.get().getPersistenceManager();
+    //	PardonCondition pardonCondition = null;
+    //	try {
+    //	    Query query = pm.newQuery(PardonConditionDO.class);
+    //	    query.setFilter("condition == cond && confId == conf");
+    //	    query.declareParameters("String cond" + ", "  + "String conf");
+    //	    @SuppressWarnings("unchecked")
+    //	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(conditionType, confId);
+    //
+    //	    if (result != null && !result.isEmpty()) {
+    //		Iterator<PardonConditionDO> it = result.iterator();
+    //		while (it.hasNext()) {
+    //		    PardonConditionDO pardonConditionDO = it.next();
+    //		    pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
+    //		    pardonCondition.setUserId(pardonConditionDO.getUserId());
+    //		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
+    //		}
+    //	    }
+    //	} catch (Exception e) {
+    //	    logger.log(Level.SEVERE, "Error while getting pardon condition:" + e.getMessage());
+    //	} finally {
+    //	    pm.close();
+    //	}
+    //	return pardonCondition;
+    //    }
 
-    
+
     public static boolean updateConfessionCondition(Long confId, String condition, boolean isFulfill) {
 	PersistenceManager pm = PMF.get().getPersistenceManager();
 	try {

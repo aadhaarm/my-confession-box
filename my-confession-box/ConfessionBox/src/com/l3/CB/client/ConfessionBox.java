@@ -67,12 +67,12 @@ public class ConfessionBox implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-//	Window.alert("User Agent:" + Navigator.getUserAgent()
-//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
-//		+ Navigator.getPlatform() + " App name:"
-//		+ Navigator.getAppName() + " Java enabled:"
-//		+ Boolean.toString(Navigator.isJavaEnabled()) + " Screen dim:"
-//		+ Window.getClientWidth() + "*" + Window.getClientHeight());
+	//	Window.alert("User Agent:" + Navigator.getUserAgent()
+	//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
+	//		+ Navigator.getPlatform() + " App name:"
+	//		+ Navigator.getAppName() + " Java enabled:"
+	//		+ Boolean.toString(Navigator.isJavaEnabled()) + " Screen dim:"
+	//		+ Window.getClientWidth() + "*" + Window.getClientHeight());
 
 	// Decide whether to consider device screen to be small or large?
 	CommonUtils.setupScreen();
@@ -91,7 +91,8 @@ public class ConfessionBox implements EntryPoint {
 	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 	if (null != error && error.equals("user_denied")) {
 	    // Proceed to app if user did not give permissions or an error has occurred
-	    proceedToApp(confessionService, facebookService, eventBus);
+//TODO: Remove commenting
+//	    proceedToApp(confessionService, facebookService, eventBus);
 	} else if (authCode != null) {
 	    if(CommonUtils.isNullOrEmpty(confId)) {
 		confId = Location.getParameter("state");
@@ -99,8 +100,8 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    //	    proceedToApp(confessionService, facebookService, eventBus);
-	    initializeUserInfo(true);
+	    	     proceedToApp(confessionService, facebookService, eventBus);
+//	    initializeUserInfo(true);
 	}
     }
 
@@ -134,6 +135,9 @@ public class ConfessionBox implements EntryPoint {
 				Error.handleError("ConfessionBox", "onFailure",	caught);
 			    }
 			});
+		    } else {
+			//TODO: Remove commenting
+//			proceedToApp(confessionService, facebookService, eventBus);
 		    }
 		}
 	    }
@@ -168,15 +172,18 @@ public class ConfessionBox implements EntryPoint {
 			    // Cancel timer
 			    this.cancel();
 			}   
-		    } else if(count < 5){
-			count++;
-			// Timer to reschedule for 1 sec
-			this.schedule(1000);
-		    } else {
-			if(proceedFirstLoad) {
-			    proceedToApp(confessionService, facebookService, eventBus);
-			}
-		    }
+		    } else
+//TODO: Remove commenting			
+//			if(count < 5){
+//			    count++;
+			    // Timer to reschedule for 1 sec
+			    this.schedule(1000);
+//TODO: Remove commenting
+//			} else {
+//			    if(proceedFirstLoad) {
+//				proceedToApp(confessionService, facebookService, eventBus);
+//			    }
+//			}
 		}
 	    };
 	    // 0.5 second to start first load

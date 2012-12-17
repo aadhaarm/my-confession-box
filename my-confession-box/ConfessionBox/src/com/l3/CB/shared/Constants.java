@@ -110,9 +110,9 @@ public class Constants {
 
     public static final String STYLE_CLASS_FEED_VIEW_LINK = "feedViewLink";
 
-    public static final String IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY = "/images/sympathies.png";
+    public static final String IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY = "/images/masks.png";
 
-    public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/sympathies.png";
+    public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/hideConfession.png";
 
     public static final String DATE_TIME_FORMAT = "MMM d, ''yy, h:mm a";
 

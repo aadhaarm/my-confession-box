@@ -40,9 +40,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
-		if(result != null) {
-		    display.setConfessions(result, true, showUserControls, Filters.ALL);
-		}
+		display.setConfessions(result, true, showUserControls, Filters.ALL);
 	    }
 	    @Override
 	    public void onFailure(Throwable caught) {
@@ -103,12 +101,12 @@ public class MyConfessionFeedPresenter implements Presenter {
 		    }
 		});
 	    }
-	   }); 
-	}
-
-	@Override
-	public void go(HasWidgets container) {
-	    RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
-	    RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
-	}
+	}); 
     }
+
+    @Override
+    public void go(HasWidgets container) {
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
+	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());	
+    }
+}

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>fbconfess</application>
-	<version>web</version>
-
+	<version>s-web3</version>
 
 	<!-- Allows App Engine to send multiple requests to one instance in parallel: -->
 	<threadsafe>true</threadsafe>
 	<ssl-enabled>true</ssl-enabled>
 	<!-- Configure serving/caching of GWT files -->
+
 	<static-files>
-		<include path="**" />
-
-		<!-- The following line requires App Engine 1.3.2 SDK -->
+		<!-- Static files to be cached for a month -->
+		<include path="**" expiration="30d" />
+		<!-- The .nocache files not to be cached -->
 		<include path="**.nocache.*" expiration="0s" />
-
-		<include path="**.cache.*" expiration="365d" />
+		<!-- The cache files to be cached for 30 days -->
+		<include path="**.cache.*" expiration="30d" />
 		<exclude path="**.gwt.rpc" />
 	</static-files>
 

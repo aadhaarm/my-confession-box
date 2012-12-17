@@ -12,8 +12,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
-import com.l3.CB.client.event.EditConfessionEvent;
-import com.l3.CB.client.event.EditConfessionEventHandler;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateHPEventHandler;
 import com.l3.CB.client.event.UpdateMenuEvent;
@@ -54,6 +52,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      */
     public ConfessionController(String confId) {
 	super();
+//	Track.track("Application loaded for the first time");
 	updateUserInfoAndInitializeAPP();
 	// Bind events
 	bind();
@@ -103,12 +102,12 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
 	if(loadAll) {
-	    String loadHash = Window.Location.getParameter(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
-	    if(loadHash != null) {
+	    String loadHash = Window.Location.getHash();
+	    if(CommonUtils.isNotNullAndNotEmpty(loadHash)) {
 		if(null != ConfessionBox.confId) {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 		} else {
-		    CommonUtils.fireHistoryEvent(loadHash);
+		    CommonUtils.fireHistoryEvent(loadHash.substring(1));
 		}
 	    } else {
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
@@ -122,6 +121,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private void bind() {
 	// Listen all history new item addition
 	History.addValueChangeHandler(this);
+	
 	// Handle update human points event
 	ConfessionBox.eventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
 	    @Override
@@ -129,6 +129,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		humanPointPresenter.updateHumanPoints(event.getUpdatedCount());
 	    }
 	});
+	
 	// Update update menu event
 	ConfessionBox.eventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
 	    @Override
@@ -136,14 +137,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if(ConfessionBox.isLoggedIn) {
 		    menuPresenter.initializeMenuCounts();
 		}
-	    }
-	});
-	// Update edit confession event
-	ConfessionBox.eventBus.addHandler(EditConfessionEvent.TYPE, new EditConfessionEventHandler() {
-	    @Override
-	    public void editConfession(EditConfessionEvent event) {
-		Presenter presenter = new RegisterConfessionPresenter(new RegisterConfessionView(), event.getConfessionToBeEdited());
-		presenter.go(container);
 	    }
 	});
     }
@@ -154,6 +147,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
 	String token = event.getValue();
+
+//	 Track.track(token);
+	
 	if (token != null) {
 	    Presenter presenter = null;
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
@@ -175,6 +171,10 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		}
 	    } 
 	    if(presenter != null) {
+		presenter.go(container);
+	    } else {
+		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
+		MenuView.selectMenuItem(1);
 		presenter.go(container);
 	    }
 	}

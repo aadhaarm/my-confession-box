@@ -89,6 +89,7 @@ public class CBTextBox extends FlowPanel {
 	boolean isValid = FieldVerifier.isValidTitle(txtTitle.getText());
 	if(!isValid || defaultValue.equals(txtTitle.getText())) {
 	    txtTitle.setStyleName(Constants.STYLE_CLASS_FIELD_ERROR);
+	    isValid = false;
 	} else {
 	    txtTitle.removeStyleName(Constants.STYLE_CLASS_FIELD_ERROR);
 	}
@@ -100,6 +101,10 @@ public class CBTextBox extends FlowPanel {
     }
     
     private void updateCharsLeft() {
-	lblRemainChar.setText(numOfChars - txtTitle.getText().length() + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	if(!txtTitle.getText().equals(defaultValue)){
+	    lblRemainChar.setText(numOfChars - txtTitle.getText().length() + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	} else {
+	    lblRemainChar.setText(numOfChars + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	}
     }
 }

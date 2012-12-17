@@ -10,11 +10,9 @@ import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.ActivityEvent;
@@ -68,7 +66,6 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	isMoreConfessionsAvailable = true;
 
 	vpnlConfessionList = new FlowPanel();
-//	vpnlConfessionList.setHorizontalAlignment(HorizontalPanel.ALIGN_JUSTIFY);
 	vpnlConfessionList.add(fPnlTopBar);
 
 	initWidget(vpnlConfessionList);
@@ -133,11 +130,12 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		    }
 		}
 	    }
-	} else {
-	    if(confessionsThisView == null || confessionsThisView.isEmpty()) {
-		vpnlConfessionList.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
-	    }
+	} 
+	else {
 	    isMoreConfessionsAvailable = false;
+	}
+	if(confessionsThisView == null || confessionsThisView.isEmpty()) {
+	    vpnlConfessionList.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
 	}
     }
 

@@ -206,6 +206,10 @@ public class FriendsSuggestBox extends FlowPanel {
 	return null;
     }
 
+    public void setSelectedUser(String userFullName) {
+	friendsSuggestBox.setValue(userFullName, true);
+    }
+
     public boolean validate() {
 	if(friendsSuggestBox != null) {
 	    if(userfriends.get(friendsSuggestBox.getValue()) == null) {

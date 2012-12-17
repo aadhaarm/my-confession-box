@@ -28,7 +28,16 @@ public class ConfessionDraftDO implements Serializable {
     private Long userId;
 
     @Persistent
+    private String shareToUserIDForSave;
+    
+    @Persistent
+    private String shareToRelationForSave;
+    
+    @Persistent
     private String confessionTitle;
+    
+    @Persistent
+    private boolean shareAsAnyn = true;
 
     public Long getConfId() {
 	return confId;
@@ -67,5 +76,29 @@ public class ConfessionDraftDO implements Serializable {
 	return "ConfessionDraftDO [confId=" + confId + ", confession="
 		+ confession + ", userId=" + userId + ", confessionTitle="
 		+ confessionTitle + "]";
+    }
+
+    public String getShareToUserIDForSave() {
+        return shareToUserIDForSave;
+    }
+
+    public void setShareToUserIDForSave(String shareToUserIDForSave) {
+        this.shareToUserIDForSave = shareToUserIDForSave;
+    }
+
+    public boolean isShareAsAnyn() {
+        return shareAsAnyn;
+    }
+
+    public void setShareAsAnyn(boolean shareAsAnyn) {
+        this.shareAsAnyn = shareAsAnyn;
+    }
+
+    public String getShareToRelationForSave() {
+        return shareToRelationForSave;
+    }
+
+    public void setShareToRelationForSave(String shareToRelationForSave) {
+        this.shareToRelationForSave = shareToRelationForSave;
     }
 }

@@ -8,10 +8,12 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.FilterEvent;
 import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.presenter.HeaderPresenter;
+import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
@@ -125,6 +127,9 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	menuListBox.addItem(ConfessionBox.cbText.cbMenuConfessionConfessToMe(), "link4");
 	menuListBox.addItem(ConfessionBox.cbText.inviteFriendsLinkLabelText(), "invite");
 	menuListBox.addItem(ConfessionBox.cbText.cbRuleBookLinkLabelText(), "rulebook");
+	menuListBox.addItem(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel(), "about");
+	menuListBox.addItem(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "policy");
+
 	if(ConfessionBox.isLoggedIn) {
 	    menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
 	}
@@ -161,11 +166,18 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 		} else if("invite".equals(newValue)) {
 		    CommonUtils.inviteFriends(ConfessionBox.getLoggedInUserInfo().getName(), ConfessionBox.cbText.inviteFriendsTextMessage());
 		} else if("rulebook".equals(newValue)) {
-		    //		pPnlRuleBook.center();
+		    PopupPanel pPnlRuleBook = ApplicationTextWidget.setupCBRuleBook();
+		    pPnlRuleBook.center();
+		} else if("about".equals(newValue)) {
+		    PopupPanel pPnlRuleBook = ApplicationTextWidget.setupAbout();
+		    pPnlRuleBook.center();
+		} else if("policy".equals(newValue)) {
+		    PopupPanel pPnlRuleBook = ApplicationTextWidget.setupPrivacy();
+		    pPnlRuleBook.center();
 		} else if("logout".equals(newValue)) {
 		    CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
 		    ConfessionBox.isLoggedIn = false;
-		    //		menuBar.remove(ancLogout);
+		    menuListBox.removeItem(8);
 		}
 	    }
 	});

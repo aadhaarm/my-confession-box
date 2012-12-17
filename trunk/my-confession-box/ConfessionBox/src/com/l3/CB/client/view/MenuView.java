@@ -16,6 +16,7 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
 import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
@@ -164,8 +165,14 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	 */
 	ancCBRuleBook = new Anchor(ConfessionBox.cbText.cbRuleBookLinkLabelText());
 	ancCBRuleBook.setStyleName("link5");
-	setupCBRuleBook();
-
+	pPnlRuleBook = ApplicationTextWidget.setupCBRuleBook();
+	ancCBRuleBook.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		pPnlRuleBook.center();
+	    }
+	});
+	
 	/*
 	 * Logout link
 	 */
@@ -196,103 +203,8 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		menuBar.add(ancLogout);
 	    }
 	} 
-//	else {
-//	    setupSmallMenu(ancLogout);
-//	}
-//	DecoratorPanel contentTableDecorator = new DecoratorPanel();
-//	contentTableDecorator.removeStyleName("gwt-DecoratorPanel");
-//	contentTableDecorator.add(menuBar);
 	initWidget(menuBar);
     }
-
-    /**
-     * @param ancLogout
-     */
-    private void setupSmallMenu(final Anchor ancLogout) {
-	final ListBox menuListBox = new ListBox();
-	menuListBox.addItem(ConfessionBox.cbText.cbMenuConfessionFeed(), "link1");
-	menuListBox.addItem(ConfessionBox.cbText.cbMenuConfessionConfess(), "link2");
-	menuListBox.addItem(ConfessionBox.cbText.cbMenuConfessionMyConfessions(), "link3");
-	menuListBox.addItem(ConfessionBox.cbText.cbMenuConfessionConfessToMe(), "link4");
-	menuListBox.addItem(ConfessionBox.cbText.inviteFriendsLinkLabelText(), "invite");
-	menuListBox.addItem(ConfessionBox.cbText.cbRuleBookLinkLabelText(), "rulebook");
-	if(ConfessionBox.isLoggedIn) {
-	menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
-	}
-	menuListBox.addChangeHandler(new ChangeHandler() {
-	@Override
-	public void onChange(ChangeEvent event) {
-	    ListBox a = ((ListBox)event.getSource());
-	    String newValue = a.getValue(a.getSelectedIndex());
-	    if("link1".equals(newValue)) {
-		ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
-		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
-	    } else if("link2".equals(newValue)) {
-		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
-		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
-		} else {
-		    CommonUtils.login(0);
-		}
-	    } else if("link3".equals(newValue)) {
-		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
-		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
-		} else {
-		    CommonUtils.login(0);
-		}
-	    } else if("link4".equals(newValue)) {
-		if(ConfessionBox.isLoggedIn) {
-		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
-		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
-		    HelpInfo.cleanToolTip();
-		} else {
-		    CommonUtils.login(0);
-		}
-	    } else if("invite".equals(newValue)) {
-		CommonUtils.inviteFriends(ConfessionBox.getLoggedInUserInfo().getName(), ConfessionBox.cbText.inviteFriendsTextMessage());
-	    } else if("rulebook".equals(newValue)) {
-		pPnlRuleBook.center();
-	    } else if("logout".equals(newValue)) {
-		CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
-		ConfessionBox.isLoggedIn = false;
-		menuBar.remove(ancLogout);
-	    }
-	}
-	});
-	menuListBox.setStyleName("showMenuButton");
-	menuBar.add(menuListBox);
-    }
-
-    /**
-     * 
-     */
-    private void setupCBRuleBook() {
-	pPnlRuleBook = new PopupPanel(true);
-	pPnlRuleBook.setGlassEnabled(true);
-	pPnlRuleBook.setStyleName("infoModalPopupWindow");
-
-	ScrollPanel sPnlContent = new ScrollPanel();
-	sPnlContent.add(new HTML("CB Rule-Book<hr/>" +
-		"1. Confession Box is a secure application and your identity is never disclosed to anyone unless you yourself share your identity to the world.<br/>" +
-		"2. You can read all the confessions on the 'Confession Wall' without logging-in on the CB and without providing ant of your informations to CB.<br/>" +
-		"3. If you register a confession with hidden identity, your identity can not be discovered by any one other than you (Unless you write your details in the confession text).<br/>" +
-		"4. You can confess and appeal for pardon from a person in your facebook friend's list. A notification is sent to the person via email if the person is on CB.<br/>" +
-		"5. If you appeal for pardon to someone, the person is informed about the confession along with your identity to this person.<br/>" +
-		"6. If some one has confessed to you, a notofication is sent to you. You can visit and check the confession and pardon for the same if you may.<br/>" +
-		"7. While pardonning, you can set some conditions that should be met for the confession to be pardoned.<br/>" +
-		"8. When all the conditions are met, the confession is pardoned and you and the confessee is notified about the pardon!<br/>" +
-		"9. You can also subscribe a confession by clicking the 'Subscribe' link. You are notified about the confession when it is pardoned.<br/>" +
-		"10. You are provided 'Human Points' for all the activities you do on CB that shall be a count of how good a human you are."));
-	pPnlRuleBook.add(sPnlContent);
-	ancCBRuleBook.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		pPnlRuleBook.center();
-	    }
-	});
-    }
-
 
     private MenuButton getPanelWithCount(HTML myConItem, int i) {
 	MenuButton btnMenuItem = new MenuButton(userInfo, confessionService, i, myConItem);

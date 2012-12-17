@@ -20,7 +20,7 @@ import com.l3.CB.shared.TO.UserInfo;
 public class MailManager {
 
     static Logger logger = Logger.getLogger("CBLogger");
-    static String fromMailAddress = "aadhaar.m@gmail.com";
+    static String fromMailAddress = "donotreply@fbconfess.com";
 
     public static boolean sendConfessionEmail(UserInfo confessionToUser, UserInfo confessionByUser, long confId) {
 	logger.log(Level.INFO, "Confessed by user:" + confessionByUser.toString());

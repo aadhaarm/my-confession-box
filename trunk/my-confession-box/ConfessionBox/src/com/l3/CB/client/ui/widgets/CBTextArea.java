@@ -97,7 +97,11 @@ public class CBTextArea extends FlowPanel {
     }
 
     private void updateCharsLeft() {
-	lblRemainChar.setText(maxCharsAllowed - cbTextArea.getText().length() + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	if(!cbTextArea.getText().equals(defaultValue)) {
+	    lblRemainChar.setText(maxCharsAllowed - cbTextArea.getText().length() + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	} else {
+	    lblRemainChar.setText(maxCharsAllowed + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
+	}
     }
 
     /**
@@ -114,6 +118,7 @@ public class CBTextArea extends FlowPanel {
 	if(!isValid || defaultValue.equals(cbTextArea.getText())) {
 	    this.add(lblErrorMsg);
 	    cbTextArea.setStylePrimaryName(Constants.STYLE_CLASS_FIELD_ERROR);
+	    isValid = false;
 	} else {
 	    this.remove(lblErrorMsg);
 	    cbTextArea.removeStyleName(Constants.STYLE_CLASS_FIELD_ERROR);

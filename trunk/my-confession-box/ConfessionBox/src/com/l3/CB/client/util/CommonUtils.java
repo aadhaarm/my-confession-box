@@ -112,27 +112,35 @@ public class CommonUtils {
      * @param element
      */
     public static native void parseXFBMLJS(Element element) /*-{
-	if($wnd.FB && element) {
-	  $wnd.FB.XFBML.parse(element);
-	}
+  	try {
+        	if($wnd.FB && element) {
+        	  $wnd.FB.XFBML.parse(element);
+        	}
+  	   } catch(err) {
+          // debug
+          alert('FAILURE: to send in event to google analytics: ' + err);
+        }
     }-*/;
 
     public static void login(int i) {
 	String confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
-
-	if(i == 0) {
-	    if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
+	if(Navigator.isJavaEnabled()) {
+	    loginInFB(true);
+	} else {
+	    if(i == 0) {
+		if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
+		    if(null != confId){
+			CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+		    } else {
+			CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+		    }
+		}
+	    } else {
 		if(null != confId){
 		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
 		} else {
 		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
 		}
-	    }
-	} else {
-	    if(null != confId){
-		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
-	    } else {
-		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
 	    }
 	}
     }
@@ -178,15 +186,17 @@ public class CommonUtils {
         		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(I)(i));
      		    	@com.l3.CB.client.ConfessionBox::loginStatus = "login";
      		    } else {
-     		        @com.l3.CB.client.ConfessionBox::isLoggedIn = false;
-     		        @com.l3.CB.client.ConfessionBox::loginStatus = "rejected";
+//TODO: Remove commenting
+//     		        @com.l3.CB.client.ConfessionBox::isLoggedIn = false;
+//     		        @com.l3.CB.client.ConfessionBox::loginStatus = "rejected";
 		    }
         	});
    		}
            }, {scope: 'email'});
 	} else {
 	    	var i = 0;
-		$entry(@com.l3.CB.client.util.CommonUtils::login(I)(i));
+//TODO: Remove commenting
+//		$entry(@com.l3.CB.client.util.CommonUtils::login(I)(i));
 	}
     }-*/;
 
@@ -507,10 +517,10 @@ public class CommonUtils {
 	final FlowPanel fPnlControls = new FlowPanel();
 	fPnlControls.setStyleName(Constants.STYLE_CLASS_USER_CONTROL_BUTTON_CONTAINER);
 
-	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY,0,0,27,30), confession.isShareAsAnyn());
+	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY,20,20,20,20), confession.isShareAsAnyn());
 	fPnlControls.add(btnChangeVisibility);
 
-	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY,0,0,27,30), confession.isVisibleOnPublicWall());
+	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY,20,20,20,20), confession.isVisibleOnPublicWall());
 	fPnlControls.add(btnDeleteConfession);
 
 	return fPnlControls;

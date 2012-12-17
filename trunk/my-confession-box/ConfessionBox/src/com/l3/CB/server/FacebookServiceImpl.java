@@ -22,7 +22,8 @@ FacebookService {
     @Override
     public String login(String authToken) {
 	final String url = FacebookUtil.getAccessTokenUrl(authToken);
-	return ServerUtils.fetchURL(url);
+	String returnString = ServerUtils.fetchURL(url); 
+	return returnString;
     }
 
     @Override

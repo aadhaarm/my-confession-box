@@ -375,4 +375,7 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("The Philosophy")
     String phillosphyFooterLinkLabel();
+
+    @DefaultStringValue("Anonymous confession")
+    String phillosphyAnonConfFooterLinkLabel();
 }

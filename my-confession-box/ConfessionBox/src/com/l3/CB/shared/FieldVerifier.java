@@ -37,7 +37,7 @@ public class FieldVerifier {
 	if (name == null) {
 	    return false;
 	}
-	return (name.length() > 3 && name.length() <= 100);
+	return (name.length() > 10 && name.length() <= 70);
     }
 
     public static boolean isValidConfession(String confessionText) {

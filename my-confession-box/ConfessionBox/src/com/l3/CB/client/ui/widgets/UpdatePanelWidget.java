@@ -66,58 +66,57 @@ public class UpdatePanelWidget extends FlowPanel {
 		    onShowUpdatePress();
 		}
 	    });
-	} else {
-	    btnShowUpdates.addClickHandler(new ClickHandler() {
-		@Override
-		public void onClick(ClickEvent event) {
-		    onShowUpdatePress();
-		}
+	} 
+	btnShowUpdates.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		onShowUpdatePress();
+	    }
 
-	    });
-	}
+	});
     }
     /**
      * 
      */
-     private void onShowUpdatePress() {
-	 if(vPnlUpdates != null && vPnlUpdates.isVisible()) {
-	     vPnlUpdates.setVisible(false);
-	     if(ConfessionBox.isTouchEnabled) {
-		 btnShowUpdates.setText(ConfessionBox.cbText.mobUpdateWidgetShowUpdatesLabelText());
-	     } else {
-		 btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
-	     }
-	 } else {
-	     addLoaderImage();
-	     ConfessionBox.confessionService.getConfessionUpdates(confId, new AsyncCallback<List<ConfessionUpdate>>() {
-		 @Override
-		 public void onSuccess(List<ConfessionUpdate> result) {
-		     if(result != null && !result.isEmpty()) {
-			 vPnlUpdates = new VerticalPanel();
-//			 vPnlUpdates.setWidth((Window.getClientWidth() - 20) + "px");
-			 vPnlUpdates.clear();
-			 for (ConfessionUpdate confessionUpdate : result) {
-			     if(confessionUpdate != null && confessionUpdate.getUpdate() != null && confessionUpdate.getUpdate() != null) {
-				 HTML update = new HTML(Templates.TEMPLATES.confessonUpdate(confessionUpdate.getCommentAs(),
-					 confessionUpdate.getUpdate(), CommonUtils.getDateInAGOFormat(confessionUpdate.getTimeStamp())));
-				 update.setStyleName(Constants.STYLE_CLASS_CONF_UPDATE_TEXT_ROW);
-				 vPnlUpdates.add(update);
-			     }
-			 }
-			 add(vPnlUpdates);
-			 btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetHideUpdatesLabelText()); 
-		     } else {
-			 btnShowUpdates.setVisible(false);
-			 add(lblNoUpdates);
-		     }
-		     remmoveLoaderImage();
-		 }
+    private void onShowUpdatePress() {
+	if(vPnlUpdates != null && vPnlUpdates.isVisible()) {
+	    vPnlUpdates.setVisible(false);
+	    if(ConfessionBox.isTouchEnabled) {
+		btnShowUpdates.setText(ConfessionBox.cbText.mobUpdateWidgetShowUpdatesLabelText());
+	    } else {
+		btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
+	    }
+	} else {
+	    addLoaderImage();
+	    ConfessionBox.confessionService.getConfessionUpdates(confId, new AsyncCallback<List<ConfessionUpdate>>() {
+		@Override
+		public void onSuccess(List<ConfessionUpdate> result) {
+		    if(result != null && !result.isEmpty()) {
+			vPnlUpdates = new VerticalPanel();
+			vPnlUpdates.setWidth((Window.getClientWidth()) + "px");
+			vPnlUpdates.clear();
+			for (ConfessionUpdate confessionUpdate : result) {
+			    if(confessionUpdate != null && confessionUpdate.getUpdate() != null && confessionUpdate.getUpdate() != null) {
+				HTML update = new HTML(Templates.TEMPLATES.confessonUpdate(confessionUpdate.getCommentAs(),
+					confessionUpdate.getUpdate(), CommonUtils.getDateInAGOFormat(confessionUpdate.getTimeStamp())));
+				update.setStyleName(Constants.STYLE_CLASS_CONF_UPDATE_TEXT_ROW);
+				vPnlUpdates.add(update);
+			    }
+			}
+			add(vPnlUpdates);
+			btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetHideUpdatesLabelText()); 
+		    } else {
+			btnShowUpdates.setVisible(false);
+			add(lblNoUpdates);
+		    }
+		    remmoveLoaderImage();
+		}
 
-		 @Override
-		 public void onFailure(Throwable caught) {
-		     Error.handleError("UpdatePanelWidget", "onFailure", caught);
-		 }
-	     });
-	 }
-     }
+		@Override
+		public void onFailure(Throwable caught) {
+		    Error.handleError("UpdatePanelWidget", "onFailure", caught);
+		}
+	    });
+	}
+    }
 }

@@ -3,7 +3,6 @@ package com.l3.CB.client.view;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -129,6 +128,8 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	menuListBox.addItem(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel(), "about");
 	menuListBox.addItem(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "policy");
 	menuListBox.addItem(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "philosophy");
+	menuListBox.addItem(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "anonConf");
+
 	
 	if(ConfessionBox.isLoggedIn) {
 	    menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
@@ -177,6 +178,9 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 		} else if("philosophy".equals(newValue)) {
 		    PopupPanel pPnlPhilosophy = ApplicationTextWidget.setupPhillosphy();
 		    pPnlPhilosophy.center();
+		} else if("anonConf".equals(newValue)) {
+		    PopupPanel pPnlPhilosophyAnonConf = ApplicationTextWidget.setupPhillosphyAnynConf();
+		    pPnlPhilosophyAnonConf.center();
 		} else if("logout".equals(newValue)) {
 		    CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
 		    menuListBox.removeItem(8);

@@ -22,7 +22,7 @@ public class CBTextArea extends FlowPanel {
     private final Label lblErrorMsg;
     private String defaultValue = null;
 
-    public CBTextArea(int numOfChars, boolean big) {
+    public CBTextArea(int numOfChars, boolean big, String defaultText) {
 	super();
 	this.maxCharsAllowed = numOfChars;
 	
@@ -31,14 +31,14 @@ public class CBTextArea extends FlowPanel {
 	cbTextArea.setStyleName("confessionTextEditor");
 	
 	// Default value
-	defaultValue = "write your confession here..";
+	defaultValue = defaultText;
 	// Set default text
 	setUpDefaultText();
 	
 	if(big) {
 	    cbTextArea.setSize(Integer.toString(getCommentWidth()) + "px", "200px");
 	} else {
-	    cbTextArea.setSize("526px", "70px");
+	    cbTextArea.setSize(Integer.toString(getCommentWidth()) + "px", "70px");
 	}
 	this.add(cbTextArea);
 	
@@ -54,11 +54,11 @@ public class CBTextArea extends FlowPanel {
      * @return
      */
     private int getCommentWidth() {
-	int width = Window.getClientWidth() - 60;
+	int width = Window.getClientWidth() - 40;
 	if(ConfessionBox.isMobile) {
 	    return width;
 	} else {
-	    return 526;
+	    return 565;
 	}
     }
 

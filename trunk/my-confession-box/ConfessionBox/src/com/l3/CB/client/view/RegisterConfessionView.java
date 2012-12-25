@@ -133,9 +133,9 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	txtTitle = new CBTextBox();
 	fPnlConfessionForm.add(txtTitle);
 
-	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS, true);
+	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS, true, "write your confession here..");
 	txtConfession.setStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
-	txtConfession.setSize("100%", "14em");
+//	txtConfession.setSize("100%", "14em");
 
 	fPnlConfessionForm.add(txtConfession);
 

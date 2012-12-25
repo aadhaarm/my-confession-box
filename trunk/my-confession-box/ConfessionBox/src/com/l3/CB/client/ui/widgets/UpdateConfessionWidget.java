@@ -23,7 +23,7 @@ public class UpdateConfessionWidget extends FlowPanel {
 
     public UpdateConfessionWidget(Confession confession) {
 	super();
-	txtUpdate = new CBTextArea(Constants.COMM_MAX_CHARS, false);
+	txtUpdate = new CBTextArea(Constants.COMM_MAX_CHARS, false, "write your confession update/response here..");
 	this.add(txtUpdate);
 
 	btnSubmit = new Button(ConfessionBox.cbText.confessionUpdateButtonLabelText());

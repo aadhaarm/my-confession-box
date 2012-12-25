@@ -335,17 +335,16 @@ a:hover {
 /*confession css begins here*/
 
 .selections {
-	padding:10px 0 0 5px;
+	padding:0 0 0 5px;
 	}
 
 .header_text {
 	border-bottom:solid 1px #CCC;
-	margin:10px 15px 0 10px;
+	margin:10px 0 0 0;
 }
 
 .subtext {
 	font-size:small;
-	width: 486px;	
 	line-height: 1.38;
 }
 
@@ -360,8 +359,8 @@ a:hover {
 
 .options {
 	background-color:#FF9;
-	padding: 5px 20px 10px 20px;
-	margin: 2px 15px 0 15px;
+	padding: 5px;
+	margin: 2px 5px 0 5px;
 	font-size:small;
 }
 
@@ -392,11 +391,13 @@ a:hover {
 .reg_confession_title {
 	font-weight:600;
 	font-size:small;
-	margin:10px 0 10px 15px;
+	margin:10px 0 10px 5px;
 }
 
 .confession_text {
-	margin:5px 5px 0 15px;	
+	display: block;
+	overflow: auto;
+	margin:5px 5px 0 5px;	
 }
 
 .ch_remaining{
@@ -405,12 +406,12 @@ a:hover {
 }
 
 .save_draft {
-	margin:5px 0 5px 15px;
+	margin:5px 0 5px 0;
 	float:left;
 }
 
 .submit_confession {
-	margin:5px 20px 5px 10px;
+	margin:5px 0 5px 0;
 	float:right;
 }
 
@@ -435,11 +436,9 @@ a:hover {
 }
 
 .friendsSuggestBoxMyConfPage {
-	/* float: left; */
 }
 
 .appealLink {
-	/* padding-left: 14px; */
 }
 
 .errorMessage {
@@ -458,15 +457,7 @@ a:hover {
 
 .regConfButtons {
 	display: block;
-	height: 45px;
-	margin-top: 60px;
-	overflow-x: auto;
-	overflow-y: auto;
-	padding-top: 7px;
-	padding-bottom: 5px;
-	padding-left: 15px;
-	position: relative;
-	width: auto;
+	overflow: auto;
 }
 
 .confessionTextEditor {

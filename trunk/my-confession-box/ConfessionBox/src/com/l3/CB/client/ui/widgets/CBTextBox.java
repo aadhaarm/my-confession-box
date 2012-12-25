@@ -71,11 +71,11 @@ public class CBTextBox extends FlowPanel {
      * @return
      */
     private int getCommentWidth() {
-	int width = Window.getClientWidth() - 60;
+	int width = Window.getClientWidth() - 40;
 	if(ConfessionBox.isMobile) {
 	    return width;
 	} else {
-	    return 526;
+	    return 565;
 	}
     }
 

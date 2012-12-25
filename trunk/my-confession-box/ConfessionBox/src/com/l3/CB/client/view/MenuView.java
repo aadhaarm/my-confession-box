@@ -1,16 +1,12 @@
 package com.l3.CB.client.view;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ConfessionServiceAsync;
@@ -183,7 +179,6 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		@Override
 		public void onClick(ClickEvent event) {
 		    CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
-		    ConfessionBox.isLoggedIn = false;
 		    menuBar.remove(ancLogout);
 		}
 	    });
@@ -192,6 +187,8 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	menuBar = new FlowPanel();
 	menuBar.setStyleName(Constants.STYLE_CLASS_MENU);
 
+	
+	// NOT Mobile
 	if(!ConfessionBox.isMobile) {
 	    menuBar.add(link1);
 	    menuBar.add(link2);

@@ -67,6 +67,7 @@ public class ConfessionBox implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
+
 	//	Window.alert("User Agent:" + Navigator.getUserAgent()
 	//		+ " App code name:" + Navigator.getAppCodeName() + " Platform:"
 	//		+ Navigator.getPlatform() + " App name:"
@@ -91,8 +92,8 @@ public class ConfessionBox implements EntryPoint {
 	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 	if (null != error && error.equals("user_denied")) {
 	    // Proceed to app if user did not give permissions or an error has occurred
-//TODO: Remove commenting
-//	    proceedToApp(confessionService, facebookService, eventBus);
+	    //TODO: Remove commenting
+	    //	    proceedToApp(confessionService, facebookService, eventBus);
 	} else if (authCode != null) {
 	    if(CommonUtils.isNullOrEmpty(confId)) {
 		confId = Location.getParameter("state");
@@ -100,8 +101,8 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    	     proceedToApp(confessionService, facebookService, eventBus);
-//	    initializeUserInfo(true);
+	    //	    proceedToApp(confessionService, facebookService, eventBus);
+	    initializeUserInfo(true);
 	}
     }
 
@@ -137,7 +138,7 @@ public class ConfessionBox implements EntryPoint {
 			});
 		    } else {
 			//TODO: Remove commenting
-//			proceedToApp(confessionService, facebookService, eventBus);
+			//			proceedToApp(confessionService, facebookService, eventBus);
 		    }
 		}
 	    }
@@ -173,17 +174,17 @@ public class ConfessionBox implements EntryPoint {
 			    this.cancel();
 			}   
 		    } else
-//TODO: Remove commenting			
-//			if(count < 5){
-//			    count++;
-			    // Timer to reschedule for 1 sec
-			    this.schedule(1000);
-//TODO: Remove commenting
-//			} else {
-//			    if(proceedFirstLoad) {
-//				proceedToApp(confessionService, facebookService, eventBus);
-//			    }
-//			}
+			//TODO: Remove commenting			
+			//			if(count < 5){
+			//			    count++;
+			// Timer to reschedule for 1 sec
+			this.schedule(1000);
+		    //TODO: Remove commenting
+		    //			} else {
+		    //			    if(proceedFirstLoad) {
+		    //				proceedToApp(confessionService, facebookService, eventBus);
+		    //			    }
+		    //			}
 		}
 	    };
 	    // 0.5 second to start first load

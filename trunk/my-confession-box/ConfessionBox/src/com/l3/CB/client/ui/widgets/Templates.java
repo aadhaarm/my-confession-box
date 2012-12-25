@@ -18,6 +18,9 @@ public class Templates {
 	@Template("<br/>confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")
 	SafeHtml confessedToPersomalWall(SafeUri profileLink, String name, String relation);
 
+	@Template("<b>{0}</b> has requested pardon from you for the following confession. {1} identity is hidden to the world except you. If you wish to grant {2} Pardon (or pardon with conditions), press the <b>Pardon</b> button below.")
+	SafeHtml confessedToYouWallPardonMessage(String name, String his, String him);
+	
 	@Template("confessed to {0} {1}")
 	SafeHtml confessedToFeedWall(String pronoun,String userName);
 
@@ -30,7 +33,7 @@ public class Templates {
 	@Template("{0}.[<a class=\"questionMark\">?</a>]")
 	SafeHtml pardonConditionInfoText(String pardonConditionText);
 
-	@Template("{0}.[<a class=\"questionMark\">?</a>] {1}")
+	@Template("Condition {0}.[<a class=\"questionMark\">?</a>] {1}")
 	SafeHtml pardonCondition(String condition, String statusTick);
     
 	@Template("<b>{0}</b><br/><div class=\"subtext\">{1} [<a class=\"questionMark_bl\">?</a>]</div>")

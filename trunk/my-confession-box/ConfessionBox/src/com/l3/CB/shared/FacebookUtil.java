@@ -17,21 +17,21 @@ public class FacebookUtil {
     //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
     //    public static String REDIRECT_URL = "http://apps.facebook.com/fbconfessbeta/";
 
-    //    public static final String APPLICATION_ID = "153945264667385"; // replace with real values from Facebook app configuration
-    //    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-    //    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-    //    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-    //    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    //    public static String FB_APP_URL = "http://apps.facebook.com/fbconfess/";
-    //    public static String APP_REDIRECT_URL = "http://www.fbconfess.com/";
+        public static final String APPLICATION_ID = "153945264667385"; // replace with real values from Facebook app configuration
+        public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+        public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+        public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+        public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+        public static String FB_APP_URL = "http://apps.facebook.com/fbconfess/";
+        public static String APP_REDIRECT_URL = "http://www.fbconfess.com/";
 
-    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
-    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
-    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
-    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
-    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String FB_APP_URL = "http://apps.facebook.com/fbconfessalfa/";
-    public static String APP_REDIRECT_URL = "http://localhost:8888/";
+//    public static final String APPLICATION_ID = "171485962909999"; // replace with real values from Facebook app configuration
+//    public static final String FB_OAUTH_URL = "https://www.facebook.com/dialog/oauth/";
+//    public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
+//    public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
+//    public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
+//    public static String FB_APP_URL = "http://apps.facebook.com/fbconfessalfa/";
+//    public static String APP_REDIRECT_URL = "http://localhost:8888/";
 
     public static String getApplicationId() {
 	return APPLICATION_ID;

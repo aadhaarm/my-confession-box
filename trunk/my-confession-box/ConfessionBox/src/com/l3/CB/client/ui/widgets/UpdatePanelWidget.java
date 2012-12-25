@@ -6,8 +6,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -35,6 +33,8 @@ public class UpdatePanelWidget extends FlowPanel {
 	this.setStyleName("buttonShowUpdate");
 	if(ConfessionBox.isTouchEnabled) {
 	    this.addStyleName(Constants.STYLE_CLASS_UPDATE_LINK_TO_BTN);
+	    btnShowUpdates.setStyleName("whiteAnchorLink");
+	    btnShowUpdates.setText(ConfessionBox.cbText.mobUpdateWidgetShowUpdatesLabelText());
 	}
 	this.confId = confId;
 	this.add(btnShowUpdates);
@@ -82,7 +82,11 @@ public class UpdatePanelWidget extends FlowPanel {
      private void onShowUpdatePress() {
 	 if(vPnlUpdates != null && vPnlUpdates.isVisible()) {
 	     vPnlUpdates.setVisible(false);
-	     btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
+	     if(ConfessionBox.isTouchEnabled) {
+		 btnShowUpdates.setText(ConfessionBox.cbText.mobUpdateWidgetShowUpdatesLabelText());
+	     } else {
+		 btnShowUpdates.setText(ConfessionBox.cbText.updateWidgetShowUpdatesLabelText());
+	     }
 	 } else {
 	     addLoaderImage();
 	     ConfessionBox.confessionService.getConfessionUpdates(confId, new AsyncCallback<List<ConfessionUpdate>>() {
@@ -90,7 +94,8 @@ public class UpdatePanelWidget extends FlowPanel {
 		 public void onSuccess(List<ConfessionUpdate> result) {
 		     if(result != null && !result.isEmpty()) {
 			 vPnlUpdates = new VerticalPanel();
-			 vPnlUpdates.setWidth((Window.getClientWidth() - 20) + "px");
+//			 vPnlUpdates.setWidth((Window.getClientWidth() - 20) + "px");
+			 vPnlUpdates.clear();
 			 for (ConfessionUpdate confessionUpdate : result) {
 			     if(confessionUpdate != null && confessionUpdate.getUpdate() != null && confessionUpdate.getUpdate() != null) {
 				 HTML update = new HTML(Templates.TEMPLATES.confessonUpdate(confessionUpdate.getCommentAs(),

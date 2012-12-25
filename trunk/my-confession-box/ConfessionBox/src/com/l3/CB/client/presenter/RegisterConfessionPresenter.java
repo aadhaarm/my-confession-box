@@ -314,7 +314,9 @@ public class RegisterConfessionPresenter implements Presenter {
 			    .isIdentityHidden(), ConfessionBox
 			    .getLoggedInUserInfo().getGender(),
 			    ConfessionBox.getLoggedInUserInfo().getId());
-		    HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_HIDE_ID_CHECKBOX);
+		    if(!ConfessionBox.isMobile) {
+			HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_HIDE_ID_CHECKBOX);
+		    }
 		}
 	    });
 	    /*
@@ -323,8 +325,10 @@ public class RegisterConfessionPresenter implements Presenter {
 	    display.getShareToSlider().addBarValueChangedHandler(new BarValueChangedHandler() {
 		@Override
 		public void onBarValueChanged(BarValueChangedEvent event) {
-		    RegisterConfessionUtil.handlePreview(display);;
-		    HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
+		    RegisterConfessionUtil.handlePreview(display);
+		    if(!ConfessionBox.isMobile) {
+			HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
+		    }
 		    if(display.isShared()) {
 			if(display.isFriendsListNull()) {
 			    getMyFriends(null);

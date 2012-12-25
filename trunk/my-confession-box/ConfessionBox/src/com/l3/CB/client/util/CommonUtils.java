@@ -98,11 +98,33 @@ public class CommonUtils {
         $wnd.top.location = url;
     }-*/;
 
-    public static native void logout(String logoutMessage)/*-{
+    /**
+     * Logout user from Confession Box and Facebook
+     * @param logoutMessage
+     */
+    public static void logout(String logoutMessage) {
+	// Reset login status
+	ConfessionBox.isLoggedIn = false;
+	ConfessionBox.loginStatus = "logout";
+	// Clear user info
+	UserInfo loggedInUserInfo = new UserInfo();
+	loggedInUserInfo.setUserId(new Long(0));
+	loggedInUserInfo.setLocale(LocaleInfo.getCurrentLocale().getLocaleName());
+	ConfessionBox.loggedInUserInfo = loggedInUserInfo;
+	//Logout from Facebook
+	logoutJS(logoutMessage);
+	
+	fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
+    }
+
+    /**
+     * Logout user from Facebook - FB-JSSDK
+     * @param logoutMessage
+     */
+    private static native void logoutJS(String logoutMessage)/*-{
     	if($wnd.FB) {
         	$wnd.FB.logout(function(response) {
 			alert(logoutMessage);
-			document.location.reload();
     		});
     	}
     }-*/;
@@ -533,7 +555,7 @@ public class CommonUtils {
      * @return Confession text with more and less links
      */
     public static FlowPanel getTextTruncated(final String confession) {
-	final String DEFAULT_TEXT_HEIGHT = "88px";
+	final String DEFAULT_TEXT_HEIGHT = "95px";
 	final FlowPanel fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 
@@ -640,7 +662,7 @@ public class CommonUtils {
 		if(seconds < 60) {
 		    return ConfessionBox.cbText.timestampLessThanMinut();
 		} else if(seconds >= 60 && seconds < 3600) {
-		    return minuts + ConfessionBox.cbText.timestampMinutsAgo();
+		    return minuts + ConfessionBox.cbText.timestampMinutesAgo();
 		} else {
 		    return hours + ConfessionBox.cbText.timestampHoursAgo();
 		}
@@ -680,13 +702,14 @@ public class CommonUtils {
 	FlowPanel fPnlStatusBar = new FlowPanel();
 	fPnlStatusBar.setStyleName(Constants.DIV_STATUS_BAR);
 
-	// Subscribe link
-	fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
 
 	// Time stamp
 	Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
 	lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
 	fPnlStatusBar.add(lblDateTimeStamp);
+
+	// Subscribe link
+	fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
 
 	return fPnlStatusBar;
     }
@@ -718,7 +741,11 @@ public class CommonUtils {
 		}
 		pardonStatusPanel.add(pardonStatus);
 		Label lblDateTimeStamp = new Label(ConfessionBox.cbText.dateTimeStampPrefix() + " " + CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
-		lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
+		if(ConfessionBox.isMobile) {
+		    lblDateTimeStamp.setStyleName("time_stamp_pardon_status");
+		} else {
+		    lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
+		}
 		pardonStatusPanel.add(lblDateTimeStamp);
 	    }
 	}

@@ -16,6 +16,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 
     private final HTML ancAbout;
     private final HTML ancPrivacy;
+    private final HTML ancPhillosphy;
     private final HTML ancAppText;
 
     public FooterView() {
@@ -31,6 +32,9 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	ancAppText = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.cbNameFooterTextLabel(), "takes you to the Confession Box community page"));
 	ancAppText.setStyleName("footerLink");
 
+	ancPhillosphy = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "The Philosophy"));
+	ancPhillosphy.setStyleName("footerLink");
+	
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
 	ancAbout.addClickHandler(new ClickHandler() {
 	    @Override
@@ -46,10 +50,19 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		pPnlPrivacy.center();
 	    }
 	});
+	
+	final PopupPanel pPnlPhillosphy = ApplicationTextWidget.setupPhillosphy();
+	ancPhillosphy.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		pPnlPhillosphy.center();
+	    }
+	});
 
 	if(!ConfessionBox.isMobile) {
 	    fPnlFooter.add(ancAbout);
 	    fPnlFooter.add(ancPrivacy);
+	    fPnlFooter.add(ancPhillosphy);
 	    fPnlFooter.add(ancAppText);
 	}
 

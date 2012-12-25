@@ -33,6 +33,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final FlowPanel fPnlTop;
     private final FlowPanel fPnlOptions;
     private final FlowPanel fPnlConfession;
+    private final FlowPanel fPnlPreview;
 
     private CheckBox cbHideIdentity;
     private IpSliderBar146 identitySlideBar;
@@ -53,7 +54,10 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private final HTML htmlConfessionPreview;    
 
     private Image loaderImage;    
+    private Image profileImage;
 
+    
+    
     public RegisterConfessionView() {
 	super();
 	//TOP panel
@@ -114,13 +118,17 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	fPnlConfessionForm.add(fPnlOptions);
 
+	// Preview
+	fPnlPreview = new FlowPanel();
+	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
+	htmlConfessionPreview.setStyleName("confessionPreview");
+	fPnlPreview.add(htmlConfessionPreview);
+	fPnlConfessionForm.add(fPnlPreview);
+
 	// Confession
 	fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName("confession");
 
-	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
-	htmlConfessionPreview.setStyleName("confessionPreview");
-	fPnlConfessionForm.add(htmlConfessionPreview);
 
 	txtTitle = new CBTextBox();
 	fPnlConfessionForm.add(txtTitle);
@@ -240,10 +248,12 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
      */
     @Override
     public void setProfilePictureTag(boolean isAnyn, String gender, String fbId) {
-	Image profileImage = CommonUtils.getProfilePicture(new Confession(gender, fbId), isAnyn);
+	if(profileImage != null) {
+	    fPnlPreview.remove(profileImage);
+	}
+	profileImage = CommonUtils.getProfilePicture(new Confession(gender, fbId), isAnyn);
 	profileImage.setStyleName("reg_image");
-	fPnlTop.add(profileImage);
-	//	CommonUtils.parseXFBMLJS(profileImage.getElement());
+	fPnlPreview.add(profileImage);
     }
 
     @Override

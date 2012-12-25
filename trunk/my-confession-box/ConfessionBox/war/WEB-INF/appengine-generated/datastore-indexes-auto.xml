@@ -1,11 +1,28 @@
-<!-- Indices written at Sat, 15 Dec 2012 22:52:29 GMT+05:30 -->
+<!-- Indices written at Mon, 24 Dec 2012 11:06:13 GMT+05:30 -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 5 times in query history -->
     <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
         <property name="isVisibleOnPublicWall" direction="asc"/>
         <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 13 times in query history -->
+    <datastore-index kind="PardonConditionDO" ancestor="true" source="auto">
+        <property name="pardonConditionDOs_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="ConfessionShareDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>

@@ -31,7 +31,7 @@ public class HumanPointView extends Composite implements HumanPointPresenter.Dis
 	points.setStyleName("humanPointNumbers");
 
 	FlowPanel fPnlHumanPoint = new FlowPanel();
-	fPnlHumanPoint.setWidth("140px");
+	fPnlHumanPoint.setWidth("155px");
 	fPnlHumanPoint.add(imgHumanPoint);
 	fPnlHumanPoint.add(points);
 	fPnlHumanPoint.add(humanPoint);

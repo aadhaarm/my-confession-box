@@ -4,9 +4,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -28,6 +25,9 @@ public class ConfessionPanel extends FlowPanel{
     private boolean anonymousView;
     private UserInfo confessedByUserInfo;
     private boolean showUserControls;
+    private boolean showExtendedDetails;
+    private boolean showPardonHelpText;
+    
     private FlowPanel fPnlMiddleContent;    
     private Image imgProfileImage;
     private Widget hPnlUserControls;
@@ -41,17 +41,15 @@ public class ConfessionPanel extends FlowPanel{
     private HTML undoToolTip;
     private HTML shareToolTip;
 
-    public ConfessionPanel(Confession confession, boolean showUserControls, boolean isAnyn) {
+    public ConfessionPanel(Confession confession, boolean showUserControls, boolean isAnyn, boolean showExtendedDetails, boolean showPardonHelpText) {
 	super();
-//	if(ConfessionBox.isMobile) {
-//	    this.setWidth((Window.getClientWidth() - 10) + "px");
-//	}
-
 	if(confession != null) {
 	    this.confession = confession;
 	    this.anonymousView = isAnyn;
 	    this.showUserControls = showUserControls;
-
+	    this.showExtendedDetails = showExtendedDetails;
+	    this.showPardonHelpText = showPardonHelpText;
+	    
 	    this.getElement().setId("confession-id-" + confession.getConfId());
 	    this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
@@ -70,9 +68,6 @@ public class ConfessionPanel extends FlowPanel{
 	    this.confession = confession;
 	}
 
-	/*
-	 * Instantiate widgets
-	 */
 	// Set USER CONTROLS
 	if(this.showUserControls) {
 	    hPnlUserControls = CommonUtils.getUserControls(confession);
@@ -88,13 +83,25 @@ public class ConfessionPanel extends FlowPanel{
 	// Set USER PROFILE PIC or ANYN PIC 
 	fPnlTopContent.add(imgProfileImage);
 
-	// Set STATUS BAR
-	fPnlTopContent.add(fPnlStatusBar);
-
-	// Set USER NAME
-	fPnlTopContent.add(fPnlName);
+	if(ConfessionBox.isMobile) {
+	    // Set USER NAME
+	    fPnlTopContent.add(fPnlName);
+	    // Set STATUS BAR
+	    fPnlTopContent.add(fPnlStatusBar);
+	} else {
+	    // Set STATUS BAR
+	    fPnlTopContent.add(fPnlStatusBar);
+	    // Set USER NAME
+	    fPnlTopContent.add(fPnlName);
+	}
 
 	this.add(fPnlTopContent);
+
+	// CONFESSED to me TOOL-TIP bar
+	if(showPardonHelpText && confessedByUserInfo != null) {
+	    HTML confToMeToolTip = FeedViewUtils.getConfessedToMeToolTipBar(confessedByUserInfo);
+	    this.add(confToMeToolTip);
+	}
 
 	// MIDDLE Container
 	fPnlMiddleContent = new FlowPanel();
@@ -108,6 +115,7 @@ public class ConfessionPanel extends FlowPanel{
 	// Confession text
 	fPnlMiddleContent.add(fPnlConfessionText);
 
+	// UPDATE panel widget
 	final FlowPanel updatePanel = new FlowPanel();
 	UpdatePanelWidget updatePanelWidget = new UpdatePanelWidget(confession.getConfId());
 	updatePanel.setStyleName(Constants.STYLE_CLASS_UPDATE_CONFESSION_PANEL);
@@ -202,14 +210,14 @@ public class ConfessionPanel extends FlowPanel{
 	if(ConfessionBox.isMobile) {
 	    final Button btnShowFBWidgets = new Button("Comment");
 	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
-	        @Override
-	        public void onTouchEnd(TouchEndEvent event) {
-	            btnShowFBWidgets.setVisible(false);
-	            fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-	            if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
-	        	CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-	            }
-	        }
+		@Override
+		public void onTouchEnd(TouchEndEvent event) {
+		    btnShowFBWidgets.setVisible(false);
+		    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+		    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
+			CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+		    }
+		}
 	    });
 	    fPnlFBWidgets.add(btnShowFBWidgets);
 	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
@@ -228,7 +236,7 @@ public class ConfessionPanel extends FlowPanel{
 	//Profile picture
 	imgProfileImage = CommonUtils.getProfilePicture(this.confession, anonymousView);
 	// User Profile name or ANYN
-	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, anonymousView, showUserControls);
+	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, anonymousView, showExtendedDetails);
 	// Status Bar (time and subscription status)
 	fPnlStatusBar = CommonUtils.getStatusBar(this.confession);
 	// Confession Text

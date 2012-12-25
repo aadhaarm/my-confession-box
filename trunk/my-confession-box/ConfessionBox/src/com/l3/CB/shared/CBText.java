@@ -91,16 +91,16 @@ public interface CBText extends Constants {
     @DefaultStringValue("If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing 'Same Boat' button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee and you get to earn 'human' points.")
     String sameBoatButtonToolTip();
 
-    @DefaultStringValue("Vote if you find the confession inappropriate for the confession wall.")
+    @DefaultStringValue("Vote report abuse if you find the confession inappropriate.")
     String abuseButtonToolTip();
 
     @DefaultStringValue("Vote if the confession is just lame and you don't find it a real confession.")
     String lameButtonToolTip();
 
-    @DefaultStringValue("Vote if you have sympathies for the confesser.")
+    @DefaultStringValue("Vote if you have sympathies for the confesser. You earn 1 Human Point.")
     String sympathyButtonToolTip();
 
-    @DefaultStringValue("Vote if you feel the confesser should be pardoned for the act.")
+    @DefaultStringValue("Vote if you feel the confesser should be pardoned for the act. You earn 1 Human Point.")
     String shouldBePardonedButtonToolTip();
 
     @DefaultStringValue("Vote if you feel the confesser should not be pardoned for the act.")
@@ -133,10 +133,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Following are the conditions that the pardoner has put and the confesee shall only be pardoned when these conditions are met.")
     String pardonConditionHelpInfoToolTip();
 
-    @DefaultStringValue("The confessee is pardoned only when the Confessee reveals his/her identity to the world.")
+    @DefaultStringValue("The Confessee is pardoned with a condition to reveal identity to the world.")
     String pardonConditionUnHideHelpInfoToolTip();
 
-    @DefaultStringValue("The confessee is pardoned when the required number of 'Should be Pardoned' votes are given by the all.")
+    @DefaultStringValue("The Confessee is pardoned with a condition to get required number of 'Should be pardoned' votes from the world.")
     String pardonConditionSPVoteHelpInfoToolTip();
 
     @DefaultStringValue("share")
@@ -229,8 +229,8 @@ public interface CBText extends Constants {
     @DefaultStringValue("less than a min ago")    
     String timestampLessThanMinut();
 
-    @DefaultStringValue(" minuts ago")
-    String timestampMinutsAgo();
+    @DefaultStringValue(" minutes ago")
+    String timestampMinutesAgo();
 
     @DefaultStringValue(" hours ago")
     String timestampHoursAgo();
@@ -304,6 +304,9 @@ public interface CBText extends Constants {
     @DefaultStringValue("Show updates")
     String updateWidgetShowUpdatesLabelText();
 
+    @DefaultStringValue("Updates")
+    String mobUpdateWidgetShowUpdatesLabelText();
+    
     @DefaultStringValue("No updates")
     String updateWidgetNoUpdatesText();
 
@@ -366,4 +369,10 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("her")
     String femalePronoun();
+
+    @DefaultStringValue("Press pardon button to grant pardon or choose your conditions for pardon.")
+    String pardonButtonHelpInfoToolTip();
+
+    @DefaultStringValue("The Philosophy")
+    String phillosphyFooterLinkLabel();
 }

@@ -797,8 +797,8 @@ public class CommonUtils {
      * Decide when to consider device to be small.
      */
     public static void setupScreen() {
-	ConfessionBox.isMobile = isMobile();
-	ConfessionBox.isTouchEnabled = isTouchEnabled();
+	ConfessionBox.isMobile = !isMobile();
+	ConfessionBox.isTouchEnabled = !isTouchEnabled();
     }
 
     public static boolean isNotNullAndNotEmpty(String str) {
@@ -819,4 +819,11 @@ public class CommonUtils {
 	    return false;
 	}
     }
+
+    public static Image getMeLoaderImage() {
+	Image loaderImage = new Image(Constants.LOADER_IMAGE_PATH);
+	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
+	return loaderImage;
+    }
+
 }

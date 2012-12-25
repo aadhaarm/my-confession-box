@@ -6,8 +6,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.l3.CB.client.ConfessionBox;
@@ -22,12 +20,10 @@ public class SubscribeAnchor extends Anchor {
     public SubscribeAnchor(Long confId) {
 	super();
 
-	if(ConfessionBox.isTouchEnabled) {
-	    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN);
-	}
-
 	setTitle(ConfessionBox.cbText.subscribeLinkToolTipText());
-
+	if(ConfessionBox.isTouchEnabled) {
+	    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
+	}
 	if(ConfessionBox.isLoggedIn) {
 	    ConfessionBox.confessionService.isSubscribed(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Boolean>() {
 		@Override
@@ -54,8 +50,16 @@ public class SubscribeAnchor extends Anchor {
 	if(ConfessionBox.isLoggedIn) {
 	    if(isSubscribed){
 		setText(ConfessionBox.cbText.unSubscribeAnchorLabel());
+		setTitle(ConfessionBox.cbText.unSubscribeLinkToolTipText());
+		if(ConfessionBox.isTouchEnabled) {
+		    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_S);
+		}
 	    } else {
 		setText(ConfessionBox.cbText.subscribeAnchorLabel());
+		setTitle(ConfessionBox.cbText.subscribeLinkToolTipText());
+		if(ConfessionBox.isTouchEnabled) {
+		    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
+		}
 	    }
 	} else {
 	    setText(ConfessionBox.cbText.subscribeAnchorLabel());

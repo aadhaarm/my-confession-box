@@ -60,20 +60,20 @@ public class UpdatePanelWidget extends FlowPanel {
 
 	if(ConfessionBox.isTouchEnabled) {
 	    btnShowUpdates.addTouchEndHandler(new TouchEndHandler() {
-
 		@Override
 		public void onTouchEnd(TouchEndEvent event) {
 		    onShowUpdatePress();
 		}
 	    });
-	} 
-	btnShowUpdates.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		onShowUpdatePress();
-	    }
+	} else {
+	    btnShowUpdates.addClickHandler(new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+		    onShowUpdatePress();
+		}
 
-	});
+	    });
+	}
     }
     /**
      * 

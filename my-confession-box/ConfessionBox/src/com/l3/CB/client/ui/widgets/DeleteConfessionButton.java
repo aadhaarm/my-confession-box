@@ -4,20 +4,25 @@ import java.util.Date;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PushButton;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 
-public class DeleteConfessionButton extends PushButton {
+public class DeleteConfessionButton extends FlowPanel {
 
     boolean isVisibleToWorld;
     
     public DeleteConfessionButton(final Confession confession, Image buttonImage, final boolean isVisible) {
-	super(buttonImage);
+	super();
+	PushButton btn = new PushButton(buttonImage);
+
 	isVisibleToWorld = isVisible;
 	
 	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
@@ -27,10 +32,15 @@ public class DeleteConfessionButton extends PushButton {
 	    this.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
 	}
 
-	this.addClickHandler(new ClickHandler() {
+	this.add(btn);
+	
+	btn.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
+		    final Image loaderImage = CommonUtils.getMeLoaderImage();
+		    add(loaderImage);
+		    
 		    ConfessionBox.confessionService.changeConfessionVisibility(
 			    ConfessionBox.getLoggedInUserInfo().getUserId(),
 			    ConfessionBox.getLoggedInUserInfo().getId(),
@@ -54,6 +64,13 @@ public class DeleteConfessionButton extends PushButton {
 				    Error.handleError("DeleteConfessionButton", "onFailure", caught);
 				}
 			    });
+		    Timer timer = new Timer() {
+			@Override
+			public void run() {
+			    remove(loaderImage);
+			}
+		    };
+		    timer.schedule(3000);
 		}
 	    }
 	});

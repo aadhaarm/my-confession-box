@@ -101,7 +101,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	    identitySlideBar = new IpSliderBar146("OPEN", "Hidden");
 	    identitySlideBar.addStyleName("identitySlider");
 
-	    fPnlOptions.add(new Label(ConfessionBox.cbText.registerPageOptionHideID()));
+	    fPnlOptions.add(new Label(ConfessionBox.cbText.registerPageOptionHideIDSlider()));
 	    fPnlOptions.add(identitySlideBar);
 
 	    shareToSlider = new IpSliderBar146("REQUEST", "No");

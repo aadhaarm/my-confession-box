@@ -75,7 +75,7 @@ public class FeedViewUtils {
 
 
     private static String getHimText(String gender) {
-	return gender != null && "male".equals(gender)? "Him" : "her";
+	return gender != null && "male".equals(gender)? "him" : "her";
     }
 
     private static String getHisText(String gender) {

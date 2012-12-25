@@ -152,8 +152,10 @@ public class Constants {
 
     public static final String STYLE_CLASS_ACTIVITY_BUTTON_DIV = "buttons";
 
-    public static final String STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN = "linkToButton";
+    public static final String STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_S = "linkToButtonS";
 
+    public static final String STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U = "linkToButtonU";
+    
     public static final String STYLE_CLASS_CONF_UPDATE_TEXT_ROW = "confessionUpdate";
 
     public static final String STYLE_CLASS_SHARE_LINK_TO_BTN = "shareLinkToButton";

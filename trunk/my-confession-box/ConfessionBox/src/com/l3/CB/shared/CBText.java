@@ -49,6 +49,9 @@ public interface CBText extends Constants {
     @DefaultStringValue("Hide my identity")
     String registerPageOptionHideID();
 
+    @DefaultStringValue("Identity status")
+    String registerPageOptionHideIDSlider();
+    
     @DefaultStringValue("Request for pardon")
     String registerPageOptionConfessToFriend();
 
@@ -121,7 +124,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Unsubscribe")
     String unSubscribeAnchorLabel();
 
-    @DefaultStringValue("Subscribe to comments and pardon status updates of this confession")
+    @DefaultStringValue("Subscribe to this confession and be updated about pardon status updates")
     String subscribeLinkToolTipText();
 
     @DefaultStringValue("You can click the voting button again to STOP your vote to be registered, till the timer reaches '0'.")
@@ -259,7 +262,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("world")
     String relationDefaultDisplayText();
 
-    @DefaultStringValue("*View on feed wall, view to the world")
+    @DefaultStringValue("Preview how this confession appears to everyone.")
     String feedViewPreviewLink();
 
     @DefaultStringValue("Pardoned with condition: This Confession has been pardoned with the following conditions.")
@@ -378,4 +381,7 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("Anonymous confession")
     String phillosphyAnonConfFooterLinkLabel();
+
+    @DefaultStringValue("Click to un-subscribe")
+    String unSubscribeLinkToolTipText();
 }

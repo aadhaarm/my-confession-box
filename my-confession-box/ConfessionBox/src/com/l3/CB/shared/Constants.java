@@ -162,4 +162,6 @@ public class Constants {
 
     public static final String STYLE_CLASS_UPDATE_LINK_TO_BTN = "updateLinkToButton";
 
+    public static final String STYLE_CLASS_CONFESS_TO_ME_TOOLTIP = "confessToMeToolTip";
+
 }

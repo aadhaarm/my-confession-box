@@ -3,6 +3,7 @@ package com.l3.CB.client.view;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -69,26 +70,38 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
     }
 
     public void initializeMenuCounts() {
-	ConfessionBox.confessionService.getMyConfessionNumber(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Long>() {
-
+	ConfessionBox.confessionService.getHumanPoints(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Integer>() {
 	    @Override
-	    public void onSuccess(Long result) {
-		HTML a = new HTML("My Conf:" + Long.toString(result));
+	    public void onSuccess(Integer result) {
+		HTML a = new HTML("Human Points " + Long.toString(result));
 		a.setStyleName("pointsLabel");
 		pnlpoints.add(a);
 	    }
-
+	    
 	    @Override
 	    public void onFailure(Throwable caught) {
-		Error.handleError("MenuPresenter", "onFailure", caught);
+		Error.handleError("HumanPointPresenter", "onFailure", caught);
 	    }
 	});
 
 	ConfessionBox.confessionService.getNumberOfConfessionForMe(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Long>() {
-
 	    @Override
 	    public void onSuccess(Long result) {
-		HTML a = new HTML("Conf To Me:" + Long.toString(result));
+		HTML a = new HTML("Confessed To Me " + Long.toString(result));
+		a.setStyleName("pointsLabel");
+		pnlpoints.add(a);
+	    }
+	    
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("MenuPresenter", "onFailure", caught);
+	    }
+	});
+
+	ConfessionBox.confessionService.getMyConfessionNumber(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Long>() {
+	    @Override
+	    public void onSuccess(Long result) {
+		HTML a = new HTML("My Confessions " + Long.toString(result));
 		a.setStyleName("pointsLabel");
 		pnlpoints.add(a);
 	    }
@@ -96,20 +109,6 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	    @Override
 	    public void onFailure(Throwable caught) {
 		Error.handleError("MenuPresenter", "onFailure", caught);
-	    }
-	});
-
-	ConfessionBox.confessionService.getHumanPoints(ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Integer>() {
-	    @Override
-	    public void onSuccess(Integer result) {
-		HTML a = new HTML("HP:" + Long.toString(result));
-		a.setStyleName("pointsLabel");
-		pnlpoints.add(a);
-	    }
-
-	    @Override
-	    public void onFailure(Throwable caught) {
-		Error.handleError("HumanPointPresenter", "onFailure", caught);
 	    }
 	});
     }
@@ -129,7 +128,8 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	menuListBox.addItem(ConfessionBox.cbText.cbRuleBookLinkLabelText(), "rulebook");
 	menuListBox.addItem(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel(), "about");
 	menuListBox.addItem(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "policy");
-
+	menuListBox.addItem(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "philosophy");
+	
 	if(ConfessionBox.isLoggedIn) {
 	    menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
 	}
@@ -174,9 +174,11 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 		} else if("policy".equals(newValue)) {
 		    PopupPanel pPnlRuleBook = ApplicationTextWidget.setupPrivacy();
 		    pPnlRuleBook.center();
+		} else if("philosophy".equals(newValue)) {
+		    PopupPanel pPnlPhilosophy = ApplicationTextWidget.setupPhillosphy();
+		    pPnlPhilosophy.center();
 		} else if("logout".equals(newValue)) {
 		    CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
-		    ConfessionBox.isLoggedIn = false;
 		    menuListBox.removeItem(8);
 		}
 	    }

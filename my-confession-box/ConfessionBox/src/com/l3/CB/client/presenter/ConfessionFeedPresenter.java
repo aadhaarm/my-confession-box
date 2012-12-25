@@ -42,7 +42,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	Widget asWidget();
 
 	public void setConfessionPagesLoaded(int confessionPagesLoaded);
-	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter);
+	public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter, boolean showExtendedDetails, boolean showPardonHelpText);
 	public void addLoaderImage();
 	public void incrementConfessionPagesLoaded();
 	public void removeLoaderImage();
@@ -66,6 +66,9 @@ public class ConfessionFeedPresenter implements Presenter {
 
     private final Display display;
     boolean showUserControls = false;
+    boolean showExtendedDetails = false;
+    boolean showPardonHelpText = false;
+    
     Filters filter = Filters.ALL;
 
     public ConfessionFeedPresenter(Display display) {
@@ -95,7 +98,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		if(result != null) {
 		    ArrayList<Confession> confessionList = new ArrayList<Confession>();
 		    confessionList.add(result);
-		    display.setConfessions(confessionList, true, showUserControls, filter);
+		    display.setConfessions(confessionList, true, showUserControls, filter, showExtendedDetails, showPardonHelpText);
 		}
 	    }
 
@@ -116,7 +119,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	ConfessionBox.confessionService.getConfessions(0, filter, ConfessionBox.getLoggedInUserInfo().getLocale(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
-		display.setConfessions(result, true, showUserControls, filter);
+		display.setConfessions(result, true, showUserControls, filter, showExtendedDetails, showPardonHelpText);
 	    }
 	    @Override
 	    public void onFailure(Throwable caught) {
@@ -142,7 +145,7 @@ public class ConfessionFeedPresenter implements Presenter {
 
 			@Override
 			public void onSuccess(List<Confession> result) {
-			    display.setConfessions(result, true, showUserControls, filter);
+			    display.setConfessions(result, true, showUserControls, filter, showExtendedDetails, showPardonHelpText);
 			    inEvent = false;
 			    display.removeLoaderImage();
 			}
@@ -171,7 +174,9 @@ public class ConfessionFeedPresenter implements Presenter {
 	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
 		@Override
 		public void onFocus(FocusEvent event) {
-		    HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
+		    if(!ConfessionBox.isMobile) {
+			HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
+		    }
 		}
 	    });
 	}

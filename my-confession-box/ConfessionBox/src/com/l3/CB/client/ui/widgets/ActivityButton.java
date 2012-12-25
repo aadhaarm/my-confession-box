@@ -267,7 +267,9 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.SAME_BOAT_BUTTON);
+			if(!ConfessionBox.isMobile) {
+			    HelpInfo.showHelpInfo(HelpInfo.type.SAME_BOAT_BUTTON);
+			}
 		    }
 		});
 		break;
@@ -275,7 +277,9 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.ABUSE_BUTTON);
+			if(!ConfessionBox.isMobile) {
+			    HelpInfo.showHelpInfo(HelpInfo.type.ABUSE_BUTTON);
+			}
 		    }
 		});
 		break;
@@ -283,7 +287,10 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.LAME_BUTTON);
+			if(!ConfessionBox.isMobile) {
+
+			    HelpInfo.showHelpInfo(HelpInfo.type.LAME_BUTTON);
+			}
 		    }
 		});
 		break;
@@ -291,7 +298,9 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.SHOULD_BE_PARDONED_BUTTON);
+			if(!ConfessionBox.isMobile) {
+			    HelpInfo.showHelpInfo(HelpInfo.type.SHOULD_BE_PARDONED_BUTTON);
+			}
 		    }
 		});
 		break;
@@ -299,7 +308,9 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.SHOULD_NOT_BE_PARDONED_BUTTON);
+			if(!ConfessionBox.isMobile) {
+			    HelpInfo.showHelpInfo(HelpInfo.type.SHOULD_NOT_BE_PARDONED_BUTTON);
+			}
 		    }
 		});
 		break;
@@ -307,7 +318,10 @@ public class ActivityButton extends AbsolutePanel {
 		btn.addMouseOverHandler(new MouseOverHandler() {
 		    @Override
 		    public void onMouseOver(MouseOverEvent event) {
-			HelpInfo.showHelpInfo(HelpInfo.type.SYMPATHY_BUTTON);
+			if(!ConfessionBox.isMobile) {
+
+			    HelpInfo.showHelpInfo(HelpInfo.type.SYMPATHY_BUTTON);
+			}
 		    }
 		});
 		break;

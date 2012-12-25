@@ -28,12 +28,14 @@ public class HeaderPresenter implements Presenter {
     }
 
     private void bind() {
-	display.getApplnTitle().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		Window.Location.assign(FacebookUtil.FB_APP_URL);
-	    }
-	});
+	if(!ConfessionBox.isMobile) {
+	    display.getApplnTitle().addClickHandler(new ClickHandler() {
+		@Override
+		public void onClick(ClickEvent event) {
+		    Window.Location.assign(FacebookUtil.FB_APP_URL);
+		}
+	    });
+	}
     }
 
     @Override

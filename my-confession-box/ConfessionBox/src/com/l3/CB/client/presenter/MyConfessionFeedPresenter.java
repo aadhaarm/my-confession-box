@@ -22,6 +22,8 @@ public class MyConfessionFeedPresenter implements Presenter {
 
     private final Display display;
     private final boolean showUserControls;
+    private boolean showExtendedDetails = true;
+    private boolean showPardonHelpText = false;
 
     public MyConfessionFeedPresenter(Display display) {
 	super();
@@ -40,7 +42,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 	ConfessionBox.confessionService.getConfessionsIDID(0, ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 	    @Override
 	    public void onSuccess(List<Confession> result) {
-		display.setConfessions(result, true, showUserControls, Filters.ALL);
+		display.setConfessions(result, true, showUserControls, Filters.ALL, showExtendedDetails, showPardonHelpText);
 	    }
 	    @Override
 	    public void onFailure(Throwable caught) {
@@ -61,7 +63,7 @@ public class MyConfessionFeedPresenter implements Presenter {
 		    ConfessionBox.confessionService.getConfessionsIDID(display.getConfessionPagesLoaded(), ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<List<Confession>>() {
 			@Override
 			public void onSuccess(List<Confession> result) {
-			    display.setConfessions(result, true, showUserControls, Filters.ALL);
+			    display.setConfessions(result, true, showUserControls, Filters.ALL, showExtendedDetails, showPardonHelpText);
 			    inEvent = false;
 			    display.removeLoaderImage();
 			}

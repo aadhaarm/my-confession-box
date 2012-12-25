@@ -16,7 +16,7 @@ div.header {
 .pointsPanel {
 	display: block;
 	margin: 0 auto 0 auto;
-	background-color: papayawhip;
+	background-color: #FEFFED;
 }
 
 .pointsLabel {
@@ -36,68 +36,25 @@ div.header {
 	width: 300px;
 }
 
-/* 
-.footerLink {
-	font-size: 11px !important;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-	color: #3B5998;
-	margin-left: 5px;
-	display: block;
-	height: 14px;
-	cursor: pointer;
-}
-
-.footerLink a.hover {
-	color: #07285d;
-}
- */
 .logoLink {
 	background-color: #E9E9E9;
 	color: #3B5998;
-	font-size: 15px;
+	font-size: 17px;
 	font-weight: bold;
 	padding: 5px 0 5px 0;
 	text-align: center;
 	border: 1px solid #3B5998;
+	letter-spacing: 2px;
 }
 
 .tagLineText {
 	font-size: 12px;
 }
 
-/* h1.header {
-	font-size: larger;
-	padding: 0;
-	margin: 0;
-}
- */
-/* div.left {
-	float: left;
-	padding-left: 1em;
-	display: none;
- 	width: 130px;
-	margin: 0;
-	padding-bottom: 1em;
-	padding-right: 1em;
-	padding-top: 3em;
-
- }
-
-div.right {
-	float: right;
-	width: auto;
-	margin: 0;
-	padding: 1em;
-} */
-
 div.content {
 	min-height: 100px;
 	margin-left: auto;
 	padding-left: 0em;
-/* 	padding-top: 1em;
-	padding-right: 1em;
-	padding-bottom: 1em;
- */
 }
 
 div.helpInfoDiv {
@@ -205,15 +162,21 @@ div.helpInfoDiv {
 
 .infoModalPopupWindow {
 	background-color: white;
+	color: #333333;
 	padding: 10px;
 	z-index: 1000;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	line-height: 1.36;
+}
+
+.infoModalPopupWindowClose {
+	float: right;
 }
 
 .confessionGridElement {
 	border-top-style: solid;
 	border-top-color: silver;
 	border-top-width: 1px;
-	/* width: 563px; */
 }
 
 .pardonStatusPanel {
@@ -268,6 +231,8 @@ div.helpInfoDiv {
 
 .confessionTopBar {
 	display: block;
+	overflow: auto;
+	padding: 10px 0 10px 0;
 }
 
 .confessionTitleText {
@@ -294,7 +259,6 @@ div.helpInfoDiv {
 }
 
 .updateConfessionPanel {
-	padding-left: 16px;
 	font-size: 11px;
 }
 
@@ -386,9 +350,13 @@ a:hover {
 }
 
 .reg_image {
-	float: right;
-	margin:-55px 10px 0 5px;
-	}
+    float: left;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    margin-right: 5px;
+    margin-top: -22px;
+    padding-right: 10px;
+}
 
 .options {
 	background-color:#FF9;
@@ -484,8 +452,8 @@ a:hover {
 
 .confessionPreview {
 	font-weight: bold;
-    padding-left: 15px;
-    padding-top: 5px;
+	padding-left: 80px;
+    padding-top: 10px;
 }
 
 .regConfButtons {
@@ -524,11 +492,13 @@ main_container a:hover {
 .text_decoration {
 	text-decoration: line-through;
 }
-/*Top div styling*/
+
 .confessionTop {
+	display: block;
+	overflow: auto;
 	height: auto;
 	width: auto;
-	height: 50px;
+	/* height: 20px; */
 	padding: 10px 0 10px 0;
 }
 
@@ -542,30 +512,35 @@ main_container a:hover {
 	margin-left: 66px;
 	margin-top: 3px;
 	vertical-align: middle;
+	/* height: 50px; */
 }
 
 .status_bar {
 	float: right;
-	text-align: right;
 	color: #999;
 	font-size: small;
-	padding-right: 20px;
 }
 
 .status_bar a {
 	cursor: pointer;
 	color: #3B5998;
+	float: right;
 }
 
 .time_stamp {
 	font-size: small;
 	color: #999999;
-
-/* 	float: right;
+	float: left;
+	margin-right: 20px;
 	position: relative;
-	padding-left: 4px;
-	padding-right: 15px;
- */}
+}
+
+.time_stamp_pardon_status {
+	font-size: small;
+	color: #999999;
+	float: inherit;
+	position: relative;
+}
 
 .time_stamp_update {
 	float: right;
@@ -578,25 +553,22 @@ main_container a:hover {
 /*Middle div styling*/
 .middle {
 	position: relative;
-	margin: 0px 10px 10px 0;
+	margin: 0 0 10px 0;
 }
 
 .confession_title {
 	padding-top: 0px;
-	padding-left: 11px;
-	padding-right: 8px;
+	font-weight: bold;
 }
 
 .confession_body {
-	padding: 6px 8px 2px 8px;
-	margin: 0 4px 0 4px;
+	padding: 6px 0 2px 0;
 	font-size: 14px;
 	color: #333333;
 	background-color: #FEFFED;
 	line-height: 1.36;
 	overflow: hidden;
 	text-overflow: clip;
-	border-radius: 10px;
 }
 
 .confessionText {
@@ -609,20 +581,17 @@ main_container a:hover {
 }
 
 .condition {
-	background-color: #5B74A8;
-	padding: 4px 5px 2px 10px;
-	margin: -10px 15px 5px 15px;
+	background-color: #73883E;
+	padding: 4px 2px 2px 2px;
+	margin: -10px 0 5px 0;
 	color: #FFF;
 	font-size: small !important;
-	line-height: 15px;
+	line-height: 1.36;
 	overflow: auto;
-	border-radius: 5px;
 }
 
 .pardonCondition {
-	float: left;
 	font-size: small;
-	width: 500px;
 }
 
 .conditionTick {
@@ -630,7 +599,7 @@ main_container a:hover {
 }
 
 .pardonConditionList {
-	width: 450px;
+	float: left;
 }
 
 .condition_label a {
@@ -681,8 +650,6 @@ main_container a:hover {
 	position: relative;
 	width: auto;
 	height: 45px;
-	padding-left: 15px;
-	padding-bottom: 5px;
 }
 
 .buttons ul {
@@ -714,15 +681,12 @@ main_container a:hover {
 	float: right;
 	font-size: 16px;
 	margin-bottom: 0;
-	margin-left: 0;
-	margin-right: 15px;
 	margin-top: 1px;
 	padding-bottom: 4px;
 	padding-left: 20px;
 	padding-right: 20px;
 	padding-top: 4px;
 	position: relative;
-	border-radius: 5px;
 	width: 118px;
 	text-align: center;
 }
@@ -730,12 +694,11 @@ main_container a:hover {
 .pardon_status_no {
 	float: right;
 	padding: 3px 15px;
-	margin: 3px 15px 0 0;
+	margin: 3px 0 0 0;
 	position: relative;
 	background-color: #999;
 	color: #FFF;
 	font-size: 15px;
-	border-radius: 5px;
 }
 
 .btnAbdPardonstatusDiv {
@@ -797,4 +760,14 @@ main_container a:hover {
 }
 
 .showMenuButton {
+}
+
+.confessToMeToolTip {
+    border: 1px solid grey;
+    color: grey;
+    display: block;
+    font-size: 10px;
+    line-height: 1.38;
+    margin: 0 10px 5px 10px;
+    padding: 5px;
 }

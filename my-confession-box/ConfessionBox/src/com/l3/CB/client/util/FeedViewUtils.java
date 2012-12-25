@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -61,6 +63,26 @@ public class FeedViewUtils {
     }
 
     /**
+     * Confession to me tool-tip
+     * 
+     * @return HTML Share tool-tip
+     */
+    public static HTML getConfessedToMeToolTipBar(UserInfo confessee) {
+	HTML confessedToMeTooltip = new HTML(Templates.TEMPLATES.confessedToYouWallPardonMessage(confessee.getName(), getHisText(confessee.getGender()), getHimText(confessee.getGender()))); 
+	confessedToMeTooltip.setStyleName(Constants.STYLE_CLASS_CONFESS_TO_ME_TOOLTIP);
+	return confessedToMeTooltip;
+    }
+
+
+    private static String getHimText(String gender) {
+	return gender != null && "male".equals(gender)? "Him" : "her";
+    }
+
+    private static String getHisText(String gender) {
+	return gender != null && "male".equals(gender)? "His" : "Her";
+    }
+
+    /**
      * Show pardon widget
      * 1. Pardon conditions
      * 2. pardon button
@@ -73,14 +95,14 @@ public class FeedViewUtils {
     public static FlowPanel getPardonWidget(final Confession confession, boolean anynView, final UserInfo confessionByUser) {
 	FlowPanel fPnlPardon = new FlowPanel();
 	if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
-	    
+
 	    List<ConfessionShare> confessionShares = confession.getConfessedTo();
-	    
+
 	    for (ConfessionShare confessionShare : confessionShares) {
-		
+
 		if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty()) {
 		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION_PANEL);
-		    
+
 		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonConditionInfoText(ConfessionBox.cbText.pardonConditionInfoText()));
 		    pardonConditionInfoText.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION);
 
@@ -92,13 +114,22 @@ public class FeedViewUtils {
 		    });
 
 		    fPnlPardon.add(pardonConditionInfoText);
-		    
+
 		    // Add conditions for pardon 
 		    addPardonConditionStatus(confessionShare.getPardonConditions(), fPnlPardon);
-		    
+
 		} else if(!anynView) {
 		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON_PANEL);
 		    final Button btnPardon = new Button(ConfessionBox.cbText.pardonButtonLabelText());
+		    btnPardon.addMouseOverHandler(new MouseOverHandler() {
+
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+			    if(!ConfessionBox.isMobile) {
+				HelpInfo.showHelpInfo(HelpInfo.type.PARDON_BUTTON);
+			    }
+			}
+		    });
 		    btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
 		    if(confessionShare.getPardonStatus() != null) {
 			switch (confessionShare.getPardonStatus()) {
@@ -138,49 +169,50 @@ public class FeedViewUtils {
      */
     public static void addPardonConditionStatus(List<PardonCondition> pardonConditions, FlowPanel fPnlPardon) {
 	int countCondition = 1;
-	for (PardonCondition pardonCondition : pardonConditions) {
-	    if(pardonCondition != null) {
-		FlowPanel fPnlCondition = new FlowPanel();
-		if(Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
-		    
-		    String statusTick = "";
-		    if(pardonCondition.isFulfil()) {
-			statusTick = Constants.TICK_MARK;
-		    }
-		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". "
-			    + ConfessionBox.cbText.pardonPopupOpenIdentityConditionView() + ".", statusTick));
-		    pardonConditionInfoText.setStyleName("pardonCondition");
-		    pardonConditionInfoText.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-			    HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_UNDHIDE_HELP_TEXT);
+	if(pardonConditions != null && !pardonConditions.isEmpty()) {
+	    FlowPanel fPnlCondition = new FlowPanel();
+	    for (PardonCondition pardonCondition : pardonConditions) {
+		if(pardonCondition != null) {
+		    if(Constants.pardonConditionUnhide.equalsIgnoreCase((pardonCondition.getCondition()))) {
+
+			String statusTick = "";
+			if(pardonCondition.isFulfil()) {
+			    statusTick = Constants.TICK_MARK;
 			}
-		    });
-		    fPnlCondition.add(pardonConditionInfoText);
-		    fPnlCondition.setStyleName("pardonConditionList");
-		    fPnlPardon.add(fPnlCondition);
-		} else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
-		    String statusTick = "";
-		    if(pardonCondition.isFulfil()) {
-			statusTick = Constants.TICK_MARK;
-		    }
-		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". " + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartOne()
-			    + pardonCondition.getCount() + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartTwo(),
-				    statusTick));
-		    pardonConditionInfoText.setStyleName("pardonCondition");
-		    pardonConditionInfoText.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-			    HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_SPVOTE_HELP_TEXT);
+			HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". "
+				+ ConfessionBox.cbText.pardonPopupOpenIdentityConditionView() + ".", statusTick));
+			pardonConditionInfoText.setStyleName("pardonCondition");
+			pardonConditionInfoText.addClickHandler(new ClickHandler() {
+			    @Override
+			    public void onClick(ClickEvent event) {
+				HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_UNDHIDE_HELP_TEXT);
+			    }
+			});
+			fPnlCondition.add(pardonConditionInfoText);
+			fPnlCondition.setStyleName("pardonConditionList");
+			fPnlPardon.add(fPnlCondition);
+		    } else if(Constants.pardonConditionSPVotes.equalsIgnoreCase((pardonCondition.getCondition()))) {
+			String statusTick = "";
+			if(pardonCondition.isFulfil()) {
+			    statusTick = Constants.TICK_MARK;
 			}
-		    });
-		    fPnlCondition.add(pardonConditionInfoText);
-		    fPnlCondition.setStyleName("pardonConditionList");
-		    fPnlPardon.add(fPnlCondition);
+			HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonCondition(countCondition + ". " + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartOne()
+				+ pardonCondition.getCount() + ConfessionBox.cbText.pardonPopupPardonActivityConditionPartTwo(),
+				statusTick));
+			pardonConditionInfoText.setStyleName("pardonCondition");
+			pardonConditionInfoText.addClickHandler(new ClickHandler() {
+			    @Override
+			    public void onClick(ClickEvent event) {
+				HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_SPVOTE_HELP_TEXT);
+			    }
+			});
+			fPnlCondition.add(pardonConditionInfoText);
+			fPnlCondition.setStyleName("pardonConditionList");
+			fPnlPardon.add(fPnlCondition);
+		    }
 		}
-	    }
-	    countCondition++;
-	}
+		countCondition++;
+	    }}
     }
 
     public static FlowPanel getUserActivityButtons(final Confession confession) {

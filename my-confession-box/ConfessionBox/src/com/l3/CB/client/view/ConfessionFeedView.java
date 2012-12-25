@@ -116,14 +116,14 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
     }
 
     @Override
-    public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter) {
+    public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter, boolean showExtendedDetails, boolean showPardonHelpText) {
 	if(confessionsThisView == null) {
 	    confessionsThisView = new HashMap<Long, ConfessionPanel>();
 	}
 	if (confessions != null && !confessions.isEmpty()) {
 	    for (final Confession confession : confessions) {
 		if(confession != null) {
-		    final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn);
+		    final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn, showExtendedDetails, showPardonHelpText);
 		    if(fPnlConfessionMain != null) {
 			vpnlConfessionList.add(fPnlConfessionMain);
 			confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);

@@ -18,6 +18,12 @@ public class Templates {
 	@Template("<br/>confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")
 	SafeHtml confessedToPersomalWall(SafeUri profileLink, String name, String relation);
 
+	@Template("{0} confessed to {1}")
+	SafeHtml confessedToShare(String confesseeName, String pardonerProNoun);
+	
+	@Template("{0} earned {1} human points for sharing.")
+	SafeHtml shareDescription(String sharerName, int pointsEarned);
+	
 	@Template("<b>{0}</b> has requested pardon from you for the following confession. {1} identity is hidden to the world except you. If you wish to grant {2} Pardon (or pardon with conditions), press the <b>Pardon</b> button below.")
 	SafeHtml confessedToYouWallPardonMessage(String name, String his, String him);
 	
@@ -57,6 +63,11 @@ public class Templates {
 	@Template("<a title=\"{1}\">{0}</a>")
 	SafeHtml infoToolTip(String linkText, String toolTip);
 
+	@Template("{0} in not a member of confessiom Box so it can not send a notification about your confession. Please press 'SEND' in the next window to send a message to {0} informing about the confession you have made.")
+	SafeHtml confessorNotRegisteredMessage(String pardonerName);
+
+	@Template("{0}")
+	SafeHtml confessionConfirmMessage(String messageText);
     }
     
     public static final CBTemplates TEMPLATES = GWT.create(CBTemplates.class);

@@ -7,6 +7,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.l3.CB.client.ConfessionBox;
@@ -19,6 +21,7 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Filters;
 
 public class HeaderView extends Composite implements HeaderPresenter.Display {
@@ -31,7 +34,6 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 
     public HeaderView() {
 	super();
-
 	headerPanel = new FlowPanel();
 	applnTitle = new HTML(Templates.TEMPLATES.applicationTitle());
 	applnTitle.setStyleName("logoLink");
@@ -126,14 +128,13 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	menuListBox.addItem(ConfessionBox.cbText.inviteFriendsLinkLabelText(), "invite");
 	menuListBox.addItem(ConfessionBox.cbText.cbRuleBookLinkLabelText(), "rulebook");
 	menuListBox.addItem(ConfessionBox.cbText.aboutConfessionBoxFooterLinkLabel(), "about");
-	menuListBox.addItem(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "policy");
 	menuListBox.addItem(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "philosophy");
 	menuListBox.addItem(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "anonConf");
-
+//	menuListBox.addItem(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "policy");
 	
-	if(ConfessionBox.isLoggedIn) {
-	    menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
-	}
+//	if(ConfessionBox.isLoggedIn) {
+//	    menuListBox.addItem(ConfessionBox.cbText.logoutLinkLabelText(), "logout");
+//	}
 	menuListBox.addChangeHandler(new ChangeHandler() {
 	    @Override
 	    public void onChange(ChangeEvent event) {

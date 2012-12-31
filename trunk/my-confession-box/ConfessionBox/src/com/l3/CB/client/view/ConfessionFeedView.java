@@ -17,14 +17,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.ActivityEvent;
 import com.l3.CB.client.event.ActivityEventHandler;
-import com.l3.CB.client.event.CancelActivityEvent;
-import com.l3.CB.client.event.CancelActivityEventHandler;
 import com.l3.CB.client.event.ShowToolTipEvent;
 import com.l3.CB.client.event.ShowToolTipEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.ui.widgets.ConfessionPanel;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
 
@@ -46,6 +45,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	fPnlTopBar = new FlowPanel();
 	fPnlTopBar.setStyleName("confessionTopBar");
 
+	
 	btnRefresh = new Button();
 	btnRefresh.setTitle(ConfessionBox.cbText.refreshButtonToolTipText());
 	btnRefresh.setStyleName(Constants.STYLE_CLASS_REFRESH_BUTTON);
@@ -66,6 +66,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	isMoreConfessionsAvailable = true;
 
 	vpnlConfessionList = new FlowPanel();
+	
 	vpnlConfessionList.add(fPnlTopBar);
 
 	initWidget(vpnlConfessionList);
@@ -84,25 +85,24 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		}
 	    }
 	});
-	ConfessionBox.eventBus.addHandler(CancelActivityEvent.TYPE, new CancelActivityEventHandler() {
-	    @Override
-	    public void cancelActivity(CancelActivityEvent event) {
-		if(event != null) {
-		    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(event.getConfId());
-		    if(fPnlConfessionMain != null) {
-			fPnlConfessionMain.hideUndoToolTip();
-		    }
-		}
-	    }
-	});
+//	ConfessionBox.eventBus.addHandler(CancelActivityEvent.TYPE, new CancelActivityEventHandler() {
+//	    @Override
+//	    public void cancelActivity(CancelActivityEvent event) {
+//		if(event != null) {
+//		    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(event.getConfId());
+//		    if(fPnlConfessionMain != null) {
+//			fPnlConfessionMain.hideUndoToolTip();
+//		    }
+//		}
+//	    }
+//	});
 	ConfessionBox.eventBus.addHandler(ShowToolTipEvent.TYPE, new ShowToolTipEventHandler() {
-
 	    @Override
 	    public void showToolTip(ShowToolTipEvent event) {
 		if(event != null && confessionsThisView != null) {
 		    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(event.getConfId());
 		    if(fPnlConfessionMain != null) {
-			fPnlConfessionMain.hideUndoToolTip();
+//			fPnlConfessionMain.hideUndoToolTip();
 			fPnlConfessionMain.showShareToolTip();
 		    }
 		}
@@ -117,6 +117,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter, boolean showExtendedDetails, boolean showPardonHelpText) {
+	vpnlConfessionList.add(loaderImage);
 	if(confessionsThisView == null) {
 	    confessionsThisView = new HashMap<Long, ConfessionPanel>();
 	}
@@ -137,6 +138,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	if(confessionsThisView == null || confessionsThisView.isEmpty()) {
 	    vpnlConfessionList.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
 	}
+	vpnlConfessionList.remove(loaderImage);
     }
 
     /**

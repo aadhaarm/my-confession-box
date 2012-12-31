@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.ui.widgets.ChangeVisibilityButton;
 import com.l3.CB.client.ui.widgets.DeleteConfessionButton;
+import com.l3.CB.client.ui.widgets.ShareAnchor;
 import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.shared.Constants;
@@ -113,7 +114,7 @@ public class CommonUtils {
 	ConfessionBox.loggedInUserInfo = loggedInUserInfo;
 	//Logout from Facebook
 	logoutJS(logoutMessage);
-	
+
 	fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
     }
 
@@ -146,31 +147,33 @@ public class CommonUtils {
 
     public static void login(int i) {
 	String confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+
 	if(Navigator.isJavaEnabled()) {
-	    loginInFB(true);
+	    loginInFB(true, "");
 	} else {
-	    if(i == 0) {
-		if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
-		    if(null != confId){
-			CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
-		    } else {
-			CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
-		    }
-		}
+	    if(null != confId){
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
 	    } else {
-		if(null != confId){
-		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
-		} else {
-		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
-		}
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
 	    }
 	}
     }
 
+    public static void login(int i, String hash) {
+	if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage())) {
+	    if(Navigator.isJavaEnabled()) {
+		loginInFB(true, hash);
+	    } else {
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+	    }
+	}
+    }
+
+
     /**
      * Login user into FB and get the information about user
      */
-    public static native void loginInFB(boolean reload) /*-{
+    public static native void loginInFB(boolean reload, String hashEvent) /*-{
 	if($wnd.FB) {
 	  $wnd.FB.login(function(response) {
            if (response.authResponse) {
@@ -188,7 +191,7 @@ public class CommonUtils {
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserEmail = response.email;
 		    	var i = 0;
-        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(I)(i));
+        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(ILjava/lang/String;)(i, hashEvent));
         		@com.l3.CB.client.ConfessionBox::loginStatus = "login";
         	});
             } else {
@@ -205,7 +208,7 @@ public class CommonUtils {
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserGender = response.gender;
 		    	@com.l3.CB.client.util.CommonUtils::loggedInUserLocale = response.locale;
 		    	var i = 0;
-        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(I)(i));
+        		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(ILjava/lang/String;)(i, hashEvent));
      		    	@com.l3.CB.client.ConfessionBox::loginStatus = "login";
      		    } else {
 //TODO: Remove commenting
@@ -696,20 +699,23 @@ public class CommonUtils {
     /**
      * Get status bar (subscribe and time stamp of confession)
      * @param confession
+     * @param confessedByUserInfo 
      * @return {@link FlowPanel} status bar (subscribe and time stamp of confession)
      */
-    public static FlowPanel getStatusBar(Confession confession) {
+    public static FlowPanel getStatusBar(Confession confession, UserInfo confessedByUserInfo) {
 	FlowPanel fPnlStatusBar = new FlowPanel();
 	fPnlStatusBar.setStyleName(Constants.DIV_STATUS_BAR);
 
-
 	// Time stamp
-	Label lblDateTimeStamp = new Label("| " + CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
+	Label lblDateTimeStamp = new Label(CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
 	lblDateTimeStamp.setStyleName(Constants.DIV_TIME_STAMP);
 	fPnlStatusBar.add(lblDateTimeStamp);
 
 	// Subscribe link
 	fPnlStatusBar.add(new SubscribeAnchor(confession.getConfId()));
+
+	// Subscribe link
+	fPnlStatusBar.add(new ShareAnchor(confession, confessedByUserInfo));
 
 	return fPnlStatusBar;
     }
@@ -757,7 +763,7 @@ public class CommonUtils {
      * @param int 1: set user details automatically, 0: Do not set user details in CB
      * @return {@link UserInfo}
      */
-    public static UserInfo getLoggedInUserInfo(int i) {
+    public static UserInfo getLoggedInUserInfo(int i, String hashEvent) {
 	UserInfo userInfo = new UserInfo();
 	if(loggedInUserFbId != null && !loggedInUserFbId.isEmpty()) {
 	    userInfo.setId(loggedInUserFbId);
@@ -774,7 +780,7 @@ public class CommonUtils {
 	}
 	// Set login userinfo and reset app
 	if(i == 0) {
-	    ConfessionBox.setLoggedInUserInfoAndResetApp(userInfo);
+	    ConfessionBox.setLoggedInUserInfoAndResetApp(userInfo, hashEvent);
 	}
 	return userInfo;
     }
@@ -797,8 +803,8 @@ public class CommonUtils {
      * Decide when to consider device to be small.
      */
     public static void setupScreen() {
-	ConfessionBox.isMobile = !isMobile();
-	ConfessionBox.isTouchEnabled = !isTouchEnabled();
+	ConfessionBox.isMobile = isMobile();
+	ConfessionBox.isTouchEnabled = isTouchEnabled();
     }
 
     public static boolean isNotNullAndNotEmpty(String str) {

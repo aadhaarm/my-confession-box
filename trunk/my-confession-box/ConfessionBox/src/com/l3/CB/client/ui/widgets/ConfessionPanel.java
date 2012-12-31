@@ -238,7 +238,7 @@ public class ConfessionPanel extends FlowPanel{
 	// User Profile name or ANYN
 	fPnlName = CommonUtils.getName(this.confession, confessedByUserInfo, anonymousView, showExtendedDetails);
 	// Status Bar (time and subscription status)
-	fPnlStatusBar = CommonUtils.getStatusBar(this.confession);
+	fPnlStatusBar = CommonUtils.getStatusBar(this.confession, confessedByUserInfo);
 	// Confession Text
 	fPnlConfessionText = CommonUtils.getTextTruncated(this.confession.getConfession());
 	//Activity buttons widget

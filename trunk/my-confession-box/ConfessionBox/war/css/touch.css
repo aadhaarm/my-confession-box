@@ -1,6 +1,6 @@
 .linkToButtonU {
-  display: block;
   background-color: #73883E;
+  display: block;
   padding: 2px 5px 2px 5px;
   text-align: center;
   color: white !important;
@@ -10,8 +10,8 @@
 }
 
 .linkToButtonS {
-  display: block;
   background-color: #999999;
+  display: block;
   padding: 2px 5px 2px 5px;
   text-align: center;
   color: white !important;
@@ -48,13 +48,15 @@
 }
 
 .shareLinkToButton {
-  background-color: #73883E;
+  background-color: #5B74A8;
+  margin-top: 3px;
   padding: 2px 5px 2px 5px;
   text-align: center;
   color: white !important;
   font-weight: bold;
   text-decoration: none !important;
-  width: 100px;
+  width: 85px;
+  text-transform: lowercase !important;
 }
 
 .identitySlider {

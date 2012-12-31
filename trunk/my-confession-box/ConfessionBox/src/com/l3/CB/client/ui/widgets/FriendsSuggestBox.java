@@ -234,4 +234,12 @@ public class FriendsSuggestBox extends FlowPanel {
 	    friendsSuggestList.setFocus(true);
 	}
     }
+    
+    public void disable() {
+	friendsSuggestBox.setVisible(false);
+    }
+    
+    public void enable() {
+	friendsSuggestBox.setVisible(true);
+    }
 }

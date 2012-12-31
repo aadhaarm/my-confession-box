@@ -33,7 +33,8 @@ public class FBLikeWidget {
 	};
 	InlineHTML messageWithLinkInlineHTML = new InlineHTML(
 		TEMPLATES.messageWithLink(url, Integer.toString(getCommentWidth())));
-	fbLikeHtml = new HTML(messageWithLinkInlineHTML.getHTML()); 
+	fbLikeHtml = new HTML(messageWithLinkInlineHTML.getHTML());
+	fbLikeHtml.setStyleName("fbLikeBar");
     }
 
     public HTML getFbLikeHtml() {

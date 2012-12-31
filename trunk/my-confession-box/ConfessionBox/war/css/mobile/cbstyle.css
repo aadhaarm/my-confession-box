@@ -519,9 +519,6 @@ main_container a:hover {
 .time_stamp {
 	font-size: small;
 	color: #999999;
-	float: left;
-	margin-right: 20px;
-	position: relative;
 }
 
 .time_stamp_pardon_status {
@@ -759,4 +756,35 @@ main_container a:hover {
     line-height: 1.38;
     margin: 0 10px 5px 10px;
     padding: 5px;
+}
+
+.fbLikeBar {
+	padding: 5px 0 5px 0;
+}
+
+.previewBar {
+	height: 60px;
+}
+
+.userLoginStatus {
+	display: block;
+	overflow: auto;
+	border: 1px solid;
+}
+
+.loginStatusBar {
+	display: block;
+	overflow: auto;
+}
+
+.userLoginStatusImage {
+	float: left;
+	padding: 4px;
+}
+
+.userLoginStatusName {
+}
+
+.left {
+	display: none;
 }

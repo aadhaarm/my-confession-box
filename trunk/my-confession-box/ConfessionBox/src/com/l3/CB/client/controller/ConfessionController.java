@@ -21,6 +21,7 @@ import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
 import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.presenter.HeaderPresenter;
 import com.l3.CB.client.presenter.HumanPointPresenter;
+import com.l3.CB.client.presenter.LoginStatusPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
@@ -31,6 +32,7 @@ import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.FooterView;
 import com.l3.CB.client.view.HeaderView;
 import com.l3.CB.client.view.HumanPointView;
+import com.l3.CB.client.view.LoginStatusView;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
 import com.l3.CB.shared.Constants;
@@ -44,6 +46,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private static HumanPointPresenter humanPointPresenter = null;
     private static MenuPresenter menuPresenter = null;
     private static HeaderPresenter headerPresenter = null;
+    private static LoginStatusPresenter loginStatusPresenter = null;
     
     /**
      * Constructors
@@ -52,7 +55,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      */
     public ConfessionController(String confId) {
 	super();
-//	Track.track("Application loaded for the first time");
+	//	Track.track("Application loaded for the first time");
 	updateUserInfoAndInitializeAPP();
 	// Bind events
 	bind();
@@ -62,9 +65,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * 
      */
     public static void updateUserInfoAndInitializeAPP() {
-	 /* Call server with logged in user info Register if new, update info or just bring the user UserID with the user info */
+	/* Call server with logged in user info Register if new, update info or just bring the user UserID with the user info */
 	if(ConfessionBox.isLoggedIn) {
-	     // Register user and get User ID
+	    // Register user and get User ID
 	    ConfessionBox.confessionService.registerUser(ConfessionBox.getLoggedInUserInfo(), new AsyncCallback<Long>() {
 		@Override
 		public void onSuccess(Long result) {
@@ -93,6 +96,10 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	// Initialize Header
 	headerPresenter = new HeaderPresenter(new HeaderView());
 	headerPresenter.go(container);
+	// Login status
+	loginStatusPresenter = new LoginStatusPresenter(new LoginStatusView());
+	loginStatusPresenter.go(container);
+	
 	// Initialize Human points
 	if(ConfessionBox.isLoggedIn) {
 	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
@@ -104,13 +111,13 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	if(loadAll) {
 	    String loadHash = Window.Location.getHash();
 	    if(CommonUtils.isNotNullAndNotEmpty(loadHash)) {
+		CommonUtils.fireHistoryEvent(loadHash.substring(1));
+	    } else {
 		if(null != ConfessionBox.confId) {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
 		} else {
-		    CommonUtils.fireHistoryEvent(loadHash.substring(1));
+		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 		}
-	    } else {
-		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED);
 	    }
 	}
     }
@@ -121,7 +128,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private void bind() {
 	// Listen all history new item addition
 	History.addValueChangeHandler(this);
-	
+
 	// Handle update human points event
 	ConfessionBox.eventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
 	    @Override
@@ -129,7 +136,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		humanPointPresenter.updateHumanPoints(event.getUpdatedCount());
 	    }
 	});
-	
+
 	// Update update menu event
 	ConfessionBox.eventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
 	    @Override
@@ -148,8 +155,8 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     public void onValueChange(ValueChangeEvent<String> event) {
 	String token = event.getValue();
 
-//	 Track.track(token);
-	
+	//	 Track.track(token);
+
 	if (token != null) {
 	    Presenter presenter = null;
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {

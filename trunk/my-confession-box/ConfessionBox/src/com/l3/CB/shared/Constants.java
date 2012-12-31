@@ -166,4 +166,6 @@ public class Constants {
 
     public static final String STYLE_CLASS_CONFESS_TO_ME_TOOLTIP = "confessToMeToolTip";
 
+    public static final String DIV_LOGIN_STATUS_BAR = "loginStatusBar";
+
 }

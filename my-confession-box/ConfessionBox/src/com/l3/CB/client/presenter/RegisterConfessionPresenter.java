@@ -26,7 +26,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.kiouri.sliderbar.client.event.BarValueChangedEvent;
 import com.kiouri.sliderbar.client.event.BarValueChangedHandler;
 import com.kiouri.sliderbar.client.solution.iph.IpSliderBar146;
+import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.EditHappenEvent;
+import com.l3.CB.client.event.EditHappenEventHandler;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
@@ -63,8 +66,8 @@ public class RegisterConfessionPresenter implements Presenter {
 	public CheckBox getCbHideIdentityCheckBox();
 	public CheckBox getCbConfessToCheckBox();
 
-	public IpSliderBar146 getShareToSlider();
-	public IpSliderBar146 getIdentitySlideBar();
+	public SliderBarHorizontal getShareToSlider();
+	public SliderBarHorizontal getIdentitySlideBar();
 	public HasClickHandlers getCbHideIdentity();
 	public HasClickHandlers getCbConfessTo();
 
@@ -78,6 +81,14 @@ public class RegisterConfessionPresenter implements Presenter {
 	public String getConfessionTitle();
 	public Button getBtnSave();
 
+
+	public Button getBtnProceed();
+	public void setupConfirmPanel(boolean isFriendNotRegistered, String pardonerName);
+
+	public Button getBtnEdit();
+	public void removeConfirmPanel();
+
+	public boolean isFriendNotRegistered();
 	public void setFriendsTrans();
 
 	Widget asWidget();
@@ -85,7 +96,8 @@ public class RegisterConfessionPresenter implements Presenter {
 
     private final Display display;
     private Map<String, UserInfo> userfriends;
-
+    private boolean isConfessionToBeSaved = true;
+    private Timer saveTimer;
     /**
      * Constructor
      * @param display
@@ -107,7 +119,9 @@ public class RegisterConfessionPresenter implements Presenter {
 	    public void onSuccess(Confession result) {
 		if(result != null) {
 		    display.getTxtTitle().getTxtTitle().setText(result.getConfessionTitle());
+		    display.getTxtTitle().validate();
 		    display.getTxtConfession().getCbTextArea().setHTML(result.getConfession());
+		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
 		    if(display.getCbHideIdentityCheckBox() != null) {
 			display.getCbHideIdentityCheckBox().setValue(result.isShareAsAnyn(), true);
 		    } else {
@@ -200,6 +214,32 @@ public class RegisterConfessionPresenter implements Presenter {
 	 * BtnSave - AddClickHandler
 	 */
 	bindSaveDraft();
+
+	// Bind proceed button
+	display.getBtnProceed().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
+		    if(display.isShared()) {
+			if(display.getFriendSuggestBox().validate() && display.getRelationSuggestBox().validate()) {
+			    saveTimer.cancel();
+			    RegisterConfessionUtil.proceedToConfirm(display);
+			}
+		    } else {
+			saveTimer.cancel();
+			RegisterConfessionUtil.proceedToConfirm(display);
+		    }
+		}
+	    }
+	});
+	display.getBtnEdit().addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		isConfessionToBeSaved = true;
+		saveTimer.scheduleRepeating(30000);
+		display.removeConfirmPanel();
+	    }
+	});
     }
 
     /**
@@ -209,43 +249,69 @@ public class RegisterConfessionPresenter implements Presenter {
 	display.getBtnSave().addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
-		if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
-		    display.getBtnSave().setText("Saving");
-		    // Get confession to be saved
-		    final Confession confession = new Confession();
-		    confession.setConfessionTitle(display.getConfessionTitle());
-		    confession.setConfession(display.getConfession());
-		    confession.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
-		    confession.setShareAsAnyn(display.isIdentityHidden());
-		    if(display.isShared() && display.getSharedWith() != null && CommonUtils.isNotNullAndNotEmpty(display.getSharedWith().getName())) {
-			confession.setShareToUserIDForSave(display.getSharedWith().getName());
-		    }
-		    if(display.isShared() && display.getRelationSuggestBox() != null && display.getRelationSuggestBox().getSelectedRelation() != null) {
-			confession.setShareToRelationForSave(display.getRelationSuggestBox().getSelectedRelation().getDisplayText());
-		    }
-
-		    ConfessionBox.confessionService.registerConfessionDraft(confession, new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-			    display.getBtnSave().setText(ConfessionBox.cbText.saveDraftButtonText());
-			    Timer t = new Timer() {
-				@Override
-				public void run() {
-				    display.getBtnSave().setText(ConfessionBox.cbText.saveAsDraftButtonLabelText());
-				}
-			    };
-			    t.schedule(3000);
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-			    Error.handleError("RegisterConfessionPresenter",
-				    "onFailure", caught);
-			}
-		    });
-		}
+		isConfessionToBeSaved = false;
+		saveConfessionDraft();
 	    }
 	});
+
+	ConfessionBox.eventBus.addHandler(EditHappenEvent.TYPE, new EditHappenEventHandler() {
+	    @Override
+	    public void changeStatusToEdit(EditHappenEvent event) {
+		isConfessionToBeSaved = true;
+	    }
+	});
+
+	saveTimer = new Timer() {
+	    @Override
+	    public void run() {
+		if(isConfessionToBeSaved) {
+		    saveConfessionDraft();
+		    isConfessionToBeSaved = false;
+		}
+	    }
+	};
+	saveTimer.scheduleRepeating(30000);
+    }
+
+    /**
+     * Save confession
+     */
+    private void saveConfessionDraft() {
+	//	if(display.getTxtTitle().validate() && display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
+	display.getBtnSave().setText("Saving");
+	// Get confession to be saved
+	final Confession confession = new Confession();
+	confession.setConfessionTitle(display.getConfessionTitle());
+	confession.setConfession(display.getConfession());
+	confession.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+	confession.setShareAsAnyn(display.isIdentityHidden());
+	if(display.isShared() && display.getSharedWith() != null && CommonUtils.isNotNullAndNotEmpty(display.getSharedWith().getName())) {
+	    confession.setShareToUserIDForSave(display.getSharedWith().getName());
+	}
+	if(display.isShared() && display.getRelationSuggestBox() != null && display.getRelationSuggestBox().getSelectedRelation() != null) {
+	    confession.setShareToRelationForSave(display.getRelationSuggestBox().getSelectedRelation().getDisplayText());
+	}
+
+	ConfessionBox.confessionService.registerConfessionDraft(confession, new AsyncCallback<Void>() {
+	    @Override
+	    public void onSuccess(Void result) {
+		display.getBtnSave().setText(ConfessionBox.cbText.saveDraftButtonText());
+		Timer t = new Timer() {
+		    @Override
+		    public void run() {
+			display.getBtnSave().setText(ConfessionBox.cbText.saveAsDraftButtonLabelText());
+		    }
+		};
+		t.schedule(3000);
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("RegisterConfessionPresenter",
+			"onFailure", caught);
+	    }
+	});
+	//	}
     }
 
     /**
@@ -400,20 +466,21 @@ public class RegisterConfessionPresenter implements Presenter {
 
 			//Register Shared-To info
 			if(display.isShared()) {
+			    if(display.getFriendSuggestBox().validate() && display.getRelationSuggestBox().validate()) {
+				final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
+				UserInfo fbSharedUser = display.getSharedWith();
+				if(fbSharedUser != null && display.getRelationSuggestBox().validate()) {
 
-			    final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
-			    UserInfo fbSharedUser = display.getSharedWith();
-			    if(fbSharedUser != null && display.getRelationSuggestBox().validate()) {
+				    // Check if the user confessed to is a member and send a fb notification message
+				    //				RegisterConfessionUtil.checkIfUserRegistered(confession, display);
 
-				// Check if the user confessed to is a member and send a fb notification message
-				RegisterConfessionUtil.checkIfUserRegistered(confession, display);
-
-				final ConfessionShare confessTo = RegisterConfessionUtil.getConfessedShareTO(fbSharedUser, display);
-				if(confessTo != null) {
-				    lstConfessTo.add(confessTo);
-				    confession.setConfessedTo(lstConfessTo);
-				    //Finally register confession
-				    RegisterConfessionUtil.finallyRegisterConfession(confession, display);
+				    final ConfessionShare confessTo = RegisterConfessionUtil.getConfessedShareTO(fbSharedUser, display);
+				    if(confessTo != null) {
+					lstConfessTo.add(confessTo);
+					confession.setConfessedTo(lstConfessTo);
+					//Finally register confession
+					RegisterConfessionUtil.finallyRegisterConfession(confession, display);
+				    }
 				}
 			    }
 			} else  {

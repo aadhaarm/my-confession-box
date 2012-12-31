@@ -18,7 +18,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancPrivacy;
     private final HTML ancPhillosphy;
     private final HTML ancPhillosphyAnynConf;
-    private final HTML ancAppText;
+    private final HTML ancAppComunityPage;
 
     public FooterView() {
 
@@ -30,13 +30,13 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	ancPrivacy = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.privacyPolicyFooterLinkLabel(), "Privacy policy it is..."));
 	ancPrivacy.setStyleName("footerLink");
 
-	ancAppText = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.cbNameFooterTextLabel(), "takes you to the Confession Box community page"));
-	ancAppText.setStyleName("footerLink");
+	ancAppComunityPage = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.cbNameFooterTextLabel(), "takes you to the Confession Box community page"));
+	ancAppComunityPage.setStyleName("footerLink");
 
 	ancPhillosphy = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "The Philosophy"));
 	ancPhillosphy.setStyleName("footerLink");
 	
-	ancPhillosphyAnynConf = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "Anonymous confession"));
+	ancPhillosphyAnynConf = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "Thoughts about Anonymous Confession"));
 	ancPhillosphyAnynConf.setStyleName("footerLink");
 	
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
@@ -74,10 +74,10 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	
 	if(!ConfessionBox.isMobile) {
 	    fPnlFooter.add(ancAbout);
-	    fPnlFooter.add(ancPrivacy);
 	    fPnlFooter.add(ancPhillosphy);
 	    fPnlFooter.add(ancPhillosphyAnynConf);
-	    fPnlFooter.add(ancAppText);
+	    fPnlFooter.add(ancAppComunityPage);
+//	    fPnlFooter.add(ancPrivacy);
 	}
 
 	initWidget(fPnlFooter);

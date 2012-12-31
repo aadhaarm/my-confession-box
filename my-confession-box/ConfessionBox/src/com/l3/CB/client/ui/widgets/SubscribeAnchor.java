@@ -8,21 +8,26 @@ import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 
-public class SubscribeAnchor extends Anchor {
+public class SubscribeAnchor extends FlowPanel {
 
     boolean isSubscribed = false;
+    Anchor ancSub;
 
     public SubscribeAnchor(Long confId) {
 	super();
-
+	ancSub = new Anchor();
+	this.add(ancSub);
+	
 	setTitle(ConfessionBox.cbText.subscribeLinkToolTipText());
 	if(ConfessionBox.isTouchEnabled) {
-	    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
+	    ancSub.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
 	}
 	if(ConfessionBox.isLoggedIn) {
 	    ConfessionBox.confessionService.isSubscribed(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Boolean>() {
@@ -49,26 +54,26 @@ public class SubscribeAnchor extends Anchor {
     private void setLinkText() {
 	if(ConfessionBox.isLoggedIn) {
 	    if(isSubscribed){
-		setText(ConfessionBox.cbText.unSubscribeAnchorLabel());
+		ancSub.setText(ConfessionBox.cbText.unSubscribeAnchorLabel());
 		setTitle(ConfessionBox.cbText.unSubscribeLinkToolTipText());
 		if(ConfessionBox.isTouchEnabled) {
-		    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_S);
+		    ancSub.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_S);
 		}
 	    } else {
-		setText(ConfessionBox.cbText.subscribeAnchorLabel());
+		ancSub.setText(ConfessionBox.cbText.subscribeAnchorLabel());
 		setTitle(ConfessionBox.cbText.subscribeLinkToolTipText());
 		if(ConfessionBox.isTouchEnabled) {
-		    this.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
+		    ancSub.setStyleName(Constants.STYLE_CLASS_SUBSCRIBE_LINK_TO_BTN_U);
 		}
 	    }
 	} else {
-	    setText(ConfessionBox.cbText.subscribeAnchorLabel());
+	    ancSub.setText(ConfessionBox.cbText.subscribeAnchorLabel());
 	}
     }
 
     private void bind(final Long confId) {
 	if(ConfessionBox.isTouchEnabled) {
-	    this.addTouchEndHandler(new TouchEndHandler() {
+	    ancSub.addTouchEndHandler(new TouchEndHandler() {
 
 		@Override
 		public void onTouchEnd(TouchEndEvent event) {
@@ -80,7 +85,7 @@ public class SubscribeAnchor extends Anchor {
 		}
 	    });
 	} else {
-	    this.addClickHandler(new ClickHandler() {
+	    ancSub.addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
 		    if(ConfessionBox.isLoggedIn) {
@@ -98,11 +103,16 @@ public class SubscribeAnchor extends Anchor {
      * @param confId
      */
      private void registerSubscription(final Long confId) {
+	 ancSub.setVisible(false);
+	 final Image loderImage = CommonUtils.getMeLoaderImage(); 
+	 this.add(loderImage);
 	 ConfessionBox.confessionService.subscribe(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new Date(), new AsyncCallback<Boolean>() {
 	     @Override
 	     public void onSuccess(Boolean result) {
 		 isSubscribed = !isSubscribed;						
 		 setLinkText();
+		 remove(loderImage);
+		 ancSub.setVisible(true);
 	     }
 	     @Override
 	     public void onFailure(Throwable caught) {

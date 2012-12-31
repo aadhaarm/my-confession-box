@@ -2,7 +2,6 @@ package com.l3.CB.client.util;
 
 import java.util.Date;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateHPEvent;
@@ -51,52 +50,75 @@ public class RegisterConfessionUtil {
      * @param confession
      */
     public static void finallyRegisterConfession(final Confession confession, final Display display) {
-	// Show user confirm message
-	if(Window.confirm(ConfessionBox.cbText.confirmMessageWhenSubmittingCOnfession())) {
+	ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
 
-	    ConfessionBox.confessionService.registerConfession(confession, new AsyncCallback<Void>() {
+	    // Human points when submitting a confession
+	    int pointsToBeAdded = Constants.POINTS_ON_CONFESSING;
 
-		// Human points when submitting a confession
-		int pointsToBeAdded = Constants.POINTS_ON_CONFESSING;
-
-		@Override
-		public void onSuccess(Void result) {
-		    if(!display.isIdentityHidden()) {
-			pointsToBeAdded += Constants.POINTS_ON_UNHIDING_IDENTITY;
-		    }
-
-		    if(display.isShared()) {
-			pointsToBeAdded += Constants.POINTS_ON_APPEAL_PARDON;
-		    }
-
-		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
-		    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
-		    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(pointsToBeAdded));
+	    @Override
+	    public void onSuccess(Void result) {
+		if(display.isFriendNotRegistered()) {
+		    final UserInfo confessedToUser = display.getSharedWith();
+		    openConfessionNotificationMessageDialog(confessedToUser);
 		}
 
-		@Override
-		public void onFailure(Throwable caught) {
-		    Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+		if(!display.isIdentityHidden()) {
+		    pointsToBeAdded += Constants.POINTS_ON_UNHIDING_IDENTITY;
 		}
-	    }); 
-	} 
+
+		if(display.isShared()) {
+		    pointsToBeAdded += Constants.POINTS_ON_APPEAL_PARDON;
+		}
+
+		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
+		ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
+		ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(pointsToBeAdded));
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+	    }
+	}); 
     }
 
     /**
      * Check is user registered - Show FB send dialog
-     * 
-     * @param confession
      */
-    public static void checkIfUserRegistered(Confession confession, Display display) {
+    public static void proceedToConfirm(final Display display) {
 	final UserInfo confessedToUser = display.getSharedWith();
 	if(confessedToUser != null) {
-	    CommonUtils.sendConfessionNotification(confessedToUser.getId(),
-		    confessedToUser.getName(),
-		    ConfessionBox.getLoggedInUserInfo().getName(),
-		    FacebookUtil.getConfessionNotificationUrl(),
-		    FacebookUtil.getApplicationImage(),
-		    ConfessionBox.cbText.shareConfessionFBWallMessage());
+	    ConfessionBox.confessionService.isUserRegistered(confessedToUser.getId(), new AsyncCallback<UserInfo>() {
+
+		@Override
+		public void onSuccess(UserInfo result) {
+		    boolean isFriendNotRegistered = false;
+		    if(result == null) {
+			isFriendNotRegistered = true;
+		    }
+		    display.setupConfirmPanel(isFriendNotRegistered, confessedToUser.getName());
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+		    Error.handleError("RegisterConfessionUtil", "onFailure", caught);
+		}
+	    });
+	} else {
+	    display.setupConfirmPanel(false, null);
 	}
+    }
+
+    /**
+     * @param confessedToUser
+     */
+    private static void openConfessionNotificationMessageDialog(final UserInfo confessedToUser) {
+	CommonUtils.sendConfessionNotification(confessedToUser.getId(),
+		confessedToUser.getName(),
+		ConfessionBox.getLoggedInUserInfo().getName(),
+		FacebookUtil.getConfessionNotificationUrl(),
+		FacebookUtil.getApplicationImage(),
+		ConfessionBox.cbText.shareConfessionFBWallMessage());
     }
 
     /**

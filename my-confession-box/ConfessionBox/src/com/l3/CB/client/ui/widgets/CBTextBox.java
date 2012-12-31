@@ -44,8 +44,6 @@ public class CBTextBox extends FlowPanel {
 	    }
 	});
 	
-	
-	
 	txtTitle.addClickHandler(new ClickHandler() {
 
 	    @Override
@@ -71,9 +69,13 @@ public class CBTextBox extends FlowPanel {
      * @return
      */
     private int getCommentWidth() {
-	int width = Window.getClientWidth() - 40;
 	if(ConfessionBox.isMobile) {
-	    return width;
+	    int width = Window.getClientWidth() - 40;
+	    if(width <= 500) {
+		return width;
+	    } else {
+		return 565;
+	    }
 	} else {
 	    return 565;
 	}
@@ -107,4 +109,13 @@ public class CBTextBox extends FlowPanel {
 	    lblRemainChar.setText(numOfChars + ConfessionBox.cbText.confessionTextBoxRemainingCharactersMessage());
 	}
     }
+
+    public void disable() {
+	txtTitle.setEnabled(false);
+    }
+    
+    public void enable() {
+	txtTitle.setEnabled(true);
+    }
+
 }

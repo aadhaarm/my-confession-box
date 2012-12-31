@@ -8,8 +8,6 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.TouchEndEvent;
 import com.google.gwt.event.dom.client.TouchEndHandler;
-import com.google.gwt.event.dom.client.TouchStartEvent;
-import com.google.gwt.event.dom.client.TouchStartHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -208,20 +206,19 @@ public class ActivityButton extends AbsolutePanel {
      */
     private Timer getActivityTimer(final Activity activity, final Confession confession, final Label btnCount) {
 	final Timer timer = new Timer() {
-	    int count = ActivityButton.this.timerCountNumber-1;
+	    int count = ActivityButton.this.timerCountNumber;
 
 	    @Override
 	    public void cancel() {
 		super.cancel();
 		ConfessionBox.eventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
 		count = ActivityButton.this.timerCountNumber-1;
-		lblTimerCount.setText(Integer.toString(ActivityButton.this.timerCountNumber));
 	    }
 
 	    @Override
 	    public void run() {
 		ConfessionBox.eventBus.fireEvent(new ActivityEvent(confession.getConfId()));
-		if(count > 0) {
+		if(count >= 0) {
 		    lblTimerCount.setText(Integer.toString(count));
 		    count--;
 		} else {

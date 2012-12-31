@@ -100,7 +100,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 		    HelpInfo.cleanToolTip();
 		} else {
-		    CommonUtils.login(0);
+		    CommonUtils.login(0, Constants.HISTORY_ITEM_REGISTER_CONFESSION);
 		}
 	    }
 	});
@@ -118,7 +118,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 		    HelpInfo.cleanToolTip();
 		} else {
-		    CommonUtils.login(0);
+		    CommonUtils.login(0, Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 		}
 	    }
 	});
@@ -136,7 +136,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 		    HelpInfo.cleanToolTip();
 		} else {
-		    CommonUtils.login(0);
+		    CommonUtils.login(0, Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 		}
 	    }
 	});
@@ -196,9 +196,9 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    menuBar.add(btnMenuItemConfToMe);
 	    menuBar.add(ancInvite);
 	    menuBar.add(ancCBRuleBook);
-	    if(ConfessionBox.isLoggedIn) {
-		menuBar.add(ancLogout);
-	    }
+//	    if(ConfessionBox.isLoggedIn) {
+//		menuBar.add(ancLogout);
+//	    }
 	} 
 	initWidget(menuBar);
     }

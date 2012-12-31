@@ -54,9 +54,13 @@ public class CBTextArea extends FlowPanel {
      * @return
      */
     private int getCommentWidth() {
-	int width = Window.getClientWidth() - 40;
 	if(ConfessionBox.isMobile) {
-	    return width;
+	    int width = Window.getClientWidth() - 40;
+	    if(width <= 500) {
+		return width;
+	    } else {
+		return 565;
+	    }
 	} else {
 	    return 565;
 	}
@@ -140,4 +144,13 @@ public class CBTextArea extends FlowPanel {
     public void setCbTextArea(RichTextArea cbTextArea) {
 	this.cbTextArea = cbTextArea;
     }
+
+    public void disable() {
+	cbTextArea.setEnabled(false);
+    }
+    
+    public void enable() {
+	cbTextArea.setEnabled(true);
+    }
+
 }

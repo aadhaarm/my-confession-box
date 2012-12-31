@@ -101,7 +101,7 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    //	    proceedToApp(confessionService, facebookService, eventBus);
+	    //  proceedToApp(confessionService, facebookService, eventBus);
 	    initializeUserInfo(true);
 	}
     }
@@ -159,13 +159,13 @@ public class ConfessionBox implements EntryPoint {
 	}
 
 	if(Navigator.isJavaEnabled()) {
-	    CommonUtils.loginInFB(false);
+	    CommonUtils.loginInFB(false, "");
 	    Timer timer = new Timer() {
 		int count = 0;
 		@Override
 		public void run() {
 		    if(loginStatus != null) {
-			ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo(1);
+			ConfessionBox.loggedInUserInfo = CommonUtils.getLoggedInUserInfo(1, null);
 			if(confessionService != null && facebookService != null) {
 			    if(proceedFirstLoad) {
 				proceedToApp(confessionService, facebookService, eventBus);
@@ -261,10 +261,13 @@ public class ConfessionBox implements EntryPoint {
      * 
      * @param loggedInUserInfo
      */
-    public static void setLoggedInUserInfoAndResetApp(UserInfo loggedInUserInfo) {
+    public static void setLoggedInUserInfoAndResetApp(UserInfo loggedInUserInfo, String hashEvent) {
 	ConfessionBox.loggedInUserInfo = loggedInUserInfo;
 	if(applicationLoaded) {
 	    ConfessionController.updateUserInfoAndInitializeAPP();
+	}
+	if(hashEvent != null && !hashEvent.isEmpty()) {
+	    CommonUtils.fireHistoryEvent(hashEvent);
 	}
     }
 }

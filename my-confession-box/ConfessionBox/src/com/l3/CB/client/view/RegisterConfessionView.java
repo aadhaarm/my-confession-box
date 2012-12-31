@@ -13,13 +13,15 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.kiouri.sliderbar.client.solution.iph.IpSliderBar146;
+import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
 import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
+import com.l3.CB.client.ui.widgets.ShareSliderWidget;
 import com.l3.CB.client.ui.widgets.RelationSuggestBox;
+import com.l3.CB.client.ui.widgets.IdentitySliderWidget;
 import com.l3.CB.client.ui.widgets.Templates;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
@@ -29,17 +31,20 @@ import com.l3.CB.shared.TO.UserInfo;
 
 public class RegisterConfessionView extends Composite implements RegisterConfessionPresenter.Display {
 
+    private boolean isFriendNotRegistered = true;
+    
     private final FlowPanel fPnlConfessionForm;
     private final FlowPanel fPnlTop;
     private final FlowPanel fPnlOptions;
     private final FlowPanel fPnlConfession;
     private final FlowPanel fPnlPreview;
+    private final FlowPanel fPnlConfirm;
 
     private CheckBox cbHideIdentity;
-    private IpSliderBar146 identitySlideBar;
+    private SliderBarHorizontal identitySlideBar;
 
     private CheckBox cbConfessTo;
-    private IpSliderBar146 shareToSlider;
+    private SliderBarHorizontal shareToSlider;
 
     private FriendsSuggestBox friendsSuggestBox;
     private RelationSuggestBox relationSuggestBox;
@@ -49,6 +54,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     private final FlowPanel fPnlButtons;
     private final Button btnSubmit;
+    private final Button btnProceed;
+    private final Button btnEdit;
     private final Button btnSave;
 
     private final HTML htmlConfessionPreview;    
@@ -56,8 +63,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private Image loaderImage;    
     private Image profileImage;
 
-    
-    
     public RegisterConfessionView() {
 	super();
 	//TOP panel
@@ -98,13 +103,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	relationSuggestBox = new RelationSuggestBox();
 	relationSuggestBox.setVisible(false);
 	if(ConfessionBox.isTouchEnabled) {
-	    identitySlideBar = new IpSliderBar146("OPEN", "Hidden");
+	    identitySlideBar = new IdentitySliderWidget();
 	    identitySlideBar.addStyleName("identitySlider");
 
 	    fPnlOptions.add(new Label(ConfessionBox.cbText.registerPageOptionHideIDSlider()));
 	    fPnlOptions.add(identitySlideBar);
 
-	    shareToSlider = new IpSliderBar146("REQUEST", "No");
+	    shareToSlider = new ShareSliderWidget();
 	    fPnlOptions.add(new Label(ConfessionBox.cbText.registerPageOptionConfessToFriend()));
 	    fPnlOptions.add(shareToSlider);
 	} else {
@@ -123,6 +128,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
 	htmlConfessionPreview.setStyleName("confessionPreview");
 	fPnlPreview.add(htmlConfessionPreview);
+	fPnlPreview.setStyleName("previewBar");
 	fPnlConfessionForm.add(fPnlPreview);
 
 	// Confession
@@ -135,7 +141,6 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	txtConfession = new CBTextArea(Constants.CONF_MAX_CHARS, true, "write your confession here..");
 	txtConfession.setStyleName(Constants.STYLE_CLASS_REGISTER_CONFESSION_TXT_BOX);
-//	txtConfession.setSize("100%", "14em");
 
 	fPnlConfessionForm.add(txtConfession);
 
@@ -146,16 +151,70 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	btnSave = new Button(ConfessionBox.cbText.saveAsDraftButtonLabelText());
 	btnSave.setStyleName("save_draft");
 	fPnlButtons.add(btnSave);
+	
+	btnProceed = new Button("Proceed");
+	btnProceed.setStyleName("submit_confession");
+	fPnlButtons.add(btnProceed);
+
+	btnEdit = new Button("Edit");
+	btnEdit.setStyleName("submit_confession");
+	btnEdit.setVisible(false);
+	fPnlButtons.add(btnEdit);
+	
+	fPnlConfirm = new FlowPanel();
 
 	btnSubmit = new Button(ConfessionBox.cbText.buttonTextSubmitConfession());
 	btnSubmit.setStyleName("submit_confession");
-	fPnlButtons.add(btnSubmit);
+//	fPnlButtons.add(btnSubmit);
 
 	fPnlConfessionForm.add(fPnlButtons);
 
 	fPnlConfessionForm.setStyleName("reg_main_container");
 	initWidget(fPnlConfessionForm);
 
+    }
+    
+    private void disableForm() {
+	txtConfession.disable();
+	txtTitle.disable();
+	fPnlOptions.setVisible(false);
+    }
+    
+    private void enableForm() {
+	txtConfession.enable();
+	txtTitle.enable();
+	fPnlOptions.setVisible(true);
+    }
+    
+    public void setupConfirmPanel(boolean isFriendNotRegistered, String pardonerName) {
+	fPnlConfirm.clear();
+	disableForm();
+	this.isFriendNotRegistered = isFriendNotRegistered;
+	if(isFriendNotRegistered && pardonerName != null) {
+	    fPnlConfirm.add(new HTML(Templates.TEMPLATES.confessorNotRegisteredMessage(pardonerName)));
+	}
+	
+	btnProceed.setVisible(false);
+	btnEdit.setVisible(true);
+	
+	fPnlConfirm.add(new HTML(Templates.TEMPLATES.confessionConfirmMessage(ConfessionBox.cbText.confirmMessageWhenSubmittingConfession())));
+	fPnlConfirm.add(btnSubmit);
+	fPnlConfessionForm.add(fPnlConfirm);
+    }
+    
+    public void removeConfirmPanel() {
+	enableForm();
+	btnProceed.setVisible(true);
+	btnEdit.setVisible(false);
+	fPnlConfessionForm.remove(fPnlConfirm);
+    }
+
+    public boolean isFriendNotRegistered() {
+        return isFriendNotRegistered;
+    }
+    
+    public Button getBtnEdit() {
+        return btnEdit;
     }
 
     private void getMeLoaderImage() {
@@ -235,7 +294,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public UserInfo getSharedWith() {
-	if(friendsSuggestBox.validate()) {
+	if(friendsSuggestBox != null && friendsSuggestBox.validate()) {
 	    return friendsSuggestBox.getSelectedUser();
 	}
 	return null;
@@ -311,11 +370,15 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	return htmlConfessionPreview;
     }
 
-    public IpSliderBar146 getIdentitySlideBar() {
+    public SliderBarHorizontal getIdentitySlideBar() {
 	return identitySlideBar;
     }
 
-    public IpSliderBar146 getShareToSlider() {
+    public SliderBarHorizontal getShareToSlider() {
 	return shareToSlider;
+    }
+
+    public Button getBtnProceed() {
+        return btnProceed;
     }
 }

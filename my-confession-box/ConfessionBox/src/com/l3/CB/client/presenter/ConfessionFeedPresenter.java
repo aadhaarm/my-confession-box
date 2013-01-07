@@ -68,7 +68,7 @@ public class ConfessionFeedPresenter implements Presenter {
     boolean showUserControls = false;
     boolean showExtendedDetails = false;
     boolean showPardonHelpText = false;
-    
+
     Filters filter = Filters.ALL;
 
     public ConfessionFeedPresenter(Display display) {
@@ -132,7 +132,7 @@ public class ConfessionFeedPresenter implements Presenter {
      * Bind events
      */
     private void bind() {
-	
+
 	// ON WINDOW SCROLL
 	Window.addWindowScrollHandler(new Window.ScrollHandler() {
 	    boolean inEvent = false;
@@ -161,7 +161,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	    }
 
 	});
-	
+
 	// ON FILTER CHANGE
 	if(display.getConfessionFilterListBox() != null) {
 	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
@@ -171,6 +171,11 @@ public class ConfessionFeedPresenter implements Presenter {
 		    ListBox lstBoxFilter = (ListBox)event.getSource();
 		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
 		    filter = Filters.valueOf(selectedFilter);
+		    if(filter != null && (filter.equals(Filters.SUBSCRIBED) || filter.equals(Filters.USER_ACTIVITY))) {
+			if(!ConfessionBox.isLoggedIn) {
+			    CommonUtils.login(0, null);
+			}
+		    }
 		    display.setFilterInfo(filter.getFilterInfoText());
 		    setConfessions(true);
 		}
@@ -185,7 +190,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		}
 	    });
 	}
-	
+
 	// Change filter selected text
 	ConfessionBox.eventBus.addHandler(FilterEvent.TYPE, new FilterEventHandler() {
 	    @Override

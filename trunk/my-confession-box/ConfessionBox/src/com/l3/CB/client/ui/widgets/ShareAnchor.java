@@ -21,6 +21,7 @@ public class ShareAnchor extends FlowPanel {
 
     public ShareAnchor(final Confession confession, UserInfo confessedByUserInfo) {
 	super();
+	this.setStyleName("shareAnchorBar");
 	this.confession = confession;
 	this.confessedByUserInfo = confessedByUserInfo;
 	ancShare = new Anchor("Share on FB");

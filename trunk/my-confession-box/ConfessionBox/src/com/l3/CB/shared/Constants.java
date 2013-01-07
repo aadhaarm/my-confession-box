@@ -102,9 +102,10 @@ public class Constants {
     public static final int COMM_MAX_CHARS = 300;
 
     // MEMCACHE
-    public static final int CONF_CACHE_EXPIRATION_SEC = 300; // 5 minuts
-    public static final int USER_CACHE_EXPIRATION_SEC = 3600; // 1 hour
-    public static final Object JSON_CACHE_EXPIRATION_SEC = 3600; // 1 hour
+    public static final int CONF_CACHE_EXPIRATION_SEC = 43200; // 12 hours
+    public static final int CONF_LIST_CACHE_EXPIRATION_SEC = 1800; // 30 minuts
+    public static final int USER_CACHE_EXPIRATION_SEC = 43200; // 1 hour
+    public static final Object JSON_CACHE_EXPIRATION_SEC = 43200; // 1 hour
 
     public static final String STYLE_CLASS_CONFESSED_TO_TEXT = "confessedToName";
 
@@ -168,4 +169,17 @@ public class Constants {
 
     public static final String DIV_LOGIN_STATUS_BAR = "loginStatusBar";
 
+    public static final String STYLE_CLASS_STATUS_LINK_TO_BTN = "statusLinkToButton";
+
+    public static final String DIV_OPTIONS_NO_BUTTON = "optionsNoButton";
+
+    public static final String DIV_OPTIONS_YES_BUTTON = "optionsYesButton";
+
+    public static final String STYLE_CLASS_YES_LINK_TO_BTN_S = "linkToButtonYesS";
+
+    public static final String STYLE_CLASS_YES_LINK_TO_BTN_U = "linkToButtonYesU";
+
+    public static final String STYLE_CLASS_NO_LINK_TO_BTN_S = "linkToButtonNoS";
+
+    public static final String STYLE_CLASS_NO_LINK_TO_BTN_U = "linkToButtonNoU";
 }

@@ -13,6 +13,7 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
 import com.l3.CB.client.event.UpdateIdentityVisibilityEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter.Display;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
@@ -34,6 +35,7 @@ public class MyConfessionFeedPresenter implements Presenter {
     }
 
     private void setConfessions(boolean clean) {
+	CommonUtils.showApplicationLoad();
 	if(clean) {
 	    this.display.clearConfessions();
 	    display.setMoreConfessions(true);

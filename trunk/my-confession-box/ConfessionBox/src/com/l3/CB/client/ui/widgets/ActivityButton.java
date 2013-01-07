@@ -36,8 +36,9 @@ public class ActivityButton extends AbsolutePanel {
     Label lblTick = null;
     Image loader = null;
     Anchor ancShare = null;
-    int timerCountNumber = 5;
-
+    final int timerCountNumber = 5;
+    Timer timer;
+    
     public ActivityButton(final Activity activity, final Confession confession, String titleText, String btnStyleName, final Image buttonImage) {
 	super();
 	this.setStyleName(Constants.DIV_ACTIVITY_BUTTON_CONTAINER);
@@ -144,14 +145,16 @@ public class ActivityButton extends AbsolutePanel {
 			    inEvent = false;
 			    timer.cancel();
 			    lblTimerCount.setVisible(false);
+			    lblTimerCount.setText(Integer.toString(timerCountNumber));
 			    loader.setVisible(false);
 			} else {
 			    inEvent = true;
-			    lblTimerCount.setVisible(true);
 			    loader.setVisible(true);
 			    timer.scheduleRepeating(1000);
 			    add(loader, btn.getElement());
 			    add(lblTimerCount, btn.getElement());
+			    lblTimerCount.setText(Integer.toString(timerCountNumber));
+			    lblTimerCount.setVisible(true);
 			}
 		    } else {
 			CommonUtils.login(0);
@@ -168,11 +171,13 @@ public class ActivityButton extends AbsolutePanel {
 			    inEvent = false;
 			    timer.cancel();
 			    lblTimerCount.setVisible(false);
+			    lblTimerCount.setText(Integer.toString(timerCountNumber));
 			    loader.setVisible(false);
 			} else {
 			    inEvent = true;
 			    lblTimerCount.setVisible(true);
 			    loader.setVisible(true);
+			    lblTimerCount.setText(Integer.toString(timerCountNumber));
 			    timer.scheduleRepeating(1000);
 			    add(loader, btn.getElement());
 			    add(lblTimerCount, btn.getElement());
@@ -205,14 +210,14 @@ public class ActivityButton extends AbsolutePanel {
      * @return
      */
     private Timer getActivityTimer(final Activity activity, final Confession confession, final Label btnCount) {
-	final Timer timer = new Timer() {
+	timer = new Timer() {
 	    int count = ActivityButton.this.timerCountNumber;
 
 	    @Override
 	    public void cancel() {
 		super.cancel();
 		ConfessionBox.eventBus.fireEvent(new CancelActivityEvent(confession.getConfId()));
-		count = ActivityButton.this.timerCountNumber-1;
+		count = ActivityButton.this.timerCountNumber;
 	    }
 
 	    @Override

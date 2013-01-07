@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.FilterEvent;
 import com.l3.CB.client.event.FilterEventHandler;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
@@ -131,6 +132,8 @@ public class ConfessionFeedPresenter implements Presenter {
      * Bind events
      */
     private void bind() {
+	
+	// ON WINDOW SCROLL
 	Window.addWindowScrollHandler(new Window.ScrollHandler() {
 	    boolean inEvent = false;
 	    @Override
@@ -158,10 +161,13 @@ public class ConfessionFeedPresenter implements Presenter {
 	    }
 
 	});
+	
+	// ON FILTER CHANGE
 	if(display.getConfessionFilterListBox() != null) {
 	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
 		@Override
 		public void onChange(ChangeEvent event) {
+		    CommonUtils.showApplicationLoad();
 		    ListBox lstBoxFilter = (ListBox)event.getSource();
 		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
 		    filter = Filters.valueOf(selectedFilter);
@@ -169,7 +175,7 @@ public class ConfessionFeedPresenter implements Presenter {
 		    setConfessions(true);
 		}
 	    });
-
+	    // Filter Help info
 	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
 		@Override
 		public void onFocus(FocusEvent event) {
@@ -179,8 +185,9 @@ public class ConfessionFeedPresenter implements Presenter {
 		}
 	    });
 	}
+	
+	// Change filter selected text
 	ConfessionBox.eventBus.addHandler(FilterEvent.TYPE, new FilterEventHandler() {
-
 	    @Override
 	    public void filter(FilterEvent event) {
 		display.setFilterInfo(event.getSelectedFilter().getFilterInfoText());
@@ -189,10 +196,11 @@ public class ConfessionFeedPresenter implements Presenter {
 	    }
 	});
 
-
+	// Bind REFRESH Button
 	display.getRefreshButton().addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
+		CommonUtils.showApplicationLoad();
 		setConfessions(true);
 	    }
 	});

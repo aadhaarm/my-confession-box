@@ -1,5 +1,2 @@
 # Module confessionbox
 # RPC service class, partial path of RPC policy file
-com.l3.CB.client.FacebookService, 2872E640E034C40FA428D26D2AB473E8.gwt.rpc
-com.google.gwt.logging.shared.RemoteLoggingService, D981642EFA42F70DEE26F7EF8CAC42EC.gwt.rpc
-com.l3.CB.client.ConfessionService, 2C5638FBC50287BBA99A1EF38725C548.gwt.rpc

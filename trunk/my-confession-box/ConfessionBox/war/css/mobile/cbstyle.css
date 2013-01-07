@@ -11,21 +11,29 @@ div.header {
 	text-align: center;
     z-index: 1;
 	cursor: pointer;
+	display: block;
+	overflow: auto;
 }
 
 .pointsPanel {
 	display: block;
 	margin: 0 auto 0 auto;
 	background-color: #FEFFED;
+	float: left;
 }
 
 .pointsLabel {
 }
 
 .menu {
+	background-image: url(../../images/icon_menu.jpg);
+	background-size:20px 27px;
 	float: left;
 	padding: 5px 0 0 5px;
-	width: 20px;
+	margin-top: 2px;
+	width: 22px;
+	/* background-color: black;
+	color: white; */
 }
 
 .footer {
@@ -112,7 +120,7 @@ div.helpInfoDiv {
 	padding-right: 1px;
 	padding-top: 0;
 	text-align: center;
-	text-transform: uppercase;
+	text-transform: capitalize;
 }
 
 .btnNameText {
@@ -219,12 +227,13 @@ div.helpInfoDiv {
 }
 
 .confessionFilterOptionsList {
-	color: #333333;
-	font-family: Comic Sans MS;
-	font-size: small;
+	background-image: url(../../images/filter-icon.png) ;
+	background-size:18px 25px;
 	float: right;
-	margin: 2px 2px 0 0;
-	width: 20px;
+	padding: 5px 0 0 5px;
+	margin-top: 2px;
+	width: 22px;
+	/* background-color: black; */
 }
 
 .confessionTopBar {
@@ -508,6 +517,7 @@ main_container a:hover {
 	float: right;
 	color: #999;
 	font-size: small;
+	width: 200px;
 }
 
 .status_bar a {
@@ -519,6 +529,7 @@ main_container a:hover {
 .time_stamp {
 	font-size: small;
 	color: #999999;
+	text-align: right;
 }
 
 .time_stamp_pardon_status {
@@ -552,7 +563,7 @@ main_container a:hover {
 	font-size: 14px;
 	color: #333333;
 	background-color: #FEFFED;
-	line-height: 1.36;
+	line-height: 1.38;
 	overflow: hidden;
 	text-overflow: clip;
 }
@@ -769,7 +780,7 @@ main_container a:hover {
 .userLoginStatus {
 	display: block;
 	overflow: auto;
-	border: 1px solid;
+	float: right;
 }
 
 .loginStatusBar {
@@ -778,8 +789,8 @@ main_container a:hover {
 }
 
 .userLoginStatusImage {
-	float: left;
-	padding: 4px;
+	float: right;
+	padding-bottom: 4px;
 }
 
 .userLoginStatusName {
@@ -787,4 +798,42 @@ main_container a:hover {
 
 .left {
 	display: none;
+}
+
+.subscribeAnchorBar {
+	float: left;
+}
+
+.shareAnchorBar {
+	position: relative;
+	top: -3px;
+}
+
+.optionsNoButton {
+	float: left;
+	width: 70px;
+}
+
+.optionsYesButton {
+	width: 70px;
+	float: left;
+}
+
+.yesNoBar {
+	display: block;
+	overflow: auto;
+}
+
+.menuButton {
+	position: absolute;
+	float: left;
+	padding: 5px 0 0 5px;
+	width: 50px;
+	z-index: 100;
+}
+
+.buttonLearn {
+	display: block;
+	overflow: auto;
+	margin: 5px auto;
 }

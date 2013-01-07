@@ -49,7 +49,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Hide my identity")
     String registerPageOptionHideID();
 
-    @DefaultStringValue("Identity status")
+    @DefaultStringValue("Hide my identity")
     String registerPageOptionHideIDSlider();
     
     @DefaultStringValue("Request for pardon")
@@ -175,7 +175,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Type your friend's name and choose from the options")
     String shareConfessionSuggestBoxErrorMessage();
 
-    @DefaultStringValue("Appeal")
+    @DefaultStringValue("Request")
     String shareConfessionButtonShareConfessionPopup();
 
     @DefaultStringValue(" has confessed to you on Confession Box.")
@@ -277,10 +277,10 @@ public interface CBText extends Constants {
     @DefaultStringValue("Add update")
     String addUpdateLinkText();
 
-    @DefaultStringValue("Add response")
+    @DefaultStringValue("Add response (Anonymous)")
     String addResponseLinkText();
 
-    @DefaultStringValue("Appeal for pardon")
+    @DefaultStringValue("Request for pardon")
     String appealForPardonLinkText();
 
     @DefaultStringValue("Name of the person you confessing to")

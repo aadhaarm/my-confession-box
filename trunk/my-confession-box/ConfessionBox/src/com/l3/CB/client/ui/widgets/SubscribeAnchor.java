@@ -22,6 +22,7 @@ public class SubscribeAnchor extends FlowPanel {
 
     public SubscribeAnchor(Long confId) {
 	super();
+	this.setStyleName("subscribeAnchorBar");
 	ancSub = new Anchor();
 	this.add(ancSub);
 	

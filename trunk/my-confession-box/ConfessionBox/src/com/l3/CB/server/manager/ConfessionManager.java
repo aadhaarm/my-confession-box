@@ -2,6 +2,7 @@ package com.l3.CB.server.manager;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import com.l3.CB.server.DAO.ConfessionBasicDAO;
@@ -114,11 +115,29 @@ public class ConfessionManager {
 		} 
 	    } else {
 		String cacheKey = Integer.toString(page) + filter.name() + locale;
-		confessions = CacheManager.getCachedConfessionList(cacheKey);
-		if(confessions == null) {
+		List<Confession> confessionIds = CacheManager.getCachedConfessionList(cacheKey);
+		confessions = new ArrayList<Confession>();
+		if(confessionIds != null && !confessionIds.isEmpty()) {
+		    for (Iterator<Confession> iterator = confessionIds.iterator(); iterator.hasNext();) {
+			Confession confession = (Confession) iterator.next();
+			Confession fetchedConfession = CacheManager.getCachedConfession(confession.getConfId());
+			if(fetchedConfession == null) {
+			    fetchedConfession = getOneConfession(confession.getConfId(), false, null);
+			    CacheManager.cacheConfession(fetchedConfession);
+			}
+			confessions.add(fetchedConfession);
+		    }
+		} else {
 		    confessions = ConfessionBasicDAO.getConfessions(page, Constants.FEED_PAGE_SIZE, filter, locale);
-		    getUserDetails(confessions, false);
-		    CacheManager.cacheConfessionList(cacheKey, confessions);
+		    if(confessions != null && !confessions.isEmpty()) {
+			confessionIds = new ArrayList<Confession>();
+			for (Iterator<Confession> iterator = confessions.iterator(); iterator.hasNext();) {
+			    Confession confession = (Confession) iterator.next();
+			    confessionIds.add(new Confession(confession.getConfId(), true));
+			}
+			CacheManager.cacheConfessionList(cacheKey, confessionIds);
+		    }
+		    getUserDetails(confessionIds, false);
 		}
 	    }
 	    setUserActivity(userId, confessions);
@@ -131,9 +150,10 @@ public class ConfessionManager {
 	for (Long confId : confIDs) {
 	    Confession confession = CacheManager.getCachedConfession(confId);
 	    if(confession == null) {
-		confessions.add(ConfessionManager.getOneConfession(confId, false, userId));
+		confession = ConfessionManager.getOneConfession(confId, false, userId);
 		CacheManager.cacheConfession(confession);
-	    }
+	    } 
+	    confessions.add(confession);
 	}
 	return confessions;
     }

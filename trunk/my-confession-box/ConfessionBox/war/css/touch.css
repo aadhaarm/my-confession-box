@@ -7,6 +7,21 @@
   font-weight: bold;
   text-decoration: none !important;
   width: 85px;
+  display: block;
+  overflow: auto;
+}
+
+.statusLinkToButton {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 48px;
+  display: block;
+  overflow: auto;
 }
 
 .linkToButtonS {
@@ -18,6 +33,64 @@
   font-weight: bold;
   text-decoration: none !important;
   width: 85px;
+}
+
+.linkToButtonYesU {
+  background-color: #999999;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  margin: 5px;
+}
+
+.linkToButtonYesS {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  margin: 5px;
+}
+
+.linkToButtonNoU {
+  background-color: #999999;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  float: left;
+  margin: 5px;
+}
+
+.linkToButtonNoS {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  float: left;
+  margin: 5px;
 }
 
 .whiteAnchorLink {
@@ -56,7 +129,7 @@
   font-weight: bold;
   text-decoration: none !important;
   width: 85px;
-  text-transform: lowercase !important;
+  /* text-transform: lowercase !important; */
 }
 
 .identitySlider {

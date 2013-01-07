@@ -1,5 +1,6 @@
 package com.l3.CB.client.ui.widgets;
 
+import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateIdentityVisibilityEvent;
@@ -31,12 +33,15 @@ public class AppealPardonWidget extends FlowPanel {
     private FriendsSuggestBox friendsSuggestBox;
     private RelationSuggestBox relationSuggestBox;
     private final Confession confession;
+    private Boolean isPardonerUserOnCB;
+
 
     public AppealPardonWidget(Confession confession) {
 	super();
 	this.confession = confession;
 	addStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
-	btnSubmit = new Button(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
+
+	btnSubmit = new Button("Proceed");
 	btnSubmit.setStyleName("appealButton");
 
 	if(friendsSuggestBox != null) {
@@ -54,6 +59,32 @@ public class AppealPardonWidget extends FlowPanel {
 
 	    @Override
 	    public void onClick(ClickEvent event) {
+		if(isPardonerUserOnCB == null) {
+		    final UserInfo selectedUser = friendsSuggestBox.getSelectedUser();
+		    if(selectedUser != null) {
+			ConfessionBox.confessionService.isUserRegistered(selectedUser.getId(), new AsyncCallback<UserInfo>() {
+
+			    @Override
+			    public void onSuccess(UserInfo result) {
+				isPardonerUserOnCB = (result == null);
+				setupConfirmPanel(isPardonerUserOnCB, selectedUser.getName());
+			    }
+
+			    @Override
+			    public void onFailure(Throwable caught) {
+				Error.handleError("RegisterConfessionUtil", "onFailure", caught);
+			    }
+			});
+		    }
+		} else {
+		    submitConfessionPardonRequest(confId);
+		}
+	    }
+
+	    /**
+	     * @param confId
+	     */
+	    private void submitConfessionPardonRequest(final Long confId) {
 		if(friendsSuggestBox != null && friendsSuggestBox.validate() && relationSuggestBox.validate()) {
 
 		    UserInfo selectedUser = friendsSuggestBox.getSelectedUser();
@@ -94,6 +125,16 @@ public class AppealPardonWidget extends FlowPanel {
 	});
     }
 
+     public void setupConfirmPanel(boolean isFriendNotRegistered, String pardonerName) {
+	 remove(btnSubmit);
+	 if(isFriendNotRegistered) {
+	     add(new HTML(Templates.TEMPLATES.confessorNotRegisteredMessage(pardonerName)));
+	 }
+	 add(new HTML("Press 'REQUEST' to send a pardon request now."));
+	 btnSubmit.setText(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
+	 add(btnSubmit);
+     }
+    
     /**
      * @param sharedWithUser
      * @return

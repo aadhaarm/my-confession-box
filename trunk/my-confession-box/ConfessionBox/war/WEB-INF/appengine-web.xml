@@ -10,7 +10,7 @@
 
 	<static-files>
 		<!-- Static files to be cached for a month -->
-		<include path="**" expiration="30d" />
+		<include path="**" expiration="1d" />
 		<!-- The .nocache files not to be cached -->
 		<include path="**.nocache.*" expiration="0s" />
 		<!-- The cache files to be cached for 30 days -->

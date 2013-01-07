@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextArea;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FieldVerifier;
@@ -25,8 +26,7 @@ public class CBTextArea extends FlowPanel {
     public CBTextArea(int numOfChars, boolean big, String defaultText) {
 	super();
 	this.maxCharsAllowed = numOfChars;
-	
-	
+
 	cbTextArea = new RichTextArea();
 	cbTextArea.setStyleName("confessionTextEditor");
 	
@@ -55,12 +55,12 @@ public class CBTextArea extends FlowPanel {
      */
     private int getCommentWidth() {
 	if(ConfessionBox.isMobile) {
-	    int width = Window.getClientWidth() - 40;
-	    if(width <= 500) {
+	    int width = Window.getClientWidth() - 50;
 		return width;
-	    } else {
-		return 565;
-	    }
+//		if(width <= 500) {
+//	    } else {
+//		return 565;
+//	    }
 	} else {
 	    return 565;
 	}

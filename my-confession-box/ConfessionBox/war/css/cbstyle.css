@@ -206,16 +206,9 @@ div.helpInfoDiv {
 }
 
 .refreshButton {
-	background-attachment: scroll;
-	background-clip: border-box;
-	background-image: url("/images/sprite_black2.png");
-	background-origin: padding-box;
-	background-position: -61px -19px;
-	background-repeat: no-repeat;
-	background-size: auto auto;
 	margin: 0 5px 0 5px;
 	height: 26px;
-	width: 28px;
+	width: 64px;
 	float: left;
 }
 
@@ -634,21 +627,24 @@ main_container a:hover {
 }
 
 .confession_title {
-	padding-top: 0px;
+	padding-top: 2px;
 	padding-left: 11px;
 	padding-right: 8px;
+	font-size: 12.5px;
+	line-height: 1.38;
+	font-weight: bold;
 }
 
 .confession_body {
 	padding: 6px 8px 2px 8px;
 	margin: 0 4px 0 4px;
-	font-size: 12px;
+	font-size: 12.5px;
+	line-height: 1.38;
 	color: #333333;
-	background-color: #FEFFED;
-	line-height: 1.36;
+	background-color: #FFF;
 	overflow: hidden;
 	text-overflow: clip;
-	border-radius: 10px;
+	/* border-radius: 10px; */
 }
 
 .confessionText {

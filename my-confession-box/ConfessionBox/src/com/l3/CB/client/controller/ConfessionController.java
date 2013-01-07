@@ -47,7 +47,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private static MenuPresenter menuPresenter = null;
     private static HeaderPresenter headerPresenter = null;
     private static LoginStatusPresenter loginStatusPresenter = null;
-    
+
     /**
      * Constructors
      * 
@@ -97,9 +97,11 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	headerPresenter = new HeaderPresenter(new HeaderView());
 	headerPresenter.go(container);
 	// Login status
-	loginStatusPresenter = new LoginStatusPresenter(new LoginStatusView());
-	loginStatusPresenter.go(container);
-	
+	if(ConfessionBox.isMobile) {
+	    loginStatusPresenter = new LoginStatusPresenter(new LoginStatusView());
+	    loginStatusPresenter.go(container);
+	}
+
 	// Initialize Human points
 	if(ConfessionBox.isLoggedIn) {
 	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
@@ -158,6 +160,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	//	 Track.track(token);
 
 	if (token != null) {
+	    CommonUtils.showApplicationLoad();	    
 	    Presenter presenter = null;
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
@@ -169,6 +172,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
 		    presenter = new RegisterConfessionPresenter(new RegisterConfessionView());
 		    MenuView.selectMenuItem(2);
+		    CommonUtils.removeApplicationLoad();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
 		    MenuView.selectMenuItem(3);
 		    presenter = new MyConfessionFeedPresenter(new ConfessionFeedView());

@@ -9,9 +9,15 @@ public class UpdateManager {
 
     public static void registerConfessionUpdate(ConfessionUpdate confessionUpdate) {
 	UpdateDAO.saveUdate(confessionUpdate);	
+	CacheManager.flushUpdates(confessionUpdate.getConfId());
     }
  
     public static List<ConfessionUpdate> getConfessionUpdates(Long confId) {
-	return UpdateDAO.getConfessionUpdates(confId);
+ 	List<ConfessionUpdate> confessionUpdates = CacheManager.getUpdates(confId);
+	if(confessionUpdates == null) {
+	    confessionUpdates = UpdateDAO.getConfessionUpdates(confId);
+	    CacheManager.cacheUpdates(confId, confessionUpdates);
+	}
+	return confessionUpdates;
     }
 }

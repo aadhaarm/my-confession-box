@@ -23,10 +23,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.client.ui.Widget;
-import com.kiouri.sliderbar.client.event.BarValueChangedEvent;
-import com.kiouri.sliderbar.client.event.BarValueChangedHandler;
-import com.kiouri.sliderbar.client.solution.iph.IpSliderBar146;
-import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.EditHappenEvent;
 import com.l3.CB.client.event.EditHappenEventHandler;
@@ -34,6 +30,7 @@ import com.l3.CB.client.ui.widgets.CBTextArea;
 import com.l3.CB.client.ui.widgets.CBTextBox;
 import com.l3.CB.client.ui.widgets.FriendsSuggestBox;
 import com.l3.CB.client.ui.widgets.RelationSuggestBox;
+import com.l3.CB.client.ui.widgets.ShareSliderWidget;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
@@ -66,8 +63,8 @@ public class RegisterConfessionPresenter implements Presenter {
 	public CheckBox getCbHideIdentityCheckBox();
 	public CheckBox getCbConfessToCheckBox();
 
-	public SliderBarHorizontal getShareToSlider();
-	public SliderBarHorizontal getIdentitySlideBar();
+	public ShareSliderWidget getShareToSlider();
+	public ShareSliderWidget getIdentitySlideBar();
 	public HasClickHandlers getCbHideIdentity();
 	public HasClickHandlers getCbConfessTo();
 
@@ -125,14 +122,14 @@ public class RegisterConfessionPresenter implements Presenter {
 		    if(display.getCbHideIdentityCheckBox() != null) {
 			display.getCbHideIdentityCheckBox().setValue(result.isShareAsAnyn(), true);
 		    } else {
-			display.getIdentitySlideBar().setValue(result.isShareAsAnyn()? 0 : display.getIdentitySlideBar().getMaxValue());
+			display.getIdentitySlideBar().setSelectionStatus(result.isShareAsAnyn()? false : true);
 		    }
 
 		    if(CommonUtils.isNotNullAndNotEmpty(result.getShareToUserIDForSave())) {
 			if(display.getCbConfessToCheckBox() != null) {
 			    display.getCbConfessToCheckBox().setValue(true, true);
 			} else {
-			    display.getShareToSlider().setValue(display.getShareToSlider().getMaxValue());
+			    display.getShareToSlider().setSelectionStatus(true);
 			}
 			getMyFriends(result.getShareToUserIDForSave());
 			if(CommonUtils.isNotNullAndNotEmpty(result.getShareToRelationForSave())) {
@@ -372,9 +369,10 @@ public class RegisterConfessionPresenter implements Presenter {
 	    /*
 	     * Handle Identity share slider value change
 	     */
-	    display.getIdentitySlideBar().addBarValueChangedHandler(new BarValueChangedHandler() {
+	    display.getIdentitySlideBar().addClickHandler(new ClickHandler() {
+
 		@Override
-		public void onBarValueChanged(BarValueChangedEvent event) {
+		public void onClick(ClickEvent event) {
 		    RegisterConfessionUtil.handlePreview(display);;
 		    display.setProfilePictureTag(display
 			    .isIdentityHidden(), ConfessionBox
@@ -383,14 +381,18 @@ public class RegisterConfessionPresenter implements Presenter {
 		    if(!ConfessionBox.isMobile) {
 			HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_HIDE_ID_CHECKBOX);
 		    }
+
 		}
 	    });
+
 	    /*
 	     *	Handle Request pardon slider value change
 	     */
-	    display.getShareToSlider().addBarValueChangedHandler(new BarValueChangedHandler() {
+	    display.getShareToSlider().addClickHandler(new ClickHandler() {
+
 		@Override
-		public void onBarValueChanged(BarValueChangedEvent event) {
+		public void onClick(ClickEvent event) {
+
 		    RegisterConfessionUtil.handlePreview(display);
 		    if(!ConfessionBox.isMobile) {
 			HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);

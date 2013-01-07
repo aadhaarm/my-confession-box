@@ -7,8 +7,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.l3.CB.client.ConfessionBox;
@@ -21,7 +19,6 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
-import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Filters;
 
 public class HeaderView extends Composite implements HeaderPresenter.Display {
@@ -38,14 +35,20 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	applnTitle = new HTML(Templates.TEMPLATES.applicationTitle());
 	applnTitle.setStyleName("logoLink");
 
-
 	tagLine = new HTML(Templates.TEMPLATES.applicationTagLine());
 	tagLine.setStyleName("tagLineText");
 
 
 	if(ConfessionBox.isMobile) {
+	    // Setup MENU
+//	    Button lblMenu = new Button("Menu");
+//	    lblMenu.setStyleName("menuButton");
+//	    headerPanel.add(lblMenu);
+	    
 	    headerPanel.add(setupSmallMenu());
+	    // Setup FILTERS
 	    lstFilterOptions = CommonUtils.getFilterListBox();
+	    
 	    lstFilterOptions.setVisible(true);
 	    lstFilterOptions.addChangeHandler(new ChangeHandler() {
 		@Override
@@ -59,13 +62,14 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 	    headerPanel.add(lstFilterOptions);
 	}
 
-	headerPanel.add(applnTitle);
-	headerPanel.add(tagLine);
 	if(ConfessionBox.isMobile) {
 	    pnlpoints = new FlowPanel();
 	    pnlpoints.setStyleName("pointsPanel");
-	    headerPanel.add(pnlpoints);
+//	    headerPanel.add(pnlpoints);
 	}
+
+	headerPanel.add(applnTitle);
+	headerPanel.add(tagLine);
 
 	initWidget(headerPanel);
     }

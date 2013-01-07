@@ -1,26 +1,80 @@
 package com.l3.CB.client.ui.widgets;
 
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Widget;
-import com.kiouri.sliderbar.client.solution.adv.MAdvancedPanel;
-import com.kiouri.sliderbar.client.solution.adv.MAdvancedTextPanel;
-import com.kiouri.sliderbar.client.view.SliderBarHorizontal;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.l3.CB.shared.Constants;
 
-public class ShareSliderWidget extends SliderBarHorizontal{
+public class ShareSliderWidget extends FlowPanel implements HasClickHandlers {
 
-    public ShareSliderWidget() {
-	Widget drag = new MAdvancedPanel();
-	drag.setPixelSize(10, 10);
-	
-	Widget less = new MAdvancedTextPanel(new Image("/images/no.png"), new Image("/images/no.png"));
-	
-	Widget more = new MAdvancedTextPanel(new Image("/images/yes.png"), new Image("/images/yes.png"));
-	
-	this.setLessWidget(less);
-	this.setScaleWidget(new Image("/images/scale.png"), 2);
-	this.setMoreWidget(more);		
-	this.setDragWidget(drag);
-	this.setMaxValue(1);
-	this.setWidth("190px");		 
+    private Anchor btnYes; 
+    private Anchor btnNo;
+
+    private boolean selectionStatus = false;
+
+    public ShareSliderWidget(boolean defaultStatus) {
+
+	selectionStatus = defaultStatus;
+
+	this.setStyleName("yesNoBar");
+
+	btnNo = new Anchor("No");
+	btnYes = new Anchor("Yes");
+
+	if(selectionStatus) {
+	    btnYes.setEnabled(false);
+	    btnYes.setStyleName(Constants.STYLE_CLASS_YES_LINK_TO_BTN_S);
+	    btnNo.setStyleName(Constants.STYLE_CLASS_NO_LINK_TO_BTN_U);
+	} else {
+	    btnNo.setEnabled(false);
+	    btnYes.setStyleName(Constants.STYLE_CLASS_YES_LINK_TO_BTN_U);
+	    btnNo.setStyleName(Constants.STYLE_CLASS_NO_LINK_TO_BTN_S);
+	}
+
+//	btnNo.addStyleName(Constants.DIV_OPTIONS_NO_BUTTON);
+//	btnYes.addStyleName(Constants.DIV_OPTIONS_YES_BUTTON);
+
+	this.add(btnNo);
+	this.add(btnYes);
+
+	btnNo.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		selectionStatus = false;
+		btnNo.setEnabled(false);
+		btnYes.setEnabled(true);
+		btnYes.setStyleName(Constants.STYLE_CLASS_YES_LINK_TO_BTN_U);
+		btnNo.setStyleName(Constants.STYLE_CLASS_NO_LINK_TO_BTN_S);
+	    }
+	});
+
+	btnYes.addClickHandler(new ClickHandler() {
+
+	    @Override
+	    public void onClick(ClickEvent event) {
+		selectionStatus = true;
+		btnNo.setEnabled(true);
+		btnYes.setEnabled(false);
+		btnYes.setStyleName(Constants.STYLE_CLASS_YES_LINK_TO_BTN_S);
+		btnNo.setStyleName(Constants.STYLE_CLASS_NO_LINK_TO_BTN_U);
+	    }
+	});
+    }
+
+    public boolean isSelectionStatus() {
+	return selectionStatus;
+    }
+
+    public void setSelectionStatus(boolean selectionStatus) {
+	this.selectionStatus = selectionStatus;
+    }
+
+    @Override
+    public HandlerRegistration addClickHandler(ClickHandler handler) {
+	return addDomHandler(handler, ClickEvent.getType());
     }
 }

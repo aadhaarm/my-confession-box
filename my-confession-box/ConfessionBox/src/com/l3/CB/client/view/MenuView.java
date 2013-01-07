@@ -196,9 +196,9 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    menuBar.add(btnMenuItemConfToMe);
 	    menuBar.add(ancInvite);
 	    menuBar.add(ancCBRuleBook);
-//	    if(ConfessionBox.isLoggedIn) {
-//		menuBar.add(ancLogout);
-//	    }
+	    if(ConfessionBox.isLoggedIn) {
+		menuBar.add(ancLogout);
+	    }
 	} 
 	initWidget(menuBar);
     }

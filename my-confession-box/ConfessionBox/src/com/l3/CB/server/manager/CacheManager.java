@@ -13,16 +13,19 @@ import net.sf.jsr107cache.CacheFactory;
 import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class CacheManager {
 
     static Logger logger = Logger.getLogger("CBLogger");
     private static Cache confessionCache;
+    private static Cache confessionListCache;
     private static Cache userCache;
     private static Cache jsonCache;
     private static Cache activityCache;
-
+    private static Cache updateCache;
+    
     public CacheManager() {
 	super();
 	try {
@@ -30,9 +33,13 @@ public class CacheManager {
 	    Map<String, Object> confCacheProps = new HashMap<String, Object>();
 	    confCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.CONF_CACHE_EXPIRATION_SEC);
 	    confessionCache = cacheFactory.createCache(confCacheProps);
+	    
+	    Map<String, Object> confListCacheProps = new HashMap<String, Object>();
+	    confListCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.CONF_LIST_CACHE_EXPIRATION_SEC);
+	    confessionListCache = cacheFactory.createCache(confListCacheProps);
 
 	    Map<String, Object> userCacheProps = new HashMap<String, Object>();
-	    //	    userCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.USER_CACHE_EXPIRATION_SEC);
+	    userCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.USER_CACHE_EXPIRATION_SEC);
 	    userCache = cacheFactory.createCache(userCacheProps);
 
 	    Map<String, Object> jsonCacheProps = new HashMap<String, Object>();
@@ -40,9 +47,13 @@ public class CacheManager {
 	    jsonCache = cacheFactory.createCache(jsonCacheProps);
 
 	    Map<String, Object> activityCacheProps = new HashMap<String, Object>();
-	    //	    jsonCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.JSON_CACHE_EXPIRATION_SEC);
+	    activityCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.JSON_CACHE_EXPIRATION_SEC);
 	    activityCache = cacheFactory.createCache(activityCacheProps);
 
+	    Map<String, Object> updateCacheProps = new HashMap<String, Object>();
+	    updateCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.JSON_CACHE_EXPIRATION_SEC);
+	    updateCache = cacheFactory.createCache(updateCacheProps);
+	    
 	} catch (CacheException e) {
 	    logger.log(Level.SEVERE, "Error getting cache object:" + e.getMessage());
 	}
@@ -82,7 +93,7 @@ public class CacheManager {
     public static void cacheConfessionList(String key, List<Confession> confessionList) {
 	if(key != null && confessionList != null && !confessionList.isEmpty()) {
 	    try {
-		confessionCache.put(key, confessionList);
+		confessionListCache.put(key, confessionList);
 	    } catch(Exception e) {
 		logger.log(Level.SEVERE,"Error while Caching confession:" + e.getMessage());
 	    }
@@ -92,7 +103,7 @@ public class CacheManager {
     @SuppressWarnings("unchecked")
     public static List<Confession> getCachedConfessionList(String key) {
 	if(key != null) {
-	    Object confessions = confessionCache.get(key);
+	    Object confessions = confessionListCache.get(key);
 	    if(confessions != null) {
 		return (List<Confession>)confessions;
 	    }
@@ -206,5 +217,29 @@ public class CacheManager {
 	StringBuffer sb = new StringBuffer();
 	sb.append("u:").append(userId).append("c:").append(confId);
 	return sb.toString();
+    }
+
+    public static void cacheUpdates(Long confId, List<ConfessionUpdate> confessionUpdates) {
+	if(confessionUpdates != null) {
+	    updateCache.put(getUpdatesKey(confId), confessionUpdates);
+	}
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static List<ConfessionUpdate> getUpdates(Long confId) {
+	List<ConfessionUpdate> confessionUpdates = null;
+	Object o = updateCache.get(getUpdatesKey(confId));
+	if(o != null) {
+	    confessionUpdates = (List<ConfessionUpdate>)o;
+	}
+	return confessionUpdates;
+    }
+    
+    public static void flushUpdates(Long confId) {
+	updateCache.remove(getUpdatesKey(confId));
+    }
+    
+    private static String getUpdatesKey(Long confId) {
+	return "updates" + confId;
     }
 }

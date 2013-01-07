@@ -7,7 +7,6 @@
 	<inherits name="com.google.gwt.logging.Logging" />
 	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
 	<inherits name='com.google.gwt.user.User' />
-	<inherits name="com.kiouri.sliderbar.SliderBarMVP" />
 
 	<!-- Inherit the default GWT style sheet. You can change -->
 	<!-- the theme of your GWT application by uncommenting -->

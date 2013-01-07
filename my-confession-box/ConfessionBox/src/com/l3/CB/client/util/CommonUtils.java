@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
@@ -558,7 +559,12 @@ public class CommonUtils {
      * @return Confession text with more and less links
      */
     public static FlowPanel getTextTruncated(final String confession) {
-	final String DEFAULT_TEXT_HEIGHT = "95px";
+	final String DEFAULT_TEXT_HEIGHT;
+	if(ConfessionBox.isMobile) {
+	    DEFAULT_TEXT_HEIGHT  = "78px";
+	} else {
+	    DEFAULT_TEXT_HEIGHT = "70px";
+	}
 	final FlowPanel fPnlConfession = new FlowPanel();
 	fPnlConfession.setStyleName(Constants.STYLE_CLASS_CONFESSION_BODY);
 
@@ -832,4 +838,30 @@ public class CommonUtils {
 	return loaderImage;
     }
 
+    private static PopupPanel pnlApplicationLoad = new PopupPanel(false);
+    static {
+	Image loaderImage = new Image(Constants.LOAD_APPLICATION_IMAGE_PATH);
+	pnlApplicationLoad.setGlassEnabled(true);
+	pnlApplicationLoad.setAnimationEnabled(true);
+	loaderImage.addStyleName(Constants.STYLE_CLASS_LOADER_IMAGE);
+	VerticalPanel vPnlApplnLoad = new VerticalPanel();
+	vPnlApplnLoad.add(loaderImage);
+	pnlApplicationLoad.add(vPnlApplnLoad);
+    }
+    
+    /**
+     * APPLICATION LOAD animation
+     */
+    public static void showApplicationLoad() {
+	pnlApplicationLoad.center();
+    }
+
+    /**
+     * Remove animation
+     */
+    public static void removeApplicationLoad() {
+	if(pnlApplicationLoad != null) {
+	    pnlApplicationLoad.hide();
+	}
+    }
 }

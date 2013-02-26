@@ -165,20 +165,25 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
 		MenuView.selectMenuItem(1);
+		headerPresenter.showFilter();
 	    } else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView(), ConfessionBox.confId);
 		MenuView.selectMenuItem(1);
+		headerPresenter.showFilter();
 	    } else if(ConfessionBox.isLoggedIn) {
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
 		    presenter = new RegisterConfessionPresenter(new RegisterConfessionView());
 		    MenuView.selectMenuItem(2);
 		    CommonUtils.removeApplicationLoad();
+		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
 		    MenuView.selectMenuItem(3);
 		    presenter = new MyConfessionFeedPresenter(new ConfessionFeedView());
+		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
 		    MenuView.selectMenuItem(4);
 		    presenter = new ConfessionForMeFeedPresenter(new ConfessionFeedView());
+		    headerPresenter.hideFilter();
 		}
 	    } 
 	    if(presenter != null) {
@@ -187,6 +192,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
 		MenuView.selectMenuItem(1);
 		presenter.go(container);
+		headerPresenter.showFilter();
 	    }
 	}
     }

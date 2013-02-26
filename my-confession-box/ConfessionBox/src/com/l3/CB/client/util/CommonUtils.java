@@ -87,7 +87,7 @@ public class CommonUtils {
 	String userAgent = Navigator.getUserAgent();
 	if(userAgent != null) {
 	    userAgent = userAgent.toLowerCase();
-	    isMobile = userAgent.contains("mobile");
+	    isMobile = userAgent.contains("mobile") || userAgent.contains("android");
 	}
 	return isMobile;
     }
@@ -811,6 +811,9 @@ public class CommonUtils {
     public static void setupScreen() {
 	ConfessionBox.isMobile = isMobile();
 	ConfessionBox.isTouchEnabled = isTouchEnabled();
+	if(!ConfessionBox.isMobile) {
+	    setCssLinkHref("themeCssElement", "css/cbstyle.css");
+	}
     }
 
     public static boolean isNotNullAndNotEmpty(String str) {
@@ -848,7 +851,7 @@ public class CommonUtils {
 	vPnlApplnLoad.add(loaderImage);
 	pnlApplicationLoad.add(vPnlApplnLoad);
     }
-    
+
     /**
      * APPLICATION LOAD animation
      */
@@ -864,4 +867,12 @@ public class CommonUtils {
 	    pnlApplicationLoad.hide();
 	}
     }
+
+    public static native void setCssLinkHref(String linkElementId, String url) /*-{ 
+        var link = $doc.getElementById(linkElementId); 
+        if (link != null && link != undefined) { 
+          link.href = url; 
+        } 
+    }-*/;  
+  
 }

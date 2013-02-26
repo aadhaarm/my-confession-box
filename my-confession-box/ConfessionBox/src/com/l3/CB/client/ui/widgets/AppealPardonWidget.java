@@ -1,6 +1,5 @@
 package com.l3.CB.client.ui.widgets;
 
-import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -68,6 +68,10 @@ public class Templates {
 
 	@Template("{0}")
 	SafeHtml confessionConfirmMessage(String messageText);
+
+	@Template("<img src='{0}'/> {1}")
+	SafeHtml voteHelp(SafeUri imagePath, String messageText);
+
     }
     
     public static final CBTemplates TEMPLATES = GWT.create(CBTemplates.class);

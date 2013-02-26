@@ -10,7 +10,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
-import com.google.gwt.user.client.ui.TextArea;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FieldVerifier;

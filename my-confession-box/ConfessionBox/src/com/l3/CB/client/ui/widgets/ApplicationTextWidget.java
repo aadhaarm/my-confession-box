@@ -2,10 +2,13 @@ package com.l3.CB.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
+import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.shared.Constants;
 
 public class ApplicationTextWidget {
 
@@ -75,7 +78,7 @@ public class ApplicationTextWidget {
     }
 
     /**
-     * PILLOSPHY CONFESSION BOX
+     * PILLOSPHY ANONYMOUS CONFESSION BOX
      */
     public static PopupPanel setupPhillosphyAnynConf() {
 	final PopupPanel pPnlAbout = new PopupPanel(true);
@@ -162,9 +165,53 @@ public class ApplicationTextWidget {
 	    }
 	});
 	sPnlContent.add(close);
-
-	sPnlContent.add(new HTML("<b>CB Rule-Book</b><br/><br/>" +
-		"1. Confession Box is a secure application and your identity is never disclosed to anyone unless you yourself share your identity to the world.<br/>" +
+	sPnlContent.add(new HTML("<b>CB Rule-Book</b><br/><br/>"));
+	
+	SafeUri reportAbuseIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_REPORT_ABUSE_ICON;
+	    }
+	};
+	SafeUri lameIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_LAME_ICON;
+	    }
+	};
+	SafeUri sameBoatIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_SAME_BOAT_ICON;
+	    }
+	};
+	SafeUri shouldBePardonedIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_SHOULD_BE_PARDONED_ICON;
+	    }
+	};
+	SafeUri shouldNotBePardonedIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_SHOULD_NOT_BE_PARDONED_ICON;
+	    }
+	};
+	SafeUri sympathyIconSafeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return Constants.IMAGE_SYMPATHY_ICON;
+	    }
+	};
+	
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(reportAbuseIconSafeUri, ConfessionBox.cbText.abuseButtonToolTip())));
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(lameIconSafeUri, ConfessionBox.cbText.lameButtonToolTip())));
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(sameBoatIconSafeUri, ConfessionBox.cbText.sameBoatButtonToolTip())));
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(shouldBePardonedIconSafeUri, ConfessionBox.cbText.shouldBePardonedButtonToolTip())));
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(shouldNotBePardonedIconSafeUri, ConfessionBox.cbText.shouldNotBePardonedButtonToolTip())));
+	sPnlContent.add(new HTML(Templates.TEMPLATES.voteHelp(sympathyIconSafeUri, ConfessionBox.cbText.sympathyButtonToolTip())));
+	
+	sPnlContent.add(new HTML("<hr/>1. Confession Box is a secure application and your identity is never disclosed to anyone unless you yourself share your identity to the world.<br/>" +
 		"2. You can read all the confessions on the 'Confession Wall' without logging-in on the CB and without providing any of your informations to CB.<br/>" +
 		"3. If you register a confession with hidden identity, your identity can not be discovered by any one other than you (Unless you write your details in the confession text).<br/>" +
 		"4. You can confess and appeal for pardon from a person in your facebook friend's list. A notification is sent to the person via email if the person is on CB.<br/>" +
@@ -174,6 +221,8 @@ public class ApplicationTextWidget {
 		"8. When all the conditions are met, the confession is pardoned and you and the confessee are notified about the pardon!<br/>" +
 		"9. You can also subscribe a confession by clicking the 'Subscribe' link. You are notified about the confession when it is pardoned.<br/>" +
 		"10. You are provided 'Human Points' for all the activities you do on CB that shall be a count of how good a human you are."));
+		
+	
 	pPnlRuleBook.add(sPnlContent);
 
 	return pPnlRuleBook;

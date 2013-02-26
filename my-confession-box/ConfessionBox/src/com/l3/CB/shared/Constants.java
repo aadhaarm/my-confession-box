@@ -182,4 +182,16 @@ public class Constants {
     public static final String STYLE_CLASS_NO_LINK_TO_BTN_S = "linkToButtonNoS";
 
     public static final String STYLE_CLASS_NO_LINK_TO_BTN_U = "linkToButtonNoU";
+
+    public static final String IMAGE_REPORT_ABUSE_ICON = "/images/flag.png";
+
+    public static final String IMAGE_SHOULD_NOT_BE_PARDONED_ICON = "/images/SNBP.png";
+
+    public static final String IMAGE_SHOULD_BE_PARDONED_ICON = "/images/SBP.png";
+
+    public static final String IMAGE_LAME_ICON = "/images/lame.png";
+
+    public static final String IMAGE_SYMPATHY_ICON = "/images/sympathies.png";
+
+    public static final String IMAGE_SAME_BOAT_ICON = "/images/SameBoat.png";
 }

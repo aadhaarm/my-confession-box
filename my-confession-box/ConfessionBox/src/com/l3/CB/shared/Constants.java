@@ -97,7 +97,7 @@ public class Constants {
     public static final int TEXT_LENGTH_ON_LOAD = 400;
 
     // Register confession page validation
-    public static final int CONF_MIN_CHARS = 36;
+    public static final int CONF_MIN_CHARS = 3;
     public static final int CONF_MAX_CHARS = 1500;
     public static final int COMM_MAX_CHARS = 300;
 
@@ -113,7 +113,7 @@ public class Constants {
 
     public static final String IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY = "/images/masks.png";
 
-    public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/hideConfession.png";
+    public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/hideConf.png";
 
     public static final String DATE_TIME_FORMAT = "MMM d, ''yy, h:mm a";
 

@@ -268,7 +268,11 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public String getConfession() {
-	return this.txtConfession.getCbTextArea().getHTML();
+	if(this.txtConfession.getCbTextArea() != null) {
+	    return this.txtConfession.getCbTextArea().getHTML();
+	} else {
+	    return this.txtConfession.getTextArea().getText();
+	}
     }
 
     @Override

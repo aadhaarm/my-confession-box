@@ -543,10 +543,10 @@ public class CommonUtils {
 	final FlowPanel fPnlControls = new FlowPanel();
 	fPnlControls.setStyleName(Constants.STYLE_CLASS_USER_CONTROL_BUTTON_CONTAINER);
 
-	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY,20,20,20,20), confession.isShareAsAnyn());
+	ChangeVisibilityButton btnChangeVisibility = new ChangeVisibilityButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_IDENTITY_VISIBILITY,6,6,25,25), confession.isShareAsAnyn());
 	fPnlControls.add(btnChangeVisibility);
 
-	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY,20,20,20,20), confession.isVisibleOnPublicWall());
+	DeleteConfessionButton btnDeleteConfession = new DeleteConfessionButton(confession, new Image(Constants.IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY,0,5,22,25), confession.isVisibleOnPublicWall());
 	fPnlControls.add(btnDeleteConfession);
 
 	return fPnlControls;

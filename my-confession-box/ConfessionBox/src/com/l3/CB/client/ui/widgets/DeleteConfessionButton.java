@@ -22,6 +22,7 @@ public class DeleteConfessionButton extends FlowPanel {
     public DeleteConfessionButton(final Confession confession, Image buttonImage, final boolean isVisible) {
 	super();
 	PushButton btn = new PushButton(buttonImage);
+	buttonImage.setStyleName("link9");
 
 	isVisibleToWorld = isVisible;
 	
@@ -57,7 +58,6 @@ public class DeleteConfessionButton extends FlowPanel {
 					}
 				    }
 				}
-
 
 				@Override
 				public void onFailure(Throwable caught) {

@@ -21,6 +21,7 @@ public class ChangeVisibilityButton extends FlowPanel {
 
     public ChangeVisibilityButton(final Confession confession, Image buttonImage, final boolean shareAnyn) {
 	PushButton btn = new PushButton(buttonImage);
+	buttonImage.setStyleName("link8");
 	this.addStyleName(Constants.DIV_USER_CONTROL_BUTTON);
 	
 	if(shareAnyn) {

@@ -51,6 +51,10 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	// Feed view TOP BAR
 	fPnlTopBar = new FlowPanel();
 	fPnlTopBar.setStyleName("confessionTopBar");
+	// Refresh Button
+	btnRefresh = new Button("Refresh");
+	btnRefresh.setTitle(ConfessionBox.cbText.refreshButtonToolTipText());
+	btnRefresh.setStyleName(Constants.STYLE_CLASS_REFRESH_BUTTON);
 	// Filter options
 	if(!ConfessionBox.isMobile) {
 	    lstFilterOptions = CommonUtils.getFilterListBox();
@@ -58,12 +62,13 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	    lblfilterInfo.setStyleName(Constants.STYLE_CLASS_CONFESION_FILTER_DESCRIPTION_INFO);
 	    fPnlTopBar.add(lstFilterOptions);
 	    fPnlTopBar.add(lblfilterInfo);
+	    fPnlTopBar.add(btnRefresh);
 	} else {
-	    fPnlTopBar.setVisible(false);
+//	    fPnlTopBar.setVisible(false);
 	    Button btnLearn = new Button("Learn");
 	    btnLearn.setWidth(Integer.toString(Window.getClientWidth() - 35) + "px");
 	    btnLearn.setStyleName("buttonLearn"); 
-	    vpnlConfessionList.add(btnLearn);
+	    fPnlTopBar.add(btnLearn);
 	    btnLearn.addClickHandler(new ClickHandler() {
 	        
 	        @Override
@@ -73,11 +78,6 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	        }
 	    });
 	}
-	// Refresh Button
-	btnRefresh = new Button("Refresh");
-	btnRefresh.setTitle(ConfessionBox.cbText.refreshButtonToolTipText());
-	btnRefresh.setStyleName(Constants.STYLE_CLASS_REFRESH_BUTTON);
-	fPnlTopBar.add(btnRefresh);
 
 	confessionPagesLoaded = 1;
 	getMeLoaderImage();

@@ -41,10 +41,6 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 
 	if(ConfessionBox.isMobile) {
 	    // Setup MENU
-//	    Button lblMenu = new Button("Menu");
-//	    lblMenu.setStyleName("menuButton");
-//	    headerPanel.add(lblMenu);
-	    
 	    headerPanel.add(setupSmallMenu());
 	    // Setup FILTERS
 	    lstFilterOptions = CommonUtils.getFilterListBox();
@@ -197,5 +193,9 @@ public class HeaderView extends Composite implements HeaderPresenter.Display {
 
     public HasClickHandlers getApplnTitle() {
         return applnTitle;
+    }
+    
+    public ListBox getFilterListBox() {
+	return lstFilterOptions;
     }
 }

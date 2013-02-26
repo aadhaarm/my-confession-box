@@ -4,7 +4,6 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.l3.CB.client.ConfessionServiceAsync;
-import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class MenuButton extends AbsolutePanel {

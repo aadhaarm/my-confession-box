@@ -171,6 +171,7 @@ public class ConfessionPanel extends FlowPanel{
 		});
 	    }
 	}
+	
 	//Middle widget
 	this.add(fPnlMiddleContent);
 

@@ -2,6 +2,7 @@ package com.l3.CB.client.view;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -68,6 +69,14 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		pPnlPhillosphyAnonymous.center();
+	    }
+	});
+	
+	ancAppComunityPage.addClickHandler(new ClickHandler() {
+	    
+	    @Override
+	    public void onClick(ClickEvent event) {
+		Window.open("http://www.facebook.com/pages/Confession-Box-Community/129927533826479", "Confession Box" , "resizable=yes,scrollbars=yes");
 	    }
 	});
 

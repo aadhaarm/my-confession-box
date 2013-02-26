@@ -101,7 +101,7 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    //	    proceedToApp(confessionService, facebookService, eventBus);
+	    //	    	    proceedToApp(confessionService, facebookService, eventBus);
 	    initializeUserInfo(true);
 	}
     }

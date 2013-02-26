@@ -117,7 +117,13 @@ public class RegisterConfessionPresenter implements Presenter {
 		if(result != null) {
 		    display.getTxtTitle().getTxtTitle().setText(result.getConfessionTitle());
 		    display.getTxtTitle().validate();
-		    display.getTxtConfession().getCbTextArea().setHTML(result.getConfession());
+		    
+		    if(display.getTxtConfession().getCbTextArea() != null) {
+			display.getTxtConfession().getCbTextArea().setHTML(result.getConfession());
+		    } else {
+			display.getTxtConfession().getTextArea().setText(result.getConfession());
+		    }
+		    
 		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
 		    if(display.getCbHideIdentityCheckBox() != null) {
 			display.getCbHideIdentityCheckBox().setValue(result.isShareAsAnyn(), true);
@@ -323,12 +329,22 @@ public class RegisterConfessionPresenter implements Presenter {
 	    }
 	});
 
-	display.getTxtConfession().getCbTextArea().addBlurHandler(new BlurHandler() {
-	    @Override
-	    public void onBlur(BlurEvent event) {
-		display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
-	    }
-	});
+	if(display.getTxtConfession().getCbTextArea() != null) {
+	    display.getTxtConfession().getCbTextArea().addBlurHandler(new BlurHandler() {
+		@Override
+		public void onBlur(BlurEvent event) {
+		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
+		}
+	    });
+	} else {
+	    display.getTxtConfession().getTextArea().addBlurHandler(new BlurHandler() {
+		@Override
+		public void onBlur(BlurEvent event) {
+		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
+		}
+	    });
+
+	}
     }
 
     /**

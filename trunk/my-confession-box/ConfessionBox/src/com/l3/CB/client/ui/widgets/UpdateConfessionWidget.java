@@ -52,9 +52,15 @@ public class UpdateConfessionWidget extends FlowPanel {
 			}
 		    }
 
+		    String confessionText;
+		    if(txtUpdate.getCbTextArea() != null) {
+			confessionText = txtUpdate.getCbTextArea().getText();
+		    } else {
+			confessionText = txtUpdate.getTextArea().getText();
+		    }
 		    ConfessionUpdate confessionUpdate = new ConfessionUpdate(
 			    confession.getConfId(), updateTimeStamp,
-			    CommonUtils.checkForNull(txtUpdate.getCbTextArea().getText()), 
+			    CommonUtils.checkForNull(confessionText), 
 			    relationName, ConfessionBox.getLoggedInUserInfo().getUserId());
 
 		    ConfessionBox.confessionService.registerConfessionUpdate(confessionUpdate , new AsyncCallback<Void>() {

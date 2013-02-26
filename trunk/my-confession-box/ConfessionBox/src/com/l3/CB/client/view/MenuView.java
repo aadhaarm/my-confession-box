@@ -160,7 +160,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	 * CB RULE BOOK	
 	 */
 	ancCBRuleBook = new Anchor(ConfessionBox.cbText.cbRuleBookLinkLabelText());
-	ancCBRuleBook.setStyleName("link5");
+	ancCBRuleBook.setStyleName("link6");
 	pPnlRuleBook = ApplicationTextWidget.setupCBRuleBook();
 	ancCBRuleBook.addClickHandler(new ClickHandler() {
 	    @Override
@@ -174,7 +174,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	 */
 	final Anchor ancLogout = new Anchor(ConfessionBox.cbText.logoutLinkLabelText());
 	if(ConfessionBox.isLoggedIn) {
-	    ancLogout.setStyleName("link5");
+	    ancLogout.setStyleName("link7");
 	    ancLogout.addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {

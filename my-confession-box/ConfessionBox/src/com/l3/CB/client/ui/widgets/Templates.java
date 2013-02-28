@@ -15,7 +15,7 @@ public class Templates {
 	@Template("<div class=\"updateText\"><span class=\"confessionRelation\">{0}</span>: {1}</div><div class=\"time_stamp_update\">{2}</div>")
 	SafeHtml confessonUpdate(String confessionRelation, String updateText, String timeStamp);
 
-	@Template("<br/>confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '{2}' on feed wall)")
+	@Template("<br/>confessed to <a href=\"{0}\" target=\"_BLANK\">{1}</a> (as '<b>{2}</b>' on feed wall)")
 	SafeHtml confessedToPersomalWall(SafeUri profileLink, String name, String relation);
 
 	@Template("{0} confessed to {1}")

@@ -27,7 +27,7 @@ public class Templates {
 	@Template("<b>{0}</b> has requested pardon from you for the following confession. {1} identity is hidden to the world except you. If you wish to grant {2} Pardon (or pardon with conditions), press the <b>Pardon</b> button below.")
 	SafeHtml confessedToYouWallPardonMessage(String name, String his, String him);
 	
-	@Template("confessed to {0} {1}")
+	@Template("confessed to {0} <b>{1}</b>")
 	SafeHtml confessedToFeedWall(String pronoun,String userName);
 
 	@Template("{0} [<a class=\"questionMark\">?</a>]")

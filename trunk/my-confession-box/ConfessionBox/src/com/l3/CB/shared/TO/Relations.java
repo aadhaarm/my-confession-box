@@ -9,7 +9,7 @@ public enum Relations {
     HUSBAND ("Husband"), DAUGHTER ("Daughter"), SON ("Son"), EX_WIFE ("Ex-wife"), EX_HUSBAND ("Ex-husband"),
     BOSS ("Boss"), JONIOR ("Junior"), SENIOR("Senior"), NEPHEW("Nephew"), NIECE("Niece"), GRAND_SON("Grand son"),
     GRAND_DAUGHTER("Grand daughter"), GOD("God"), RELATIVE("Relative"), BEST_FRIEND("Best friend"),
-    SON_IN_LAW("Son in-law"), DAUGHTER_IN_LAW("Daughter in-law");
+    SON_IN_LAW("Son in-law"), DAUGHTER_IN_LAW("Daughter in-law"), FIANCEE("Fiancee");
 
     private String displayText;
 

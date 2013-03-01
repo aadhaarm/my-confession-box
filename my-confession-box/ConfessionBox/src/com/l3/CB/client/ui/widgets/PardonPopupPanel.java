@@ -84,8 +84,7 @@ public class PardonPopupPanel extends PopupPanel{
 	HorizontalPanel hPnlPardonActivityCondition = new HorizontalPanel();
 	lbPardonActivityCondition = new ListBox();
 	
-	//TODO: remove 1 option
-	lbPardonActivityCondition.addItem("1");
+//	lbPardonActivityCondition.addItem("1");
 	
 	lbPardonActivityCondition.addItem("5");
 	lbPardonActivityCondition.addItem("10");

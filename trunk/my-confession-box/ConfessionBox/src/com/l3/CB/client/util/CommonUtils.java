@@ -212,17 +212,15 @@ public class CommonUtils {
         		$entry(@com.l3.CB.client.util.CommonUtils::getLoggedInUserInfo(ILjava/lang/String;)(i, hashEvent));
      		    	@com.l3.CB.client.ConfessionBox::loginStatus = "login";
      		    } else {
-//TODO: Remove commenting
-//     		        @com.l3.CB.client.ConfessionBox::isLoggedIn = false;
-//     		        @com.l3.CB.client.ConfessionBox::loginStatus = "rejected";
+     		        @com.l3.CB.client.ConfessionBox::isLoggedIn = false;
+     		        @com.l3.CB.client.ConfessionBox::loginStatus = "rejected";
 		    }
         	});
    		}
            }, {scope: 'email'});
 	} else {
 	    	var i = 0;
-//TODO: Remove commenting
-//		$entry(@com.l3.CB.client.util.CommonUtils::login(I)(i));
+		$entry(@com.l3.CB.client.util.CommonUtils::login(I)(i));
 	}
     }-*/;
 

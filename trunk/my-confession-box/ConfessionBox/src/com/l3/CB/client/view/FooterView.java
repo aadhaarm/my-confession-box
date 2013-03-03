@@ -24,6 +24,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancPhillosphyAnynConf;
     private final HTML ancAppComunityPage;
     private final HTML ancAppWebLink;
+    private final HTML ancTOSLink;
     
     public FooterView() {
 
@@ -46,6 +47,9 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	
 	ancAppWebLink = new HTML(Templates.TEMPLATES.infoToolTip("fbconfess.com", "Confession box web link"));
 	ancAppWebLink.setStyleName("footerLink");
+
+	ancTOSLink = new HTML(Templates.TEMPLATES.infoToolTip("Terms of service", "Confession Box terms of service"));
+	ancTOSLink.setStyleName("footerLink");
 	
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
 	ancAbout.addClickHandler(new ClickHandler() {
@@ -94,6 +98,14 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	    }
 	});
 	
+	final PopupPanel pPnlTOS = ApplicationTextWidget.setupTOS();
+	ancTOSLink.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		pPnlTOS.center();
+	    }
+	});
+	
 	if(!ConfessionBox.isMobile) {
 	    fPnlFooter.add(ancAbout);
 	    fPnlFooter.add(ancPhillosphy);
@@ -101,17 +113,19 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	    fPnlFooter.add(ancAppComunityPage);
 	    fPnlFooter.add(ancAppWebLink);
 	    fPnlFooter.add(ancPrivacy);
+	    fPnlFooter.add(ancTOSLink);
 	}
 
 	initWidget(fPnlFooter);
 	
 	ConfessionBox.eventBus.addHandler(URLEvent.TYPE, new URLEventHandler() {
-	    
 	    @Override
 	    public void loadPage(URLEvent event) {
 		if(event != null && event.getUrlType() != null) {
 		    if(Constants.HISTORY_ITEM_PRIVACY_POLICY.equalsIgnoreCase(event.getUrlType())) {
 			pPnlPrivacy.center();
+		    } else if(Constants.HISTORY_ITEM_TOS.equalsIgnoreCase(event.getUrlType())) {
+			pPnlTOS.center();
 		    }
 		}
 	    }

@@ -119,9 +119,9 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	if(loadAll) {
 	    String loadHash = Window.Location.getHash();
 	    if(CommonUtils.isNotNullAndNotEmpty(loadHash)) {
-		if(Constants.HISTORY_ITEM_PRIVACY_POLICY.equalsIgnoreCase(loadHash.substring(1))) {
+		if((Constants.HISTORY_ITEM_PRIVACY_POLICY.equalsIgnoreCase(loadHash.substring(1))) || (Constants.HISTORY_ITEM_TOS.equalsIgnoreCase(loadHash.substring(1)))) {
 		    ConfessionBox.eventBus.fireEvent(new URLEvent(loadHash.substring(1)));
-		} else {
+		}  else {
 		    CommonUtils.fireHistoryEvent(loadHash.substring(1));
 		}
 	    } else {

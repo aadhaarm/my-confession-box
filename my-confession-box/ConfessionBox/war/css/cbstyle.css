@@ -183,6 +183,7 @@ div.helpInfoDiv {
 	color: #333333;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	line-height: 1.36;
+	font-size: 10px;
 }
 
 .infoModalPopupWindowClose {
@@ -327,7 +328,7 @@ div.helpInfoDiv {
 	padding: 5px 0 5px 30px;
 	margin: 1px 0 1px 0;
 	display: block;
-	background-size:25px 25px;
+	background-size: 25px 25px;
 	background-image: url(../images/confessToMe.gif);
 	background-repeat: no-repeat;
 	color: #333;
@@ -346,7 +347,7 @@ div.helpInfoDiv {
 	padding: 5px 0 5px 30px;
 	margin: 1px 0 1px 0;
 	display: block;
-	background-size:22px 22px;
+	background-size: 22px 22px;
 	background-image: url(../images/rulebook.png);
 	background-repeat: no-repeat;
 	color: #333;
@@ -356,7 +357,7 @@ div.helpInfoDiv {
 	padding: 5px 0 5px 30px;
 	margin: 1px 0 1px 0;
 	display: block;
-	background-size:22px 22px;
+	background-size: 22px 22px;
 	background-image: url(../images/logout.png);
 	background-repeat: no-repeat;
 	color: #333;
@@ -364,7 +365,7 @@ div.helpInfoDiv {
 
 .link8 {
 	display: block;
-	background-size:32px 32px !important;
+	background-size: 32px 32px !important;
 	background-image: url(../images/masks.png);
 	background-repeat: no-repeat;
 	color: #333;
@@ -372,11 +373,10 @@ div.helpInfoDiv {
 
 .link9 {
 	display: block;
-	background-size:23px 33px !important;
+	background-size: 23px 33px !important;
 	background-repeat: no-repeat;
 	color: #333;
 }
-
 
 menu a:link,menu a:visited {
 	color: #666;
@@ -474,12 +474,12 @@ a:hover {
 }
 
 .reg_image {
-    float: left;
-    margin-bottom: 10px;
-    margin-left: 15px;
-    margin-right: 5px;
-    margin-top: -22px;
-    padding-right: 10px;
+	float: left;
+	margin-bottom: 10px;
+	margin-left: 15px;
+	margin-right: 5px;
+	margin-top: -22px;
+	padding-right: 10px;
 }
 
 .options {
@@ -580,7 +580,7 @@ a:hover {
 .confessionPreview {
 	font-weight: bold;
 	padding-left: 80px;
-    padding-top: 10px;
+	padding-top: 10px;
 }
 
 .regConfButtons {
@@ -754,14 +754,14 @@ main_container a:hover {
 }
 
 .confessToMeToolTip {
-    border: 1px solid grey;
-    border-radius: 5px;
-    color: grey;
-    display: block;
-    font-size: 10px;
-    line-height: 1.38;
-    margin: 0 10px 5px 10px;
-    padding: 5px;
+	border: 1px solid grey;
+	border-radius: 5px;
+	color: grey;
+	display: block;
+	font-size: 10px;
+	line-height: 1.38;
+	margin: 0 10px 5px 10px;
+	padding: 5px;
 }
 
 .tooltip_left a {
@@ -864,6 +864,9 @@ main_container a:hover {
 
 .pardonButton {
 	width: 116px;
+	background-color: #73883E;
+	display: block;
+	color: white !important;
 }
 
 .activityButtonDiv {

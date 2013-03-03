@@ -731,6 +731,9 @@ main_container a:hover {
 
 .pardonButton {
 	width: 116px;
+	background-color: #73883E;
+	display: block;
+	color: white !important;
 }
 
 .activityButtonDiv {

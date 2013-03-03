@@ -129,7 +129,7 @@ public class AppealPardonWidget extends FlowPanel {
 	 if(isFriendNotRegistered) {
 	     add(new HTML(Templates.TEMPLATES.confessorNotRegisteredMessage(pardonerName)));
 	 }
-	 add(new HTML("Press 'REQUEST' to send a pardon request now."));
+	 add(new HTML("<b>Press 'REQUEST' to send a pardon request now OR dedicate the confession to someone.</b>"));
 	 btnSubmit.setText(ConfessionBox.cbText.shareConfessionButtonShareConfessionPopup());
 	 add(btnSubmit);
      }

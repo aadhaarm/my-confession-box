@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.URLEvent;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateHPEventHandler;
 import com.l3.CB.client.event.UpdateMenuEvent;
@@ -90,12 +91,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * Initialize Application for first view
      */
     public static void initializeApp(boolean loadAll) {
+	
 	// Initialize MENU
 	menuPresenter = new MenuPresenter(new MenuView());
 	menuPresenter.go(container);
+	
 	// Initialize Header
 	headerPresenter = new HeaderPresenter(new HeaderView());
 	headerPresenter.go(container);
+	
 	// Login status
 	if(ConfessionBox.isMobile) {
 	    loginStatusPresenter = new LoginStatusPresenter(new LoginStatusView());
@@ -107,13 +111,19 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 	    humanPointPresenter.go(container);
 	}
+	
 	// Initialize Footer
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
+
 	if(loadAll) {
 	    String loadHash = Window.Location.getHash();
 	    if(CommonUtils.isNotNullAndNotEmpty(loadHash)) {
-		CommonUtils.fireHistoryEvent(loadHash.substring(1));
+		if(Constants.HISTORY_ITEM_PRIVACY_POLICY.equalsIgnoreCase(loadHash.substring(1))) {
+		    ConfessionBox.eventBus.fireEvent(new URLEvent(loadHash.substring(1)));
+		} else {
+		    CommonUtils.fireHistoryEvent(loadHash.substring(1));
+		}
 	    } else {
 		if(null != ConfessionBox.confId) {
 		    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);

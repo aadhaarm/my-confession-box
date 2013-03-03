@@ -102,10 +102,10 @@ public class Constants {
     public static final int COMM_MAX_CHARS = 300;
 
     // MEMCACHE
-    public static final int CONF_CACHE_EXPIRATION_SEC = 43200; // 12 hours
-    public static final int CONF_LIST_CACHE_EXPIRATION_SEC = 1800; // 30 minuts
-    public static final int USER_CACHE_EXPIRATION_SEC = 43200; // 1 hour
-    public static final Object JSON_CACHE_EXPIRATION_SEC = 43200; // 1 hour
+    public static final int CONF_CACHE_EXPIRATION_SEC = 300; // 5 minuts
+    public static final int CONF_LIST_CACHE_EXPIRATION_SEC = 300; // 5 minuts
+    public static final int USER_CACHE_EXPIRATION_SEC = 1800; // 30 hour
+    public static final Object JSON_CACHE_EXPIRATION_SEC = 1800; // 30 hour
 
     public static final String STYLE_CLASS_CONFESSED_TO_TEXT = "confessedToName";
 
@@ -194,4 +194,6 @@ public class Constants {
     public static final String IMAGE_SYMPATHY_ICON = "/images/sympathies.png";
 
     public static final String IMAGE_SAME_BOAT_ICON = "/images/SameBoat.png";
+
+    public static final String HISTORY_ITEM_PRIVACY_POLICY = "privacy";
 }

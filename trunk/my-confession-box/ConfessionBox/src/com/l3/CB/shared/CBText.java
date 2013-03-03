@@ -175,7 +175,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Type your friend's name and choose from the options")
     String shareConfessionSuggestBoxErrorMessage();
 
-    @DefaultStringValue("Request")
+    @DefaultStringValue("Request / Dedicate")
     String shareConfessionButtonShareConfessionPopup();
 
     @DefaultStringValue(" has confessed to you on Confession Box.")

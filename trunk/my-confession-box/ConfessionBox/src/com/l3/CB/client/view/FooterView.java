@@ -9,9 +9,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.URLEvent;
+import com.l3.CB.client.event.URLEventHandler;
 import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.Templates;
+import com.l3.CB.shared.Constants;
 
 public class FooterView extends Composite implements FooterPresenter.Display {
 
@@ -20,7 +23,8 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancPhillosphy;
     private final HTML ancPhillosphyAnynConf;
     private final HTML ancAppComunityPage;
-
+    private final HTML ancAppWebLink;
+    
     public FooterView() {
 
 	FlowPanel fPnlFooter = new FlowPanel();
@@ -39,6 +43,9 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	
 	ancPhillosphyAnynConf = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "Thoughts about Anonymous Confession"));
 	ancPhillosphyAnynConf.setStyleName("footerLink");
+	
+	ancAppWebLink = new HTML(Templates.TEMPLATES.infoToolTip("fbconfess.com", "Confession box web link"));
+	ancAppWebLink.setStyleName("footerLink");
 	
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
 	ancAbout.addClickHandler(new ClickHandler() {
@@ -79,17 +86,36 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		Window.open("http://www.facebook.com/pages/Confession-Box-Community/129927533826479", "Confession Box" , "resizable=yes,scrollbars=yes");
 	    }
 	});
-
+	
+	ancAppWebLink.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		Window.open("http://www.fbconfess.com", "Confession Box" , "resizable=yes,scrollbars=yes");
+	    }
+	});
 	
 	if(!ConfessionBox.isMobile) {
 	    fPnlFooter.add(ancAbout);
 	    fPnlFooter.add(ancPhillosphy);
 	    fPnlFooter.add(ancPhillosphyAnynConf);
 	    fPnlFooter.add(ancAppComunityPage);
-//	    fPnlFooter.add(ancPrivacy);
+	    fPnlFooter.add(ancAppWebLink);
+	    fPnlFooter.add(ancPrivacy);
 	}
 
 	initWidget(fPnlFooter);
+	
+	ConfessionBox.eventBus.addHandler(URLEvent.TYPE, new URLEventHandler() {
+	    
+	    @Override
+	    public void loadPage(URLEvent event) {
+		if(event != null && event.getUrlType() != null) {
+		    if(Constants.HISTORY_ITEM_PRIVACY_POLICY.equalsIgnoreCase(event.getUrlType())) {
+			pPnlPrivacy.center();
+		    }
+		}
+	    }
+	});
     }
 
     @Override

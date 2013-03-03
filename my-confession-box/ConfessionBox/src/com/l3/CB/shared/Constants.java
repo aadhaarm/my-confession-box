@@ -196,4 +196,6 @@ public class Constants {
     public static final String IMAGE_SAME_BOAT_ICON = "/images/SameBoat.png";
 
     public static final String HISTORY_ITEM_PRIVACY_POLICY = "privacy";
+
+    public static final String HISTORY_ITEM_TOS = "TermsOfService";
 }

@@ -25,7 +25,7 @@ public class CacheManager {
     private static Cache jsonCache;
     private static Cache activityCache;
     private static Cache updateCache;
-    
+
     public CacheManager() {
 	super();
 	try {
@@ -33,7 +33,7 @@ public class CacheManager {
 	    Map<String, Object> confCacheProps = new HashMap<String, Object>();
 	    confCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.CONF_CACHE_EXPIRATION_SEC);
 	    confessionCache = cacheFactory.createCache(confCacheProps);
-	    
+
 	    Map<String, Object> confListCacheProps = new HashMap<String, Object>();
 	    confListCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.CONF_LIST_CACHE_EXPIRATION_SEC);
 	    confessionListCache = cacheFactory.createCache(confListCacheProps);
@@ -53,7 +53,7 @@ public class CacheManager {
 	    Map<String, Object> updateCacheProps = new HashMap<String, Object>();
 	    updateCacheProps.put(GCacheFactory.EXPIRATION_DELTA, Constants.JSON_CACHE_EXPIRATION_SEC);
 	    updateCache = cacheFactory.createCache(updateCacheProps);
-	    
+
 	} catch (CacheException e) {
 	    logger.log(Level.SEVERE, "Error getting cache object:" + e.getMessage());
 	}
@@ -224,7 +224,7 @@ public class CacheManager {
 	    updateCache.put(getUpdatesKey(confId), confessionUpdates);
 	}
     }
-    
+
     @SuppressWarnings("unchecked")
     public static List<ConfessionUpdate> getUpdates(Long confId) {
 	List<ConfessionUpdate> confessionUpdates = null;
@@ -234,11 +234,11 @@ public class CacheManager {
 	}
 	return confessionUpdates;
     }
-    
+
     public static void flushUpdates(Long confId) {
 	updateCache.remove(getUpdatesKey(confId));
     }
-    
+
     private static String getUpdatesKey(Long confId) {
 	return "updates" + confId;
     }

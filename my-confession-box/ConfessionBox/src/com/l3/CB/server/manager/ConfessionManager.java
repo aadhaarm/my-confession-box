@@ -137,7 +137,7 @@ public class ConfessionManager {
 			}
 			CacheManager.cacheConfessionList(cacheKey, confessionIds);
 		    }
-		    getUserDetails(confessionIds, false);
+		    getUserDetails(confessions, false);
 		}
 	    }
 	    setUserActivity(userId, confessions);

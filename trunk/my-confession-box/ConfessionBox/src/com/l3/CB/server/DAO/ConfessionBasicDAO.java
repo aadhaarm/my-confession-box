@@ -11,6 +11,7 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Text;
+import com.google.gwt.user.client.Random;
 import com.l3.CB.server.DO.ConfessionDO;
 import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.DO.PardonConditionDO;
@@ -96,7 +97,11 @@ public class ConfessionBasicDAO {
 	return null;
     }
 
-
+//    public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
+//        int x = Random.nextInt(clazz.getEnumConstants().length);
+//        return clazz.getEnumConstants()[x];
+//    }    
+    
     @SuppressWarnings("unchecked")
     public static List<Confession> getConfessions(int page, int pageSize, Filters filter, String locale) {
 	List<Confession> confessions = null;
@@ -105,7 +110,11 @@ public class ConfessionBasicDAO {
 	    Query query = pm.newQuery(ConfessionDO.class);
 	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
 	    query.setOrdering("lastUpdateTimeStamp desc");
-
+	    
+//	    if(filter.equals(Filters.RANDOM)) {
+//		filter = randomEnum(Filters.class);
+//	    }
+	    
 	    switch (filter) {
 	    case LOCALE_SPECIFIC:
 		query.setFilter("isVisibleOnPublicWall == status && locale == lang");
@@ -233,8 +242,7 @@ public class ConfessionBasicDAO {
 		    }
 		}
 		break;
-
-	    default:
+	    case ALL:
 		List<ConfessionDO> resultSet9 = null;
 		query.setFilter("isVisibleOnPublicWall == status");
 		query.declareParameters("String status");
@@ -242,6 +250,21 @@ public class ConfessionBasicDAO {
 		if (resultSet9 != null && !resultSet9.isEmpty()) {
 		    confessions = new ArrayList<Confession>();
 		    Iterator<ConfessionDO> it = resultSet9.iterator();
+		    while (it.hasNext()) {
+			ConfessionDO confessionDO = it.next();
+			Confession confession = getConfession(confessionDO);
+			confessions.add(confession);
+		    }
+		}
+		break;
+	    default:
+		List<ConfessionDO> resultSet10 = null;
+		query.setFilter("isVisibleOnPublicWall == status");
+		query.declareParameters("String status");
+		resultSet10 = (List<ConfessionDO>) query.execute(true);
+		if (resultSet10 != null && !resultSet10.isEmpty()) {
+		    confessions = new ArrayList<Confession>();
+		    Iterator<ConfessionDO> it = resultSet10.iterator();
 		    while (it.hasNext()) {
 			ConfessionDO confessionDO = it.next();
 			Confession confession = getConfession(confessionDO);

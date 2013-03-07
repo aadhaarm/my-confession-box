@@ -1,6 +1,7 @@
 package com.l3.CB.shared.TO;
 
 public enum Filters {
+    RANDOM("Confession Posted World-wide", "You have no confessions in this view!"),
     ALL("Confession Posted World-wide", "You have no confessions in this view!"), 
     LOCALE_SPECIFIC("All Confessions in your Language Locale", "Oops, no confessions posted in your language. Be the first one to post a confession in your language."), 
     MOST_SAME_BOATS("Confessions with maximum 'Same Boat' votes globally", ""), 

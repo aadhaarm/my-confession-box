@@ -73,7 +73,7 @@ public interface CBText extends Constants {
     @DefaultStringValue(" 'Should be pardoned' votes.")
     String pardonPopupPardonActivityConditionPartTwo();
 
-    @DefaultStringValue("I hereby pardon you for the above mentioned confession, only when you fulfill the above conditions that I have selected")
+    @DefaultStringValue("I pardon you for you confession, only when you fulfill the above conditions that I have selected")
     String pardonPopupAcceptance();
 
     @DefaultStringValue("Pardon")
@@ -85,28 +85,28 @@ public interface CBText extends Constants {
     @DefaultStringValue("Pardoned")
     String pardonedStatus();
 
-    @DefaultStringValue("Reveal your Identity")
+    @DefaultStringValue("Un-Hide your Identity")
     String pardonPopupOpenIdentityConditionView();
 
     @DefaultStringValue("Choose the confessions you want to read.")
     String feedPageFilterToolTip();
 
-    @DefaultStringValue("If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing 'Same Boat' button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee. You get to earn 1 'human' points for voting and 10 'human' points for sharing your vote thereafter.")
+    @DefaultStringValue("SAME BOAT: If you feel, that in past or present, you were in a similar situation / position or had similar sentiments expressed in the confession text, you should consider pressing 'Same Boat' button telling the confessee that you understand his/her situation/sentiments and perhaps have shared a similar situation in your life. Your vote will mean a lot to the confessee. You get to earn 1 'human' points for voting and 10 'human' points for sharing your vote thereafter.")
     String sameBoatButtonToolTip();
 
-    @DefaultStringValue("Vote report abuse if you find the confession inappropriate.")
+    @DefaultStringValue("REPOTE ABUSE: Vote report abuse if you find the confession inappropriate.")
     String abuseButtonToolTip();
 
-    @DefaultStringValue("Vote if the confession is just lame and you don't find it a real confession.")
+    @DefaultStringValue("LAME: Vote if the confession is just lame and you don't find it a real confession.")
     String lameButtonToolTip();
 
-    @DefaultStringValue("Vote if you have sympathies for the confesser. You get to earn 1 'human' points for voting and 5 'human' points for sharing your vote thereafter.")
+    @DefaultStringValue("SYMPATHY: Vote if you have sympathies for the confesser. You get to earn 1 'human' points for voting and 5 'human' points for sharing your vote thereafter.")
     String sympathyButtonToolTip();
 
-    @DefaultStringValue("Vote if you feel the confesser should be pardoned for the act. You get to earn 1 'human' points for voting and 10 'human' points for sharing your vote thereafter.")
+    @DefaultStringValue("SHOULD BE PARDONED: Vote if you feel the confesser should be pardoned for the act. You get to earn 1 'human' points for voting and 10 'human' points for sharing your vote thereafter.")
     String shouldBePardonedButtonToolTip();
 
-    @DefaultStringValue("Vote if you feel the confesser should not be pardoned for the act. You get to earn 2 'human' points for sharing your vote.")
+    @DefaultStringValue("SHOULD NOT BE PARDONED: Vote if you feel the confesser should not be pardoned for the act. You get to earn 2 'human' points for sharing your vote.")
     String shouldNotBePardonedButtonToolTip();
 
     @DefaultStringValue("Confession Title")
@@ -148,7 +148,7 @@ public interface CBText extends Constants {
     @DefaultStringValue(" has earned ")
     String activityButtonShareClickText1();
 
-    @DefaultStringValue(" 'Human Points' for sharing on wall.")
+    @DefaultStringValue(" 'HUMAN POINTS' for sharing on wall.")
     String activityButtonShareClickText2();
 
     @DefaultStringValue(" characters remaining")
@@ -384,4 +384,7 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("Click to un-subscribe")
     String unSubscribeLinkToolTipText();
+
+    @DefaultStringValue("SHARE your vote with your friends")
+    String suggestShareVote();
 }

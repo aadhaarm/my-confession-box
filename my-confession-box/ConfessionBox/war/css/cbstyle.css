@@ -239,7 +239,7 @@ div.helpInfoDiv {
 
 .helpInfoPanel {
 	background-color: #FFFF99;
-	font-size: 10px;
+	font-size: 12px;
 	line-height: 1.30;
 	padding: 4px 3px 3px 6px;
 }
@@ -440,6 +440,7 @@ menu a:link,menu a:visited {
 .toolTipTitle {
 	text-align: center;
 	font-weight: bold;
+	font-size: 13px;
 }
 
 /* From cb Reg conf*/
@@ -604,6 +605,7 @@ a:hover {
 
 .content a:link,a:visited {
 	color: #3B5998 !important;
+	font-weight: bold;
 }
 
 main_container a:hover {
@@ -635,6 +637,7 @@ main_container a:hover {
 .status_bar {
 	float: right;
 	font-size: 11px;
+	font-weight: bold;
 }
 
 .status_bar a {

@@ -36,9 +36,9 @@ public class ActivityButton extends AbsolutePanel {
     Label lblTick = null;
     Image loader = null;
     Anchor ancShare = null;
-    final int timerCountNumber = 5;
+    final int timerCountNumber = 2;
     Timer timer;
-    
+
     public ActivityButton(final Activity activity, final Confession confession, String titleText, String btnStyleName, final Image buttonImage) {
 	super();
 	this.setStyleName(Constants.DIV_ACTIVITY_BUTTON_CONTAINER);
@@ -242,6 +242,7 @@ public class ActivityButton extends AbsolutePanel {
 			    add(ancShare);
 			    EventUtils.raiseUpdateHPEvent(activity.getActivityPoints());
 			    ConfessionBox.eventBus.fireEvent(new ShowToolTipEvent(confession.getConfId()));
+			    HelpInfo.showHelpInfo(HelpInfo.type.SUGGEST_SHARE_VOTE);
 			}
 
 			@Override

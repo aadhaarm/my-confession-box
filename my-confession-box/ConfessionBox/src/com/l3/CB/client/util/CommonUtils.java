@@ -636,7 +636,7 @@ public class CommonUtils {
 	if(lstFilterOptions != null) {
 	    lstFilterOptions.setStyleName("confessionFilterOptionsList");
 	    lstFilterOptions.setVisible(false);
-	    lstFilterOptions.addItem(ConfessionBox.cbText.filterAllConfessions(), Filters.ALL.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterAllConfessions(), Filters.RANDOM.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterGlobalConfessions(), Filters.ALL.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLocaleConfessions(), Filters.LOCALE_SPECIFIC.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterUserActivityConfessions(), Filters.USER_ACTIVITY.name());

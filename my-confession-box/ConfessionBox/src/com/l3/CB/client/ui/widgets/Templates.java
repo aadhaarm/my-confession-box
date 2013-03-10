@@ -72,6 +72,8 @@ public class Templates {
 	@Template("<img src='{0}'/> {1}")
 	SafeHtml voteHelp(SafeUri imagePath, String messageText);
 
+	@Template("<iframe width=\"{1}\" height=\"{2}\" src=\"{0}\" frameborder=\"0\" allowfullscreen></iframe>")
+	SafeHtml youtubeVideoPlayer(SafeUri URL, String width, String height);
     }
     
     public static final CBTemplates TEMPLATES = GWT.create(CBTemplates.class);

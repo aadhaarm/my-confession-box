@@ -77,17 +77,29 @@ public class ConfessionBox implements EntryPoint {
 
 	// Decide whether to consider device screen to be small or large?
 	CommonUtils.setupScreen();
+	
+	if(!isMobile) {
+	    // Introduce App
+	    PopupPanel pPnlIntro = CommonUtils.introductionCB();
+	    pPnlIntro.center();
+	}
+	
 	// Application title/LOGO image
 	imgLogo = new Image(Constants.IMAGE_APPLICATION_LOGO_PATH);
+	
 	// Initialize services
 	confessionService = (ConfessionServiceAsync)GWT.create(ConfessionService.class);
 	facebookService = (FacebookServiceAsync)GWT.create(FacebookService.class);
+	
 	// Get application event bus
 	eventBus = new HandlerManager(null);
+	
 	// Get application auth-code that facebook might have sent
 	String authCode = Location.getParameter("code");
+	
 	// FB might have also sent an error message
 	String error = Location.getParameter("error_reason");
+	
 	// Get confession ID from request if any
 	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 	if (null != error && error.equals("user_denied")) {
@@ -100,8 +112,8 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    //	    	    proceedToApp(confessionService, facebookService, eventBus);
-	    initializeUserInfo(true);
+//	    proceedToApp(confessionService, facebookService, eventBus);
+    	    initializeUserInfo(true);
 	}
     }
 
@@ -174,7 +186,7 @@ public class ConfessionBox implements EntryPoint {
 		    } else
 			if(count < 5){
 			    count++;
-//			    Timer to reschedule for 1 sec
+			    //			    Timer to reschedule for 1 sec
 			    this.schedule(1000);
 			} else {
 			    if(proceedFirstLoad) {

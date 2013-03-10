@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
@@ -33,7 +32,7 @@ public class ConfessionPanel extends FlowPanel{
     private Widget hPnlUserControls;
     private FlowPanel fPnlName;
     private FlowPanel fPnlStatusBar;
-    private Label lblConfessionTitle;
+    private Anchor ancConfessionTitle;
     private FlowPanel fPnlConfessionText;
     private FlowPanel fPnlPardonWidget;
     private FlowPanel fPnlActivityButtons;
@@ -54,7 +53,20 @@ public class ConfessionPanel extends FlowPanel{
 	    this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
 	    getConfessionWidgetsSetup(confession);
+	    bind();
 	}
+    }
+
+    private void bind() {
+	ancConfessionTitle.addClickHandler(new ClickHandler() {
+	    
+	    @Override
+	    public void onClick(ClickEvent event) {
+		ConfessionBox.confId = confession.getConfId().toString();
+		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
+//		Window.open(FacebookUtil.getActivityUrl(confession.getConfId()), confession.getConfessionTitle(), "");
+	    }
+	});
     }
 
     /**
@@ -108,9 +120,10 @@ public class ConfessionPanel extends FlowPanel{
 	fPnlMiddleContent.setStyleName(Constants.DIV_CONFESSION_PANEL_MIDDLE_CONTAINER);
 
 	// Confession Title
-	lblConfessionTitle = new Label(confession.getConfessionTitle());
-	lblConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
-	fPnlMiddleContent.add(lblConfessionTitle);
+	ancConfessionTitle = new Anchor(confession.getConfessionTitle());
+	
+	ancConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
+	fPnlMiddleContent.add(ancConfessionTitle);
 
 	// Confession text
 	fPnlMiddleContent.add(fPnlConfessionText);

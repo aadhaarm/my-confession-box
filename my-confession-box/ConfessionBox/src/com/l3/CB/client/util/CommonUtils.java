@@ -18,12 +18,14 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.Window.Navigator;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -872,5 +874,38 @@ public class CommonUtils {
           link.href = url; 
         } 
     }-*/;  
-  
+ 
+    public static PopupPanel introductionCB() {
+	final PopupPanel pPnlIntroduction = new PopupPanel(false);
+	pPnlIntroduction.setGlassEnabled(true);
+	pPnlIntroduction.setStyleName("infoModalPopupWindow");
+	
+	FlowPanel fPnlBody = new FlowPanel();
+	
+	// Button SKIP
+	Button btnSkip = new Button("SKIP");
+	btnSkip.addStyleName("floatRight");
+	fPnlBody.add(btnSkip);
+	btnSkip.addClickHandler(new ClickHandler() {
+	    @Override
+	    public void onClick(ClickEvent event) {
+		pPnlIntroduction.hide();
+	    }
+	});
+
+	// Video player
+	SafeUri safeUri = new SafeUri() {
+	    @Override
+	    public String asString() {
+		return "http://www.youtube.com/embed/HqPvI_CwTe8";
+	    }
+	};
+	//<iframe width="853" height="480" src="http://www.youtube.com/embed/HqPvI_CwTe8" frameborder="0" allowfullscreen></iframe>
+	HTML html = new HTML(Templates.TEMPLATES.youtubeVideoPlayer(safeUri, "640", "360"));
+	fPnlBody.add(html);
+
+
+	pPnlIntroduction.add(fPnlBody);
+	return pPnlIntroduction;
+    }
 }

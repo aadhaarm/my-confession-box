@@ -19,13 +19,14 @@ div.header {
 }
 
 .footer {
-	padding-top: 4px;
+	padding-top: 16px;
 }
 
 .footerLink {
 	cursor: pointer;
 	font-size: 10px;
 	margin-left: 5px;
+	margin-top: 2px;
 	line-height: 1.4;
 }
 
@@ -670,7 +671,7 @@ main_container a:hover {
 	padding-top: 2px;
 	padding-left: 11px;
 	padding-right: 8px;
-	font-size: 12.5px;
+	font-size: 14px;
 	line-height: 1.38;
 	font-weight: bold;
 }
@@ -928,4 +929,8 @@ main_container a:hover {
 
 .userLoginStatusName {
 	vertical-align: middle;
+}
+
+.floatRight {
+	float: right;
 }

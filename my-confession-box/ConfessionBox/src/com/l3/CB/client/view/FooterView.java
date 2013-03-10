@@ -14,6 +14,7 @@ import com.l3.CB.client.event.URLEventHandler;
 import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.Templates;
+import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.Constants;
 
 public class FooterView extends Composite implements FooterPresenter.Display {
@@ -25,7 +26,8 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancAppComunityPage;
     private final HTML ancAppWebLink;
     private final HTML ancTOSLink;
-    
+    private final HTML ancIntroVideo;
+
     public FooterView() {
 
 	FlowPanel fPnlFooter = new FlowPanel();
@@ -41,16 +43,19 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 
 	ancPhillosphy = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyFooterLinkLabel(), "The Philosophy"));
 	ancPhillosphy.setStyleName("footerLink");
-	
+
 	ancPhillosphyAnynConf = new HTML(Templates.TEMPLATES.infoToolTip(ConfessionBox.cbText.phillosphyAnonConfFooterLinkLabel(), "Thoughts about Anonymous Confession"));
 	ancPhillosphyAnynConf.setStyleName("footerLink");
-	
+
 	ancAppWebLink = new HTML(Templates.TEMPLATES.infoToolTip("fbconfess.com", "Confession box web link"));
 	ancAppWebLink.setStyleName("footerLink");
 
 	ancTOSLink = new HTML(Templates.TEMPLATES.infoToolTip("Terms of service", "Confession Box terms of service"));
 	ancTOSLink.setStyleName("footerLink");
-	
+
+	ancIntroVideo = new HTML(Templates.TEMPLATES.infoToolTip("KNOW CONFESSION BOX", "A small introduction VIDEO"));
+	ancIntroVideo.setStyleName("footerLink");
+
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
 	ancAbout.addClickHandler(new ClickHandler() {
 	    @Override
@@ -58,7 +63,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		pPnlAbout.center();
 	    }
 	});
-	
+
 	final PopupPanel pPnlPrivacy = ApplicationTextWidget.setupPrivacy();
 	ancPrivacy.addClickHandler(new ClickHandler() {
 	    @Override
@@ -66,7 +71,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		pPnlPrivacy.center();
 	    }
 	});
-	
+
 	final PopupPanel pPnlPhillosphy = ApplicationTextWidget.setupPhillosphy();
 	ancPhillosphy.addClickHandler(new ClickHandler() {
 	    @Override
@@ -82,22 +87,22 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		pPnlPhillosphyAnonymous.center();
 	    }
 	});
-	
+
 	ancAppComunityPage.addClickHandler(new ClickHandler() {
-	    
+
 	    @Override
 	    public void onClick(ClickEvent event) {
 		Window.open("http://www.facebook.com/pages/Confession-Box-Community/129927533826479", "Confession Box" , "resizable=yes,scrollbars=yes");
 	    }
 	});
-	
+
 	ancAppWebLink.addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {
 		Window.open("http://www.fbconfess.com", "Confession Box" , "resizable=yes,scrollbars=yes");
 	    }
 	});
-	
+
 	final PopupPanel pPnlTOS = ApplicationTextWidget.setupTOS();
 	ancTOSLink.addClickHandler(new ClickHandler() {
 	    @Override
@@ -105,8 +110,19 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 		pPnlTOS.center();
 	    }
 	});
-	
+
+	// Intro video link
+	ancIntroVideo.addClickHandler(new ClickHandler() {
+
+	    @Override
+	    public void onClick(ClickEvent event) {
+		PopupPanel pPnlIntro = CommonUtils.introductionCB();
+		pPnlIntro.center();
+	    }
+	});
+
 	if(!ConfessionBox.isMobile) {
+	    fPnlFooter.add(ancIntroVideo);
 	    fPnlFooter.add(ancAbout);
 	    fPnlFooter.add(ancPhillosphy);
 	    fPnlFooter.add(ancPhillosphyAnynConf);
@@ -117,7 +133,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	}
 
 	initWidget(fPnlFooter);
-	
+
 	ConfessionBox.eventBus.addHandler(URLEvent.TYPE, new URLEventHandler() {
 	    @Override
 	    public void loadPage(URLEvent event) {

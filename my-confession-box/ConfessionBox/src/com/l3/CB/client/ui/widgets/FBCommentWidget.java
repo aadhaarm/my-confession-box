@@ -16,7 +16,7 @@ public class FBCommentWidget {
     HTML fbCommentHtml;
 
     public interface FBCommentTemplate extends SafeHtmlTemplates {
-	@Template("<fb:comments href=\"{0}\" num_posts=\"1\" width=\"{2}\"></fb:comments>")
+	@Template("<fb:comments href=\"{0}\" num_posts=\"10\" width=\"{2}\"></fb:comments>")
 	SafeHtml messageWithLink(SafeUri url, int numPostm , int width);
     }
 

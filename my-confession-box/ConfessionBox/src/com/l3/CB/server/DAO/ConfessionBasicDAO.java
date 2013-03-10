@@ -11,7 +11,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.google.appengine.api.datastore.Text;
-import com.google.gwt.user.client.Random;
 import com.l3.CB.server.DO.ConfessionDO;
 import com.l3.CB.server.DO.ConfessionShareDO;
 import com.l3.CB.server.DO.PardonConditionDO;

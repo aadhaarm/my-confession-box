@@ -934,3 +934,9 @@ main_container a:hover {
 .floatRight {
 	float: right;
 }
+
+img.footerLinkImage {
+	height: 70%;
+	width: 100%;
+	cursor: pointer;
+}

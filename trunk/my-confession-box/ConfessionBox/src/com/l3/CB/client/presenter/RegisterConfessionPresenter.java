@@ -117,13 +117,13 @@ public class RegisterConfessionPresenter implements Presenter {
 		if(result != null) {
 		    display.getTxtTitle().getTxtTitle().setText(result.getConfessionTitle());
 		    display.getTxtTitle().validate();
-		    
+
 		    if(display.getTxtConfession().getCbTextArea() != null) {
 			display.getTxtConfession().getCbTextArea().setHTML(result.getConfession());
 		    } else {
 			display.getTxtConfession().getTextArea().setText(result.getConfession());
 		    }
-		    
+
 		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
 		    if(display.getCbHideIdentityCheckBox() != null) {
 			display.getCbHideIdentityCheckBox().setValue(result.isShareAsAnyn(), true);
@@ -156,6 +156,8 @@ public class RegisterConfessionPresenter implements Presenter {
 		Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
 	    }
 	});
+	RegisterConfessionUtil.handlePreview(display);
+	handleShareConfession();
     }
 
     /**
@@ -445,24 +447,32 @@ public class RegisterConfessionPresenter implements Presenter {
 	    display.getCbConfessTo().addClickHandler(new ClickHandler() {
 		@Override
 		public void onClick(ClickEvent event) {
-		    RegisterConfessionUtil.handlePreview(display);;
-		    HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
-		    if(display.isShared()) {
-			if(display.isFriendsListNull()) {
-			    getMyFriends(null);
-			}
-			if(display.getFriendSuggestBox() != null) {
-			    display.getFriendSuggestBox().setVisible(true);
-			    display.getRelationSuggestBox().setVisible(true);
-			}
-		    } else {
-			if(display.getFriendSuggestBox() != null) {
-			    display.getFriendSuggestBox().setVisible(false);
-			    display.getRelationSuggestBox().setVisible(false);
-			}
-		    }
+		    handleShareConfession();
 		}
+
 	    });
+	}
+    }
+
+    /**
+     * Handle if confession shared with friend
+     */
+    private void handleShareConfession() {
+	RegisterConfessionUtil.handlePreview(display);;
+	HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
+	if(display.isShared()) {
+	    if(display.isFriendsListNull()) {
+		getMyFriends(null);
+	    }
+	    if(display.getFriendSuggestBox() != null) {
+		display.getFriendSuggestBox().setVisible(true);
+		display.getRelationSuggestBox().setVisible(true);
+	    }
+	} else {
+	    if(display.getFriendSuggestBox() != null) {
+		display.getFriendSuggestBox().setVisible(false);
+		display.getRelationSuggestBox().setVisible(false);
+	    }
 	}
     }
 

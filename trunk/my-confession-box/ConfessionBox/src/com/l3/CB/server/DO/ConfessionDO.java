@@ -26,6 +26,7 @@ public class ConfessionDO implements Serializable {
 	numOfShouldBePardonedVote = 0;
 	numOfShouldNotBePardonedVote = 0;
 	numOfSympathyVote = 0;
+	numOfTotalVote = new Long(0);
     }
 
     @PrimaryKey
@@ -77,6 +78,9 @@ public class ConfessionDO implements Serializable {
     @Persistent
     private long numOfShouldNotBePardonedVote;
 
+    @Persistent
+    private Long numOfTotalVote;
+    
     public Long getConfId() {
 	return confId;
     }
@@ -221,33 +225,46 @@ public class ConfessionDO implements Serializable {
 	this.numOfShouldNotBePardonedVote = numOfShouldNotBePardonedVote;
     }
 
+    public void incrementTotalVote() {
+	if(numOfTotalVote == null) {
+	    numOfTotalVote = new Long(0);
+	}
+	numOfTotalVote++;
+    }
+    
     public long incrementAbuseVote() {
 	numOfAbuseVote++;
+	incrementTotalVote();
 	return numOfAbuseVote;
     }
 
     public long incrementSameBoatVote() {
 	numOfSameBoatVote++;
+	incrementTotalVote();
 	return numOfSameBoatVote;
     }
 
     public long incrementShouldBePardonedVote() {
 	numOfShouldBePardonedVote++;
+	incrementTotalVote();
 	return numOfShouldBePardonedVote;
     }
 
     public long incrementShouldNotBePardonedVote() {
 	numOfShouldNotBePardonedVote++;
+	incrementTotalVote();
 	return numOfShouldNotBePardonedVote;
     }
 
     public long incrementLameVote() {
 	numOfLameVote++;
+	incrementTotalVote();
 	return numOfLameVote;
     }
 
     public long incrementSympathyVote() {
 	numOfSympathyVote++;
+	incrementTotalVote();
 	return numOfSympathyVote;
     }
 
@@ -257,5 +274,13 @@ public class ConfessionDO implements Serializable {
 
     public void setLastUpdateTimeStamp(Date lastUpdateTimeStamp) {
         this.lastUpdateTimeStamp = lastUpdateTimeStamp;
+    }
+
+    public long getNumOfTotalVote() {
+        return numOfTotalVote;
+    }
+
+    public void setNumOfTotalVote(long numOfTotalVote) {
+        this.numOfTotalVote = numOfTotalVote;
     }
 }

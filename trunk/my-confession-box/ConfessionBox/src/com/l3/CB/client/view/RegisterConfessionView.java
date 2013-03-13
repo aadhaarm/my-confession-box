@@ -112,10 +112,11 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	    fPnlOptions.add(shareToSlider);
 	} else {
 	    cbHideIdentity = new CheckBox(ConfessionBox.cbText.registerPageOptionHideID());
-	    cbHideIdentity.setValue(true);
+	    cbHideIdentity.setValue(false);
 	    fPnlOptions.add(cbHideIdentity);
 
 	    cbConfessTo = new CheckBox(ConfessionBox.cbText.registerPageOptionConfessToFriend());
+	    cbConfessTo.setValue(true);
 	    fPnlOptions.add(cbConfessTo);
 	}
 
@@ -123,6 +124,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
 	// Preview
 	fPnlPreview = new FlowPanel();
+
 	htmlConfessionPreview = new HTML(Templates.TEMPLATES.confessonPreview(ConfessionBox.cbText.confessedByAnynName(), ConfessionBox.cbText.confessedToWorld(), "the"));
 	htmlConfessionPreview.setStyleName("confessionPreview");
 	fPnlPreview.add(htmlConfessionPreview);

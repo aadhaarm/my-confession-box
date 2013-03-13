@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
@@ -26,7 +27,7 @@ public class FooterView extends Composite implements FooterPresenter.Display {
     private final HTML ancAppComunityPage;
     private final HTML ancAppWebLink;
     private final HTML ancTOSLink;
-    private final HTML ancIntroVideo;
+    private final Image ancIntroVideo;
 
     public FooterView() {
 
@@ -53,8 +54,8 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	ancTOSLink = new HTML(Templates.TEMPLATES.infoToolTip("Terms of service", "Confession Box terms of service"));
 	ancTOSLink.setStyleName("footerLink");
 
-	ancIntroVideo = new HTML(Templates.TEMPLATES.infoToolTip("KNOW CONFESSION BOX", "A small introduction VIDEO"));
-	ancIntroVideo.setStyleName("footerLink");
+	ancIntroVideo = new Image("/images/video_play_button.png");
+	ancIntroVideo.setStyleName("footerLinkImage");
 
 	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
 	ancAbout.addClickHandler(new ClickHandler() {

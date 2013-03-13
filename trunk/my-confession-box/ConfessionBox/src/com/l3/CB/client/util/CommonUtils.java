@@ -639,6 +639,7 @@ public class CommonUtils {
 	    lstFilterOptions.setStyleName("confessionFilterOptionsList");
 	    lstFilterOptions.setVisible(false);
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterAllConfessions(), Filters.RANDOM.name());
+	    lstFilterOptions.addItem(ConfessionBox.cbText.filterMostVotedConfessions(), Filters.MOST_VOTED.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterGlobalConfessions(), Filters.ALL.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterLocaleConfessions(), Filters.LOCALE_SPECIFIC.name());
 	    lstFilterOptions.addItem(ConfessionBox.cbText.filterUserActivityConfessions(), Filters.USER_ACTIVITY.name());
@@ -894,13 +895,13 @@ public class CommonUtils {
 	});
 
 	// Video player
+	//<iframe width="640" height="360" src="http://www.youtube.com/embed/y7ENfTax5eA" frameborder="0" allowfullscreen></iframe>
 	SafeUri safeUri = new SafeUri() {
 	    @Override
 	    public String asString() {
-		return "http://www.youtube.com/embed/HqPvI_CwTe8";
+		return "http://www.youtube.com/embed/y7ENfTax5eA";
 	    }
 	};
-	//<iframe width="853" height="480" src="http://www.youtube.com/embed/HqPvI_CwTe8" frameborder="0" allowfullscreen></iframe>
 	HTML html = new HTML(Templates.TEMPLATES.youtubeVideoPlayer(safeUri, "640", "360"));
 	fPnlBody.add(html);
 

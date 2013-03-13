@@ -387,4 +387,7 @@ public interface CBText extends Constants {
 
     @DefaultStringValue("SHARE your vote with your friends")
     String suggestShareVote();
+
+    @DefaultStringValue("Most Voted Confession")
+    String filterMostVotedConfessions();
 }

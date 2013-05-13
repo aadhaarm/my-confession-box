@@ -36,7 +36,7 @@ public class ActivityButton extends AbsolutePanel {
     Label lblTick = null;
     Image loader = null;
     Anchor ancShare = null;
-    final int timerCountNumber = 5;
+    final int timerCountNumber = 1;
     Image buttonImage;
     Timer timer;
 

@@ -226,8 +226,6 @@ public class ConfessionPanel extends FlowPanel{
 	// Facebook LIKE Button
 	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
 
-	AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
-	fPnlFBWidgets.add(addCommentWidget);
 
 	// Comment Section
 	if(ConfessionBox.isMobile) {
@@ -237,19 +235,32 @@ public class ConfessionPanel extends FlowPanel{
 		@Override
 		public void onTouchEnd(TouchEndEvent event) {
 		    btnShowFBWidgets.setVisible(false);
+		    AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
+		    fPnlFBWidgets.add(addCommentWidget);
 		    CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
 		    fPnlFBWidgets.add(commentListWidget);
 		}
 	    });
+//	    btnShowFBWidgets.addClickHandler(new ClickHandler() {
+//	        @Override
+//	        public void onClick(ClickEvent event) {
+//		    btnShowFBWidgets.setVisible(false);
+//		    AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
+//		    fPnlFBWidgets.add(addCommentWidget);
+//		    CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
+//		    fPnlFBWidgets.add(commentListWidget);
+//	        }
+//	    });
 	    fPnlFBWidgets.add(btnShowFBWidgets);
-
-	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
 	} else {
 	    // For Desktop - Comment Section
+	    AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
+	    fPnlFBWidgets.add(addCommentWidget);
 	    CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
 	    fPnlFBWidgets.add(commentListWidget);
 	}
 
+	CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
 	this.add(fPnlFBWidgets);
     }
 

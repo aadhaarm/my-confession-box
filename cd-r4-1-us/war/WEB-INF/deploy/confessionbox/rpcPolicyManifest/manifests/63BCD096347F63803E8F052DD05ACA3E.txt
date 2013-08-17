@@ -1,0 +1,2 @@
+serviceClass: com.l3.CB.client.FacebookService
+path: 2872E640E034C40FA428D26D2AB473E8.gwt.rpc

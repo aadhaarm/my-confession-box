@@ -3,6 +3,15 @@
 	<!-- <context-param> <param-name>gwt.xsrf.session_cookie_name</param-name> 
 		<param-value>JSESSIONID</param-value> </context-param> -->
 
+	<filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>confessionServlet</servlet-name>

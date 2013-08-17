@@ -840,3 +840,53 @@ main_container a:hover {
 	overflow: auto;
 	margin: 5px auto;
 }
+
+.comment_frame {
+	display: block;
+	overflow-x: auto;
+	overflow-y: auto;
+	border:#CCC thin solid;
+	border-radius:5px;
+	width:auto;
+	height:auto;
+	padding:5px;
+	/*background-color:#CCC;*/
+	line-height:18px;
+	font-size:13px;
+	font-family:Georgia, "Times New Roman", Times, serif;
+}
+
+.coment_read {
+	border:#CCC solid thin;
+    border-radius:5px;
+	padding:10px;
+	color:#666;
+	background-color:#FFF;
+}
+
+.individual_comment_read {
+	border-top:#CCC dashed thin;
+	margin-bottom:25px;
+}
+
+.comment_image{
+	float:left;
+	margin-right:10px;
+	border:#CCC solid thin;
+	width:35px;
+	height:35px;
+	margin-top:3px;
+}
+
+.write_comment {
+	padding-top:5px;
+	color:#CCC;
+}
+
+.write_comment_image{
+	border:#CCC solid thin;
+	width:44px;
+	height:44px;
+	float:left;
+	margin-right:4px;
+}

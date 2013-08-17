@@ -2,7 +2,10 @@ package com.l3.CB.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.TouchEndEvent;
+import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -25,7 +28,7 @@ public class ConfessionPanel extends FlowPanel{
     private boolean showUserControls;
     private boolean showExtendedDetails;
     private boolean showPardonHelpText;
-    
+
     private FlowPanel fPnlMiddleContent;    
     private Image imgProfileImage;
     private Widget hPnlUserControls;
@@ -47,7 +50,7 @@ public class ConfessionPanel extends FlowPanel{
 	    this.showUserControls = showUserControls;
 	    this.showExtendedDetails = showExtendedDetails;
 	    this.showPardonHelpText = showPardonHelpText;
-	    
+
 	    this.getElement().setId("confession-id-" + confession.getConfId());
 	    this.addStyleName(Constants.STYLE_CLASS_CONFESSION_MAIN_CONTAINER);
 
@@ -58,12 +61,12 @@ public class ConfessionPanel extends FlowPanel{
 
     private void bind() {
 	ancConfessionTitle.addClickHandler(new ClickHandler() {
-	    
+
 	    @Override
 	    public void onClick(ClickEvent event) {
 		ConfessionBox.confId = confession.getConfId().toString();
 		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);
-//		Window.open(FacebookUtil.getActivityUrl(confession.getConfId()), confession.getConfessionTitle(), "");
+		//		Window.open(FacebookUtil.getActivityUrl(confession.getConfId()), confession.getConfessionTitle(), "");
 	    }
 	});
     }
@@ -120,7 +123,7 @@ public class ConfessionPanel extends FlowPanel{
 
 	// Confession Title
 	ancConfessionTitle = new Anchor(confession.getConfessionTitle());
-	
+
 	ancConfessionTitle.setStyleName(Constants.STYLE_CLASS_CONFESSION_TITLE_TEXT);
 	fPnlMiddleContent.add(ancConfessionTitle);
 
@@ -183,7 +186,7 @@ public class ConfessionPanel extends FlowPanel{
 		});
 	    }
 	}
-	
+
 	//Middle widget
 	this.add(fPnlMiddleContent);
 
@@ -220,40 +223,32 @@ public class ConfessionPanel extends FlowPanel{
 	final FlowPanel fPnlFBWidgets = new FlowPanel();
 	fPnlFBWidgets.setStyleName("comment_frame");
 
+	// Facebook LIKE Button
+	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
+
 	AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
 	fPnlFBWidgets.add(addCommentWidget);
 
-	CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
-	fPnlFBWidgets.add(commentListWidget);
-	
-//	// Facebook LIKE Button
-//	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
-//	
-//	// Comment Section
-//	if(ConfessionBox.isMobile) {
-//	    // For Mobile - Comment section
-//	    final Button btnShowFBWidgets = new Button("Comment");
-//	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
-//		@Override
-//		public void onTouchEnd(TouchEndEvent event) {
-//		    btnShowFBWidgets.setVisible(false);
-//		    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-//		    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
-//			CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-//		    }
-//		}
-//	    });
-//	    fPnlFBWidgets.add(btnShowFBWidgets);
-//	    
-//	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-//	} else {
-//	    // For Desktop - Comment Section
-//	    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-//	    
-//	    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
-//		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-//	    }
-//	}
+	// Comment Section
+	if(ConfessionBox.isMobile) {
+	    // For Mobile - Comment section
+	    final Button btnShowFBWidgets = new Button("Comment");
+	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
+		@Override
+		public void onTouchEnd(TouchEndEvent event) {
+		    btnShowFBWidgets.setVisible(false);
+		    CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
+		    fPnlFBWidgets.add(commentListWidget);
+		}
+	    });
+	    fPnlFBWidgets.add(btnShowFBWidgets);
+
+	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+	} else {
+	    // For Desktop - Comment Section
+	    CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
+	    fPnlFBWidgets.add(commentListWidget);
+	}
 
 	this.add(fPnlFBWidgets);
     }

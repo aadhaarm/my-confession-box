@@ -78,7 +78,7 @@ public class AddCommentTemplate extends Composite implements HasText {
      */
     private int getCommentWidth() {
 	if(ConfessionBox.isMobile) {
-	    int width = Window.getClientWidth() - 50;
+	    int width = Window.getClientWidth() - 100;
 	    return width;
 	} else {
 	    return 565;

@@ -64,7 +64,9 @@ public class CommentReadTemplate extends Composite implements HasText {
 	this.comment = comment;
 	if(comment != null) {
 	    btnSecond.setText("L");
+	    btnSecond.setTitle("Like");
 	    btnDislike.setText("D");
+	    btnDislike.setTitle("Dislike");
 	    this.strComment.setInnerText(comment.getComment());
 	    this.numOfDislike.setInnerText(comment.getNumOfAbuseVote() + "");
 	    this.numOfSecond.setInnerText(comment.getNumOfSecond() + "");
@@ -110,8 +112,8 @@ public class CommentReadTemplate extends Composite implements HasText {
 
 	    @Override
 	    public void onSuccess(Void result) {
-		// TODO Auto-generated method stub
-
+		comment.setNumOfSecond(comment.getNumOfSecond() + 1);
+		numOfSecond.setInnerText(comment.getNumOfSecond() + "");
 	    }
 
 	    @Override
@@ -135,8 +137,8 @@ public class CommentReadTemplate extends Composite implements HasText {
 
 	    @Override
 	    public void onSuccess(Void result) {
-		// TODO Auto-generated method stub
-
+		comment.setNumOfAbuseVote(comment.getNumOfAbuseVote() + 1);
+		numOfDislike.setInnerText(comment.getNumOfAbuseVote() + "");
 	    }
 
 	    @Override

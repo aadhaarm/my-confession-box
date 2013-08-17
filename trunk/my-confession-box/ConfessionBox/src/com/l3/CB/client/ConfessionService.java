@@ -12,7 +12,9 @@ import java.util.Map;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.google.gwt.user.server.rpc.XsrfProtect;
+import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
+import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
@@ -68,4 +70,9 @@ public interface ConfessionService extends RemoteService {
     // SUBSCRIBE
     boolean subscribe(Long confId, Long userId, Date timeStamp);
     boolean isSubscribed(Long confId, Long userId);
+
+    // COMMENT
+    void saveComment(Comment comment);
+    List<Comment> getComments(CommentFilter filter);   
+    void voteOnComment(CommentFilter filter);
 }

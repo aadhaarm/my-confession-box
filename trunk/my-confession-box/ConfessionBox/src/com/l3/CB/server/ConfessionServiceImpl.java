@@ -8,11 +8,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.l3.CB.client.ConfessionService;
 import com.l3.CB.server.manager.ActivityManager;
 import com.l3.CB.server.manager.CacheManager;
+import com.l3.CB.server.manager.CommentManager;
 import com.l3.CB.server.manager.ConfessionManager;
 import com.l3.CB.server.manager.PardonManager;
 import com.l3.CB.server.manager.UpdateManager;
 import com.l3.CB.server.manager.UserManager;
+import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
+import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
@@ -192,5 +195,21 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements Confe
     @Override
     public List<ConfessionUpdate> getConfessionUpdates(Long confId) {
 	return UpdateManager.getConfessionUpdates(confId);
+    }
+
+    @Override
+    public void saveComment(Comment comment) {
+	comment.setUserIp(getThreadLocalRequest().getRemoteHost().toString());
+	CommentManager.saveComment(comment);
+    }
+
+    @Override
+    public List<Comment> getComments(CommentFilter filter) {
+	return CommentManager.getComments(filter);
+    }
+
+    @Override
+    public void voteOnComment(CommentFilter filter) {
+	CommentManager.vote(filter);
     }
 }

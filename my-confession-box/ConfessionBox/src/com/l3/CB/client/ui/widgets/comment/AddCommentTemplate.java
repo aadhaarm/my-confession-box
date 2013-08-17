@@ -49,16 +49,16 @@ public class AddCommentTemplate extends Composite implements HasText {
     Button btnSubmit;
 
     Timer timer = new Timer() {
-        @Override
-        public void run() {
+	@Override
+	public void run() {
 	    ConfessionBox.eventBus.fireEvent(new CommentEvent(confId));
 	    txtComment.setText("");
 	    txtComment.setEnabled(true);
 	    btnSubmit.setEnabled(true);
 	    commentAsAnyn.setEnabled(true);
-        }
+	}
     };
-    
+
     public AddCommentTemplate() {
 	initWidget(uiBinder.createAndBindUi(this));
     }
@@ -67,8 +67,8 @@ public class AddCommentTemplate extends Composite implements HasText {
 	initWidget(uiBinder.createAndBindUi(this));
 	this.confId = confId;
 	setupImage();
-	
-	txtComment.setWidth(getCommentWidth() + "px");
+
+	getCommentWidth();
 
 	bind();
     }
@@ -76,16 +76,15 @@ public class AddCommentTemplate extends Composite implements HasText {
     /**
      * @return
      */
-    private int getCommentWidth() {
+    private void getCommentWidth() {
 	if(ConfessionBox.isMobile) {
-	    int width = Window.getClientWidth() - 100;
-	    return width;
+	    int width = Window.getClientWidth() - 200;
+	    txtComment.setWidth(width + "px");
 	} else {
-	    return 565;
+	    txtComment.setCharacterWidth(60);
 	}
     }
 
-    
     private void bind() {
 	commentAsAnyn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -106,9 +105,11 @@ public class AddCommentTemplate extends Composite implements HasText {
 	    String fbId = ConfessionBox.getLoggedInUserInfo().getId();
 	    if (commentAsAnyn != null && commentAsAnyn.getValue()) {
 		imgProfile.setUrl(FacebookUtil.getFaceIconImage(gender));
-	    } else {
+	    } else if(fbId != null){
 		imgProfile.setUrl(FacebookUtil.getUserImageUrl(fbId));
 		CommonUtils.parseXFBMLJS(imgProfile.getElement());
+	    } else {
+		imgProfile.setUrl(FacebookUtil.getFaceIconImage(gender));
 	    }
 	} else {
 	    imgProfile.setUrl(FacebookUtil.getFaceIconImage(gender));
@@ -126,17 +127,17 @@ public class AddCommentTemplate extends Composite implements HasText {
     void onSubmit(ClickEvent e) {
 	if(validate()) {
 	    Comment c = getComment();
-	    
+
 	    txtComment.setEnabled(false);
 	    btnSubmit.setEnabled(false);
 	    commentAsAnyn.setEnabled(false);
-	    
+
 	    ConfessionBox.confessionService.saveComment(c, new AsyncCallback<Void>() {
 
 		@Override
 		public void onSuccess(Void result) {
 		    timer.cancel();
-		    timer.schedule(1000);
+		    timer.schedule(2000);
 		}
 
 		@Override

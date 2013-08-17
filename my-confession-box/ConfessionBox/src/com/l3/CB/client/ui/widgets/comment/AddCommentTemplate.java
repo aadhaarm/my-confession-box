@@ -67,10 +67,25 @@ public class AddCommentTemplate extends Composite implements HasText {
 	initWidget(uiBinder.createAndBindUi(this));
 	this.confId = confId;
 	setupImage();
+	
+	txtComment.setWidth(getCommentWidth() + "px");
 
 	bind();
     }
 
+    /**
+     * @return
+     */
+    private int getCommentWidth() {
+	if(ConfessionBox.isMobile) {
+	    int width = Window.getClientWidth() - 50;
+	    return width;
+	} else {
+	    return 565;
+	}
+    }
+
+    
     private void bind() {
 	commentAsAnyn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 

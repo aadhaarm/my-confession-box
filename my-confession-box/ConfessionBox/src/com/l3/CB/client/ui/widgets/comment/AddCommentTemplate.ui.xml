@@ -16,8 +16,7 @@
 			<div class="write_comment_image">
 				<g:Image ui:field="imgProfile"></g:Image>
 			</div>
-			<g:TextArea ui:field="txtComment" characterWidth="60"
-				visibleLines="3" ></g:TextArea>
+			<g:TextArea ui:field="txtComment" visibleLines="3" ></g:TextArea>
 			<g:Button ui:field="btnSubmit">Submit</g:Button>
 		</div>
 	</g:HTMLPanel>

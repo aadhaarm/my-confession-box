@@ -1,0 +1,842 @@
+div.container {
+	max-width: 984px;
+	line-height: 150%;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	color: #333333;
+}
+
+div.header {
+	text-align: center;
+    z-index: 1;
+	cursor: pointer;
+	display: block;
+	overflow: auto;
+}
+
+.pointsPanel {
+	display: block;
+	margin: 0 auto 0 auto;
+	background-color: #FEFFED;
+	float: left;
+}
+
+.pointsLabel {
+}
+
+.menu {
+	background-image: url(../../images/icon_menu.jpg);
+	background-size:20px 27px;
+	float: left;
+	padding: 5px 0 0 5px;
+	margin-top: 2px;
+	width: 22px;
+	/* background-color: black;
+	color: white; */
+}
+
+.footer {
+	display: none;	
+}
+
+.confessionPanel {
+	width: 300px;
+}
+
+.logoLink {
+	background-color: #E9E9E9;
+	color: #3B5998;
+	font-size: 17px;
+	font-weight: bold;
+	padding: 5px 0 5px 0;
+	text-align: center;
+	border: 1px solid #3B5998;
+	letter-spacing: 2px;
+}
+
+.tagLineText {
+	font-size: 12px;
+}
+
+div.content {
+	min-height: 100px;
+	margin-left: auto;
+	padding-left: 0em;
+}
+
+div.helpInfoDiv {
+	display: none;
+}
+
+.activityButton {
+	height: 42px;
+	width: 33px;
+	float: left;
+}
+
+.btnWrapper {
+	font-size: 10px;
+	position: absolute;
+	right: 1px;
+	text-align: right;
+	top: 33px;
+	z-index: 1;
+}
+
+.btnWrapperMenu {
+	position: absolute;
+	right: 3px;
+	text-align: right;
+	top: 4px;
+	z-index: 1;
+	background-color: #D8DFEA;
+	padding: 2px;
+	color: #3B5998;
+}
+
+.loaderWrap {
+	position: absolute;
+	right: 33px;
+	top: 0px;
+	z-index: 1;
+}
+
+.timerCountWrap {
+	position: absolute;
+	text-align: right;
+	right: 6px;
+	top: -1px;
+	font-size: small;
+	z-index: 1;
+}
+
+.shareWrap {
+	color: #D8DFEA;
+	cursor: pointer;
+	font-size: xx-small;
+	padding-bottom: 1px;
+	padding-left: 2px;
+	padding-right: 1px;
+	padding-top: 0;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+.btnNameText {
+	color: black;
+	font-size: 17px;
+	position: absolute;
+	right: -18px;
+	text-align: center;
+	top: -5px;
+	width: 47px;
+	z-index: 1;
+}
+
+.activityButtonContainer {
+	float: left;
+	width: 46px;
+}
+
+.userControlButtonContainer {
+	float: right;
+	height: 30px;
+	width: 30px;
+}
+
+.userControlButton {
+	float: left;
+}
+
+/* .confessionScrollPanel {
+	height: auto;
+	width: 559;
+	max-width: 1400px;
+	min-width: 545px;
+}
+ */
+.loaderImage {
+	display: block;
+	margin-left: auto;
+	margin-right: auto
+}
+
+#auth-id {
+	display: none;
+}
+
+.infoModalPopupWindow {
+	background-color: white;
+	color: #333333;
+	padding: 10px;
+	z-index: 1000;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	line-height: 1.36;
+}
+
+.infoModalPopupWindowClose {
+	float: right;
+}
+
+.confessionGridElement {
+	border-top-style: solid;
+	border-top-color: silver;
+	border-top-width: 1px;
+}
+
+.pardonStatusPanel {
+	
+}
+
+.dateTimeStamp {
+	color: gray;
+	font-style: italic;
+	font-size: small;
+}
+
+.fieldError {
+	border-bottom-color: red !important;
+	border-bottom-style: dashed !important;
+	border-width: 2px !important;
+}
+
+.refreshButton {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-image: url("/images/sprite_black2.png");
+	background-origin: padding-box;
+	background-position: -61px -19px;
+	background-repeat: no-repeat;
+	background-size: auto auto;
+	margin-left: 5px;
+	height: 26px;
+	width: 28px;
+	float: right;
+}
+
+.filterInfo {
+	color: #666666;
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 1.2;
+	margin: 2px 2px 2px 3px;
+	text-align: start;
+	text-transform: capitalize;
+	float: right;
+}
+
+.confessionFilterOptionsList {
+	background-image: url(../../images/filter-icon.png) ;
+	background-size:18px 25px;
+	float: right;
+	padding: 5px 0 0 5px;
+	margin-top: 2px;
+	width: 22px;
+	/* background-color: black; */
+}
+
+.confessionTopBar {
+	display: block;
+	overflow: auto;
+	padding: 10px 0 10px 0;
+}
+
+.confessionTitleText {
+	font-size: large;
+	font-weight: bold;
+}
+
+.moreTextLink {
+	float: right;
+}
+
+.helpInfoPanel {
+	color: #333333;
+	background-color: #FFFF99;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: 10px;
+	line-height: 1.30;
+	margin-top: 4px;
+	padding-bottom: 2px;
+	padding-left: 6px;
+	padding-right: 2px;
+	padding-top: 4px;
+	width: 138px;
+}
+
+.updateConfessionPanel {
+	font-size: 11px;
+}
+
+.confessionRelation {
+	font-weight: bold;
+}
+
+.confessionUpdate {
+	background-color: #FEFFED;
+	color: #333333;
+	font-size: 13px;
+	margin-bottom: 0;
+	margin-left: 0;
+	margin-right: 16px;
+	margin-top: 0;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	overflow: auto;
+	border-bottom-color: #999999;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+.updateText {
+	float: left;
+}
+
+.questionMark {
+	cursor: pointer;
+	color: white;
+}
+
+.questionMark_bl {
+	color: black;
+	cursor: pointer;
+}
+
+.emptyPageText {
+	font-size: 15px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	width: 475px;
+}
+
+.write {
+	vertical-align: text-top;
+}
+
+.human_points {
+	display: none;
+ }
+
+.reg_main_container{
+	background:#f5f5f5;
+	padding:0 0px 0 0px;
+	height:auto;
+	font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size:normal;
+	border-bottom:solid 1px #CCC;
+}
+
+reg_main_container a:link, reg_main_container a:visited {
+	color:#415896;
+}
+
+a:hover {
+	color:#07285d;
+	}
+
+/*confession css begins here*/
+
+.selections {
+	padding:0 0 0 5px;
+	}
+
+.header_text {
+	border-bottom:solid 1px #CCC;
+	margin:10px 0 0 0;
+}
+
+.subtext {
+	font-size:small;
+	line-height: 1.38;
+}
+
+.reg_image {
+    float: left;
+    margin-bottom: 10px;
+    margin-left: 15px;
+    margin-right: 5px;
+    margin-top: -22px;
+    padding-right: 10px;
+}
+
+.options {
+	background-color:#FF9;
+	padding: 5px;
+	margin: 2px 5px 0 5px;
+	font-size:small;
+}
+
+.options_title{
+	font-weight:600;
+}
+
+.appeal {
+	font-size:small;
+	font-weight:600;
+	margin-top: 8px;
+}
+
+.friend_image {
+	height: 25px;
+	height: 25px;
+    margin-bottom: -7px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 3px;
+    width: 25px;
+	cursor: pointer;
+}
+	
+.confession {
+	}
+
+.reg_confession_title {
+	font-weight:600;
+	font-size:small;
+	margin:10px 0 10px 5px;
+}
+
+.confession_text {
+	display: block;
+	overflow: auto;
+	margin:5px 5px 0 5px;	
+}
+
+.ch_remaining{
+	font-size:small;
+	margin:2px 0 0 0;
+}
+
+.save_draft {
+	margin:5px 0 5px 0;
+	float:left;
+}
+
+.submit_confession {
+	margin:5px 0 5px 0;
+	float:right;
+}
+
+.relationSuggestBox {
+	font-size: small;
+	font-weight: 600;
+}
+
+.appealButton {
+	float: right;
+}
+
+.pardonModalPopupWindow {
+	padding: 10px;
+	z-index: 1000;
+	background-color: white;
+}
+
+.appealPanel {
+	margin-left: 19px;
+	font-size: 12px;
+}
+
+.friendsSuggestBoxMyConfPage {
+}
+
+.appealLink {
+}
+
+.errorMessage {
+	color: orangered;
+}
+
+.buttonShowUpdate {
+	/* float: right; */	
+}
+
+.confessionPreview {
+	font-weight: bold;
+	padding-left: 80px;
+    padding-top: 10px;
+}
+
+.regConfButtons {
+	display: block;
+	overflow: auto;
+}
+
+.confessionTextEditor {
+	font-size: 12px;
+}
+.main_container {
+	background: #f5f5f5;
+	height: auto;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	font-size: normal;
+	border-bottom: solid 1px #CCC;
+}
+
+.content a:link,a:visited {
+	color: #3B5998;
+	font-size: 13px;
+}
+
+main_container a:hover {
+	color: #07285d;
+}
+
+.text_decoration {
+	text-decoration: line-through;
+}
+
+.confessionTop {
+	display: block;
+	overflow: auto;
+	height: auto;
+	width: auto;
+	/* height: 20px; */
+	padding: 10px 0 10px 0;
+}
+
+.image {
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.name {
+	margin-left: 66px;
+	margin-top: 3px;
+	vertical-align: middle;
+	/* height: 50px; */
+}
+
+.status_bar {
+	float: right;
+	color: #999;
+	font-size: small;
+	width: 200px;
+}
+
+.status_bar a {
+	cursor: pointer;
+	color: #3B5998;
+	float: right;
+}
+
+.time_stamp {
+	font-size: small;
+	color: #999999;
+	text-align: right;
+}
+
+.time_stamp_pardon_status {
+	font-size: small;
+	color: #999999;
+	float: inherit;
+	position: relative;
+}
+
+.time_stamp_update {
+	float: right;
+	position: relative;
+	padding-left: 4px;
+	font-size: small;
+	color: #999999;
+}
+
+/*Middle div styling*/
+.middle {
+	position: relative;
+	margin: 0 0 10px 0;
+}
+
+.confession_title {
+	padding-top: 0px;
+	font-weight: bold;
+}
+
+.confession_body {
+	padding: 6px 0 2px 0;
+	font-size: 14px;
+	color: #333333;
+	background-color: #FEFFED;
+	line-height: 1.38;
+	overflow: hidden;
+	text-overflow: clip;
+}
+
+.confessionText {
+	overflow: hidden;
+}
+
+.moreLink {
+	float: right;
+	position: relative;
+}
+
+.condition {
+	background-color: #73883E;
+	padding: 4px 2px 2px 2px;
+	margin: -10px 0 5px 0;
+	color: #FFF;
+	font-size: small !important;
+	line-height: 1.36;
+	overflow: auto;
+}
+
+.pardonCondition {
+	font-size: small;
+}
+
+.conditionTick {
+	float: left;
+}
+
+.pardonConditionList {
+	float: left;
+}
+
+.condition_label a {
+	font-weight: 600;
+	color: #fff;
+}
+
+.condition_status {
+	float: right;
+	margin-top: -42px;
+	margin-right: 45px;
+	color: #FFF;
+	background-color: #39F;
+	padding: 3px 5px 3px 5px;
+	font-size: 12px;
+}
+
+.tooltip_left {
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 2px 0 2px 5px;
+	border: #CCC;
+	color: #999;
+	font-size: 13px;
+	background-color: #333;
+}
+
+.tooltip_right {
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 2px 0 2px 10px;
+	border: #CCC;
+	color: white;;
+	font-size: 12px;
+	background-color: #333;
+}
+
+.tooltip_left a {
+	color: #fff;
+}
+
+.tooltip_right a {
+	color: #fff;
+}
+
+/*bottom div is below middle div for all buttons and pardon staus area. This div will have 2 more sub divs - buttons and pardon_status*/
+.buttons {
+	position: relative;
+	width: auto;
+	height: 45px;
+}
+
+.buttons ul {
+	width: auto;
+	margin: 0 auto 0 auto;
+}
+
+.buttons ul li {
+	float: left;
+	padding: 0 2px 0 2px;
+	border-right: 1px solid #FFF;
+	border-left: 1px solid #FFF;
+	height: 41px;
+	list-style: none;
+	display: block;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.buttons li:hover {
+	
+}
+
+/*pardon status div*/
+.pardon_status_yes {
+	background-color: #73883E;
+	color: #FFFFFF;
+	float: right;
+	font-size: 16px;
+	margin-bottom: 0;
+	margin-top: 1px;
+	padding-bottom: 4px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 4px;
+	position: relative;
+	width: 118px;
+	text-align: center;
+}
+
+.pardon_status_no {
+	float: right;
+	padding: 3px 15px;
+	margin: 3px 0 0 0;
+	position: relative;
+	background-color: #999;
+	color: #FFF;
+	font-size: 15px;
+}
+
+.btnAbdPardonstatusDiv {
+	width: auto;
+	height: 50px;
+}
+
+.fb_widgets {
+	/* float: right; */
+}
+
+.confessedToName {
+	font-weight: normal;
+	font-size: normal;
+	color: gray;
+	text-align: left;
+}
+
+.feedViewLink {
+	color: #999999;
+	font-size: small;
+	display: block;
+}
+
+.pardonButtonDiv {
+	padding-right: 14px;
+	float: right;
+}
+
+.popupCancelButton {
+	float: right;
+}
+
+.pardonButton {
+	width: 116px;
+	background-color: #73883E;
+	display: block;
+	color: white !important;
+}
+
+.activityButtonDiv {
+	float: left;
+	overflow: auto;
+}
+
+.pardonStatusDiv {
+	float: right;
+	width: 195px;
+}
+
+.profileName {
+	float: left;
+	padding-right: 3px;
+	cursor: pointer;
+}
+
+.confessionListDecoratoePanel {
+/* 	border-left-style: solid;
+	border-left-width: 1px;
+	border-left-color: #cccccc; */
+	min-height: 600px
+}
+
+.showMenuButton {
+}
+
+.confessToMeToolTip {
+    border: 1px solid grey;
+    color: grey;
+    display: block;
+    font-size: 10px;
+    line-height: 1.38;
+    margin: 0 10px 5px 10px;
+    padding: 5px;
+}
+
+.fbLikeBar {
+	padding: 5px 0 5px 0;
+}
+
+.previewBar {
+	height: 60px;
+}
+
+.userLoginStatus {
+	display: block;
+	overflow: auto;
+	float: right;
+}
+
+.loginStatusBar {
+	display: block;
+	overflow: auto;
+}
+
+.userLoginStatusImage {
+	float: right;
+	padding-bottom: 4px;
+}
+
+.userLoginStatusName {
+}
+
+.left {
+	display: none;
+}
+
+.subscribeAnchorBar {
+	float: left;
+}
+
+.shareAnchorBar {
+	position: relative;
+	top: -3px;
+}
+
+.optionsNoButton {
+	float: left;
+	width: 70px;
+}
+
+.optionsYesButton {
+	width: 70px;
+	float: left;
+}
+
+.yesNoBar {
+	display: block;
+	overflow: auto;
+}
+
+.menuButton {
+	position: absolute;
+	float: left;
+	padding: 5px 0 0 5px;
+	width: 50px;
+	z-index: 100;
+}
+
+.buttonLearn {
+	display: block;
+	overflow: auto;
+	margin: 5px auto;
+}

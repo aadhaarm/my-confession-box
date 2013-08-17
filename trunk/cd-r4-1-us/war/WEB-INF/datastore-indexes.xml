@@ -1,0 +1,160 @@
+<datastore-indexes autoGenerate="true">
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 25 times in query history -->
+    <datastore-index kind="PardonConditionDO" ancestor="true" source="auto">
+        <property name="pardonConditionDOs_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="locale" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="UserActivityDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="SubscribtionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="shareAsAnyn" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfSameBoatVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfShouldBePardonedVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfShouldNotBePardonedVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfLameVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionShareDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+    
+        <!-- Used 4 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 48 times in query history -->
+    <datastore-index kind="PardonConditionDO" ancestor="true" source="auto">
+        <property name="pardonConditionDOs_INTEGER_IDX" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="SubscribtionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 8 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfLameVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfShouldNotBePardonedVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfShouldBePardonedVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfSympathyVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="numOfSameBoatVote" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="shareAsAnyn" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="UserActivityDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="locale" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="ConfessionShareDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="ConfessionUpdateDO" ancestor="false" source="auto">
+        <property name="confId" direction="asc"/>
+        <property name="timeStamp" direction="asc"/>
+    </datastore-index>
+      
+</datastore-indexes>

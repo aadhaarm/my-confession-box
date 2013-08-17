@@ -156,5 +156,11 @@
         <property name="confId" direction="asc"/>
         <property name="timeStamp" direction="asc"/>
     </datastore-index>
+
+    <!-- Used 17 times in query history -->
+    <datastore-index kind="CommentDO" ancestor="false" source="auto">
+        <property name="confId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
       
 </datastore-indexes>

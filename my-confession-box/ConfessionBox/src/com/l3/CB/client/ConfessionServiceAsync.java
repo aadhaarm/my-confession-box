@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
+import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
@@ -57,4 +59,9 @@ public interface ConfessionServiceAsync {
     void getConfessionDraft(Long userId, String fbId, AsyncCallback<Confession> callback);
     void clearConfessionDraft(Long userId, String fbId, AsyncCallback<Void> callback);
     void getConfessionUpdates(Long confId, AsyncCallback<List<ConfessionUpdate>> callback);
+    
+    // COMMENT
+    void saveComment(Comment comment, AsyncCallback<Void> callback);
+    void getComments(CommentFilter filter, AsyncCallback<List<Comment>> callback);
+    void voteOnComment(CommentFilter filter, AsyncCallback<Void> callback);
 }

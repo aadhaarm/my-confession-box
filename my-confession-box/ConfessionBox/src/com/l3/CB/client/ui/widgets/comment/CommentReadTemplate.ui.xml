@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<div class="comment_image">
+			<g:Image ui:field="imgProfile" />
+		</div>
+		<div class="person_name">
+			<span ui:field='nameSpan' />
+			commented..
+			<div class="time_stamp">
+				<span ui:field='timeStamp' />
+			</div>
+		</div>
+		<span ui:field='strComment' />
+		<div class="like_buttons">
+			<span ui:field='numOfSecond' />
+			<g:Button ui:field="btnSecond" />
+			<span ui:field='numOfDislike' />
+			<g:Button ui:field="btnDislike" />
+		</div>
+
+		<!-- <g:Button styleName="{style.important}" ui:field="button" /> -->
+	</g:HTMLPanel>
+</ui:UiBinder> 

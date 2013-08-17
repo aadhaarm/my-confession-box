@@ -2,15 +2,14 @@ package com.l3.CB.client.ui.widgets;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.TouchEndEvent;
-import com.google.gwt.event.dom.client.TouchEndHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.ui.widgets.comment.AddCommentWidget;
+import com.l3.CB.client.ui.widgets.comment.CommentListWidget;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.FeedViewUtils;
 import com.l3.CB.shared.Constants;
@@ -219,28 +218,42 @@ public class ConfessionPanel extends FlowPanel{
 
 	// FB WIDGETS
 	final FlowPanel fPnlFBWidgets = new FlowPanel();
-	fPnlFBWidgets.setStyleName(Constants.DIV_CONFESSION_PANEL_FBWIDGETS_CONTAINER);
-	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
-	if(ConfessionBox.isMobile) {
-	    final Button btnShowFBWidgets = new Button("Comment");
-	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
-		@Override
-		public void onTouchEnd(TouchEndEvent event) {
-		    btnShowFBWidgets.setVisible(false);
-		    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-		    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
-			CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-		    }
-		}
-	    });
-	    fPnlFBWidgets.add(btnShowFBWidgets);
-	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-	} else {
-	    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
-	    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
-		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
-	    }
-	}
+	fPnlFBWidgets.setStyleName("comment_frame");
+
+	AddCommentWidget addCommentWidget = new AddCommentWidget(confession.getConfId());
+	fPnlFBWidgets.add(addCommentWidget);
+
+	CommentListWidget commentListWidget = new CommentListWidget(confession.getConfId());
+	fPnlFBWidgets.add(commentListWidget);
+	
+//	// Facebook LIKE Button
+//	fPnlFBWidgets.add(FeedViewUtils.getLikeButton(confession.getConfId()));
+//	
+//	// Comment Section
+//	if(ConfessionBox.isMobile) {
+//	    // For Mobile - Comment section
+//	    final Button btnShowFBWidgets = new Button("Comment");
+//	    btnShowFBWidgets.addTouchEndHandler(new TouchEndHandler() {
+//		@Override
+//		public void onTouchEnd(TouchEndEvent event) {
+//		    btnShowFBWidgets.setVisible(false);
+//		    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+//		    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
+//			CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+//		    }
+//		}
+//	    });
+//	    fPnlFBWidgets.add(btnShowFBWidgets);
+//	    
+//	    CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+//	} else {
+//	    // For Desktop - Comment Section
+//	    fPnlFBWidgets.add(FeedViewUtils.getCommentSection(confession.getConfId()));
+//	    
+//	    if(fPnlFBWidgets != null && fPnlFBWidgets.getElement() != null) {
+//		CommonUtils.parseXFBMLJS(fPnlFBWidgets.getElement());
+//	    }
+//	}
 
 	this.add(fPnlFBWidgets);
     }

@@ -125,29 +125,33 @@ public class AddCommentTemplate extends Composite implements HasText {
 
     @UiHandler("btnSubmit")
     void onSubmit(ClickEvent e) {
-	if(validate()) {
-	    Comment c = getComment();
+	if(ConfessionBox.isLoggedIn) {
+	    if(validate()) {
+		Comment c = getComment();
 
-	    txtComment.setEnabled(false);
-	    btnSubmit.setEnabled(false);
-	    commentAsAnyn.setEnabled(false);
+		txtComment.setEnabled(false);
+		btnSubmit.setEnabled(false);
+		commentAsAnyn.setEnabled(false);
 
-	    ConfessionBox.confessionService.saveComment(c, new AsyncCallback<Void>() {
+		ConfessionBox.confessionService.saveComment(c, new AsyncCallback<Void>() {
 
-		@Override
-		public void onSuccess(Void result) {
-		    timer.cancel();
-		    timer.schedule(2000);
-		}
+		    @Override
+		    public void onSuccess(Void result) {
+			timer.cancel();
+			timer.schedule(2000);
+		    }
 
-		@Override
-		public void onFailure(Throwable caught) {
-		    // TODO Auto-generated method stub
+		    @Override
+		    public void onFailure(Throwable caught) {
+			// TODO Auto-generated method stub
 
-		}
-	    });
+		    }
+		});
+	    } else {
+		Window.alert("Enter a valid comment.");
+	    }
 	} else {
-	    Window.alert("Enter a valid comment.");
+	    CommonUtils.login(0);
 	}
     }
 

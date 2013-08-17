@@ -150,7 +150,7 @@ public class UserDAO {
 	return isValid;
     }
 
-    
+
     /**
      * Convert user TO to DO
      * @param userInfo
@@ -194,35 +194,38 @@ public class UserDAO {
     }
 
     public static int updateHumanPoints(Long userId, int points, boolean updatePoints) {
-	int updatedHumanPoints = 0;
-	PersistenceManager pm = PMF.get().getPersistenceManager();
-	try {
-	    Query query = pm.newQuery(UserDO.class);
-	    query.setFilter("userId == id");
-	    query.declareParameters("String id");
-	    @SuppressWarnings("unchecked")
-	    List<UserDO> result = (List<UserDO>) query.execute(userId);
+	if(userId != null && userId != 0) {
+	    int updatedHumanPoints = 0;
+	    PersistenceManager pm = PMF.get().getPersistenceManager();
+	    try {
+		Query query = pm.newQuery(UserDO.class);
+		query.setFilter("userId == id");
+		query.declareParameters("String id");
+		@SuppressWarnings("unchecked")
+		List<UserDO> result = (List<UserDO>) query.execute(userId);
 
-	    if (result != null && !result.isEmpty()) {
-		Iterator<UserDO> it = result.iterator();
-		while (it.hasNext()) {
-		    UserDO userDO = it.next();
-		    if(userDO != null) {
-			if(updatePoints) {
-			    userDO.setHumanPoints(points + userDO.getHumanPoints());
-			    pm.makePersistent(userDO);
+		if (result != null && !result.isEmpty()) {
+		    Iterator<UserDO> it = result.iterator();
+		    while (it.hasNext()) {
+			UserDO userDO = it.next();
+			if(userDO != null) {
+			    if(updatePoints) {
+				userDO.setHumanPoints(points + userDO.getHumanPoints());
+				pm.makePersistent(userDO);
+			    }
+			    updatedHumanPoints = userDO.getHumanPoints();
 			}
-			updatedHumanPoints = userDO.getHumanPoints();
 		    }
 		}
+	    } catch (Exception e) {
+		logger.log(Level.SEVERE,
+			"Error while getting user human points from DB:" + e.getMessage());
+	    } finally {
+		pm.close();
 	    }
-	} catch (Exception e) {
-	    logger.log(Level.SEVERE,
-		    "Error while getting user human points from DB:" + e.getMessage());
-	} finally {
-	    pm.close();
+	    return updatedHumanPoints;
 	}
-	return updatedHumanPoints;
+	return 0;
     }
 
     public static String getFBId(Long userId) {

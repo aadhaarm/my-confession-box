@@ -11,7 +11,7 @@
 			<g:Image ui:field="imgProfile" />
 		</div>
 		<div class="person_name">
-			<span ui:field='nameSpan' />
+			<g:Anchor ui:field='nameSpan'></g:Anchor>
 			commented..
 			<div class="time_stamp">
 				<span ui:field='timeStamp' />

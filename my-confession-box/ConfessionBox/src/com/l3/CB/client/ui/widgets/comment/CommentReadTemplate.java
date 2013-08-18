@@ -3,11 +3,11 @@ package com.l3.CB.client.ui.widgets.comment;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
@@ -39,7 +39,7 @@ public class CommentReadTemplate extends Composite implements HasText {
     SpanElement strComment;
 
     @UiField
-    SpanElement nameSpan;
+    Anchor nameSpan;
 
     @UiField
     SpanElement timeStamp;
@@ -73,15 +73,15 @@ public class CommentReadTemplate extends Composite implements HasText {
 	    this.timeStamp.setInnerText(CommonUtils.getDateInAGOFormat(comment.getTimeStamp()));
 
 	    if(comment.isShareAsAnyn()) {
-		this.nameSpan.setInnerText(ConfessionBox.cbText.confessedByAnynName());
+		this.nameSpan.setText(ConfessionBox.cbText.confessedByAnynName());
 		imgProfile.setUrl(FacebookUtil.getFaceIconImage(comment.getGender()));
 	    } else {
 		if(comment.getUserDetailsJSON() != null) {
 		    UserInfo userInfo = FacebookUtil.getUserInfo(comment.getUserDetailsJSON());
 		    if(userInfo != null) {
-			this.nameSpan.setInnerText(userInfo.getFirst_name());
-			imgProfile.setUrl(FacebookUtil.getUserImageUrl(comment.getFbId()));
-			//		    imgProfile.setUrl(userInfo.getLink());
+			this.nameSpan.setText(userInfo.getName());
+			this.nameSpan.setHref(userInfo.getLink());
+			imgProfile.setUrl(FacebookUtil.getUserImageUrl(userInfo.getId()));
 		    }
 		}
 	    }

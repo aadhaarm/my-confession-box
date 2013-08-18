@@ -134,4 +134,64 @@ public class MailManager {
 	sb.append(FacebookUtil.FB_APP_URL).append("?conf=").append(confId);
 	return sb.toString();	
     }
+
+    public static boolean sendCommentReceivedEmail(UserInfo confessionToUser, UserInfo confessionByUser, long confId) {
+	if(confessionByUser != null) {
+	    logger.log(Level.INFO, "Confessed by user:" + confessionByUser.toString());
+	}
+
+	String confToUser = "";
+	if(confessionToUser != null) {
+	    confToUser = confessionToUser.getName();
+	    logger.log(Level.INFO, "Confessed to user:" + confessionToUser.toString());
+	}
+
+	logger.log(Level.INFO, "From email address:" + fromMailAddress);
+
+	Properties props = new Properties();
+	Session session = Session.getDefaultInstance(props, null);
+	
+	String msgBody = getCommentReceivedEmailMsgBody(confId, confessionByUser.getName(), confToUser);
+	try {
+	    Message msg = new MimeMessage(session);
+	    
+	    msg.setFrom(new InternetAddress(fromMailAddress, "Confession Box (fbconfess admin)"));
+	   
+	    if(confessionByUser != null) {
+		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(confessionByUser.getEmail(), confessionByUser.getName()));
+	    }
+	    if(confessionToUser != null) {
+		msg.addRecipient(Message.RecipientType.CC, new InternetAddress(confessionToUser.getEmail(), confessionToUser.getName()));
+	    }
+
+	    msg.setSubject("Comment received on your confession");
+	    
+	    msg.setText(msgBody);
+	    
+	    logger.log(Level.INFO, "Email message object:" + msg.getDescription());
+
+	    Transport.send(msg);
+
+	} catch (AddressException e) {
+	    logger.log(Constants.LOG_LEVEL,
+		    "AddressException in MailManager.sendFormSaveEmail()" + e.getMessage());
+	} catch (MessagingException e) {
+	    logger.log(Constants.LOG_LEVEL,
+		    "MessagingException in MailManager.sendFormSaveEmail()" + e.getMessage());
+	} catch (UnsupportedEncodingException e) {
+	    logger.log(Constants.LOG_LEVEL,
+		    "UnsupportedEncodingException in MailManager.sendFormSaveEmail()" + e.getMessage());
+	}
+	return true;
+    }
+
+    private static String getCommentReceivedEmailMsgBody(long confId, String confessssionBy, String confessionTo){
+	final StringBuilder sb = new StringBuilder();
+	sb.append("Dear ").append(confessssionBy).append(",\n");
+	sb.append("Someone has commented on your confession.\n");
+	sb.append("To view the comment, please visit the link ");
+	sb.append(FacebookUtil.FB_APP_URL).append("?conf=").append(confId);
+	return sb.toString();
+    }
+
 }

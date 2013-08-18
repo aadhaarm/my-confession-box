@@ -8,7 +8,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<div class="comment_image">
-			<g:Image ui:field="imgProfile" />
+			<g:Image ui:field="imgProfile" height="35px" width="35px"/>
 		</div>
 		<div class="person_name">
 			<g:Anchor ui:field='nameSpan'></g:Anchor>

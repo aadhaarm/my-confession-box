@@ -14,9 +14,9 @@
 		<!--below div is for comment writing text area.. -->
 		<div class="write_comment">
 			<div class="write_comment_image">
-				<g:Image ui:field="imgProfile"></g:Image>
+				<g:Image ui:field="imgProfile" height="44px" width="44px"></g:Image>
 			</div>
-			<g:TextArea ui:field="txtComment" visibleLines="2" ></g:TextArea>
+			<g:TextArea ui:field="txtComment" visibleLines="1" ></g:TextArea>
 			<g:Button ui:field="btnSubmit">Submit</g:Button>
 		</div>
 	</g:HTMLPanel>

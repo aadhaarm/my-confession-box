@@ -861,6 +861,7 @@ main_container a:hover {
 	/* border:#CCC solid thin; */
     /* border-radius:5px; */
 	/* padding:10px; */
+	padding-top: 5px;
 	color:#666;
 	background-color:#FFF;
 }

@@ -1,0 +1,137 @@
+.linkToButtonU {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+}
+
+.statusLinkToButton {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 48px;
+  display: block;
+  overflow: auto;
+}
+
+.linkToButtonS {
+  background-color: #999999;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+}
+
+.linkToButtonYesU {
+  background-color: #999999;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  margin: 5px;
+}
+
+.linkToButtonYesS {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  margin: 5px;
+}
+
+.linkToButtonNoU {
+  background-color: #999999;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  float: left;
+  margin: 5px;
+}
+
+.linkToButtonNoS {
+  background-color: #73883E;
+  display: block;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  display: block;
+  overflow: auto;
+  float: left;
+  margin: 5px;
+}
+
+.whiteAnchorLink {
+	color: white !important;	
+}
+
+.updateLinkToButton {
+  color: white !important;
+  background-color: #73883E;
+  display: block;
+  padding: 2px 0 2px 0;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 115px;
+  margin: 5px 0 15px 0;
+}
+
+.moreLinkToButton {
+  display: block;
+  background-color: #73883E;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 33px;
+}
+
+.shareLinkToButton {
+  background-color: #5B74A8;
+  margin-top: 3px;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  color: white !important;
+  font-weight: bold;
+  text-decoration: none !important;
+  width: 85px;
+  /* text-transform: lowercase !important; */
+}
+
+.identitySlider {
+
+}

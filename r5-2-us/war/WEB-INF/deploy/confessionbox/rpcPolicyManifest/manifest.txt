@@ -1,0 +1,2 @@
+# Module confessionbox
+# RPC service class, partial path of RPC policy file

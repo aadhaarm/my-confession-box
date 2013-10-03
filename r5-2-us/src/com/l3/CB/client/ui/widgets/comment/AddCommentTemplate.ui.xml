@@ -1,0 +1,23 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<div>
+			<g:CheckBox ui:field="commentAsAnyn">Comment Anonymously</g:CheckBox>
+		</div>
+
+		<!--below div is for comment writing text area.. -->
+		<div class="write_comment">
+			<div class="write_comment_image">
+				<g:Image ui:field="imgProfile" height="44px" width="44px"></g:Image>
+			</div>
+			<g:TextArea ui:field="txtComment" visibleLines="1" ></g:TextArea>
+			<g:Button ui:field="btnSubmit">Submit</g:Button>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

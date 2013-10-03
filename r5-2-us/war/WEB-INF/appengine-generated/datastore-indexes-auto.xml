@@ -1,0 +1,48 @@
+<!-- Indices written at Mon, 7 Jan 2013 13:33:10 GMT+05:30 -->
+
+<datastore-indexes>
+
+    <!-- Used 7 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 16 times in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 3 times in query history -->
+    <datastore-index kind="ConfessionShareDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 12 times in query history -->
+    <datastore-index kind="UserActivityDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="SubscribtionDO" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timeStamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionUpdateDO" ancestor="false" source="auto">
+        <property name="confId" direction="asc"/>
+        <property name="timeStamp" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ConfessionDO" ancestor="false" source="auto">
+        <property name="isVisibleOnPublicWall" direction="asc"/>
+        <property name="locale" direction="asc"/>
+        <property name="lastUpdateTimeStamp" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

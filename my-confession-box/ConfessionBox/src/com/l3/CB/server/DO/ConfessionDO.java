@@ -49,6 +49,9 @@ public class ConfessionDO implements Serializable {
     private boolean shareAsAnyn = true;
 
     @Persistent
+    private boolean onlyDedicate;
+
+    @Persistent
     private String userIp;
 
     @Persistent
@@ -282,5 +285,13 @@ public class ConfessionDO implements Serializable {
 
     public void setNumOfTotalVote(long numOfTotalVote) {
         this.numOfTotalVote = numOfTotalVote;
+    }
+
+    public boolean isOnlyDedicate() {
+        return onlyDedicate;
+    }
+
+    public void setOnlyDedicate(boolean onlyDedicate) {
+        this.onlyDedicate = onlyDedicate;
     }
 }

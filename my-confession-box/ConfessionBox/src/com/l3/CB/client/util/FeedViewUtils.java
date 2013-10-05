@@ -94,7 +94,7 @@ public class FeedViewUtils {
      */
     public static FlowPanel getPardonWidget(final Confession confession, boolean anynView, final UserInfo confessionByUser) {
 	FlowPanel fPnlPardon = new FlowPanel();
-	if(confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+	if(!confession.isOnlyDedicate() && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
 
 	    List<ConfessionShare> confessionShares = confession.getConfessedTo();
 

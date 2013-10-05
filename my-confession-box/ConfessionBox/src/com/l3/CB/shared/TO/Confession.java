@@ -29,6 +29,8 @@ public class Confession implements Serializable {
     private String userIp;
 
     private boolean shareAsAnyn = true;
+    
+    private boolean onlyDedicate;
 
     private String gender;
 
@@ -314,5 +316,13 @@ public class Confession implements Serializable {
 
     public void setShareToRelationForSave(String shareToRelationForSave) {
         this.shareToRelationForSave = shareToRelationForSave;
+    }
+
+    public boolean isOnlyDedicate() {
+        return onlyDedicate;
+    }
+
+    public void setOnlyDedicate(boolean onlyDedicate) {
+        this.onlyDedicate = onlyDedicate;
     }
 }

@@ -42,6 +42,7 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
     private ShareSliderWidget identitySlideBar;
 
     private CheckBox cbConfessTo;
+    private CheckBox cbDedicateTo;
     private ShareSliderWidget shareToSlider;
 
     private FriendsSuggestBox friendsSuggestBox;
@@ -115,9 +116,13 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 	    cbHideIdentity.setValue(false);
 	    fPnlOptions.add(cbHideIdentity);
 
+	    cbDedicateTo = new CheckBox("Dedicate your confesion");
+	    cbDedicateTo.setValue(true);
+	    fPnlOptions.add(cbDedicateTo);
+
 	    cbConfessTo = new CheckBox(ConfessionBox.cbText.registerPageOptionConfessToFriend());
-	    cbConfessTo.setValue(true);
 	    fPnlOptions.add(cbConfessTo);
+	    
 	}
 
 	fPnlConfessionForm.add(fPnlOptions);
@@ -321,8 +326,8 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     @Override
     public boolean isShared() {
-	if(cbConfessTo != null) {
-	    return cbConfessTo.getValue();
+	if(cbConfessTo != null && cbDedicateTo != null) {
+	    return cbConfessTo.getValue() || cbDedicateTo.getValue();
 	} else {
 	    return shareToSlider.isSelectionStatus();
 	}
@@ -384,5 +389,10 @@ public class RegisterConfessionView extends Composite implements RegisterConfess
 
     public Button getBtnProceed() {
         return btnProceed;
+    }
+
+    @Override
+    public HasClickHandlers getCbDedicateTo() {
+	return cbDedicateTo;
     }
 }

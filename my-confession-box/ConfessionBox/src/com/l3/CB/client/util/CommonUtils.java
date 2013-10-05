@@ -735,7 +735,7 @@ public class CommonUtils {
      */
     public static FlowPanel getPardonStatus(Confession confession) {
 	FlowPanel pardonStatusPanel = null;
-	if(confession != null && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+	if(confession != null && !confession.isOnlyDedicate() && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
 	    pardonStatusPanel = new FlowPanel();
 	    pardonStatusPanel.setStyleName("pardonStatusDiv");
 	    Label pardonStatus = new Label();

@@ -91,6 +91,7 @@ public class ConfessionBasicDAO {
 	    confessionDO.setLastUpdateTimeStamp(confession.getTimeStamp());
 	    confessionDO.setUserIp(confession.getUserIp());
 	    confessionDO.setLocale(confession.getLocale());
+	    confessionDO.setOnlyDedicate(confession.isOnlyDedicate());
 	    return confessionDO;
 	}
 	return null;
@@ -341,6 +342,7 @@ public class ConfessionBasicDAO {
 	    confession.setNumOfShouldNotBePardonedVote(confessionDO.getNumOfShouldNotBePardonedVote());
 	    confession.setNumOfSympathyVote(confessionDO.getNumOfSympathyVote());
 	    confession.setUpdateTimeStamp(confessionDO.getLastUpdateTimeStamp());
+	    confession.setOnlyDedicate(confessionDO.isOnlyDedicate());
 
 	    UserDO userDO = UserDAO.getUserByUserId(new UserInfo(confessionDO.getUserId()));
 	    if(userDO != null) {

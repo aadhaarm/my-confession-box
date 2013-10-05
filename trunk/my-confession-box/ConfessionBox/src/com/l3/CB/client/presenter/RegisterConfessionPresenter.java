@@ -67,6 +67,7 @@ public class RegisterConfessionPresenter implements Presenter {
 	public ShareSliderWidget getIdentitySlideBar();
 	public HasClickHandlers getCbHideIdentity();
 	public HasClickHandlers getCbConfessTo();
+	public HasClickHandlers getCbDedicateTo();
 
 	public HasClickHandlers getSubmitBtn();
 	public FriendsSuggestBox getFriendSuggestBox();
@@ -451,6 +452,13 @@ public class RegisterConfessionPresenter implements Presenter {
 		}
 
 	    });
+	    
+	    display.getCbDedicateTo().addClickHandler(new ClickHandler() {
+	        @Override
+	        public void onClick(ClickEvent event) {
+		    handleShareConfession();
+	        }
+	    });
 	}
     }
 
@@ -458,7 +466,7 @@ public class RegisterConfessionPresenter implements Presenter {
      * Handle if confession shared with friend
      */
     private void handleShareConfession() {
-	RegisterConfessionUtil.handlePreview(display);;
+	RegisterConfessionUtil.handlePreview(display);
 	HelpInfo.showHelpInfo(HelpInfo.type.REGISTER_CONF_SHARE_WITH_CHECKBOX);
 	if(display.isShared()) {
 	    if(display.isFriendsListNull()) {
@@ -494,6 +502,13 @@ public class RegisterConfessionPresenter implements Presenter {
 
 			//Register Shared-To info
 			if(display.isShared()) {
+			    
+			    if(display.getCbConfessToCheckBox().getValue()) {
+				confession.setOnlyDedicate(false);
+			    } else {
+				confession.setOnlyDedicate(true);
+			    }
+			    
 			    if(display.getFriendSuggestBox().validate() && display.getRelationSuggestBox().validate()) {
 				final List<ConfessionShare> lstConfessTo = new ArrayList<ConfessionShare>();
 				UserInfo fbSharedUser = display.getSharedWith();

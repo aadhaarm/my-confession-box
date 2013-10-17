@@ -3,12 +3,18 @@ package com.l3.CB.server.DO;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
 
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class UserActivityDO implements Serializable {
 
     /**
@@ -23,29 +29,30 @@ public class UserActivityDO implements Serializable {
     public UserActivityDO(long userId, long confId, String activityType,
 	    boolean shareAsAnyn, Date timeStamp) {
 	super();
-	this.userId = userId;
-	this.confId = confId;
+	this.setUserId(userId);
+	this.setConfId(confId);
 	this.activityType = activityType;
 	this.shareAsAnyn = shareAsAnyn;
 	this.timeStamp = timeStamp;
     }
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long activityId;
 
-    @Persistent
-    private long userId;
+    private Long userId;
 
-    @Persistent
-    private long confId;
+    @Load
+    private Ref<UserDO> refUser;
+
+    private Long confId;
+
+    @Load
+    private Ref<ConfessionDO> refConfession;
 
     private String activityType;
 
-    @Persistent
     private boolean shareAsAnyn = true;
 
-    @Persistent
     private Date timeStamp;
 
     public Long getActivityId() {
@@ -62,6 +69,7 @@ public class UserActivityDO implements Serializable {
 
     public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public long getConfId() {
@@ -70,6 +78,7 @@ public class UserActivityDO implements Serializable {
 
     public void setConfId(long confId) {
 	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public String getActivityType() {
@@ -94,6 +103,22 @@ public class UserActivityDO implements Serializable {
 
     public void setTimeStamp(Date timeStamp) {
 	this.timeStamp = timeStamp;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
     }
 
     @Override

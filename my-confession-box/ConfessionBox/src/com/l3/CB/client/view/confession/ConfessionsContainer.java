@@ -1,22 +1,18 @@
-package com.l3.CB.client.view;
+package com.l3.CB.client.view.confession;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.ActivityEvent;
@@ -24,69 +20,41 @@ import com.l3.CB.client.event.ActivityEventHandler;
 import com.l3.CB.client.event.ShowToolTipEvent;
 import com.l3.CB.client.event.ShowToolTipEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
-import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.ConfessionPanel;
 import com.l3.CB.client.util.CommonUtils;
-import com.l3.CB.client.view.confession.ConfessionView;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
 
-public class ConfessionFeedView extends Composite implements ConfessionFeedPresenter.Display {
+public class ConfessionsContainer extends Composite implements ConfessionFeedPresenter.Display {
 
-    private final FlowPanel vpnlConfessionList;
+    private static ConfessionsContainerUiBinder uiBinder = GWT
+	    .create(ConfessionsContainerUiBinder.class);
+
+    interface ConfessionsContainerUiBinder extends UiBinder<Widget, ConfessionsContainer> {
+	
+    }
+
     private int confessionPagesLoaded;
     private Image loaderImage;
     private boolean isMoreConfessionsAvailable;
-//    private ListBox lstFilterOptions;
-//    private final Button btnRefresh;
-    private final FlowPanel fPnlTopBar;
     private Map<Long, ConfessionPanel> confessionsThisView;
-    private Label lblfilterInfo;
 
-    public ConfessionFeedView() {
-	super();
+    
+    @UiField
+    FlowPanel fPnlConfContainer;
 
-	vpnlConfessionList = new FlowPanel();
+    public ConfessionsContainer() {
+	
+	initWidget(uiBinder.createAndBindUi(this));
 
-	// Feed view TOP BAR
-	fPnlTopBar = new FlowPanel();
-	fPnlTopBar.setStyleName("confessionTopBar");
-	// Refresh Button
-//	btnRefresh = new Button("Refresh");
-//	btnRefresh.setTitle(ConfessionBox.cbText.refreshButtonToolTipText());
-//	btnRefresh.setStyleName(Constants.STYLE_CLASS_REFRESH_BUTTON);
-	// Filter options
-	if(!ConfessionBox.isMobile) {
-//	    lstFilterOptions = CommonUtils.getFilterListBox();
-//	    lblfilterInfo = new Label();
-//	    lblfilterInfo.setStyleName(Constants.STYLE_CLASS_CONFESION_FILTER_DESCRIPTION_INFO);
-//	    fPnlTopBar.add(lstFilterOptions);
-//	    fPnlTopBar.add(lblfilterInfo);
-//	    fPnlTopBar.add(btnRefresh);
-	} else {
-//	    fPnlTopBar.setVisible(false);
-	    Button btnLearn = new Button("Learn");
-	    btnLearn.setWidth(Integer.toString(Window.getClientWidth() - 35) + "px");
-	    btnLearn.setStyleName("buttonLearn"); 
-//	    fPnlTopBar.add(btnLearn);
-	    btnLearn.addClickHandler(new ClickHandler() {
-	        
-	        @Override
-	        public void onClick(ClickEvent event) {
-	            PopupPanel a = ApplicationTextWidget.setupCBRuleBook();
-	            a.center();
-	        }
-	    });
-	}
-
-	confessionPagesLoaded = 1;
 	getMeLoaderImage();
-	isMoreConfessionsAvailable = true;
-	vpnlConfessionList.add(fPnlTopBar);
-	// Init panel for confessions
-	initWidget(vpnlConfessionList);
+
 	bind();
+    }
+
+    public ConfessionsContainer(String firstName) {
+	initWidget(uiBinder.createAndBindUi(this));
     }
 
     private void bind() {
@@ -133,7 +101,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter, boolean showExtendedDetails, boolean showPardonHelpText) {
-	vpnlConfessionList.add(loaderImage);
+	fPnlConfContainer.add(loaderImage);
 	if(confessionsThisView == null) {
 	    confessionsThisView = new HashMap<Long, ConfessionPanel>();
 	}
@@ -143,7 +111,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 		    final ConfessionView confessionView = new ConfessionView(confession, showUserControls, isAnyn, showExtendedDetails, showPardonHelpText);
 //		    final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn, showExtendedDetails, showPardonHelpText);
 		    if(confessionView != null) {
-			vpnlConfessionList.add(confessionView);
+			fPnlConfContainer.add(confessionView);
 //			confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);
 		    }
 		}
@@ -153,10 +121,10 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 	    isMoreConfessionsAvailable = false;
 	}
 	if(confessionsThisView == null || confessionsThisView.isEmpty()) {
-	    vpnlConfessionList.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
+	    fPnlConfContainer.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
 	}
 	CommonUtils.removeApplicationLoad();
-	vpnlConfessionList.remove(loaderImage);
+	fPnlConfContainer.remove(loaderImage);
     }
 
     /**
@@ -206,12 +174,12 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public FlowPanel getVpnlConfessionList() {
-	return vpnlConfessionList;
+	return fPnlConfContainer;
     }
 
     @Override
     public void addLoaderImage() {
-	vpnlConfessionList.add(loaderImage);
+	fPnlConfContainer.add(loaderImage);
     }
 
     @Override
@@ -221,7 +189,7 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public void removeLoaderImage() {
-	vpnlConfessionList.remove(loaderImage);
+	fPnlConfContainer.remove(loaderImage);
     }
 
     @Override
@@ -245,13 +213,13 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
 
     @Override
     public void clearConfessions() {
-	vpnlConfessionList.clear();
+	fPnlConfContainer.clear();
 //	if(lstFilterOptions != null)
 //	    fPnlTopBar.add(lstFilterOptions);
 //	fPnlTopBar.add(btnRefresh);
-	if(lblfilterInfo != null)
-	    fPnlTopBar.add(lblfilterInfo);
-	vpnlConfessionList.add(fPnlTopBar);
+//	if(lblfilterInfo != null)
+//	    fPnlTopBar.add(lblfilterInfo);
+//	vpnlConfessionList.add(fPnlTopBar);
     }
 
     @Override
@@ -265,9 +233,9 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
     }
 
     public void setFilterInfo(String filterInfoText) {
-	if(lblfilterInfo != null && filterInfoText != null) {
-	    lblfilterInfo.setText(filterInfoText);
-	}
+//	if(lblfilterInfo != null && filterInfoText != null) {
+//	    lblfilterInfo.setText(filterInfoText);
+//	}
     }
 
     public void resetConfessionsThisView() {

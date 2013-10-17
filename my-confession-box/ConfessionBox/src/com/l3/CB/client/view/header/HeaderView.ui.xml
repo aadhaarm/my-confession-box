@@ -1,0 +1,26 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<div class="tm-headerbar uk-clearfix uk-hidden-small">
+
+			<a href="#" class="tm-logo">
+				<img width="200" height="70" alt="Demo" src="images/junk/logo.svg" />
+			</a>
+
+			<!-- <div class="uk-panel">
+				<div class="uk-margin-top">
+					<a class="uk-icon-button uk-icon-github" href="#"></a>
+					<a class="uk-icon-button uk-icon-twitter" href="#"></a>
+					<a class="uk-icon-button uk-icon-dribbble" href="#"></a>
+					<a class="uk-icon-button uk-icon-facebook" href="#"></a>
+				</div>
+			</div> -->
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder> 

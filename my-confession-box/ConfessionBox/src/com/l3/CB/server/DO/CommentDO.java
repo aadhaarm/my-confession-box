@@ -2,10 +2,14 @@ package com.l3.CB.server.DO;
 
 import java.util.Date;
 
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
 import com.l3.CB.shared.TO.Comment;
 
 @Entity
@@ -19,9 +23,17 @@ public class CommentDO {
     @Index
     private Long userId;
     
+    @Load
+    @Index
+    private Ref<UserDO> refUser;
+    
     @Index
     private Long confId;
 
+    @Load
+    @Index
+    private Ref<ConfessionDO> refConfession;
+    
     String comment;
     
     @Index
@@ -30,10 +42,13 @@ public class CommentDO {
     @Index
     private String fbId;
     
+    @Index
     private boolean shareAsAnyn = true;
 
+    @Index
     private String userIp;
 
+    @Index
     private String locale;
 
     @Index
@@ -85,8 +100,9 @@ public class CommentDO {
         return userId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(long userId) {
+	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public boolean isShareAsAnyn() {
@@ -133,8 +149,9 @@ public class CommentDO {
         return confId;
     }
 
-    public void setConfId(Long confId) {
-        this.confId = confId;
+    public void setConfId(long confId) {
+	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public String getComment() {
@@ -184,10 +201,26 @@ public class CommentDO {
     }
 
     public void incNumOfAbuseVotes() {
-	this.numOfAbuseVote = ++numOfAbuseVote;
+	this.numOfAbuseVote = numOfAbuseVote + 1;
     }
 
     public void incNumOfSecondVotes() {
-	this.numOfSecond = ++numOfSecond;
+	this.numOfSecond = numOfSecond + 1;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
     }
 }

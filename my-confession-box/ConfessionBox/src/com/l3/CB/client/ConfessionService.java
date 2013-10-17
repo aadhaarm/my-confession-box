@@ -73,6 +73,6 @@ public interface ConfessionService extends RemoteService {
 
     // COMMENT
     void saveComment(Comment comment);
-    List<Comment> getComments(CommentFilter filter);   
+    CommentFilter getComments(CommentFilter filter);   
     void voteOnComment(CommentFilter filter);
 }

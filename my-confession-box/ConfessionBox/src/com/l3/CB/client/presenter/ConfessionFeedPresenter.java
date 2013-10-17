@@ -11,10 +11,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
@@ -31,7 +27,6 @@ import com.l3.CB.client.event.FilterEvent;
 import com.l3.CB.client.event.FilterEventHandler;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
-import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
@@ -181,14 +176,14 @@ public class ConfessionFeedPresenter implements Presenter {
 		}
 	    });
 	    // Filter Help info
-	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
-		@Override
-		public void onFocus(FocusEvent event) {
-		    if(!ConfessionBox.isMobile) {
-			HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
-		    }
-		}
-	    });
+//	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
+//		@Override
+//		public void onFocus(FocusEvent event) {
+//		    if(!ConfessionBox.isMobile) {
+//			HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
+//		    }
+//		}
+//	    });
 	}
 
 	// Change filter selected text
@@ -202,13 +197,13 @@ public class ConfessionFeedPresenter implements Presenter {
 	});
 
 	// Bind REFRESH Button
-	display.getRefreshButton().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		CommonUtils.showApplicationLoad();
-		setConfessions(true);
-	    }
-	});
+//	display.getRefreshButton().addClickHandler(new ClickHandler() {
+//	    @Override
+//	    public void onClick(ClickEvent event) {
+//		CommonUtils.showApplicationLoad();
+//		setConfessions(true);
+//	    }
+//	});
     }
 
     @Override

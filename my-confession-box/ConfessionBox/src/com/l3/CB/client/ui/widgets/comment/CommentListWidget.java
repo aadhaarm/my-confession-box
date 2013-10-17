@@ -1,7 +1,5 @@
 package com.l3.CB.client.ui.widgets.comment;
 
-import java.util.List;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -19,14 +17,17 @@ public class CommentListWidget extends FlowPanel {
     private int page = 0;
     private Anchor anchMore;
 
+    public CommentListWidget() {
+	super();
+	anchMore = new Anchor("Load more comments");
+	bind();
+    }
+
     public CommentListWidget(Long confId) {
 	super();
 	this.confId = confId;
-	this.setStyleName("coment_read");
-
-	anchMore = new Anchor("more");
+	anchMore = new Anchor("Load more comments");
 	initializeWidget(true);
-
 	bind();
     }
 
@@ -38,7 +39,7 @@ public class CommentListWidget extends FlowPanel {
 		initializeWidget(false);
 	    }
 	});
-	
+
 	ConfessionBox.eventBus.addHandler(CommentEvent.TYPE, new CommentEventHandler() {
 	    @Override
 	    public void commentAdded(CommentEvent event) {
@@ -50,19 +51,23 @@ public class CommentListWidget extends FlowPanel {
 	});
     }
 
+    public void initializeWidget(Long confId, final boolean clear) {
+	this.confId = confId;
+	initializeWidget(true);
+    }
+
     private void initializeWidget(final boolean clear) {
 	this.remove(anchMore);
-	ConfessionBox.confessionService.getComments(getFilter(), new AsyncCallback<List<Comment>>() {
+	ConfessionBox.confessionService.getComments(getFilter(), new AsyncCallback<CommentFilter>() {
 	    @Override
-	    public void onSuccess(List<Comment> result) {
-		if(result != null && !result.isEmpty()) {
+	    public void onSuccess(CommentFilter result) {
+		if(result != null && result.getComments() != null && !result.getComments().isEmpty()) {
 		    if(clear) {
 			clear();
 		    }
-		    for (final Comment comment : result) {
+		    for (final Comment comment : result.getComments()) {
 			if(comment != null) {
 			    CommentReadTemplate commentReadTemplate = new CommentReadTemplate(comment);
-			    commentReadTemplate.setStyleName("individual_comment_read");
 			    add(commentReadTemplate);
 			}
 		    }

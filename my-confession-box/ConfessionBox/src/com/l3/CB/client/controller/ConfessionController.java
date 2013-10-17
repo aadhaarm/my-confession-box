@@ -24,6 +24,7 @@ import com.l3.CB.client.presenter.HeaderPresenter;
 import com.l3.CB.client.presenter.HumanPointPresenter;
 import com.l3.CB.client.presenter.LoginStatusPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
+import com.l3.CB.client.presenter.MobileMenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
 import com.l3.CB.client.presenter.RegisterConfessionPresenter;
@@ -31,11 +32,12 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.FooterView;
-import com.l3.CB.client.view.HeaderView;
 import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.LoginStatusView;
-import com.l3.CB.client.view.MenuView;
 import com.l3.CB.client.view.RegisterConfessionView;
+import com.l3.CB.client.view.confession.ConfessionsContainer;
+import com.l3.CB.client.view.header.HeaderView;
+import com.l3.CB.client.view.menu.MobileMenuView;
 import com.l3.CB.shared.Constants;
 
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
@@ -46,6 +48,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private static HasWidgets container;
     private static HumanPointPresenter humanPointPresenter = null;
     private static MenuPresenter menuPresenter = null;
+    private static MobileMenuPresenter mobileMenuPresenter = null;
     private static HeaderPresenter headerPresenter = null;
     private static LoginStatusPresenter loginStatusPresenter = null;
 
@@ -93,8 +96,11 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     public static void initializeApp(boolean loadAll) {
 	
 	// Initialize MENU
-	menuPresenter = new MenuPresenter(new MenuView());
+	menuPresenter = new MenuPresenter(new com.l3.CB.client.view.menu.MenuView());
 	menuPresenter.go(container);
+	
+	mobileMenuPresenter = new MobileMenuPresenter(new MobileMenuView());
+	mobileMenuPresenter.go(container);
 	
 	// Initialize Header
 	headerPresenter = new HeaderPresenter(new HeaderView());
@@ -173,25 +179,25 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    CommonUtils.showApplicationLoad();	    
 	    Presenter presenter = null;
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
-		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
-		MenuView.selectMenuItem(1);
+		presenter = new ConfessionFeedPresenter(new ConfessionsContainer());
+//		MenuView.selectMenuItem(1);
 		headerPresenter.showFilter();
 	    } else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
-		presenter = new ConfessionFeedPresenter(new ConfessionFeedView(), ConfessionBox.confId);
-		MenuView.selectMenuItem(1);
+		presenter = new ConfessionFeedPresenter(new ConfessionsContainer(), ConfessionBox.confId);
+//		MenuView.selectMenuItem(1);
 		headerPresenter.showFilter();
 	    } else if(ConfessionBox.isLoggedIn) {
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
 		    presenter = new RegisterConfessionPresenter(new RegisterConfessionView());
-		    MenuView.selectMenuItem(2);
+//		    MenuView.selectMenuItem(2);
 		    CommonUtils.removeApplicationLoad();
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
-		    MenuView.selectMenuItem(3);
+//		    MenuView.selectMenuItem(3);
 		    presenter = new MyConfessionFeedPresenter(new ConfessionFeedView());
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
-		    MenuView.selectMenuItem(4);
+//		    MenuView.selectMenuItem(4);
 		    presenter = new ConfessionForMeFeedPresenter(new ConfessionFeedView());
 		    headerPresenter.hideFilter();
 		}
@@ -200,7 +206,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		presenter.go(container);
 	    } else {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
-		MenuView.selectMenuItem(1);
+//		MenuView.selectMenuItem(1);
 		presenter.go(container);
 		headerPresenter.showFilter();
 	    }

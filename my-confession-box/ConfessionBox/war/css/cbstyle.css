@@ -618,8 +618,8 @@ main_container a:hover {
 }
 
 .confessionTop {
-	display: block;
-	overflow: auto;
+	/* display: block;
+	overflow: auto; */
 	padding: 10px 12px 10px 12px;
 }
 
@@ -857,12 +857,12 @@ main_container a:hover {
 }
 
 .comment_frame {
-	display: block;
+	/* display: block;
 	overflow-x: auto;
-	overflow-y: auto;
+	overflow-y: auto; */
 	border:#CCC thin solid;
 	border-radius:5px;
-	width:566px;
+	/* width:566px; */
 	height:auto;
 	padding:5px;
 	/*background-color:#CCC;*/
@@ -1021,7 +1021,6 @@ main_container a:hover {
 }
 
 img.footerLinkImage {
-	height: 70%;
-	width: 100%;
+	width: 30%;
 	cursor: pointer;
 }

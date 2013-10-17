@@ -1,6 +1,9 @@
 package com.l3.CB.shared;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.l3.CB.shared.TO.Comment;
 
 public class CommentFilter implements Serializable {
 
@@ -11,6 +14,10 @@ public class CommentFilter implements Serializable {
     private int page;
     
     private int pageSize;
+    
+    private List<Comment> comments;
+    
+    private int totalNumberOfComments;
     
     /*
      * Vote    
@@ -67,5 +74,21 @@ public class CommentFilter implements Serializable {
 
     public void setVoteSecond(boolean voteSecond) {
         this.voteSecond = voteSecond;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public int getTotalNumberOfComments() {
+        return totalNumberOfComments;
+    }
+
+    public void setTotalNumberOfComments(int totalNumberOfComments) {
+        this.totalNumberOfComments = totalNumberOfComments;
     }
 }

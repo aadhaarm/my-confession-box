@@ -3,14 +3,19 @@ package com.l3.CB.server.DO;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
 
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class ConfessionUpdateDO implements Serializable {
 
     /**
@@ -18,36 +23,39 @@ public class ConfessionUpdateDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long updateId;
 
-    @Persistent
     private Long confId;
+
+    @Load
+    private Ref<ConfessionDO> refConfession;
     
-    @Persistent
     private Date timeStamp;
     
-    @Persistent
     private Text update;
     
-    @Persistent
     private String commentAs;
 
-    @Persistent
     private Long userId;
 
-    @Persistent
+    @Load
+    private Ref<UserDO> refUser;
+    
     private boolean shareAsAnyn = true;
     
+    private ConfessionUpdateDO() {
+	super();
+    }
+
     public ConfessionUpdateDO(Long confId, Date timeStamp, Text update,
 	    String commentAs, Long userId) {
 	super();
-	this.confId = confId;
+	this.setUserId(userId);
+	this.setConfId(confId);
 	this.timeStamp = timeStamp;
 	this.update = update;
 	this.commentAs = commentAs;
-	this.userId = userId;
     }
 
     public Long getUpdateId() {
@@ -62,8 +70,9 @@ public class ConfessionUpdateDO implements Serializable {
         return confId;
     }
 
-    public void setConfId(Long confId) {
-        this.confId = confId;
+    public void setConfId(long confId) {
+	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public Date getTimeStamp() {
@@ -78,8 +87,9 @@ public class ConfessionUpdateDO implements Serializable {
         return userId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(long userId) {
+	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public boolean isShareAsAnyn() {
@@ -104,5 +114,21 @@ public class ConfessionUpdateDO implements Serializable {
 
     public void setCommentAs(String commentAs) {
         this.commentAs = commentAs;
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
     }
 }

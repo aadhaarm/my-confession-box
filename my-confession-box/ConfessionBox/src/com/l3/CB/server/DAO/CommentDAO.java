@@ -26,12 +26,16 @@ public class CommentDAO {
 	}
     }
 
-    public static List<Comment> getComments(CommentFilter filter) {
+    public static CommentFilter getComments(CommentFilter filter) {
 	List<Comment> comments = null;
 	if(filter != null) {
 	    Query<CommentDO> query = ofy().load().type(CommentDO.class)
-		    .filter("confId", filter.getConfId())
-		    .offset(filter.getPageSize() * filter.getPage())
+		    .filter("confId", filter.getConfId());
+
+	    int numberOfComments = query.count();
+	    filter.setTotalNumberOfComments(numberOfComments);
+	    
+	    query = query.offset(filter.getPageSize() * filter.getPage())
 		    .limit(filter.getPageSize())
 		    .order("-timeStamp");
 
@@ -49,8 +53,10 @@ public class CommentDAO {
 		}
 		comments.add(comment);
 	    }
+	    
+	    filter.setComments(comments);
 	}
-	return comments;
+	return filter;
     }
 
     public static void vote(CommentFilter filter) {

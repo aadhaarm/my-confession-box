@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<h4>Comments (<span ui:field="numComments"></span>)</h4>
+
+		<g:HTMLPanel ui:field="hPnlBody"></g:HTMLPanel>
+
+		<p style="text-align:center">
+			<g:Anchor ui:field="ancMore">Load more comments</g:Anchor>
+		</p>
+	</g:HTMLPanel>
+</ui:UiBinder> 

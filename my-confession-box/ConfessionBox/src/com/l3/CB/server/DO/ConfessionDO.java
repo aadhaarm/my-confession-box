@@ -3,14 +3,18 @@ package com.l3.CB.server.DO;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.UserDAO;
+import com.l3.CB.shared.TO.Confession;
 
-@PersistenceCapable
+@Entity
+@Cache
 public class ConfessionDO implements Serializable {
 
     /**
@@ -29,61 +33,79 @@ public class ConfessionDO implements Serializable {
 	numOfTotalVote = new Long(0);
     }
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    public ConfessionDO(Confession confession) {
+	if (confession != null) {
+	    this.setConfId(confession.getConfId());
+	    this.setUserId(confession.getUserId());
+	    this.setShareAsAnyn(confession.isShareAsAnyn());
+	    this.setOnlyDedicate(confession.isOnlyDedicate());
+	    this.setConfessionTitle(confession.getConfessionTitle());
+	    this.setConfession(new Text(confession.getConfession()));
+	    this.setTimeStamp(confession.getTimeStamp());
+	    this.setLastUpdateTimeStamp(confession.getTimeStamp());
+	    this.setUserIp(confession.getUserIp());
+	    this.setLocale(confession.getLocale());
+	}
+    }
+
+    @Id
+    @Index
     private Long confId;
 
-    @Persistent
     private Text confession;
 
-    @Persistent
+    @Index
     private Date timeStamp;
 
-    @Persistent
+    @Index
     private Date lastUpdateTimeStamp;
-    
-    @Persistent
+
+    @Index
     private Long userId;
 
-    @Persistent
+    @Load
+    @Index
+    private Ref<UserDO> refUser;
+
+    @Index
     private boolean shareAsAnyn = true;
 
-    @Persistent
+    @Index
     private boolean onlyDedicate;
-
-    @Persistent
+    
+    @Index
     private String userIp;
 
-    @Persistent
+    @Index
     private String locale;
 
-    @Persistent
+    @Index
     private String confessionTitle;
 
-    @Persistent
+    @Index
     private boolean isVisibleOnPublicWall = true;
 
-    @Persistent
+    @Index
     private long numOfSameBoatVote;
 
-    @Persistent
+    @Index
     private long numOfSympathyVote;
 
-    @Persistent
+    @Index
     private long numOfLameVote;
 
-    @Persistent
+    @Index
     private long numOfShouldBePardonedVote;
 
-    @Persistent
+    @Index
     private long numOfAbuseVote;
 
-    @Persistent
+    @Index
     private long numOfShouldNotBePardonedVote;
 
-    @Persistent
+    @Index
     private Long numOfTotalVote;
-    
+
     public Long getConfId() {
 	return confId;
     }
@@ -112,8 +134,9 @@ public class ConfessionDO implements Serializable {
 	return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public String getUserIp() {
@@ -234,7 +257,7 @@ public class ConfessionDO implements Serializable {
 	}
 	numOfTotalVote++;
     }
-    
+
     public long incrementAbuseVote() {
 	numOfAbuseVote++;
 	incrementTotalVote();
@@ -272,21 +295,33 @@ public class ConfessionDO implements Serializable {
     }
 
     public Date getLastUpdateTimeStamp() {
-        return lastUpdateTimeStamp;
+	return lastUpdateTimeStamp;
     }
 
     public void setLastUpdateTimeStamp(Date lastUpdateTimeStamp) {
-        this.lastUpdateTimeStamp = lastUpdateTimeStamp;
+	this.lastUpdateTimeStamp = lastUpdateTimeStamp;
     }
 
     public long getNumOfTotalVote() {
-        return numOfTotalVote;
+	return numOfTotalVote;
     }
 
     public void setNumOfTotalVote(long numOfTotalVote) {
-        this.numOfTotalVote = numOfTotalVote;
+	this.numOfTotalVote = numOfTotalVote;
     }
 
+    public Ref<UserDO> getRefUser() {
+	return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+	this.refUser = refUser;
+    }
+
+    public void setNumOfTotalVote(Long numOfTotalVote) {
+	this.numOfTotalVote = numOfTotalVote;
+    }
+    
     public boolean isOnlyDedicate() {
         return onlyDedicate;
     }
@@ -294,4 +329,29 @@ public class ConfessionDO implements Serializable {
     public void setOnlyDedicate(boolean onlyDedicate) {
         this.onlyDedicate = onlyDedicate;
     }
+
+    public Confession toConfessionTO() {
+
+	Confession confession = new Confession(this.getConfId(), this.getConfessionTitle(),
+		this.getConfession().getValue(), this.getTimeStamp(),
+		this.getUserId(), this.isShareAsAnyn());
+
+	confession.setVisibleOnPublicWall(this.isVisibleOnPublicWall());
+	confession.setNumOfAbuseVote(this.getNumOfAbuseVote());
+	confession.setNumOfLameVote(this.getNumOfLameVote());
+	confession.setNumOfSameBoatVote(this.getNumOfSameBoatVote());
+	confession.setNumOfShouldBePardonedVote(this.getNumOfShouldBePardonedVote());
+	confession.setNumOfShouldNotBePardonedVote(this.getNumOfShouldNotBePardonedVote());
+	confession.setNumOfSympathyVote(this.getNumOfSympathyVote());
+	confession.setUpdateTimeStamp(this.getLastUpdateTimeStamp());
+	confession.setOnlyDedicate(this.isOnlyDedicate());
+
+	
+	if(this.refUser != null) {
+	    confession.setFbId(refUser.get().getFbId());
+	    confession.setGender(refUser.get().getGender());
+	}
+	return confession;
+    }
+
 }

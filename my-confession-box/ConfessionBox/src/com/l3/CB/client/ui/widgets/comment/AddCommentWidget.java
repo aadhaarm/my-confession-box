@@ -12,12 +12,19 @@ public class AddCommentWidget extends FlowPanel {
 //    private CheckBox cBoxAnynComment;
 //    private Button btnSubmit;
 
+    
+    
     public AddCommentWidget(Long confId) {
 	super();
 	this.confId = confId;
 
 	initializeWidget();
 
+	bind();
+    }
+
+    public AddCommentWidget() {
+	super();
 	bind();
     }
 
@@ -71,6 +78,11 @@ public class AddCommentWidget extends FlowPanel {
 //	return comment;
 //    }
 
+    public void initializeWidget(Long confId) {
+	this.confId = confId;
+	initializeWidget();
+    }
+    
     private void initializeWidget() {
 	AddCommentTemplate addCommentWidget = new AddCommentTemplate(confId);
 	this.add(addCommentWidget);

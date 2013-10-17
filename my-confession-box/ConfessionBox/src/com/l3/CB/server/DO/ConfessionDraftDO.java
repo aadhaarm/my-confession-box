@@ -2,14 +2,17 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Text;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.UserDAO;
 
-@PersistenceCapable
+@Entity
+@Cache
 public class ConfessionDraftDO implements Serializable {
 
     /**
@@ -17,27 +20,33 @@ public class ConfessionDraftDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long confId;
 
-    @Persistent
     private Text confession;
+    @Index
 
-    @Persistent
     private Long userId;
 
-    @Persistent
+    @Index
+    @Load
+    private Ref<UserDO> refUser;    
+    
+    @Index
     private String shareToUserIDForSave;
     
-    @Persistent
+    @Index
     private String shareToRelationForSave;
     
-    @Persistent
+    @Index
     private String confessionTitle;
     
-    @Persistent
+    @Index
     private boolean shareAsAnyn = true;
+
+    public ConfessionDraftDO() {
+	super();
+    }
 
     public Long getConfId() {
 	return confId;
@@ -59,8 +68,9 @@ public class ConfessionDraftDO implements Serializable {
 	return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public String getConfessionTitle() {
@@ -100,5 +110,13 @@ public class ConfessionDraftDO implements Serializable {
 
     public void setShareToRelationForSave(String shareToRelationForSave) {
         this.shareToRelationForSave = shareToRelationForSave;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
     }
 }

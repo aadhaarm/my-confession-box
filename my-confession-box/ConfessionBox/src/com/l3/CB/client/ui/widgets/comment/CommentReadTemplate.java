@@ -1,6 +1,7 @@
 package com.l3.CB.client.ui.widgets.comment;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.HRElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -10,6 +11,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,7 +22,7 @@ import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.UserInfo;
 
-public class CommentReadTemplate extends Composite implements HasText {
+public class CommentReadTemplate extends Composite {
 
     private static CommentReadTemplateUiBinder uiBinder = GWT
 	    .create(CommentReadTemplateUiBinder.class);
@@ -59,15 +61,25 @@ public class CommentReadTemplate extends Composite implements HasText {
     @UiField
     Image imgProfile;
 
+    @UiField
+    Anchor ancMore;
+    
+    @UiField
+    HRElement hr;
+    
     public CommentReadTemplate(Comment comment) {
 	initWidget(uiBinder.createAndBindUi(this));
 	this.comment = comment;
 	if(comment != null) {
-	    btnSecond.setText("L");
-	    btnSecond.setTitle("Like");
-	    btnDislike.setText("D");
-	    btnDislike.setTitle("Dislike");
-	    this.strComment.setInnerText(comment.getComment());
+
+	    /*
+	     * Comment Text
+	     */
+	    this.strComment.setInnerText(CommonUtils.trunkate(comment.getComment(), 150));
+	    if(comment.getComment() != null && comment.getComment().length() < 200) {
+		ancMore.setVisible(false);
+	    }
+	    
 	    this.numOfDislike.setInnerText(comment.getNumOfAbuseVote() + "");
 	    this.numOfSecond.setInnerText(comment.getNumOfSecond() + "");
 	    this.timeStamp.setInnerText(CommonUtils.getDateInAGOFormat(comment.getTimeStamp()));
@@ -88,16 +100,10 @@ public class CommentReadTemplate extends Composite implements HasText {
 	}
     }
 
-    @Override
-    public String getText() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public void setText(String text) {
-	// TODO Auto-generated method stub
-
+    @UiHandler("ancMore")
+    void showMore(ClickEvent event) {
+	this.strComment.setInnerText(comment.getComment());
+	ancMore.setVisible(false);
     }
 
     @UiHandler("btnSecond")
@@ -147,5 +153,9 @@ public class CommentReadTemplate extends Composite implements HasText {
 
 	    }
 	});
+    }
+
+    public void hideLastHR() {
+	hr.removeFromParent();
     }
 }

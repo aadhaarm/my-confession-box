@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -37,7 +38,8 @@ public class AddCommentTemplate extends Composite implements HasText {
     Long confId;
 
     @UiField
-    CheckBox commentAsAnyn;
+    Button commentAsAnyn;
+    boolean boolCommentAsAnon;
 
     @UiField
     Image imgProfile;
@@ -65,6 +67,13 @@ public class AddCommentTemplate extends Composite implements HasText {
 
     public AddCommentTemplate(Long confId) {
 	initWidget(uiBinder.createAndBindUi(this));
+	initialize(confId);
+    }
+
+    /**
+     * @param confId
+     */
+    public void initialize(Long confId) {
 	this.confId = confId;
 	setupImage();
 
@@ -86,10 +95,21 @@ public class AddCommentTemplate extends Composite implements HasText {
     }
 
     private void bind() {
-	commentAsAnyn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-
+	commentAsAnyn.addClickHandler(new ClickHandler() {
+	    
 	    @Override
-	    public void onValueChange(ValueChangeEvent<Boolean> event) {
+	    public void onClick(ClickEvent event) {
+		if(ConfessionBox.isLoggedIn) {
+		    boolCommentAsAnon = !boolCommentAsAnon;
+		    if(boolCommentAsAnon) {
+			commentAsAnyn.addStyleName("uk-button-primary");
+		    } else {
+			commentAsAnyn.removeStyleName("uk-button-primary");
+		    }
+		} else {
+		    CommonUtils.login(0);
+		    boolCommentAsAnon = false;
+		}
 		setupImage();
 	    }
 	});
@@ -103,7 +123,7 @@ public class AddCommentTemplate extends Composite implements HasText {
 	if(ConfessionBox.getLoggedInUserInfo() != null) {
 	    gender = ConfessionBox.getLoggedInUserInfo().getGender();
 	    String fbId = ConfessionBox.getLoggedInUserInfo().getId();
-	    if (commentAsAnyn != null && commentAsAnyn.getValue()) {
+	    if (boolCommentAsAnon) {
 		imgProfile.setUrl(FacebookUtil.getFaceIconImage(gender));
 	    } else if(fbId != null){
 		imgProfile.setUrl(FacebookUtil.getUserImageUrl(fbId));
@@ -170,7 +190,7 @@ public class AddCommentTemplate extends Composite implements HasText {
 	    comment.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
 	}
 
-	comment.setShareAsAnyn(commentAsAnyn.getValue());
+	comment.setShareAsAnyn(boolCommentAsAnon);
 	comment.setComment(txtComment.getText());
 	comment.setGender(ConfessionBox.getLoggedInUserInfo().getGender());
 	comment.setLocale(ConfessionBox.getLoggedInUserInfo().getLocale());

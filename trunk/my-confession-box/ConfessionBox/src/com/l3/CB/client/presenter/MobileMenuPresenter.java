@@ -11,7 +11,7 @@ import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.MenuView;
 import com.l3.CB.shared.Constants;
 
-public class MenuPresenter implements Presenter {
+public class MobileMenuPresenter implements Presenter {
 
     public interface Display {
 	public HTML setFeedItemSelected();
@@ -30,7 +30,7 @@ public class MenuPresenter implements Presenter {
 
     private final Display display;
 
-    public MenuPresenter(Display display) {
+    public MobileMenuPresenter(Display display) {
 	super();
 	this.display = display;
 	this.display.setFeedItemSelected();
@@ -76,8 +76,8 @@ public class MenuPresenter implements Presenter {
 
     @Override
     public void go(HasWidgets container) {
-	RootPanel.get(Constants.DIV_LEFT_MENU).clear();
-	RootPanel.get(Constants.DIV_LEFT_MENU).add(display.asWidget());		
+	RootPanel.get(Constants.DIV_MOBILE_LEFT_MENU).clear();
+	RootPanel.get(Constants.DIV_MOBILE_LEFT_MENU).add(display.asWidget());		
     }
     
     public void selectMenuItem(int item) {

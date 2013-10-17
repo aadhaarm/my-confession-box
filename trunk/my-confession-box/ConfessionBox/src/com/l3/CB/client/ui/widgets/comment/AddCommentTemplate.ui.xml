@@ -1,23 +1,29 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
 	<ui:style>
-		.important {
-			font-weight: bold;
+		.imgProfile {
+			padding-right: 5px;
+			width: 57px;
+			height: 57px;
+			float: left;
+			margin-right: 1px;
 		}
 	</ui:style>
-	<g:HTMLPanel>
-		<div>
-			<g:CheckBox ui:field="commentAsAnyn">Comment Anonymously</g:CheckBox>
-		</div>
 
-		<!--below div is for comment writing text area.. -->
-		<div class="write_comment">
-			<div class="write_comment_image">
-				<g:Image ui:field="imgProfile" height="44px" width="44px"></g:Image>
-			</div>
-			<g:TextArea ui:field="txtComment" visibleLines="1" ></g:TextArea>
-			<g:Button ui:field="btnSubmit">Submit</g:Button>
-		</div>
+	<g:HTMLPanel>
+		<p>
+			<g:Button ui:field="commentAsAnyn" styleName="uk-button uk-button uk-button-small"
+				title="Hide your identity by commenting anonymously.">Comment Anonymously</g:Button>
+		</p>
+
+		<g:Image ui:field="imgProfile" styleName="{style.imgProfile}" />
+
+		<p class="uk-form-row">
+			<g:TextArea ui:field="txtComment" width="75%" visibleLines="2" styleName="uk-form-large uk-form-width-large"></g:TextArea>
+
+			<g:Button styleName="uk-button uk-button-large" ui:field="btnSubmit">Submit</g:Button>
+		</p>
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -112,8 +112,8 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-//	    proceedToApp(confessionService, facebookService, eventBus);
-    	    initializeUserInfo(true);
+	    proceedToApp(confessionService, facebookService, eventBus);
+//    	    initializeUserInfo(true);
 	}
     }
 
@@ -183,7 +183,8 @@ public class ConfessionBox implements EntryPoint {
 			    // Cancel timer
 			    this.cancel();
 			}   
-		    } else
+		    } 
+		    else 
 			if(count < 3){
 			    count++;
 			    // Timer to reschedule for 1 sec

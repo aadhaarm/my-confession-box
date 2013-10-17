@@ -204,7 +204,7 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements Confe
     }
 
     @Override
-    public List<Comment> getComments(CommentFilter filter) {
+    public CommentFilter getComments(CommentFilter filter) {
 	return CommentManager.getComments(filter);
     }
 

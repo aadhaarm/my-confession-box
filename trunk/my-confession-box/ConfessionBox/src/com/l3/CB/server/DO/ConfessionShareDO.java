@@ -4,14 +4,20 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
+import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.PardonStatus;
 
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class ConfessionShareDO implements Serializable {
 
     /**
@@ -19,31 +25,43 @@ public class ConfessionShareDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long shareId;
-
-    @Persistent
+    
     private Long confId;
 
-    @Persistent
+    @Load
+    private Ref<ConfessionDO> refConfession;
+    
     private Long userId;
+    
+    @Load
+    private Ref<UserDO> refUser;
 
-    @Persistent
-    private String pardonStatus;
+    private String pardonStatus = PardonStatus.AWAITING_PARDON.name();
 
-    @Persistent
     private Date timeStamp;
     
-    @Persistent
     private String relation;
 
-    @Persistent
     private List<PardonConditionDO> pardonConditionDOs;
 
     public ConfessionShareDO() {
 	super();
-	pardonStatus = PardonStatus.AWAITING_PARDON.name();
+    }
+    
+    public ConfessionShareDO(ConfessionShare confessedTo) {
+	if(confessedTo != null) {
+
+	    this.setConfId(confessedTo.getConfId());
+	    this.setUserId(confessedTo.getUserId());
+
+	    this.setTimeStamp(confessedTo.getTimeStamp());
+	    
+	    if(confessedTo.getRelation() != null) {
+		this.setRelation(confessedTo.getRelation().name());
+	    }
+	}
     }
 
     public Long getShareId() {
@@ -58,16 +76,18 @@ public class ConfessionShareDO implements Serializable {
 	return confId;
     }
 
-    public void setConfId(Long confId) {
+    public void setConfId(long confId) {
 	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public Long getUserId() {
 	return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public Date getTimeStamp() {
@@ -100,6 +120,22 @@ public class ConfessionShareDO implements Serializable {
 
     public void setRelation(String relation) {
         this.relation = relation;
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
     }
 
     @Override

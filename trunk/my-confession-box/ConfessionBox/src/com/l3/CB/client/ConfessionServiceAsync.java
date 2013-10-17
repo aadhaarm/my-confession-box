@@ -62,6 +62,6 @@ public interface ConfessionServiceAsync {
     
     // COMMENT
     void saveComment(Comment comment, AsyncCallback<Void> callback);
-    void getComments(CommentFilter filter, AsyncCallback<List<Comment>> callback);
+    void getComments(CommentFilter filter, AsyncCallback<CommentFilter> callback);
     void voteOnComment(CommentFilter filter, AsyncCallback<Void> callback);
 }

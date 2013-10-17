@@ -2,15 +2,19 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
 
-
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class PardonConditionDO implements Serializable {
 
     /**
@@ -18,24 +22,28 @@ public class PardonConditionDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key pardonConditionId;
+    @Id
+    private Long pardonConditionId;
 
-    @Persistent
     private Long confId;
 
-    @Persistent
+    @Load
+    private Ref<ConfessionDO> refConfession;
+
     private Long userId;
 
-    @Persistent
+    @Load
+    private Ref<UserDO> refUser;
+
     private boolean isFulfil;
 
-    @Persistent
     private String condition;
 
-    @Persistent
     private int count;
+
+    private PardonConditionDO() {
+	super();
+    }
 
     public int getCount() {
 	return count;
@@ -59,12 +67,12 @@ public class PardonConditionDO implements Serializable {
 	this.condition = condition;
     }
 
-    public Key getPardonConditionId() {
-	return pardonConditionId;
+    public Long getPardonConditionId() {
+        return pardonConditionId;
     }
 
-    public void setPardonConditionId(Key pardonConditionId) {
-	this.pardonConditionId = pardonConditionId;
+    public void setPardonConditionId(Long pardonConditionId) {
+        this.pardonConditionId = pardonConditionId;
     }
 
     public boolean isFulfil() {
@@ -79,16 +87,34 @@ public class PardonConditionDO implements Serializable {
 	return confId;
     }
 
-    public void setConfId(Long confId) {
+    public void setConfId(long confId) {
 	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public Long getUserId() {
 	return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
     }
 
     @Override

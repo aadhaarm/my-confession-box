@@ -510,7 +510,7 @@ public class CommonUtils {
      * @param relation
      * @return default text if relation null
      */
-    private static String checkForNullConfessedTo(Relations relation) {
+    public static String checkForNullConfessedTo(Relations relation) {
 	if(relation != null) {
 	    return relation.getDisplayText();
 	}
@@ -908,5 +908,12 @@ public class CommonUtils {
 
 	pPnlIntroduction.add(fPnlBody);
 	return pPnlIntroduction;
+    }
+
+    public static String trunkate(String confession, int i) {
+	if(confession != null && confession.length() > 200) {
+	    return confession.substring(0, i) + "...";
+	}
+	return confession;
     }
 }

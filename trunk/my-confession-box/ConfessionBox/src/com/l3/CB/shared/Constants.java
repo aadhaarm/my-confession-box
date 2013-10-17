@@ -198,4 +198,6 @@ public class Constants {
     public static final String HISTORY_ITEM_PRIVACY_POLICY = "privacy";
 
     public static final String HISTORY_ITEM_TOS = "TermsOfService";
+
+    public static final String DIV_MOBILE_LEFT_MENU = "mobileMenuDiv";
 }

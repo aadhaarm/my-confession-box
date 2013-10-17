@@ -38,7 +38,7 @@ public class CommentManager {
 	}
     }
 
-    public static List<Comment> getComments(CommentFilter filter) {
+    public static CommentFilter getComments(CommentFilter filter) {
 	return CommentDAO.getComments(filter);
     }
 

@@ -40,36 +40,36 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     PopupPanel pPnlRuleBook;
 
     public static void selectMenuItem(int item) {
-	switch (item) {
-	case 1: 
-	    if(selectedMenuItem != null) {
-		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    }
-	    link1.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    selectedMenuItem = link1;
-	    break;
-	case 2:
-	    if(selectedMenuItem != null) {
-		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    }
-	    link2.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    selectedMenuItem = link2;
-	    break;
-	case 3:
-	    if(selectedMenuItem != null) {
-		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    }
-	    link3.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    selectedMenuItem = link3;
-	    break;
-	case 4:
-	    if(selectedMenuItem != null) {
-		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    }
-	    link4.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
-	    selectedMenuItem = link4;
-	    break;
-	}
+//	switch (item) {
+//	case 1: 
+//	    if(selectedMenuItem != null) {
+//		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    }
+//	    link1.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    selectedMenuItem = link1;
+//	    break;
+//	case 2:
+//	    if(selectedMenuItem != null) {
+//		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    }
+//	    link2.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    selectedMenuItem = link2;
+//	    break;
+//	case 3:
+//	    if(selectedMenuItem != null) {
+//		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    }
+//	    link3.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    selectedMenuItem = link3;
+//	    break;
+//	case 4:
+//	    if(selectedMenuItem != null) {
+//		selectedMenuItem.removeStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    }
+//	    link4.addStyleName(Constants.STYLE_CLASS_MENU_ITEM_SELECTED);
+//	    selectedMenuItem = link4;
+//	    break;
+//	}
     }
 
     public MenuView() {
@@ -221,25 +221,25 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	return link1;
     }
 
-    @Override
-    public HTML getFeedItem() {
-	return link1;
-    }
-
-    @Override
-    public HTML getConfessItem() {
-	return link2;
-    }
-
-    @Override
-    public HTML getMyConItem() {
-	return link3;
-    }
-
-    @Override
-    public HTML getConToMeItem() {
-	return link4;
-    }
+//    @Override
+//    public HTML getFeedItem() {
+//	return link1;
+//    }
+//
+//    @Override
+//    public HTML getConfessItem() {
+//	return link2;
+//    }
+//
+//    @Override
+//    public HTML getMyConItem() {
+//	return link3;
+//    }
+//
+//    @Override
+//    public HTML getConToMeItem() {
+//	return link4;
+//    }
 
     public boolean setMyConfCount(int count) {
 	return true;

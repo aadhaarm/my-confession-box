@@ -2,12 +2,14 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class UserDO implements Serializable {
 
     /**
@@ -15,27 +17,24 @@ public class UserDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long userId;
 
-    @Persistent
     private String fbId;
 
-    @Persistent
     private String gender;
 
-    @Persistent
     private String name;
 
-    @Persistent
     private String userName;
 
-    @Persistent
     private String email;
 
-    @Persistent
     private int humanPoints = 0;
+
+    private UserDO() {
+	super();
+    }
 
     public Long getUserId() {
 	return userId;

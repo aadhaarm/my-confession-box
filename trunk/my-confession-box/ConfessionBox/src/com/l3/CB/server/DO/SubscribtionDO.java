@@ -3,12 +3,18 @@ package com.l3.CB.server.DO;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
+import com.l3.CB.server.DAO.ConfessionBasicDAO;
+import com.l3.CB.server.DAO.UserDAO;
 
-@PersistenceCapable
+@Entity
+@Cache
+@Index
 public class SubscribtionDO implements Serializable {
 
     /**
@@ -16,22 +22,34 @@ public class SubscribtionDO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Id
     private Long subfId;
 
-    @Persistent
     private Long userId;
 
-    @Persistent
+    @Load
+    private Ref<UserDO> refUser;
+
     private Long confId;
 
-    @Persistent
+    @Load
+    private Ref<ConfessionDO> refConfession;
+
     private boolean isSubscribed;
 
-    @Persistent
     private Date timeStamp;
 
+    private SubscribtionDO() {
+	super();
+    }
+
+    public SubscribtionDO(Long userId, Long confId, boolean isSubscribed) {
+	super();
+	this.setUserId(userId);
+	this.setConfId(confId);
+	this.isSubscribed = isSubscribed;
+    }
+    
     public Long getSubfId() {
 	return subfId;
     }
@@ -44,16 +62,18 @@ public class SubscribtionDO implements Serializable {
 	return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(long userId) {
 	this.userId = userId;
+	this.refUser = UserDAO.getUserRef(userId);
     }
 
     public Long getConfId() {
 	return confId;
     }
 
-    public void setConfId(Long confId) {
+    public void setConfId(long confId) {
 	this.confId = confId;
+	this.refConfession = ConfessionBasicDAO.getConfessionRef(confId);
     }
 
     public boolean isSubscribed() {
@@ -64,19 +84,28 @@ public class SubscribtionDO implements Serializable {
 	this.isSubscribed = isSubscribed;
     }
 
-    public SubscribtionDO(Long userId, Long confId, boolean isSubscribed) {
-	super();
-	this.userId = userId;
-	this.confId = confId;
-	this.isSubscribed = isSubscribed;
-    }
-
     public Date getTimeStamp() {
 	return timeStamp;
     }
 
     public void setTimeStamp(Date timeStamp) {
 	this.timeStamp = timeStamp;
+    }
+
+    public Ref<UserDO> getRefUser() {
+        return refUser;
+    }
+
+    public void setRefUser(Ref<UserDO> refUser) {
+        this.refUser = refUser;
+    }
+
+    public Ref<ConfessionDO> getRefConfession() {
+        return refConfession;
+    }
+
+    public void setRefConfession(Ref<ConfessionDO> refConfession) {
+        this.refConfession = refConfession;
     }
 
     @Override

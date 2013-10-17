@@ -2,29 +2,37 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
+		.handPointer {
+			cursor: pointer;
+		}
+		
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<div class="comment_image">
-			<g:Image ui:field="imgProfile" height="35px" width="35px"/>
-		</div>
-		<div class="person_name">
+		<p class="uk-article-meta uk-width-1-1">
+			<g:Image ui:field="imgProfile" height="35px" width="35px" />
 			<g:Anchor ui:field='nameSpan'></g:Anchor>
-			commented..
-			<div class="time_stamp">
-				<span ui:field='timeStamp' />
-			</div>
-		</div>
-		<span ui:field='strComment' />
-		<div class="like_buttons">
-			<span ui:field='numOfSecond' />
-			<g:Button ui:field="btnSecond" />
-			<span ui:field='numOfDislike' />
-			<g:Button ui:field="btnDislike" />
-		</div>
+			commented,
+			<span ui:field='timeStamp' />
+		</p>
 
-		<!-- <g:Button styleName="{style.important}" ui:field="button" /> -->
+		<p>
+			<span ui:field='strComment' />
+			<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">More</g:Anchor>
+		</p>
+		<p>
+			<g:Button ui:field="btnSecond"
+				styleName="uk-button uk-button-primary uk-button-small" title="I Like your comment!">Like</g:Button>
+			<span ui:field='numOfSecond' />
+
+			<g:Button ui:field="btnDislike" styleName="uk-button uk-button-small"
+				title="I don't like your Comment!">Dislike</g:Button>
+			<span ui:field='numOfDislike' />
+		</p>
+
+		<hr ui:field="hr" class="uk-grid-divider" />
+
 	</g:HTMLPanel>
 </ui:UiBinder> 

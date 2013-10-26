@@ -37,7 +37,7 @@ public class Constants {
     public static final String HISTORY_ITEM_CONFESSION_FOR_ME_FEED = "FeedToMe";
 
     //General settings
-    public static final int FEED_PAGE_SIZE = 5;
+    public static final int FEED_PAGE_SIZE = 2;
     public static final Level LOG_LEVEL = Level.OFF;
 
     //Loader image animation

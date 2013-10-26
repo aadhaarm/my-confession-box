@@ -11,7 +11,7 @@
 
 			<ul class="uk-navbar-nav uk-hidden-small">
 
-				<li data-uk-dropdown="{}" class="uk-parent">
+				<li ui:field="liConfessionWall" data-uk-dropdown="{}" class="uk-parent">
 					<g:Anchor ui:field="ancConfWall">Confession Wall</g:Anchor>
 					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1"
 						style="">
@@ -48,7 +48,7 @@
 					</div>
 				</li>
 
-				<li data-uk-dropdown="{}" class="">
+				<li ui:field="liWriteConfession" data-uk-dropdown="{}" class="">
 					<g:Anchor ui:field="ancWrtConf">Write Confession</g:Anchor>
 				</li>
 				<li data-uk-dropdown="{}" class="">
@@ -68,9 +68,7 @@
 			<a data-uk-offcanvas="" class="uk-navbar-toggle uk-visible-small" href="#offcanvas"></a>
 
 			<div class="uk-navbar-content uk-navbar-center uk-visible-small">
-				<a href="#" class="tm-logo-small">
-					<img width="100" height="35" class="uk-responsive-height" alt="Demo" src="images/junk/logo_small.svg" />
-				</a>
+				Confession Box
 			</div>
 
 		</nav>

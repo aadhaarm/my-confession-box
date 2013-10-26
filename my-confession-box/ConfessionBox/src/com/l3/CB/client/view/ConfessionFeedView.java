@@ -13,6 +13,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -205,8 +207,9 @@ public class ConfessionFeedView extends Composite implements ConfessionFeedPrese
     }
 
     @Override
-    public FlowPanel getVpnlConfessionList() {
-	return vpnlConfessionList;
+    public HTMLPanel getVpnlConfessionList() {
+	return null;
+//	return vpnlConfessionList;
     }
 
     @Override

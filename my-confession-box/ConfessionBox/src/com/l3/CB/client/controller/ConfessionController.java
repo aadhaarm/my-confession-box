@@ -19,6 +19,7 @@ import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.event.UpdateMenuEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
+import com.l3.CB.client.presenter.CopyOfRegisterConfessionPresenter;
 import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.presenter.HeaderPresenter;
 import com.l3.CB.client.presenter.HumanPointPresenter;
@@ -34,10 +35,10 @@ import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.FooterView;
 import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.LoginStatusView;
-import com.l3.CB.client.view.RegisterConfessionView;
 import com.l3.CB.client.view.confession.ConfessionsContainer;
 import com.l3.CB.client.view.header.HeaderView;
 import com.l3.CB.client.view.menu.MobileMenuView;
+import com.l3.CB.client.view.register.RegisterConfessionUI;
 import com.l3.CB.shared.Constants;
 
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
@@ -188,17 +189,17 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		headerPresenter.showFilter();
 	    } else if(ConfessionBox.isLoggedIn) {
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
-		    presenter = new RegisterConfessionPresenter(new RegisterConfessionView());
+		    presenter = new CopyOfRegisterConfessionPresenter(new RegisterConfessionUI());
 //		    MenuView.selectMenuItem(2);
 		    CommonUtils.removeApplicationLoad();
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
 //		    MenuView.selectMenuItem(3);
-		    presenter = new MyConfessionFeedPresenter(new ConfessionFeedView());
+		    presenter = new MyConfessionFeedPresenter(new ConfessionsContainer());
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
 //		    MenuView.selectMenuItem(4);
-		    presenter = new ConfessionForMeFeedPresenter(new ConfessionFeedView());
+		    presenter = new ConfessionForMeFeedPresenter(new ConfessionsContainer());
 		    headerPresenter.hideFilter();
 		}
 	    } 

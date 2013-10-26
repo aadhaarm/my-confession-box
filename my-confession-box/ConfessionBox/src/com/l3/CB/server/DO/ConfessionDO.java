@@ -12,6 +12,7 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.l3.CB.server.DAO.UserDAO;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.UserInfo;
 
 @Entity
 @Cache
@@ -72,7 +73,7 @@ public class ConfessionDO implements Serializable {
 
     @Index
     private boolean onlyDedicate;
-    
+
     @Index
     private String userIp;
 
@@ -321,13 +322,13 @@ public class ConfessionDO implements Serializable {
     public void setNumOfTotalVote(Long numOfTotalVote) {
 	this.numOfTotalVote = numOfTotalVote;
     }
-    
+
     public boolean isOnlyDedicate() {
-        return onlyDedicate;
+	return onlyDedicate;
     }
 
     public void setOnlyDedicate(boolean onlyDedicate) {
-        this.onlyDedicate = onlyDedicate;
+	this.onlyDedicate = onlyDedicate;
     }
 
     public Confession toConfessionTO() {
@@ -346,11 +347,16 @@ public class ConfessionDO implements Serializable {
 	confession.setUpdateTimeStamp(this.getLastUpdateTimeStamp());
 	confession.setOnlyDedicate(this.isOnlyDedicate());
 
-	
-	if(this.refUser != null) {
-	    confession.setFbId(refUser.get().getFbId());
-	    confession.setGender(refUser.get().getGender());
+	UserDO userDO = UserDAO.getUserByUserId(new UserInfo(this.getUserId()));
+	if(userDO != null) {
+	    confession.setFbId(userDO.getFbId());
+	    confession.setGender(userDO.getGender());
 	}
+
+//	if(this.refUser != null) {
+//	    confession.setFbId(refUser.get().getFbId());
+//	    confession.setGender(refUser.get().getGender());
+//	}
 	return confession;
     }
 

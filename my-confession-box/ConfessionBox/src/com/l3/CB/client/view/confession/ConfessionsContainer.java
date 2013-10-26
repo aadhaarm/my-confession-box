@@ -11,7 +11,7 @@ import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
@@ -20,7 +20,6 @@ import com.l3.CB.client.event.ActivityEventHandler;
 import com.l3.CB.client.event.ShowToolTipEvent;
 import com.l3.CB.client.event.ShowToolTipEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
-import com.l3.CB.client.ui.widgets.ConfessionPanel;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
@@ -38,17 +37,21 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
     private int confessionPagesLoaded;
     private Image loaderImage;
     private boolean isMoreConfessionsAvailable;
-    private Map<Long, ConfessionPanel> confessionsThisView;
+    private Map<Long, ConfessionView> confessionsThisView;
 
     
     @UiField
-    FlowPanel fPnlConfContainer;
+    HTMLPanel fPnlConfContainer;
 
     public ConfessionsContainer() {
 	
 	initWidget(uiBinder.createAndBindUi(this));
 
 	getMeLoaderImage();
+	
+	confessionPagesLoaded = 1;
+
+	isMoreConfessionsAvailable = true;
 
 	bind();
     }
@@ -62,10 +65,10 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 	    @Override
 	    public void registerVote(ActivityEvent event) {
 		if(event != null) {
-		    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(event.getConfId());
-		    if(fPnlConfessionMain != null) {
-			fPnlConfessionMain.showUndoTooltip();
-		    }
+		    final ConfessionView fPnlConfessionMain = confessionsThisView.get(event.getConfId());
+//		    if(fPnlConfessionMain != null) {
+//			fPnlConfessionMain.showUndoTooltip();
+//		    }
 		}
 	    }
 	});
@@ -84,10 +87,10 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 	    @Override
 	    public void showToolTip(ShowToolTipEvent event) {
 		if(event != null && confessionsThisView != null) {
-		    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(event.getConfId());
+		    final ConfessionView fPnlConfessionMain = confessionsThisView.get(event.getConfId());
 		    if(fPnlConfessionMain != null) {
 //			fPnlConfessionMain.hideUndoToolTip();
-			fPnlConfessionMain.showShareToolTip();
+//			fPnlConfessionMain.showShareToolTip();
 		    }
 		}
 	    }
@@ -103,7 +106,7 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
     public void setConfessions(List<Confession> confessions, boolean isAnyn, boolean showUserControls, Filters filter, boolean showExtendedDetails, boolean showPardonHelpText) {
 	fPnlConfContainer.add(loaderImage);
 	if(confessionsThisView == null) {
-	    confessionsThisView = new HashMap<Long, ConfessionPanel>();
+	    confessionsThisView = new HashMap<Long, ConfessionView>();
 	}
 	if (confessions != null && !confessions.isEmpty()) {
 	    for (final Confession confession : confessions) {
@@ -112,7 +115,7 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 //		    final ConfessionPanel fPnlConfessionMain = new ConfessionPanel(confession, showUserControls, isAnyn, showExtendedDetails, showPardonHelpText);
 		    if(confessionView != null) {
 			fPnlConfContainer.add(confessionView);
-//			confessionsThisView.put(confession.getConfId(), fPnlConfessionMain);
+			confessionsThisView.put(confession.getConfId(), confessionView);
 		    }
 		}
 	    }
@@ -134,10 +137,9 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
     @Override
     public void setConfessions(Confession confession) {
 	if (confession != null) {
-	    final ConfessionPanel fPnlConfessionMain = confessionsThisView.get(confession.getConfId());
+	    final ConfessionView fPnlConfessionMain = confessionsThisView.get(confession.getConfId());
 	    if(fPnlConfessionMain != null) {
-		fPnlConfessionMain.clear();
-		fPnlConfessionMain.getConfessionWidgetsSetup(confession);
+		fPnlConfessionMain.getConfessionWidgetsSetup(confession, true);
 	    }
 	}
 	CommonUtils.removeApplicationLoad();
@@ -173,7 +175,7 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
     }
 
     @Override
-    public FlowPanel getVpnlConfessionList() {
+    public HTMLPanel getVpnlConfessionList() {
 	return fPnlConfContainer;
     }
 

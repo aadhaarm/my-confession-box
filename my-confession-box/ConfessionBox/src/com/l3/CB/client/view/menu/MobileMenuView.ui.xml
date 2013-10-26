@@ -8,7 +8,6 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-
 		<div class="uk-offcanvas-bar uk-offcanvas-bar-show">
 			<ul class="uk-nav uk-nav-offcanvas">
 				<li class="uk-parent">

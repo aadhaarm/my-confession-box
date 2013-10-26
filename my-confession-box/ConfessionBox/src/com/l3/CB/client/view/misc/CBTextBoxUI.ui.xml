@@ -7,8 +7,10 @@
 		}
 	</ui:style>
 	<g:HTMLPanel>
-		<div class="tm-headerbar uk-clearfix uk-hidden-small">
-			<h1 class="tm-logo">Confesion Box</h1>
-		</div>
+		<g:TextBox ui:field="txtTitle" width="100%" styleName="uk-width-1-1" maxLength="70"/>
+
+		<span ui:field="spanErrorMessage" style="float:left" class="uk-article-meta"/>
+
+		<span ui:field="lblRemainChar" style="float:right" class="uk-article-meta">70 Characters left.</span>
 	</g:HTMLPanel>
 </ui:UiBinder> 

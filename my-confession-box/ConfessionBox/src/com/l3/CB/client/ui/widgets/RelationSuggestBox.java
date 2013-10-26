@@ -25,9 +25,9 @@ public class RelationSuggestBox extends FlowPanel{
     SuggestBox relationSuggestBox;
     ListBox relationSuggestList;
     MultiWordSuggestOracle relationsOracle;
+    Map<String, Relations> relationMap;
     private final Label label = new Label(ConfessionBox.cbText.relationsSuggestionBoxLabel());
     private final Label errMsg = new Label(ConfessionBox.cbText.relationsSuggestionBoxErrorMessage());
-    Map<String, Relations> relationMap;
 
     public RelationSuggestBox() {
 	super();

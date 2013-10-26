@@ -1,0 +1,82 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:w="urn:import:com.l3.CB.client.view.misc">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel styleName="tm-main uk-width-medium-1-1"
+		ui:field="fPnlConfContainer">
+		<div class="uk-panel-box">
+			<div class="uk-width-1-1">
+
+				<div class="uk-panel uk-panel-box uk-panel-box-primary">
+					<h3 align="center" class="uk-panel-title">Write Your Confession Below</h3>
+
+					<p align="center">
+						<g:Button styleName="uk-button">Confession Rules</g:Button>
+					</p>
+
+					<p>
+						<strong>Please Note:</strong>
+						Your identity is never revealed to anyone unless you choose to do
+						so. Also the confession is never posted on Facebook wall by
+						default.
+					</p>
+				</div>
+
+				<h4 align="center">Confession Sharing Options</h4>
+
+				<div>
+					<w:CBButton ui:field="btnHideIdentity" title="Press to confess anonymously">Hide My
+						Identity</w:CBButton>
+
+					<w:CBButton ui:field="btnDedicateConfession"
+						title="Press to Dedicate your confession to someone you know">Dedicate Confession</w:CBButton>
+
+					<w:CBButton ui:field="btnRequestPardon"
+						title="Press to request for a Pardon from the person to whom you are dedicating this confession.">Request for Pardon</w:CBButton>
+				</div>
+
+				<div ui:field="pOptions">
+					<h4>Dedicate Your Confession to someone</h4>
+
+					<div class="uk-width-1-2 uk-grid-margin">
+						<fieldset class="uk-form">
+
+							<w:FriendsSuggestBoxUI ui:field="friendsSuggestBox" />
+							<w:RelationSuggestBoxUI ui:field="relationSuggestBox" />
+
+						</fieldset>
+					</div>
+				</div>
+
+				<p class="uk-panel uk-panel-box uk-panel-box-primary">
+					<g:Image height="60px" width="60px" ui:field="profileImage"></g:Image>
+					<g:HTML ui:field="htmlConfessionPreview" />
+				</p>
+
+				<h4 align="center">Begin Writing Your Confession</h4>
+
+				<w:CBTextBoxUI ui:field="txtTitle" />
+				<br />
+
+				<w:CBTextAreaUI ui:field="txtConfession"></w:CBTextAreaUI>
+				<br />
+
+				<g:Button ui:field="btnProceed" title="Confirm if you wish to continue"
+					styleName="uk-button uk-button-large">Proceed</g:Button>
+
+				<p ui:field="pConfirmPanel">
+					<span ui:field="spanUserMessage" />
+					<span ui:field="spanConfirmMessage" />
+					<g:Button ui:field="btnEdit" title="Edit your confession"
+						styleName="uk-button uk-button-large">Edit</g:Button>
+					<g:Button ui:field="btnSubmit" title="Submit confession"
+						styleName="uk-button uk-button-large">Submit</g:Button>
+				</p>
+			</div>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

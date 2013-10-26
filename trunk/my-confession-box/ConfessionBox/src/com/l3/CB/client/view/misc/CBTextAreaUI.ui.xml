@@ -1,0 +1,18 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<g:TextArea ui:field="textArea" height="200px" width="100%" styleName="uk-width-1-1" />
+			
+		<g:RichTextArea ui:field="richTextArea" height="200px" width="100%" styleName="uk-width-1-1"></g:RichTextArea>
+
+		<span ui:field="spanErrorMessage" style="float:left" class="uk-article-meta"/>
+			
+		<span ui:field="spanMessage" style="float:right" class="uk-article-meta">1500 Characters left.</span>
+	</g:HTMLPanel>
+</ui:UiBinder> 

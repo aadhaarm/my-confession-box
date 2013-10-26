@@ -49,10 +49,10 @@ public class ChangeVisibilityButton extends FlowPanel {
 					if(shareAnyn) {
 					    // Give human points
 					    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
-					    setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 					} else {
 					    //Deduct human points
 					    ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
+					    setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 					    setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 					}
 

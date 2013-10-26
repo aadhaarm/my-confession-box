@@ -21,6 +21,12 @@ public class ActivityManager {
     public static Long registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp) {
 
 	Long updatedActivityCount = ConfessionOtherDAO.updateActivityCountInConfession(confId, activity);
+	
+	/*
+	 * Flush confession Cache
+	 */
+	CacheManager.flushConfession(confId);
+	
 	ConfessionOtherDAO.registerUserActivity(userId, confId, activity, new Date());
 
 	if(activity.equals(Activity.SHOULD_BE_PARDONED)) {

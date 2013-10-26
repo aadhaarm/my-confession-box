@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
@@ -49,7 +50,7 @@ public class ConfessionFeedPresenter implements Presenter {
 	public int getConfessionPagesLoaded();
 	public boolean isMoreConfessions();
 	public Image getLoaderImage();
-	public FlowPanel getVpnlConfessionList();
+	public HTMLPanel getVpnlConfessionList();
 	public HasChangeHandlers getConfessionFilterListBox();
 	public HasFocusHandlers getConfessionFilterListBoxForHelp();
 	public HasClickHandlers getRefreshButton();
@@ -138,7 +139,11 @@ public class ConfessionFeedPresenter implements Presenter {
 		    inEvent = true;
 		    display.incrementConfessionPagesLoaded();
 
-		    ConfessionBox.confessionService.getConfessions(display.getConfessionPagesLoaded(), filter, ConfessionBox.getLoggedInUserInfo().getLocale(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<List<Confession>>() {
+		    ConfessionBox.confessionService.getConfessions(
+			    display.getConfessionPagesLoaded(), filter,
+			    ConfessionBox.getLoggedInUserInfo().getLocale(),
+			    ConfessionBox.getLoggedInUserInfo().getUserId(),
+			    new AsyncCallback<List<Confession>>() {
 
 			@Override
 			public void onSuccess(List<Confession> result) {

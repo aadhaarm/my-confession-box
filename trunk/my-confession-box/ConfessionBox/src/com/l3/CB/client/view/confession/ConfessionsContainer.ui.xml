@@ -6,8 +6,7 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:HTMLPanel styleName="tm-main uk-width-medium-1-1">
-		<g:FlowPanel styleName="tm-content" ui:field="fPnlConfContainer">
-		</g:FlowPanel>
+	
+	<g:HTMLPanel styleName="tm-main uk-width-medium-1-1" ui:field="fPnlConfContainer">
 	</g:HTMLPanel>
 </ui:UiBinder> 

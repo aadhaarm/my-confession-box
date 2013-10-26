@@ -4,11 +4,16 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -18,11 +23,13 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateHPEvent;
+import com.l3.CB.client.ui.widgets.PardonPopupPanel;
 import com.l3.CB.client.ui.widgets.comment.AddCommentTemplate;
 import com.l3.CB.client.ui.widgets.comment.CommentListTemplate;
-import com.l3.CB.client.ui.widgets.comment.CommentListWidget;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
+import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
@@ -39,12 +46,13 @@ public class ConfessionView extends Composite {
     }
 
     private Confession confession;
-    private boolean anonymousView;
+    private boolean isAnyn;
     private UserInfo confessedByUserInfo;
     private boolean showUserControls;
     private boolean showExtendedDetails;
     private boolean showPardonHelpText;
-
+    private PardonPopupPanel pardonPopupPanel;
+    
     @UiField
     HTMLPanel mainDiv;
 
@@ -84,6 +92,14 @@ public class ConfessionView extends Composite {
     Button btnShudNtBePar;
     @UiField
     Button btnRepAbuse;
+    @UiField
+    Button btnHideIdentity;
+    @UiField
+    Button btnHideConfession;
+    @UiField
+    Button btnPreview;
+    @UiField
+    Button btnPardon;
 
     @UiField
     SpanElement spanSameBoatNum;
@@ -99,17 +115,37 @@ public class ConfessionView extends Composite {
     SpanElement spanRepAbuseNum;
 
     @UiField
+    Anchor ancConfessedTo;
+    @UiField
+    SpanElement spanConfessedTo;
+
+    @UiField
     ButtonElement badgePardonStatus;
 
-    public ConfessionView(Confession confession, boolean showUserControls, boolean isAnyn, boolean showExtendedDetails, boolean showPardonHelpText) {
+    @UiField
+    ParagraphElement userCtrlBtnBlock;
+
+    public ConfessionView(Confession confession, boolean showUserControls, boolean isAnyn, 
+	    boolean showExtendedDetails, boolean showPardonHelpText) {
 	initWidget(uiBinder.createAndBindUi(this));
+	this.confession = confession;
+	this.isAnyn = isAnyn;
+	this.showUserControls = showUserControls;
+	this.showExtendedDetails = showExtendedDetails;
+	this.showPardonHelpText = showPardonHelpText;
+
+	getConfessionWidgetsSetup(confession, isAnyn);
+    }
+
+    /**
+     * @param confession
+     * @param isAnyn
+     */
+    public void getConfessionWidgetsSetup(Confession confession, boolean isAnyn) {
+	this.confession = confession;
+	this.isAnyn = isAnyn;
 
 	if(confession != null) {
-	    this.confession = confession;
-	    this.anonymousView = isAnyn;
-	    this.showUserControls = showUserControls;
-	    this.showExtendedDetails = showExtendedDetails;
-	    this.showPardonHelpText = showPardonHelpText;
 
 	    /*
 	     *  Confession ID
@@ -125,23 +161,12 @@ public class ConfessionView extends Composite {
 	    confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
 	    if(confessedByUserInfo != null) {
 		confession.setFbId(confessedByUserInfo.getId());
-		this.confession = confession;
 	    }
 
 	    /*
 	     * User Name
 	     */
-	    if (!confession.isShareAsAnyn() || !isAnyn) {
-		if (confessedByUserInfo != null) {
-		    ancUserName.setText(confessedByUserInfo.getName());
-		    ancUserName.setHref(confessedByUserInfo.getLink());
-		    ancUserName.setTarget("_BLANK");
-		}
-	    } else {
-		// Anonymous user
-		ancUserName.setText(ConfessionBox.cbText.confessedByAnynName());
-		ancUserName.setTitle(ConfessionBox.cbText.profileNameAnonymousTileText());
-	    }
+	    setupUserNameDetails();
 
 	    /*
 	     * Date time
@@ -159,11 +184,7 @@ public class ConfessionView extends Composite {
 	    /*
 	     * Profile Image
 	     */
-	    if (confession != null && !confession.isShareAsAnyn() || !isAnyn) {
-		imgProfileImage.setUrl(FacebookUtil.getUserImageUrl(confession.getFbId()));
-	    } else {
-		imgProfileImage.setUrl(FacebookUtil.getFaceIconImage(confession.getGender()));
-	    }
+	    setupProfilePictureDetails();
 
 	    /*
 	     * Comment
@@ -174,87 +195,216 @@ public class ConfessionView extends Composite {
 	    /*
 	     * Activity Vote Count
 	     */
-	    spanLameNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.LAME))));
-	    spanRepAbuseNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.ABUSE))));
-	    spanSameBoatNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SAME_BOAT))));
-	    spanShudBeParNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SHOULD_BE_PARDONED))));
-	    spanShudNtBeParNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SHOULD_NOT_BE_PARDONED))));
-	    spanSympathyNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SYMPATHY))));
+	    setupActivityButtonStatus();
+	    //Button disable status
+	    disableActivityButtons();
 
-	    /*
-	     * Button disable status
-	     */
-	    if (confession.getActivityCount() != null) {
-		if (confession.getActivityCount().containsKey(Activity.ABUSE.name())) {
-		    disableBtn(btnRepAbuse);
-		}
-		if (confession.getActivityCount().containsKey(Activity.LAME.name())) {
-		    disableBtn(btnLame);
-		}
-		if (confession.getActivityCount().containsKey(Activity.SAME_BOAT.name())) {
-		    disableBtn(btnSameBoat);
-		}
-		if (confession.getActivityCount().containsKey(Activity.SHOULD_BE_PARDONED.name())) {
-		    disableBtn(btnShudBePar);
-		}
-		if (confession.getActivityCount().containsKey(Activity.SHOULD_NOT_BE_PARDONED.name())) {
-		    disableBtn(btnShudNtBePar);
-		}
-		if (confession.getActivityCount().containsKey(Activity.SYMPATHY.name())) {
-		    disableBtn(btnSympathy);
-		}
-	    }
+	    // Remove User control block
+	    setupUserCtrlButtons();
 
 	    /*
 	     * Pardon Status
 	     */
-	    if(confession != null 
-		    && !confession.isOnlyDedicate() 
-		    && confession.getConfessedTo() != null 
-		    && !confession.getConfessedTo().isEmpty()) {
+	    setupPardonStatusBadge();
+	}
+    }
 
-		for (ConfessionShare confessionShare : confession.getConfessedTo()) {
-		    if(confessionShare != null && confessionShare.getPardonStatus() != null) {
-			switch (confessionShare.getPardonStatus()) {
-			case PARDONED:
-			    // Set Badge Text with time stamp
-			    badgePardonStatus.setInnerText(ConfessionBox.cbText.pardonStatusLabel()
-				    + " "
-				    + ConfessionBox.cbText.dateTimeStampPrefix()
-				    + " "
-				    + CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
-			    // Set tool-tip
-			    badgePardonStatus.setTitle("Confessor has been pardoned by " 
-				    + CommonUtils.getPronoun(confession.getGender()) 
-				    + " " 
-				    + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) 
-				    + ".");
-			    // Set badge style
-			    badgePardonStatus.addClassName("uk-badge-success");
-			    break;
-			default:
-			    badgePardonStatus.setInnerText(ConfessionBox.cbText.awaitingPardonStatusLabel()
-				    + " " 
-				    + ConfessionBox.cbText.dateTimeStampPrefix() 
-				    + " " 
-				    + CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
-			    // Set tool-tip
-			    badgePardonStatus.setTitle("Confessor is awaiting pardon from " 
-				    + CommonUtils.getPronoun(confession.getGender()) 
-				    + " " 
-				    + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) 
-				    + ".");
-			    // Set badge style
-			    badgePardonStatus.addClassName("uk-badge-danger");
-			    break;
-			}
-		    }
-		}
+    /**
+     * @param confession
+     */
+    private void setupUserCtrlButtons() {
+	if(this.showUserControls) { 
+	    if(confession.isShareAsAnyn()) {
+		btnHideIdentity.addStyleName("uk-button-primary");
+		btnHideIdentity.setText("Un-Hide Identity");
+		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	    } else {
-		badgePardonStatus.removeFromParent();
+		btnHideIdentity.removeStyleName("uk-button-primary");
+		btnHideIdentity.setText("Hide Identity");
+		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	    }
 
+	    if(confession.isVisibleOnPublicWall()) {
+		btnHideConfession.setText("Hide Confession");
+		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
+		btnHideConfession.removeStyleName("uk-button-primary");
+	    } else {
+		btnHideConfession.setText("Un-Hide Confession");
+		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
+		btnHideConfession.addStyleName("uk-button-primary");
+	    }
+	} else {
+	    btnPreview.removeFromParent();
+	    userCtrlBtnBlock.removeFromParent();
+	}
+    }
 
+    /**
+     * @param confession
+     */
+    private void setupPardonStatusBadge() {
+	if(confession != null 
+		&& !confession.isOnlyDedicate() 
+		&& confession.getConfessedTo() != null 
+		&& !confession.getConfessedTo().isEmpty()) {
+
+	    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
+		    /*
+		     * Confessed to
+		     */
+		    if(showUserControls) {
+			ancConfessedTo.setTarget("_BLANK");
+			ancConfessedTo.setHref(FacebookUtil.getProfileFBLink(confessionShare.getFbId()).asString());
+			ancConfessedTo.setText(confessionShare.getUserFullName());
+			spanConfessedTo.setInnerText(
+				" (as " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) + " on public wall)");
+		    } else {
+			ancConfessedTo.removeFromParent();
+			spanConfessedTo.setInnerText(CommonUtils.getPronoun(confession.getGender()) 
+				+ " " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()));
+		    }
+
+		    /*
+		     * Pardon Status Badge
+		     */
+		    switch (confessionShare.getPardonStatus()) {
+		    case PARDONED:
+			// Set Badge Text with time stamp
+			badgePardonStatus.setInnerText(ConfessionBox.cbText.pardonStatusLabel()
+				+ " "
+				+ ConfessionBox.cbText.dateTimeStampPrefix()
+				+ " "
+				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
+			// Set tool-tip
+			badgePardonStatus.setTitle("Confessor has been pardoned by " 
+				+ CommonUtils.getPronoun(confession.getGender()) 
+				+ " " 
+				+ CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) 
+				+ ".");
+			// Set badge style
+			badgePardonStatus.addClassName("uk-badge-success");
+			break;
+		    default:
+			badgePardonStatus.setInnerText(ConfessionBox.cbText.awaitingPardonStatusLabel()
+				+ " " 
+				+ ConfessionBox.cbText.dateTimeStampPrefix() 
+				+ " " 
+				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
+			// Set tool-tip
+			badgePardonStatus.setTitle("Confessor is awaiting pardon from " 
+				+ CommonUtils.getPronoun(confession.getGender()) 
+				+ " " 
+				+ CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) 
+				+ ".");
+			// Set badge style
+			badgePardonStatus.addClassName("uk-badge-danger");
+			break;
+		    }
+		} else if(!isAnyn) {
+		    //	    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON_PANEL);
+		    //	    final Button btnPardon = new Button(ConfessionBox.cbText.pardonButtonLabelText());
+		    //	    btnPardon.addMouseOverHandler(new MouseOverHandler() {
+		    //
+		    //		@Override
+		    //		public void onMouseOver(MouseOverEvent event) {
+		    //		    if(!ConfessionBox.isMobile) {
+		    //			HelpInfo.showHelpInfo(HelpInfo.type.PARDON_BUTTON);
+		    //		    }
+		    //		}
+		    //	    });
+		    //	    btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
+
+		    if(confessionShare.getPardonStatus() != null) {
+			switch (confessionShare.getPardonStatus()) {
+			case PARDONED:
+			    btnPardon.setEnabled(false);
+			    break;
+			default:
+			    pardonPopupPanel = new PardonPopupPanel(confession, confessedByUserInfo, btnPardon);
+			    pardonPopupPanel.setAnimationEnabled(true);
+			    pardonPopupPanel.setGlassEnabled(true);
+			    pardonPopupPanel.setStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
+			    break;
+			}
+		    } 
+		}
+	    }
+	} else {
+	    badgePardonStatus.removeFromParent();
+	    btnPardon.removeFromParent();
+	    /*
+	     * Confessed to
+	     */
+	    spanConfessedTo.setInnerText("the world");
+	}
+    }
+
+    /**
+     * @param confession
+     */
+    private void disableActivityButtons() {
+	if (confession.getActivityCount() != null) {
+	    if (confession.getActivityCount().containsKey(Activity.ABUSE.name())) {
+		disableBtn(btnRepAbuse);
+	    }
+	    if (confession.getActivityCount().containsKey(Activity.LAME.name())) {
+		disableBtn(btnLame);
+	    }
+	    if (confession.getActivityCount().containsKey(Activity.SAME_BOAT.name())) {
+		disableBtn(btnSameBoat);
+	    }
+	    if (confession.getActivityCount().containsKey(Activity.SHOULD_BE_PARDONED.name())) {
+		disableBtn(btnShudBePar);
+	    }
+	    if (confession.getActivityCount().containsKey(Activity.SHOULD_NOT_BE_PARDONED.name())) {
+		disableBtn(btnShudNtBePar);
+	    }
+	    if (confession.getActivityCount().containsKey(Activity.SYMPATHY.name())) {
+		disableBtn(btnSympathy);
+	    }
+	}
+    }
+
+    /**
+     * @param confession
+     */
+    private void setupActivityButtonStatus() {
+	spanLameNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.LAME))));
+	spanRepAbuseNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.ABUSE))));
+	spanSameBoatNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SAME_BOAT))));
+	spanShudBeParNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SHOULD_BE_PARDONED))));
+	spanShudNtBeParNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SHOULD_NOT_BE_PARDONED))));
+	spanSympathyNum.setInnerText(getCountToDisplay(Long.toString(getCount(confession, Activity.SYMPATHY))));
+    }
+
+    /**
+     * @param confession
+     * @param isAnyn
+     */
+    private void setupProfilePictureDetails() {
+	if (confession != null && !confession.isShareAsAnyn() || !isAnyn) {
+	    imgProfileImage.setUrl(FacebookUtil.getUserImageUrl(confession.getFbId()));
+	} else {
+	    imgProfileImage.setUrl(FacebookUtil.getFaceIconImage(confession.getGender()));
+	}
+    }
+
+    /**
+     * @param confession
+     * @param isAnyn
+     */
+    private void setupUserNameDetails() {
+	if (!confession.isShareAsAnyn() || !isAnyn) {
+	    if (confessedByUserInfo != null) {
+		ancUserName.setText(confessedByUserInfo.getName());
+		ancUserName.setHref(confessedByUserInfo.getLink());
+		ancUserName.setTarget("_BLANK");
+	    }
+	} else {
+	    // Anonymous user
+	    ancUserName.setText(ConfessionBox.cbText.confessedByAnynName());
+	    ancUserName.setTitle(ConfessionBox.cbText.profileNameAnonymousTileText());
 	}
     }
 
@@ -359,6 +509,74 @@ public class ConfessionView extends Composite {
     @UiHandler("btnSympathy")
     void onSympathyVote(ClickEvent event) {
 	registerVote(Activity.SYMPATHY, spanSympathyNum, btnSympathy);
+    }
+    @UiHandler("btnHideIdentity") 
+    void onHideIdentityClick(ClickEvent event) {
+	ConfessionBox.confessionService.changeIdentityVisibility(ConfessionBox.getLoggedInUserInfo().getUserId(), 
+		ConfessionBox.getLoggedInUserInfo().getId(), confession.getConfId(), 
+		!confession.isShareAsAnyn(), new Date(), new AsyncCallback<Boolean>() {
+	    @Override
+	    public void onSuccess(Boolean result) {
+		if(result != null) {
+		    if(!confession.isShareAsAnyn()) {
+			// Give human points
+			ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_UNHIDING_IDENTITY));
+			setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
+		    } else {
+			//Deduct human points
+			ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(-1*Constants.POINTS_ON_UNHIDING_IDENTITY));
+			setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
+		    }
+
+		    // Refresh Profile image
+		    confession.setShareAsAnyn(!confession.isShareAsAnyn());
+		    confession.setFbId(ConfessionBox.loggedInUserInfo.getId());
+		    setupProfilePictureDetails();
+		    // Refresh Name
+		    confessedByUserInfo = ConfessionBox.loggedInUserInfo;
+		    setupUserNameDetails();
+		    // Refresh User ctrl btns
+		    setupUserCtrlButtons();
+		}
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("ChangeVisibilityButton", "onFailure", caught);
+	    }
+	});
+    }
+    @UiHandler("btnHideConfession")
+    void onHideConfessionClick(ClickEvent event) {
+	ConfessionBox.confessionService.changeConfessionVisibility(
+		ConfessionBox.getLoggedInUserInfo().getUserId(),
+		ConfessionBox.getLoggedInUserInfo().getId(),
+		confession.getConfId(), !confession.isVisibleOnPublicWall(), new Date(),
+		new AsyncCallback<Boolean>() {
+		    @Override
+		    public void onSuccess(Boolean result) {
+			if(result) {
+			    confession.setVisibleOnPublicWall(!confession.isVisibleOnPublicWall());
+			    setupUserCtrlButtons();
+			}
+		    }
+
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("DeleteConfessionButton", "onFailure", caught);
+		    }
+		});
+    }
+
+    @UiHandler("btnPreview")
+    void onPreviewClick(ClickEvent event) {
+	ConfessionBox.confId = confession.getConfId().toString();
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID);	
+    }
+
+    @UiHandler("btnPardon")
+    void onPardonClick(ClickEvent event) {
+	pardonPopupPanel.center();
     }
 
     /**

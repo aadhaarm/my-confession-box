@@ -283,7 +283,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Request for pardon")
     String appealForPardonLinkText();
 
-    @DefaultStringValue("Name of the person you confessing to")
+    @DefaultStringValue("Type your friend's name and choose from the options")
     String friendsSuggestionBoxLabel();
 
     @DefaultStringValue("Relation of this person to you. (example: friend, brother, wife, uncle, boss etc)")

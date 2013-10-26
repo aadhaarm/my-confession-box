@@ -424,6 +424,21 @@ public class CommonUtils {
     }
 
     /**
+     * Get profile image object
+     * 
+     * @param confession
+     * @param isAnyn
+     * @return {@link Image} - user image or anonymous image
+     */
+    public static String getProfilePictureURL(Confession confession, boolean isAnyn) {
+	if (confession != null && !confession.isShareAsAnyn() || !isAnyn) {
+	    return FacebookUtil.getUserImageUrl(confession.getFbId());
+	} else {
+	    return FacebookUtil.getFaceIconImage(confession.getGender());
+	}
+    }
+
+    /**
      * Get confessee name and with confessed to details
      * @param confession
      * @param userInfo

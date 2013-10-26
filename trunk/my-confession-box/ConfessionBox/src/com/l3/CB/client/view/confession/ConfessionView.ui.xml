@@ -13,7 +13,8 @@
 			margin-right: 15px;
 		}
 	</ui:style>
-	<g:HTMLPanel ui:field="mainDiv" styleName="uk-grid tm-leading-article">
+
+	<g:HTMLPanel ui:field="mainDiv" styleName="uk-panel-box">
 		<div class="uk-width-1-1">
 			<article class="uk-article">
 
@@ -23,12 +24,17 @@
 				</h1>
 
 				<p class="uk-article-meta">
-					Written by
 					<g:Anchor ui:field="ancUserName" styleName="{style.handPointer}" />
+					confessed to
+					<g:Anchor ui:field="ancConfessedTo"></g:Anchor>
+					<span ui:field="spanConfessedTo" />
 					,
 					<time pubdate="">
 						<span ui:field="spanDateTile" />
-						<button ui:field="badgePardonStatus" class="uk-badge uk-badge-large" data-uk-tooltip="" style="float:right;"/>
+						<button ui:field="badgePardonStatus" class="uk-badge uk-badge-large"
+							data-uk-tooltip="" style="float:right;" />
+						<g:Button ui:field="btnPreview" styleName="{style.handPointer} uk-button uk-button-small"
+							title="Preview how this confession appears on Feed Wall">Preview</g:Button>
 					</time>
 					.
 				</p>
@@ -36,46 +42,60 @@
 				<p>
 					<g:HTML ui:field="htmlConfessionText"></g:HTML>
 				</p>
+				<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">Continue Reading</g:Anchor>
 
-				<p>
-					<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">Continue Reading</g:Anchor>
-				</p>
-
-				<p>
-					<g:Button ui:field="btnSameBoat" styleName="uk-button uk-button-large"
-						title="I am in the Same Boat!">
+				<p ui:field="activityBtnBlock">
+					<g:Button ui:field="btnSameBoat"
+						styleName="{style.handPointer} uk-button uk-button-large" title="I am in the Same Boat!">
 						Same Boat
 						<span ui:field="spanSameBoatNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 
-					<g:Button ui:field="btnSympathy" styleName="uk-button uk-button-large"
-						title="I sypathies with you!">
+					<g:Button ui:field="btnSympathy"
+						styleName="{style.handPointer} uk-button uk-button-large" title="I sypathies with you!">
 						Sympathies
 						<span ui:field="spanSympathyNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 
-					<g:Button ui:field="btnLame" styleName="uk-button uk-button-large"
-						title="Go get a life!">
+					<g:Button ui:field="btnLame"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Go get a life!">
 						Lame
 						<span ui:field="spanLameNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 
-					<g:Button ui:field="btnShudBePar" styleName="uk-button uk-button-large"
-						title="You should be Pardoned.">
+					<g:Button ui:field="btnShudBePar"
+						styleName="{style.handPointer} uk-button uk-button-large" title="You should be Pardoned.">
 						It's OK
 						<span ui:field="spanShudBeParNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 
-					<g:Button ui:field="btnShudNtBePar" styleName="uk-button uk-button-large"
-						title="You should not be Pardoned.">
+					<g:Button ui:field="btnShudNtBePar"
+						styleName="{style.handPointer} uk-button uk-button-large" title="You should not be Pardoned.">
 						Not OK
 						<span ui:field="spanShudNtBeParNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 
-					<g:Button ui:field="btnRepAbuse" styleName="uk-button uk-button-large"
-						title="Report Abuse!">
+					<g:Button ui:field="btnRepAbuse"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Report Abuse!">
 						Report Abuse
 						<span ui:field="spanRepAbuseNum" class="uk-badge uk-badge-notification" />
+					</g:Button>
+				</p>
+				<p ui:field="userCtrlBtnBlock">
+					<g:Button ui:field="btnHideIdentity"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Hide your identity from the world.">
+						Hide identity
+					</g:Button>
+
+					<g:Button ui:field="btnHideConfession"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Hide your confession from the world">
+						Hide confession
+					</g:Button>
+				</p>
+				<p ui:field="pardonBtnBlock">
+					<g:Button ui:field="btnPardon"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Pardon">
+						Pardon
 					</g:Button>
 				</p>
 

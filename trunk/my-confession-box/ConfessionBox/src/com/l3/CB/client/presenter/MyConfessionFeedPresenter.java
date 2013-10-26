@@ -78,13 +78,13 @@ public class MyConfessionFeedPresenter implements Presenter {
 	    }
 	});
 
-	display.getRefreshButton().addClickHandler(new ClickHandler() {
-
-	    @Override
-	    public void onClick(ClickEvent event) {
-		setConfessions(true);
-	    }
-	});
+//	display.getRefreshButton().addClickHandler(new ClickHandler() {
+//
+//	    @Override
+//	    public void onClick(ClickEvent event) {
+//		setConfessions(true);
+//	    }
+//	});
 
 	ConfessionBox.eventBus.addHandler(UpdateIdentityVisibilityEvent.TYPE, new UpdateIdentityVisibilityEventHandler() {
 	    @Override

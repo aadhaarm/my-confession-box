@@ -24,12 +24,17 @@
 		</p>
 		<p>
 			<g:Button ui:field="btnSecond"
-				styleName="uk-button uk-button-primary uk-button-small" title="I Like your comment!">Like</g:Button>
-			<span ui:field='numOfSecond' />
+				styleName="uk-button uk-button-primary uk-button-small" title="I Like your comment!">
+				Like
+				<span ui:field='numOfSecond' />
+			</g:Button>
 
 			<g:Button ui:field="btnDislike" styleName="uk-button uk-button-small"
-				title="I don't like your Comment!">Dislike</g:Button>
-			<span ui:field='numOfDislike' />
+				title="I don't like your Comment!">
+				Dislike
+				<span ui:field='numOfDislike' />
+			</g:Button>
+
 		</p>
 
 		<hr ui:field="hr" class="uk-grid-divider" />

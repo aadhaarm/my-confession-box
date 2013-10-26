@@ -1,0 +1,200 @@
+.gwt-SuggestBox {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #999999;
+    border-top-style: solid;
+    border-top-width: 1px;
+    font-family: Arial Unicode MS,Arial,sans-serif;
+    font-size: 100%;
+    padding-bottom: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 5px;
+}
+.gwt-SuggestBoxPopup {
+}
+.gwt-SuggestBoxPopup .item {
+    color: #000000;
+    cursor: default;
+    font-size: 110%;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+}
+.gwt-SuggestBoxPopup .item-selected {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #D5E2FF;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+}
+.gwt-SuggestBoxPopup .suggestPopupContent {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: white;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopCenter {
+    border-top-color: #BBBBBB;
+    border-top-style: solid;
+    border-top-width: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupBottomCenter {
+    border-bottom-color: #BBBBBB;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopCenterInner, .gwt-SuggestBoxPopup .suggestPopupBottomCenterInner {
+    height: 1px;
+    line-height: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupMiddleLeft {
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #BBBBBB;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupMiddleRight {
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #BBBBBB;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupMiddleLeftInner, .gwt-SuggestBoxPopup .suggestPopupMiddleRightInner {
+    line-height: 1px;
+    width: 1px;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopLeftInner {
+    height: 0;
+    width: 0;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopRightInner {
+    height: 0;
+    width: 0;
+}
+.gwt-SuggestBoxPopup .suggestPopupBottomLeftInner {
+    height: 0;
+    width: 0;
+}
+.gwt-SuggestBoxPopup .suggestPopupBottomRightInner {
+    height: 0;
+    width: 0;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopLeft {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/circles.png");
+    background-origin: padding-box;
+    background-position: 0 -6px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    height: 5px;
+    width: 5px;
+}
+.gwt-SuggestBoxPopup .suggestPopupTopRight {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/circles.png");
+    background-origin: padding-box;
+    background-position: -5px -6px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    height: 5px;
+    width: 5px;
+}
+.gwt-SuggestBoxPopup .suggestPopupBottomLeft {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/circles.png");
+    background-origin: padding-box;
+    background-position: 0 -11px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    height: 5px;
+    width: 5px;
+}
+.gwt-SuggestBoxPopup .suggestPopupBottomRight {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("images/circles.png");
+    background-origin: padding-box;
+    background-position: -5px -11px;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    height: 5px;
+    width: 5px;
+}
+* html .gwt-SuggestBoxPopup .suggestPopupTopLeftInner {
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 0;
+}
+* html .gwt-SuggestBoxPopup .suggestPopupTopRightInner {
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 0;
+}
+* html .gwt-SuggestBoxPopup .suggestPopupBottomLeftInner {
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 0;
+}
+* html .gwt-SuggestBoxPopup .suggestPopupBottomRightInner {
+    height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    width: 0;
+}

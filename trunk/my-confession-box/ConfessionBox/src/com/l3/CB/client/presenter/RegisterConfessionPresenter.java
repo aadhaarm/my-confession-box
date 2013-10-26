@@ -238,6 +238,7 @@ public class RegisterConfessionPresenter implements Presenter {
 		}
 	    }
 	});
+
 	display.getBtnEdit().addClickHandler(new ClickHandler() {
 	    @Override
 	    public void onClick(ClickEvent event) {

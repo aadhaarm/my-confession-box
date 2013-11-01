@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Relations;
 
 public class RelationSuggestBoxUI extends Composite {
@@ -78,9 +79,13 @@ public class RelationSuggestBoxUI extends Composite {
     public boolean validate() {
 	if(getSelectedRelation() == null) {
 	    showErrorMessage();
+	    relationSuggestBox.addStyleName(Constants.STYLE_CLASS_DANGER);
+	    relationSuggestList.addStyleName(Constants.STYLE_CLASS_DANGER);
 	    return false;
 	} 
 	hideErrorMessage();
+	relationSuggestBox.removeStyleName(Constants.STYLE_CLASS_DANGER);
+	relationSuggestList.removeStyleName(Constants.STYLE_CLASS_DANGER);
 	return true;
     }
 

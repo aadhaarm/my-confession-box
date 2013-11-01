@@ -7,9 +7,9 @@
 		}
 	</ui:style>
 	<g:HTMLPanel styleName="uk-form-row">
+		<g:Image ui:field="imgFriend"/>
 		<g:SuggestBox ui:field="friendsSuggestBox" styleName="uk-width-1-1"/>
 		<g:ListBox ui:field="friendsSuggestList" styleName="uk-width-1-1"/>
-		<g:Image ui:field="imgFriend"/>
 		<span class="uk-text-info" ui:field="spanMessage">Type your friend's name and choose from the options</span>
 	</g:HTMLPanel>
 </ui:UiBinder> 

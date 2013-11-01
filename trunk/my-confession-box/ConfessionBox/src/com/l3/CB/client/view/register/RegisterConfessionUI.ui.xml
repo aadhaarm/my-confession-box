@@ -54,7 +54,7 @@
 
 				<p class="uk-panel uk-panel-box uk-panel-box-primary">
 					<g:Image height="60px" width="60px" ui:field="profileImage"></g:Image>
-					<g:HTML ui:field="htmlConfessionPreview" />
+					<span ui:field="htmlConfessionPreview" />
 				</p>
 
 				<h4 align="center">Begin Writing Your Confession</h4>

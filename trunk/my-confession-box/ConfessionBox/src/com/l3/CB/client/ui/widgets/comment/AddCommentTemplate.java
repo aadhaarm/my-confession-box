@@ -3,10 +3,9 @@ package com.l3.CB.client.ui.widgets.comment;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -14,7 +13,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Image;
@@ -38,7 +36,7 @@ public class AddCommentTemplate extends Composite implements HasText {
     Long confId;
 
     @UiField
-    Button commentAsAnyn;
+    Button btnCommentAsAnyn;
     boolean boolCommentAsAnon;
 
     @UiField
@@ -50,6 +48,9 @@ public class AddCommentTemplate extends Composite implements HasText {
     @UiField
     Button btnSubmit;
 
+    @UiField
+    ParagraphElement pStatusMessage;
+
     Timer timer = new Timer() {
 	@Override
 	public void run() {
@@ -57,16 +58,30 @@ public class AddCommentTemplate extends Composite implements HasText {
 	    txtComment.setText("");
 	    txtComment.setEnabled(true);
 	    btnSubmit.setEnabled(true);
-	    commentAsAnyn.setEnabled(true);
+	    btnCommentAsAnyn.setEnabled(true);
+	}
+    };
+
+    Timer timerShowMessage = new Timer() {
+	@Override
+	public void run() {
+	    pStatusMessage.removeClassName("show");
+	    pStatusMessage.addClassName("hide");
 	}
     };
 
     public AddCommentTemplate() {
 	initWidget(uiBinder.createAndBindUi(this));
+	pStatusMessage.addClassName("hide");
+	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");
+	btnCommentAsAnyn.getElement().setAttribute("data-uk-tooltip", "");
     }
 
     public AddCommentTemplate(Long confId) {
 	initWidget(uiBinder.createAndBindUi(this));
+	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");
+	btnCommentAsAnyn.getElement().setAttribute("data-uk-tooltip", "");
+	pStatusMessage.addClassName("hide");
 	initialize(confId);
     }
 
@@ -95,16 +110,16 @@ public class AddCommentTemplate extends Composite implements HasText {
     }
 
     private void bind() {
-	commentAsAnyn.addClickHandler(new ClickHandler() {
-	    
+	btnCommentAsAnyn.addClickHandler(new ClickHandler() {
+
 	    @Override
 	    public void onClick(ClickEvent event) {
 		if(ConfessionBox.isLoggedIn) {
 		    boolCommentAsAnon = !boolCommentAsAnon;
 		    if(boolCommentAsAnon) {
-			commentAsAnyn.addStyleName("uk-button-primary");
+			btnCommentAsAnyn.addStyleName("uk-button-primary");
 		    } else {
-			commentAsAnyn.removeStyleName("uk-button-primary");
+			btnCommentAsAnyn.removeStyleName("uk-button-primary");
 		    }
 		} else {
 		    CommonUtils.login(0);
@@ -151,7 +166,7 @@ public class AddCommentTemplate extends Composite implements HasText {
 
 		txtComment.setEnabled(false);
 		btnSubmit.setEnabled(false);
-		commentAsAnyn.setEnabled(false);
+		btnCommentAsAnyn.setEnabled(false);
 
 		ConfessionBox.confessionService.saveComment(c, new AsyncCallback<Void>() {
 
@@ -159,6 +174,10 @@ public class AddCommentTemplate extends Composite implements HasText {
 		    public void onSuccess(Void result) {
 			timer.cancel();
 			timer.schedule(2000);
+			
+			timerShowMessage.cancel();
+			pStatusMessage.addClassName("show");
+			timerShowMessage.schedule(2000);
 		    }
 
 		    @Override

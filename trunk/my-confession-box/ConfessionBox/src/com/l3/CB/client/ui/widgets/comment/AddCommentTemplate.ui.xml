@@ -14,16 +14,22 @@
 
 	<g:HTMLPanel>
 		<p>
-			<g:Button ui:field="commentAsAnyn" styleName="uk-button uk-button uk-button-small"
+			<g:Button ui:field="btnCommentAsAnyn" styleName="uk-button uk-button uk-button-small"
 				title="Hide your identity by commenting anonymously.">Comment Anonymously</g:Button>
 		</p>
 
 		<g:Image ui:field="imgProfile" styleName="{style.imgProfile}" />
 
 		<p class="uk-form-row">
-			<g:TextArea ui:field="txtComment" width="75%" visibleLines="2" styleName="uk-form-large uk-form-width-large"></g:TextArea>
+			<g:TextArea ui:field="txtComment" width="75%"
+				visibleLines="2" styleName="uk-form-large uk-form-width-large"></g:TextArea>
 
 			<g:Button styleName="uk-button uk-button-large" ui:field="btnSubmit">Submit</g:Button>
+		</p>
+
+		<p ui:field="pStatusMessage" style="width:259px; text-align:center;">
+			<input type="text" class="uk-width-1-1 uk-form-success" value="Comment successfully published below"
+				placeholder="form-success" />
 		</p>
 	</g:HTMLPanel>
 </ui:UiBinder> 

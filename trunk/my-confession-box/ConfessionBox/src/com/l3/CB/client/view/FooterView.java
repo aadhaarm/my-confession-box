@@ -57,13 +57,13 @@ public class FooterView extends Composite implements FooterPresenter.Display {
 	ancIntroVideo = new Image("/images/video_play_button.png");
 	ancIntroVideo.setStyleName("footerLinkImage");
 
-	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
-	ancAbout.addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		pPnlAbout.center();
-	    }
-	});
+//	final PopupPanel pPnlAbout = ApplicationTextWidget.setupAbout();
+//	ancAbout.addClickHandler(new ClickHandler() {
+//	    @Override
+//	    public void onClick(ClickEvent event) {
+//		pPnlAbout.center();
+//	    }
+//	});
 
 	final PopupPanel pPnlPrivacy = ApplicationTextWidget.setupPrivacy();
 	ancPrivacy.addClickHandler(new ClickHandler() {

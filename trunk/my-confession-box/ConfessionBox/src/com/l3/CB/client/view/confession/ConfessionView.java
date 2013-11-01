@@ -134,6 +134,17 @@ public class ConfessionView extends Composite {
 	this.showExtendedDetails = showExtendedDetails;
 	this.showPardonHelpText = showPardonHelpText;
 
+	btnHideConfession.getElement().setAttribute("data-uk-tooltip", "");
+	btnHideIdentity.getElement().setAttribute("data-uk-tooltip", "");
+	btnLame.getElement().setAttribute("data-uk-tooltip", "");
+	btnPardon.getElement().setAttribute("data-uk-tooltip", "");
+	btnPreview.getElement().setAttribute("data-uk-tooltip", "");
+	btnRepAbuse.getElement().setAttribute("data-uk-tooltip", "");
+	btnSameBoat.getElement().setAttribute("data-uk-tooltip", "");
+	btnShudBePar.getElement().setAttribute("data-uk-tooltip", "");
+	btnShudNtBePar.getElement().setAttribute("data-uk-tooltip", "");
+	btnSympathy.getElement().setAttribute("data-uk-tooltip", "");
+
 	getConfessionWidgetsSetup(confession, isAnyn);
     }
 

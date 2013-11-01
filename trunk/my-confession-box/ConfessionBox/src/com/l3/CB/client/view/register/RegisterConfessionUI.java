@@ -51,7 +51,7 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
     }
 
     private boolean isFriendNotRegistered = true;
-    
+
     @UiField
     CBButton btnHideIdentity;
 
@@ -71,7 +71,7 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
     Image profileImage;
 
     @UiField
-    HTML htmlConfessionPreview;
+    SpanElement htmlConfessionPreview;
 
     @UiField
     CBTextBoxUI txtTitle;
@@ -90,7 +90,7 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 
     @UiField
     Button btnSubmit;
-    
+
     @UiField
     SpanElement spanUserMessage;
 
@@ -99,19 +99,26 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 
     @UiField
     ParagraphElement pConfirmPanel;
-    
+
     public RegisterConfessionUI() {
 	initWidget(uiBinder.createAndBindUi(this));
 
 	txtConfession.setupWidget(Constants.CONF_MAX_CHARS, true, "Write your confession here..");
 
+	btnDedicateConfession.getElement().setAttribute("data-uk-tooltip", "");
+	btnEdit.getElement().setAttribute("data-uk-tooltip", "");
+	btnHideIdentity.getElement().setAttribute("data-uk-tooltip", "");
+	btnProceed.getElement().setAttribute("data-uk-tooltip", "");
+	btnRequestPardon.getElement().setAttribute("data-uk-tooltip", "");
+	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");
+	
 	//Hide confirm panel
 	pConfirmPanel.addClassName(CLASS_HIDE);
 	// True on Load
 	btnDedicateConfession.setValue(true);
 	// Handle Preview
 	handlePreview();
-	
+
 	bind();
     }
 
@@ -156,15 +163,15 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
     void onDedicateConfessionClick(ClickEvent event) {
 	// Refresh Display Image & Preview Confession Heading
 	handlePreview();
-	
+
 	if(btnDedicateConfession.getValue()) {
 	    btnRequestPardon.setVisible(true);
-	    
+
 	    pOptions.removeClassName(CLASS_HIDE);
 	    pOptions.addClassName(CLASS_SHOW);
 	} else {
 	    btnRequestPardon.setVisible(false);
-	    
+
 	    pOptions.removeClassName(CLASS_SHOW);
 	    pOptions.addClassName(CLASS_HIDE);
 	}
@@ -178,9 +185,17 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 
     @UiHandler("btnProceed")
     void onBtnProceedClick(ClickEvent event) {
-	if(txtTitle.validate() && txtConfession.validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS)) {
+	boolean validateTitle = txtTitle.validate(); 
+	boolean validateConfession = txtConfession.validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
+	boolean validateFriend = false;
+	boolean validateRelation = false;
+	if(btnDedicateConfession.getValue()) {
+	    validateFriend = friendsSuggestBox.validate(); 
+	    validateRelation = relationSuggestBox.validate(); 
+	}
+	if(validateTitle && validateConfession) {
 	    if(btnDedicateConfession.getValue()) {
-		if(friendsSuggestBox.validate() && relationSuggestBox.validate()) {
+		if(validateFriend && validateRelation) {
 		    proceedToConfirm();
 		}
 	    } else {
@@ -198,7 +213,7 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 	// Enable Form
 	enableForm();
     }
-    
+
     /**
      * Check is user registered - Show FB send dialog
      */
@@ -225,27 +240,27 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 	    setupConfirmPanel(false, null);
 	}
     }
-    
+
     public void setupConfirmPanel(boolean isFriendNotRegistered, String pardonerName) {
- 	disableForm();
+	disableForm();
 
- 	this.isFriendNotRegistered = isFriendNotRegistered;
+	this.isFriendNotRegistered = isFriendNotRegistered;
 
- 	if(isFriendNotRegistered && pardonerName != null) {
- 	    spanUserMessage.setInnerSafeHtml(Templates.TEMPLATES.confessorNotRegisteredMessage(pardonerName));
- 	}
- 	
- 	spanConfirmMessage.setInnerSafeHtml(Templates.TEMPLATES.confessionConfirmMessage(
- 		ConfessionBox.cbText.confirmMessageWhenSubmittingConfession()));
+	if(isFriendNotRegistered && pardonerName != null) {
+	    spanUserMessage.setInnerSafeHtml(Templates.TEMPLATES.confessorNotRegisteredMessage(pardonerName));
+	}
 
- 	btnProceed.setVisible(false);
- 	pConfirmPanel.removeClassName(CLASS_HIDE);
- 	pConfirmPanel.addClassName(CLASS_SHOW);
- 	btnEdit.setVisible(true);
- 	btnSubmit.setVisible(true);
-     }
+	spanConfirmMessage.setInnerSafeHtml(Templates.TEMPLATES.confessionConfirmMessage(
+		ConfessionBox.cbText.confirmMessageWhenSubmittingConfession()));
 
-    
+	btnProceed.setVisible(false);
+	pConfirmPanel.removeClassName(CLASS_HIDE);
+	pConfirmPanel.addClassName(CLASS_SHOW);
+	btnEdit.setVisible(true);
+	btnSubmit.setVisible(true);
+    }
+
+
     /**
      * Make preview description and profile image
      * @param display - View object
@@ -272,49 +287,46 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 
 	if((btnDedicateConfession.getValue() || btnRequestPardon.getValue()) 
 		&& relationSuggestBox.getSelectedRelation() != null) {
-	    htmlConfessionPreview.setHTML(
-		    Templates.TEMPLATES.confessonPreview(confesee, confessor, 
+	    htmlConfessionPreview.setInnerSafeHtml(Templates.TEMPLATES.confessonPreview(confesee, confessor, 
 			    CommonUtils.getPronoun(ConfessionBox.loggedInUserInfo.getGender())));
 	} else {
-	    htmlConfessionPreview.setHTML(Templates.TEMPLATES.confessonPreview(confesee, confessor, "the"));
+	    htmlConfessionPreview.setInnerSafeHtml(Templates.TEMPLATES.confessonPreview(confesee, confessor, "the"));
 	}
-
-	htmlConfessionPreview.setVisible(true);
     }
 
     public CBButton getBtnHideIdentity() {
-        return btnHideIdentity;
+	return btnHideIdentity;
     }
 
     public CBButton getBtnDedicateConfession() {
-        return btnDedicateConfession;
+	return btnDedicateConfession;
     }
 
     public CBButton getBtnRequestPardon() {
-        return btnRequestPardon;
+	return btnRequestPardon;
     }
 
     public FriendsSuggestBoxUI getFriendsSuggestBox() {
-        return friendsSuggestBox;
+	return friendsSuggestBox;
     }
 
     public RelationSuggestBoxUI getRelationSuggestBox() {
-        return relationSuggestBox;
+	return relationSuggestBox;
     }
 
     public CBTextBoxUI getTxtTitle() {
-        return txtTitle;
+	return txtTitle;
     }
 
     public CBTextAreaUI getTxtConfession() {
-        return txtConfession;
+	return txtConfession;
     }
 
     public HasClickHandlers getBtnSubmit() {
-        return btnSubmit;
+	return btnSubmit;
     }
-    
+
     public boolean isFriendNotRegistered() {
-        return isFriendNotRegistered;
+	return isFriendNotRegistered;
     }
 }

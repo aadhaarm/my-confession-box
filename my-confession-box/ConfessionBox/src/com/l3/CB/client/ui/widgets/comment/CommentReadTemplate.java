@@ -70,6 +70,10 @@ public class CommentReadTemplate extends Composite {
     public CommentReadTemplate(Comment comment) {
 	initWidget(uiBinder.createAndBindUi(this));
 	this.comment = comment;
+	
+	btnDislike.getElement().setAttribute("data-uk-tooltip", "");
+	btnSecond.getElement().setAttribute("data-uk-tooltip", "");
+	
 	if(comment != null) {
 
 	    /*

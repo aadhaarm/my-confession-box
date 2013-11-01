@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+
+	<g:HTMLPanel ui:field="mainDiv" styleName="tm-main uk-width-medium-1-1">
+		<div class="uk-panel-box">
+
+			<div class="uk-width-1-1">
+				<article class="uk-article">
+					<h1 class="uk-article-title">
+						<span ui:field="spanHeading" />
+					</h1>
+					<p>
+						<g:HTML ui:field="spanText" />
+					</p>
+				</article>
+			</div>
+		</div>
+	</g:HTMLPanel>
+</ui:UiBinder>

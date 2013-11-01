@@ -68,10 +68,12 @@ public class CBTextBoxUI extends Composite {
 
     private void hideErrorMessage() {
 	spanErrorMessage.setInnerText("");
+	txtTitle.removeStyleName(Constants.STYLE_CLASS_DANGER);
     }
 
     private void showErrorMessage() {
 	spanErrorMessage.setInnerText(ConfessionBox.cbText.confessionTextBoxErrorMessage());
+	txtTitle.addStyleName(Constants.STYLE_CLASS_DANGER);
     }
 
     

@@ -108,12 +108,12 @@ public class ConfessionForMeFeedPresenter implements Presenter {
 	/*
 	 * Refresh when REFRESH button is pressed
 	 */
-	display.getRefreshButton().addClickHandler(new ClickHandler() {
-	    @Override
-	    public void onClick(ClickEvent event) {
-		setConfessions(true);
-	    }
-	});
+//	display.getRefreshButton().addClickHandler(new ClickHandler() {
+//	    @Override
+//	    public void onClick(ClickEvent event) {
+//		setConfessions(true);
+//	    }
+//	});
 
 	ConfessionBox.eventBus.addHandler(UpdateFeedToMeEvent.TYPE, new UpdateFeedToMeEventHandler() {
 	    @Override

@@ -2,11 +2,11 @@ package com.l3.CB.client.view.menu;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.LIElement;
-import com.google.gwt.dom.client.LinkElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
@@ -19,6 +19,7 @@ import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
+import com.l3.CB.client.view.misc.PopupPanelUI;
 import com.l3.CB.shared.Constants;
 
 public class MenuView extends Composite implements MenuPresenter.Display {
@@ -30,26 +31,34 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     interface MenuViewUiBinder extends UiBinder<Widget, MenuView> {
     }
 
-    @UiField
-    Anchor ancConfWall;
-
-    @UiField
-    Anchor ancWrtConf;
-
-    @UiField
-    Anchor ancMyConf;
-
-    @UiField
-    Anchor ancConfMe;
-
-    @UiField
-    Anchor ancInvFrnd;
-
-    @UiField
-    Anchor ancRulBok;
-
     LIElement selectedLiElement;
 
+    @UiField
+    Anchor ancConfWall;
+    @UiField
+    Anchor ancWrtConf;
+    @UiField
+    Anchor ancMyConf;
+    @UiField
+    Anchor ancConfMe;
+    @UiField
+    Anchor ancInvFrnd;
+    @UiField
+    Anchor ancRulBok;
+    @UiField
+    Anchor ancAbout;
+    @UiField
+    Anchor ancPhilosophy;
+    @UiField
+    Anchor ancAnonymous;
+    @UiField
+    Anchor ancCommunity;
+    @UiField
+    Anchor ancFbconfess;
+    @UiField
+    Anchor ancPrPolicy;
+    @UiField
+    Anchor ancTerms;
     @UiField
     LIElement liConfessionWall;
     @UiField
@@ -121,12 +130,40 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     void onInvFrndClick(ClickEvent event) {
 	CommonUtils.inviteFriends(ConfessionBox.getLoggedInUserInfo().getName(), ConfessionBox.cbText.inviteFriendsTextMessage());
     }
-
+    
     @UiHandler("ancRulBok")
     void onRulBokClick(ClickEvent event) {
-	PopupPanel pPnlRuleBook = ApplicationTextWidget.setupCBRuleBook();
-	pPnlRuleBook.center();
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_RULE_BOOK);
     }
+    @UiHandler("ancAbout")
+    void onAboutClick(ClickEvent event) {
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ABOUT_CB);
+    }
+    @UiHandler("ancPhilosophy")
+    void onPhilosophyClick(ClickEvent event) {
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_PHILOSPHY);
+    }
+    @UiHandler("ancAnonymous")
+    void onAnonymousClick(ClickEvent event) {
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ANONYMOUS_CONFESSION);
+    }
+    @UiHandler("ancCommunity")
+    void onCommunityClick(ClickEvent event) {
+	Window.open("http://www.facebook.com/pages/Confession-Box-Community/129927533826479", "Confession Box" , "resizable=yes,scrollbars=yes");
+    }
+    @UiHandler("ancFbconfess")
+    void onFbconfessClick(ClickEvent event) {
+	Window.open("http://www.fbconfess.com", "Confession Box" , "resizable=yes,scrollbars=yes");
+    }
+    @UiHandler("ancPrPolicy")
+    void onPrPolicyClick(ClickEvent event) {
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_PRIVACY_POLICY);
+    }
+    @UiHandler("ancTerms")
+    void onTermsClick(ClickEvent event) {
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_TOS);
+    }
+    
 
     @Override
     public HTML setFeedItemSelected() {

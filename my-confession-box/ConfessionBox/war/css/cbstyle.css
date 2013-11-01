@@ -179,7 +179,7 @@ div.helpInfoDiv {
 .infoModalPopupWindow {
 	background-color: white;
 	width: 700px;
-	padding: 10px;
+	padding: 20px;
 	z-index: 1000;
 	color: #333333;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;

@@ -2,6 +2,9 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
+		.handPointer {
+			cursor: pointer;
+		}
 		.important {
 			font-weight: bold;
 		}
@@ -12,35 +15,35 @@
 			<ul class="uk-navbar-nav uk-hidden-small">
 
 				<li ui:field="liConfessionWall" data-uk-dropdown="{}" class="uk-parent">
-					<g:Anchor ui:field="ancConfWall">Confession Wall</g:Anchor>
+					<g:Anchor ui:field="ancConfWall" styleName="{style.handPointer}">Confession Wall</g:Anchor>
 					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1"
 						style="">
 						<div class="uk-grid">
 							<div class="uk-width-1-1">
 								<ul class="uk-nav uk-nav-navbar">
 									<li>
-										<g:Anchor>Most Voted Confessions</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most Voted Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Global Confessions</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Global Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Local Confessions</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Local Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Most 'SAME BOAT'</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most 'SAME BOAT'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Most 'LAME'</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most 'LAME'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Most 'SYMPATHAISED'</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most 'SYMPATHAISED'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Most 'SHOULD BE PARDONED'</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most 'SHOULD BE PARDONED'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor>Most 'SHOULD NOT BE PARDONED'</g:Anchor>
+										<g:Anchor styleName="{style.handPointer}">Most 'SHOULD NOT BE PARDONED'</g:Anchor>
 									</li>
 								</ul>
 							</div>
@@ -49,19 +52,59 @@
 				</li>
 
 				<li ui:field="liWriteConfession" data-uk-dropdown="{}" class="">
-					<g:Anchor ui:field="ancWrtConf">Write Confession</g:Anchor>
+					<g:Anchor ui:field="ancWrtConf" styleName="{style.handPointer}">Write Confession</g:Anchor>
 				</li>
-				<li data-uk-dropdown="{}" class="">
-					<g:Anchor ui:field="ancMyConf">My Confessions</g:Anchor>
+
+				<li data-uk-dropdown="{}" class="uk-parent">
+					<g:Anchor ui:field="ancMyConf" styleName="{style.handPointer}">My Confessions</g:Anchor>
+					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1" style="">
+						<div class="uk-grid">
+							<div class="uk-width-1-1">
+								<ul class="uk-nav uk-nav-navbar">
+									<li>
+										<g:Anchor ui:field="ancConfMe" styleName="{style.handPointer}">Confessed to me</g:Anchor>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</li>
+				
 				<li data-uk-dropdown="{}" class="">
-					<g:Anchor ui:field="ancConfMe">Confessed to me</g:Anchor>
+					<g:Anchor ui:field="ancInvFrnd" styleName="{style.handPointer}">Invite Friends</g:Anchor>
 				</li>
-				<li data-uk-dropdown="{}" class="">
-					<g:Anchor ui:field="ancInvFrnd">Invite Friends</g:Anchor>
-				</li>
-				<li data-uk-dropdown="{}" class="">
-					<g:Anchor ui:field="ancRulBok">CB Rule Book</g:Anchor>
+				
+				<li data-uk-dropdown="{}" class="uk-parent">
+					<g:Anchor ui:field="ancAbout" styleName="{style.handPointer}">About</g:Anchor>
+					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1" style="">
+						<div class="uk-grid">
+							<div class="uk-width-1-1">
+								<ul class="uk-nav uk-nav-navbar">
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancRulBok">CB Rule Book</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancPhilosophy">The Philosophy</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancAnonymous">Anonymous confession</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancCommunity">Confession Box community</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancFbconfess">fbconfess.com</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancPrPolicy">Privacy policy</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancTerms">Terms of service</g:Anchor>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</li>
 			</ul>
 

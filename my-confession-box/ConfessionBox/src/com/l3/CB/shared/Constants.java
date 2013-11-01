@@ -200,4 +200,14 @@ public class Constants {
     public static final String HISTORY_ITEM_TOS = "TermsOfService";
 
     public static final String DIV_MOBILE_LEFT_MENU = "mobileMenuDiv";
+
+    public static final String HISTORY_ITEM_ABOUT_CB = "aboutUs";
+
+    public static final String HISTORY_ITEM_PHILOSPHY = "philosphy";
+
+    public static final String HISTORY_ITEM_ANONYMOUS_CONFESSION = "anonymousConfession";
+
+    public static final String HISTORY_ITEM_RULE_BOOK = "confessionBoxRuleBook";
+
+    public static final String STYLE_CLASS_DANGER = "uk-form-danger";
 }

@@ -6,7 +6,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -20,8 +19,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
@@ -154,14 +153,18 @@ public class FriendsSuggestBoxUI extends Composite {
 	if(Navigator.isJavaEnabled()) {
 	    if(userfriends.get(friendsSuggestBox.getValue()) == null) {
 		showErrorText();
+		friendsSuggestBox.addStyleName(Constants.STYLE_CLASS_DANGER);
 		return false;
 	    } 
+	    friendsSuggestBox.removeStyleName(Constants.STYLE_CLASS_DANGER);
 	    hideErrorText();
 	} else {
 	    if(userfriends.get(friendsSuggestList.getValue(friendsSuggestList.getSelectedIndex())) == null) {
 		showErrorText();
+		friendsSuggestList.addStyleName(Constants.STYLE_CLASS_DANGER);
 		return false;
 	    } 
+	    friendsSuggestList.removeStyleName(Constants.STYLE_CLASS_DANGER);
 	    hideErrorText();
 	}
 	return true;

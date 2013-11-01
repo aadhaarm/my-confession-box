@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FieldVerifier;
 
 public class CBTextAreaUI extends Composite {
@@ -122,10 +123,14 @@ public class CBTextAreaUI extends Composite {
 
     private void hideErrorMessage() {
 	spanErrorMessage.setInnerText("");
+	textArea.removeStyleName(Constants.STYLE_CLASS_DANGER);
+	richTextArea.removeStyleName(Constants.STYLE_CLASS_DANGER);
     }
 
     private void showErrorMessage() {
 	spanErrorMessage.setInnerText(ConfessionBox.cbText.confessionTextBoxErrorMessage());
+	textArea.addStyleName(Constants.STYLE_CLASS_DANGER);
+	richTextArea.addStyleName(Constants.STYLE_CLASS_DANGER);
     }
 
     private String removeHtmlTags(String html) {

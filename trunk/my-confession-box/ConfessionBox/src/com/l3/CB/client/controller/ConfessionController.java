@@ -28,7 +28,8 @@ import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MobileMenuPresenter;
 import com.l3.CB.client.presenter.MyConfessionFeedPresenter;
 import com.l3.CB.client.presenter.Presenter;
-import com.l3.CB.client.presenter.RegisterConfessionPresenter;
+import com.l3.CB.client.presenter.TextPresenter;
+import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.client.view.ConfessionFeedView;
@@ -38,6 +39,7 @@ import com.l3.CB.client.view.LoginStatusView;
 import com.l3.CB.client.view.confession.ConfessionsContainer;
 import com.l3.CB.client.view.header.HeaderView;
 import com.l3.CB.client.view.menu.MobileMenuView;
+import com.l3.CB.client.view.misc.PopupPanelUI;
 import com.l3.CB.client.view.register.RegisterConfessionUI;
 import com.l3.CB.shared.Constants;
 
@@ -95,18 +97,18 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * Initialize Application for first view
      */
     public static void initializeApp(boolean loadAll) {
-	
+
 	// Initialize MENU
 	menuPresenter = new MenuPresenter(new com.l3.CB.client.view.menu.MenuView());
 	menuPresenter.go(container);
-	
+
 	mobileMenuPresenter = new MobileMenuPresenter(new MobileMenuView());
 	mobileMenuPresenter.go(container);
-	
+
 	// Initialize Header
 	headerPresenter = new HeaderPresenter(new HeaderView());
 	headerPresenter.go(container);
-	
+
 	// Login status
 	if(ConfessionBox.isMobile) {
 	    loginStatusPresenter = new LoginStatusPresenter(new LoginStatusView());
@@ -118,7 +120,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
 	    humanPointPresenter.go(container);
 	}
-	
+
 	// Initialize Footer
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
@@ -181,24 +183,42 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    Presenter presenter = null;
 	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionsContainer());
-//		MenuView.selectMenuItem(1);
+		//		MenuView.selectMenuItem(1);
 		headerPresenter.showFilter();
 	    } else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionsContainer(), ConfessionBox.confId);
-//		MenuView.selectMenuItem(1);
+		//		MenuView.selectMenuItem(1);
 		headerPresenter.showFilter();
+	    } else if(token.equals(Constants.HISTORY_ITEM_ABOUT_CB)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getAboutTitle(), ApplicationTextWidget.getAboutTextBody()));
+		CommonUtils.removeApplicationLoad();
+	    } else if(token.equals(Constants.HISTORY_ITEM_ANONYMOUS_CONFESSION)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getAnonymousConfTitle(), ApplicationTextWidget.getAnonymousConfTextBody()));
+		CommonUtils.removeApplicationLoad();
+	    } else if(token.equals(Constants.HISTORY_ITEM_PHILOSPHY)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getPhilosphyTitle(), ApplicationTextWidget.getPhilosphyTextBody()));
+		CommonUtils.removeApplicationLoad();
+	    } else if(token.equals(Constants.HISTORY_ITEM_PRIVACY_POLICY)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getPrivacyPolicyTitle(), ApplicationTextWidget.getPrivacyPolicyTextBody()));
+		CommonUtils.removeApplicationLoad();
+	    } else if(token.equals(Constants.HISTORY_ITEM_RULE_BOOK)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getRuleBookTitle(), ApplicationTextWidget.getRuleBookTextBody()));
+		CommonUtils.removeApplicationLoad();
+	    } else if(token.equals(Constants.HISTORY_ITEM_TOS)) {
+		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getTOSTitle(), ApplicationTextWidget.getTOSTextBody()));
+		CommonUtils.removeApplicationLoad();
 	    } else if(ConfessionBox.isLoggedIn) {
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
 		    presenter = new CopyOfRegisterConfessionPresenter(new RegisterConfessionUI());
-//		    MenuView.selectMenuItem(2);
+		    //		    MenuView.selectMenuItem(2);
 		    CommonUtils.removeApplicationLoad();
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
-//		    MenuView.selectMenuItem(3);
+		    //		    MenuView.selectMenuItem(3);
 		    presenter = new MyConfessionFeedPresenter(new ConfessionsContainer());
 		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
-//		    MenuView.selectMenuItem(4);
+		    //		    MenuView.selectMenuItem(4);
 		    presenter = new ConfessionForMeFeedPresenter(new ConfessionsContainer());
 		    headerPresenter.hideFilter();
 		}
@@ -207,7 +227,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		presenter.go(container);
 	    } else {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
-//		MenuView.selectMenuItem(1);
+		//		MenuView.selectMenuItem(1);
 		presenter.go(container);
 		headerPresenter.showFilter();
 	    }

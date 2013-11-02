@@ -569,8 +569,8 @@ public class ConfessionBasicDAO {
 	boolean isChange = false;
 
 	com.googlecode.objectify.cmd.Query<ConfessionShareDO> queryOfy = ofy()
-		.load().type(ConfessionShareDO.class).filter("", userId)
-		.filter("", confId);
+		.load().type(ConfessionShareDO.class).filter("userId", userId)
+		.filter("confId", confId);
 
 	for (ConfessionShareDO confessionShareDO : queryOfy) {
 	    if(!confessionShareDO.getPardonStatus().equals(pardonedStatus.name())){

@@ -16,7 +16,7 @@ public class UserDAO {
     static {
 	ObjectifyService.register(UserDO.class);
     }
-    
+
     /**
      * Get User if registered. Update info if old info is not complete
      * @param userInfo
@@ -145,9 +145,12 @@ public class UserDAO {
      */
     public static boolean validateUser(Long userId, String fbId) {
 	boolean isValid = false;
-	int count = ofy().load().type(UserDO.class).filter("userId", userId).filter("fbId", fbId).count();
-	if(count > 0) {
-	    isValid = true;
+	if(userId != null && userId != 0) {
+
+	    int count = ofy().load().type(UserDO.class).filter("userId", userId).filter("fbId", fbId).count();
+	    if(count > 0) {
+		isValid = true;
+	    }
 	}
 	//	PersistenceManager pm = PMF.get().getPersistenceManager();
 	//	try {

@@ -15,9 +15,27 @@
 					<h3 align="center" class="uk-panel-title">Write Your Confession Below</h3>
 
 					<p align="center">
-						<g:Button styleName="uk-button">Confession Rules</g:Button>
+						<g:Button ui:field="btnShowRules" styleName="uk-button">Confession Rules</g:Button>
 					</p>
-
+					
+					<g:HTMLPanel ui:field="divRules">
+						<g:HTML>
+							<h1>Confession Writting Rules</h1>
+							<ol>
+								<li>Your can write confessions anonymously by selecting 'Hide My
+									Identity' button.</li>
+								<li>You can 'Dedicate' your confession to any of your Facebook
+									Friends. Your firend will recieve a private message on his/her
+									facebook account with your confession.</li>
+								<li>If you have confessed anonymously, noone can see your identity
+									except the one to whom you have dedicated your confession.</li>
+								<li>Your confessions are not posted on your or anyone's else's
+									Facebook wall. However, you can share or like your confessions to
+									send them to Facebook wall.</li>
+							</ol>
+						</g:HTML>
+					</g:HTMLPanel>
+					
 					<p>
 						<strong>Please Note:</strong>
 						Your identity is never revealed to anyone unless you choose to do

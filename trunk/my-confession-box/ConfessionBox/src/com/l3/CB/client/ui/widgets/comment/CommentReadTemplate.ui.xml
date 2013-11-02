@@ -24,7 +24,7 @@
 		</p>
 		<p>
 			<g:Button ui:field="btnSecond"
-				styleName="uk-button uk-button-primary uk-button-small" title="I Like your comment!">
+				styleName="uk-button uk-button-small" title="I Like your comment!">
 				Like
 				<span ui:field='numOfSecond' />
 			</g:Button>

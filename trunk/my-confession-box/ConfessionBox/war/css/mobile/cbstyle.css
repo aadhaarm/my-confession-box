@@ -892,3 +892,9 @@ main_container a:hover {
 	float:left;
 	margin-right:4px;
 }
+.hide {
+	display: none !important;
+}
+.show {
+	display: inherit;
+}

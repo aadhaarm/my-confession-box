@@ -2,7 +2,6 @@ package com.l3.CB.server.DO;
 
 import java.io.Serializable;
 
-import com.google.appengine.api.datastore.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;

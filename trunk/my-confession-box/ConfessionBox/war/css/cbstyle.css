@@ -1024,3 +1024,9 @@ img.footerLinkImage {
 	width: 30%;
 	cursor: pointer;
 }
+.hide {
+	display: none !important;
+}
+.show {
+	display: inherit;
+}

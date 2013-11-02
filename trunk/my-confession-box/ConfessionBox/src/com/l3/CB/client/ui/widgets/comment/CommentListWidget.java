@@ -27,6 +27,7 @@ public class CommentListWidget extends FlowPanel {
 	super();
 	this.confId = confId;
 	anchMore = new Anchor("Load more comments");
+	anchMore.addStyleName("handPointer");	
 	initializeWidget(true);
 	bind();
     }

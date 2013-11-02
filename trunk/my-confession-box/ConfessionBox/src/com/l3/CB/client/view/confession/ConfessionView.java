@@ -1,19 +1,18 @@
 package com.l3.CB.client.view.confession;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
@@ -23,18 +22,20 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateFeedToMeEvent;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.ui.widgets.PardonPopupPanel;
 import com.l3.CB.client.ui.widgets.comment.AddCommentTemplate;
 import com.l3.CB.client.ui.widgets.comment.CommentListTemplate;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
-import com.l3.CB.client.util.HelpInfo;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.ConfessionShare;
+import com.l3.CB.shared.TO.PardonCondition;
+import com.l3.CB.shared.TO.PardonStatus;
 import com.l3.CB.shared.TO.UserInfo;
 
 public class ConfessionView extends Composite {
@@ -52,7 +53,7 @@ public class ConfessionView extends Composite {
     private boolean showExtendedDetails;
     private boolean showPardonHelpText;
     private PardonPopupPanel pardonPopupPanel;
-    
+
     @UiField
     HTMLPanel mainDiv;
 
@@ -125,6 +126,9 @@ public class ConfessionView extends Composite {
     @UiField
     ParagraphElement userCtrlBtnBlock;
 
+    @UiField
+    ParagraphElement pardonBtnBlock;
+
     public ConfessionView(Confession confession, boolean showUserControls, boolean isAnyn, 
 	    boolean showExtendedDetails, boolean showPardonHelpText) {
 	initWidget(uiBinder.createAndBindUi(this));
@@ -185,6 +189,11 @@ public class ConfessionView extends Composite {
 	    spanDateTile.setInnerText(CommonUtils.getDateInAGOFormat(confession.getTimeStamp()));
 
 	    /*
+	     * Confessed to
+	     */
+	    setupConfessedTo();
+
+	    /*
 	     * Confession Text
 	     */
 	    htmlConfessionText.setHTML(CommonUtils.trunkate(confession.getConfession(), 200));
@@ -217,6 +226,73 @@ public class ConfessionView extends Composite {
 	     * Pardon Status
 	     */
 	    setupPardonStatusBadge();
+
+	    /*
+	     * Enable Pardon Button
+	     */
+	    enablePardonButton();
+	}
+    }
+
+    private void enablePardonButton() {
+	pardonBtnBlock.removeClassName("show");
+	pardonBtnBlock.addClassName("hide");
+
+	if(!confession.isOnlyDedicate() && confession.getConfessedTo() != null && !confession.getConfessedTo().isEmpty()) {
+
+	    List<ConfessionShare> confessionShares = confession.getConfessedTo();
+
+	    for (ConfessionShare confessionShare : confessionShares) {
+
+		if(confessionShare.getPardonConditions() != null && !confessionShare.getPardonConditions().isEmpty()) {
+		    //		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION_PANEL);
+		    //
+		    //		    HTML pardonConditionInfoText = new HTML(Templates.TEMPLATES.pardonConditionInfoText(ConfessionBox.cbText.pardonConditionInfoText()));
+		    //		    pardonConditionInfoText.setStyleName(Constants.STYLE_CLASS_PARDON_CONDITION);
+		    //
+		    //		    pardonConditionInfoText.addClickHandler(new ClickHandler() {
+		    //			@Override
+		    //			public void onClick(ClickEvent event) {
+		    //			    HelpInfo.showHelpInfo(HelpInfo.type.PARDON_CONDITION_HELP_TEXT);
+		    //			}
+		    //		    });
+		    //
+		    //		    fPnlPardon.add(pardonConditionInfoText);
+		    //
+		    //		    // Add conditions for pardon 
+		    //		    addPardonConditionStatus(confessionShare.getPardonConditions(), fPnlPardon);
+		    //
+		} else if(!isAnyn) {
+		    //		    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON_PANEL);
+		    //		    final Button btnPardon = new Button(ConfessionBox.cbText.pardonButtonLabelText());
+		    //		    btnPardon.addMouseOverHandler(new MouseOverHandler() {
+		    //
+		    //			@Override
+		    //			public void onMouseOver(MouseOverEvent event) {
+		    //			    if(!ConfessionBox.isMobile) {
+		    //				HelpInfo.showHelpInfo(HelpInfo.type.PARDON_BUTTON);
+		    //			    }
+		    //			}
+		    //		    });
+		    //		    btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
+		    pardonBtnBlock.removeClassName("hide");
+		    pardonBtnBlock.addClassName("show");
+		    if(confessionShare.getPardonStatus() != null) {
+			switch (confessionShare.getPardonStatus()) {
+			case PARDONED:
+			    btnPardon.setEnabled(false);
+			    btnPardon.addStyleName("uk-badge-success");
+			    break;
+			    //			default:
+			    //			    pardonPopupPanel = new PardonPopupPanel(confession, confessedByUserInfo, btnPardon);
+			    //			    pardonPopupPanel.setAnimationEnabled(true);
+			    //			    pardonPopupPanel.setGlassEnabled(true);
+			    //			    pardonPopupPanel.setStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
+			    //			    break;
+			}
+		    } 
+		}
+	    }
 	}
     }
 
@@ -224,7 +300,8 @@ public class ConfessionView extends Composite {
      * @param confession
      */
     private void setupUserCtrlButtons() {
-	if(this.showUserControls) { 
+	if(this.showUserControls) {
+
 	    if(confession.isShareAsAnyn()) {
 		btnHideIdentity.addStyleName("uk-button-primary");
 		btnHideIdentity.setText("Un-Hide Identity");
@@ -245,8 +322,8 @@ public class ConfessionView extends Composite {
 		btnHideConfession.addStyleName("uk-button-primary");
 	    }
 	} else {
-	    btnPreview.removeFromParent();
-	    userCtrlBtnBlock.removeFromParent();
+		btnPreview.addStyleName("hide");
+		userCtrlBtnBlock.addClassName("hide");
 	}
     }
 
@@ -254,6 +331,10 @@ public class ConfessionView extends Composite {
      * @param confession
      */
     private void setupPardonStatusBadge() {
+
+	badgePardonStatus.removeClassName("show");
+	badgePardonStatus.addClassName("hide");
+
 	if(confession != null 
 		&& !confession.isOnlyDedicate() 
 		&& confession.getConfessedTo() != null 
@@ -261,20 +342,8 @@ public class ConfessionView extends Composite {
 
 	    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
 		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
-		    /*
-		     * Confessed to
-		     */
-		    if(showUserControls) {
-			ancConfessedTo.setTarget("_BLANK");
-			ancConfessedTo.setHref(FacebookUtil.getProfileFBLink(confessionShare.getFbId()).asString());
-			ancConfessedTo.setText(confessionShare.getUserFullName());
-			spanConfessedTo.setInnerText(
-				" (as " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) + " on public wall)");
-		    } else {
-			ancConfessedTo.removeFromParent();
-			spanConfessedTo.setInnerText(CommonUtils.getPronoun(confession.getGender()) 
-				+ " " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()));
-		    }
+		    badgePardonStatus.removeClassName("hide");
+		    badgePardonStatus.addClassName("show");
 
 		    /*
 		     * Pardon Status Badge
@@ -312,38 +381,40 @@ public class ConfessionView extends Composite {
 			badgePardonStatus.addClassName("uk-badge-danger");
 			break;
 		    }
-		} else if(!isAnyn) {
-		    //	    fPnlPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON_PANEL);
-		    //	    final Button btnPardon = new Button(ConfessionBox.cbText.pardonButtonLabelText());
-		    //	    btnPardon.addMouseOverHandler(new MouseOverHandler() {
-		    //
-		    //		@Override
-		    //		public void onMouseOver(MouseOverEvent event) {
-		    //		    if(!ConfessionBox.isMobile) {
-		    //			HelpInfo.showHelpInfo(HelpInfo.type.PARDON_BUTTON);
-		    //		    }
-		    //		}
-		    //	    });
-		    //	    btnPardon.setStyleName(Constants.STYLE_CLASS_PARDON_BUTTON);
-
-		    if(confessionShare.getPardonStatus() != null) {
-			switch (confessionShare.getPardonStatus()) {
-			case PARDONED:
-			    btnPardon.setEnabled(false);
-			    break;
-			default:
-			    pardonPopupPanel = new PardonPopupPanel(confession, confessedByUserInfo, btnPardon);
-			    pardonPopupPanel.setAnimationEnabled(true);
-			    pardonPopupPanel.setGlassEnabled(true);
-			    pardonPopupPanel.setStyleName(Constants.STYLE_CLASS_PARDON_MODAL);
-			    break;
-			}
-		    } 
 		}
 	    }
+	}
+    }
+
+
+    /**
+     * @param confession
+     */
+    private void setupConfessedTo() {
+	if(confession != null 
+		//		&& !confession.isOnlyDedicate() 
+		&& confession.getConfessedTo() != null 
+		&& !confession.getConfessedTo().isEmpty()) {
+
+	    for (ConfessionShare confessionShare : confession.getConfessedTo()) {
+		if(confessionShare != null && confessionShare.getPardonStatus() != null) {
+		    /*
+		     * Confessed to
+		     */
+		    if(showUserControls) {
+			ancConfessedTo.setTarget("_BLANK");
+			ancConfessedTo.setHref(FacebookUtil.getProfileFBLink(confessionShare.getFbId()).asString());
+			ancConfessedTo.setText(confessionShare.getUserFullName());
+			spanConfessedTo.setInnerText(
+				" (as " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()) + " on public wall)");
+		    } else {
+			ancConfessedTo.addStyleName("hide");
+			spanConfessedTo.setInnerText(CommonUtils.getPronoun(confession.getGender()) 
+				+ " " + CommonUtils.checkForNullConfessedTo(confessionShare.getRelation()));
+		    }
+		} 
+	    }
 	} else {
-	    badgePardonStatus.removeFromParent();
-	    btnPardon.removeFromParent();
 	    /*
 	     * Confessed to
 	     */
@@ -587,7 +658,36 @@ public class ConfessionView extends Composite {
 
     @UiHandler("btnPardon")
     void onPardonClick(ClickEvent event) {
-	pardonPopupPanel.center();
+	if(Window.confirm("Do you want to pardon for this act?")) {
+	    if(confessedByUserInfo != null) {
+		List<PardonCondition> pardonConditions = new ArrayList<PardonCondition>();
+
+		/**
+		 * Pardon if no conditions
+		 * Awaiting pardon if pardoned with conditions		    
+		 */
+		PardonStatus pardonStatus = PardonStatus.PARDONED;
+		//	    if(pardonConditions != null && !pardonConditions.isEmpty()) {
+		//		pardonStatus = PardonStatus.PARDONED_WITH_CONDITION;
+		//	    }
+		ConfessionBox.confessionService.pardonConfession(ConfessionBox.getLoggedInUserInfo(), confession.getConfId(), confessedByUserInfo, pardonConditions, pardonStatus, new Date(), new AsyncCallback<Void>() {
+		    @Override
+		    public void onSuccess(Void result) {
+			btnPardon.setEnabled(false);
+			//			    btnPardonHome.setEnabled(false);
+			//			    hidePopup();
+			ConfessionBox.eventBus.fireEvent(new UpdateFeedToMeEvent(confession));
+			ConfessionBox.eventBus.fireEvent(new UpdateHPEvent(Constants.POINTS_ON_PARDONING));
+		    }
+
+		    @Override
+		    public void onFailure(Throwable caught) {
+			btnPardon.setEnabled(true);
+			Error.handleError("PardonPopupPanel", "bind", caught);
+		    }
+		});
+	    }
+	}
     }
 
     /**

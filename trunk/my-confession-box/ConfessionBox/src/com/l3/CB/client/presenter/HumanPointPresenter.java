@@ -2,11 +2,9 @@ package com.l3.CB.client.presenter;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.Error;
-import com.l3.CB.shared.Constants;
 
 public class HumanPointPresenter implements Presenter {
 

@@ -22,28 +22,31 @@
 							<div class="uk-width-1-1">
 								<ul class="uk-nav uk-nav-navbar">
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most Voted Confessions</g:Anchor>
+										<g:Anchor ui:field="ancMostVoted" styleName="{style.handPointer}">Most Voted Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Global Confessions</g:Anchor>
+										<g:Anchor ui:field="ancGlobal" styleName="{style.handPointer}">Global Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Local Confessions</g:Anchor>
+										<g:Anchor ui:field="ancLocal" styleName="{style.handPointer}">Local Confessions</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most 'SAME BOAT'</g:Anchor>
+										<g:Anchor ui:field="ancUserVoted" styleName="{style.handPointer}">Confessions I Voted</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most 'LAME'</g:Anchor>
+										<g:Anchor ui:field="ancMostSameBoat" styleName="{style.handPointer}">Most 'SAME BOAT'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most 'SYMPATHAISED'</g:Anchor>
+										<g:Anchor ui:field="ancMostLame" styleName="{style.handPointer}">Most 'LAME'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most 'SHOULD BE PARDONED'</g:Anchor>
+										<g:Anchor ui:field="ancMostSympathy" styleName="{style.handPointer}">Most 'SYMPATHAISED'</g:Anchor>
 									</li>
 									<li>
-										<g:Anchor styleName="{style.handPointer}">Most 'SHOULD NOT BE PARDONED'</g:Anchor>
+										<g:Anchor ui:field="ancMostSBP" styleName="{style.handPointer}">Most 'SHOULD BE PARDONED'</g:Anchor>
+									</li>
+									<li>
+										<g:Anchor ui:field="ancMostSNBP" styleName="{style.handPointer}">Most 'SHOULD NOT BE PARDONED'</g:Anchor>
 									</li>
 								</ul>
 							</div>
@@ -55,13 +58,13 @@
 					<g:Anchor ui:field="ancWrtConf" styleName="{style.handPointer}">Write Confession</g:Anchor>
 				</li>
 
-				<li data-uk-dropdown="{}" class="uk-parent">
+				<li ui:field="liMyConf" data-uk-dropdown="{}" class="uk-parent">
 					<g:Anchor ui:field="ancMyConf" styleName="{style.handPointer}">My Confessions</g:Anchor>
 					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1" style="">
 						<div class="uk-grid">
 							<div class="uk-width-1-1">
 								<ul class="uk-nav uk-nav-navbar">
-									<li>
+									<li ui:field="liConfMe">
 										<g:Anchor ui:field="ancConfMe" styleName="{style.handPointer}">Confessed to me</g:Anchor>
 									</li>
 								</ul>
@@ -74,7 +77,7 @@
 					<g:Anchor ui:field="ancInvFrnd" styleName="{style.handPointer}">Invite Friends</g:Anchor>
 				</li>
 				
-				<li data-uk-dropdown="{}" class="uk-parent">
+				<li ui:field="liAbout" data-uk-dropdown="{}" class="uk-parent">
 					<g:Anchor ui:field="ancAbout" styleName="{style.handPointer}">About</g:Anchor>
 					<div class="uk-dropdown uk-dropdown-navbar uk-dropdown-width-1" style="">
 						<div class="uk-grid">

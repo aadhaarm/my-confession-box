@@ -115,7 +115,7 @@ public class Constants {
 
     public static final String IMAGE_PATH_USER_CONTROL_CONFESSION_VISIBILITY = "/images/hideConf.png";
 
-    public static final String DATE_TIME_FORMAT = "MMM d, ''yy, h:mm a";
+    public static final String DATE_TIME_FORMAT = "MMM d, ''yy";
 
     public static final String STYLE_CLASS_TOOLTIP_RIGHT = "tooltip_right";
 
@@ -210,4 +210,6 @@ public class Constants {
     public static final String HISTORY_ITEM_RULE_BOOK = "confessionBoxRuleBook";
 
     public static final String STYLE_CLASS_DANGER = "uk-form-danger";
+
+    public static final String STYLE_CLASS_BLUE_BUTTON = "uk-button-primary";
 }

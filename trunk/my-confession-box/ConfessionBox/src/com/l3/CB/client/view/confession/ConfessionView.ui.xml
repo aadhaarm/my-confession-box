@@ -41,8 +41,8 @@
 
 				<p>
 					<g:HTML ui:field="htmlConfessionText"></g:HTML>
+					<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">more</g:Anchor>
 				</p>
-				<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">Continue Reading</g:Anchor>
 
 				<p ui:field="activityBtnBlock">
 					<g:Button ui:field="btnSameBoat"
@@ -81,6 +81,7 @@
 						<span ui:field="spanRepAbuseNum" class="uk-badge uk-badge-notification" />
 					</g:Button>
 				</p>
+				
 				<p ui:field="userCtrlBtnBlock">
 					<g:Button ui:field="btnHideIdentity"
 						styleName="{style.handPointer} uk-button uk-button-large" title="Hide your identity from the world.">
@@ -92,6 +93,7 @@
 						Hide confession
 					</g:Button>
 				</p>
+				
 				<p ui:field="pardonBtnBlock">
 					<g:Button ui:field="btnPardon"
 						styleName="{style.handPointer} uk-button uk-button-large" title="Pardon">

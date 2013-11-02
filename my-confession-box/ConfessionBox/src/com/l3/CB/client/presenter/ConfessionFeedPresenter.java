@@ -9,23 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Document;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.HasFocusHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.FilterEvent;
 import com.l3.CB.client.event.FilterEventHandler;
+import com.l3.CB.client.event.confession.FilterConfessionsEvent;
+import com.l3.CB.client.event.confession.FilterConfessionsEventHandler;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
@@ -163,14 +161,12 @@ public class ConfessionFeedPresenter implements Presenter {
 	});
 
 	// ON FILTER CHANGE
-	if(display.getConfessionFilterListBox() != null) {
-	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
-		@Override
-		public void onChange(ChangeEvent event) {
+	ConfessionBox.eventBus.addHandler(FilterConfessionsEvent.TYPE, new FilterConfessionsEventHandler() {
+	    
+	    @Override
+	    public void filter(FilterConfessionsEvent event) {
 		    CommonUtils.showApplicationLoad();
-		    ListBox lstBoxFilter = (ListBox)event.getSource();
-		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
-		    filter = Filters.valueOf(selectedFilter);
+		    filter = event.getFilter();
 		    if(filter != null && (filter.equals(Filters.SUBSCRIBED) || filter.equals(Filters.USER_ACTIVITY))) {
 			if(!ConfessionBox.isLoggedIn) {
 			    CommonUtils.login(0, null);
@@ -178,9 +174,27 @@ public class ConfessionFeedPresenter implements Presenter {
 		    }
 		    display.setFilterInfo(filter.getFilterInfoText());
 		    setConfessions(true);
-		}
-	    });
-	    // Filter Help info
+	    }
+	});
+	
+//	if(display.getConfessionFilterListBox() != null) {
+//	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
+//		@Override
+//		public void onChange(ChangeEvent event) {
+//		    CommonUtils.showApplicationLoad();
+//		    ListBox lstBoxFilter = (ListBox)event.getSource();
+//		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
+//		    filter = Filters.valueOf(selectedFilter);
+//		    if(filter != null && (filter.equals(Filters.SUBSCRIBED) || filter.equals(Filters.USER_ACTIVITY))) {
+//			if(!ConfessionBox.isLoggedIn) {
+//			    CommonUtils.login(0, null);
+//			}
+//		    }
+//		    display.setFilterInfo(filter.getFilterInfoText());
+//		    setConfessions(true);
+//		}
+//	    });
+//	    //Filter Help info
 //	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
 //		@Override
 //		public void onFocus(FocusEvent event) {
@@ -189,7 +203,7 @@ public class ConfessionFeedPresenter implements Presenter {
 //		    }
 //		}
 //	    });
-	}
+//	}
 
 	// Change filter selected text
 	ConfessionBox.eventBus.addHandler(FilterEvent.TYPE, new FilterEventHandler() {

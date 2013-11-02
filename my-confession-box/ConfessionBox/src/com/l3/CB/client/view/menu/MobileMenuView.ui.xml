@@ -17,28 +17,31 @@
 					<g:Anchor ui:field="ancConfWall" styleName="{style.handPointer}">Confession Wall</g:Anchor>
 					<ul class="uk-nav-sub">
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most Voted Confessions</g:Anchor>
+							<g:Anchor ui:field="ancMostVoted" styleName="{style.handPointer}">Most Voted Confessions</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Global Confessions</g:Anchor>
+							<g:Anchor ui:field="ancGlobal" styleName="{style.handPointer}">Global Confessions</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Local Confessions</g:Anchor>
+							<g:Anchor ui:field="ancLocal" styleName="{style.handPointer}">Local Confessions</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most 'SAME BOAT'</g:Anchor>
+							<g:Anchor ui:field="ancUserVoted" styleName="{style.handPointer}">Confessions I Voted</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most 'LAME'</g:Anchor>
+							<g:Anchor ui:field="ancMostSameBoat" styleName="{style.handPointer}">Most 'SAME BOAT'</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most 'SYMPATHAISED'</g:Anchor>
+							<g:Anchor ui:field="ancMostLame" styleName="{style.handPointer}">Most 'LAME'</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most 'SHOULD BE PARDONED'</g:Anchor>
+							<g:Anchor ui:field="ancMostSympathy" styleName="{style.handPointer}">Most 'SYMPATHAISED'</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}">Most 'SHOULD NOT BE PARDONED'</g:Anchor>
+							<g:Anchor ui:field="ancMostSBP" styleName="{style.handPointer}">Most 'SHOULD BE PARDONED'</g:Anchor>
+						</li>
+						<li>
+							<g:Anchor ui:field="ancMostSNBP" styleName="{style.handPointer}">Most 'SHOULD NOT BE PARDONED'</g:Anchor>
 						</li>
 					</ul>
 				</li>

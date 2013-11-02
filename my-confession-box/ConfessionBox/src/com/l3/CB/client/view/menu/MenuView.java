@@ -10,17 +10,16 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateMenuEvent;
+import com.l3.CB.client.event.confession.FilterConfessionsEvent;
 import com.l3.CB.client.presenter.MenuPresenter;
-import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
-import com.l3.CB.client.view.misc.PopupPanelUI;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.TO.Filters;
 
 public class MenuView extends Composite implements MenuPresenter.Display {
 
@@ -63,7 +62,33 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     LIElement liConfessionWall;
     @UiField
     LIElement liWriteConfession;
+    @UiField
+    LIElement liMyConf;
+    @UiField
+    LIElement liAbout;
+    @UiField
+    LIElement liConfMe;
 
+    @UiField
+    Anchor ancMostVoted;
+    @UiField
+    Anchor ancGlobal;
+    @UiField
+    Anchor ancLocal;
+    @UiField
+    Anchor ancMostSameBoat;
+    @UiField
+    Anchor ancMostLame;
+    @UiField
+    Anchor ancMostSympathy;
+    @UiField
+    Anchor ancMostSBP;
+    @UiField
+    Anchor ancMostSNBP;
+    @UiField
+    Anchor ancUserVoted;
+
+    
     public MenuView() {
 	initWidget(uiBinder.createAndBindUi(this));
     }
@@ -110,6 +135,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 	    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 	    HelpInfo.cleanToolTip();
+	    makeThisLinkActive(liMyConf);
 	} else {
 	    CommonUtils.login(0, Constants.HISTORY_ITEM_MY_CONFESSION_FEED);
 	}
@@ -121,6 +147,7 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	    ConfessionBox.eventBus.fireEvent(new UpdateMenuEvent());
 	    CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 	    HelpInfo.cleanToolTip();
+	    makeThisLinkActive(liConfMe);
 	} else {
 	    CommonUtils.login(0, Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED);
 	}
@@ -134,17 +161,21 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     @UiHandler("ancRulBok")
     void onRulBokClick(ClickEvent event) {
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_RULE_BOOK);
+	makeThisLinkActive(liAbout);
     }
     @UiHandler("ancAbout")
     void onAboutClick(ClickEvent event) {
+	makeThisLinkActive(liAbout);
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ABOUT_CB);
     }
     @UiHandler("ancPhilosophy")
     void onPhilosophyClick(ClickEvent event) {
+	makeThisLinkActive(liAbout);
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_PHILOSPHY);
     }
     @UiHandler("ancAnonymous")
     void onAnonymousClick(ClickEvent event) {
+	makeThisLinkActive(liAbout);
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ANONYMOUS_CONFESSION);
     }
     @UiHandler("ancCommunity")
@@ -158,10 +189,58 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     @UiHandler("ancPrPolicy")
     void onPrPolicyClick(ClickEvent event) {
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_PRIVACY_POLICY);
+	makeThisLinkActive(liAbout);
     }
     @UiHandler("ancTerms")
     void onTermsClick(ClickEvent event) {
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_TOS);
+	makeThisLinkActive(liAbout);
+    }
+
+    @UiHandler("ancMostVoted")
+    void onMostVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_VOTED));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancGlobal")
+    void onGlobalFilterClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.ALL));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancLocal")
+    void onLocalClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.LOCALE_SPECIFIC));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancMostSameBoat")
+    void onMostSameBoatVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SAME_BOATS));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancMostLame")
+    void onMostLameVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_LAME));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancMostSympathy")
+    void onMostSympathyVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SYMPATHY));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancMostSBP")
+    void onMostSBPVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SHOULD_BE_PARDONED));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancMostSNBP")
+    void onMostSNBPVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SHOULD_NOT_BE_PARDONED));
+	makeThisLinkActive(liConfessionWall);
+    }
+    @UiHandler("ancUserVoted")
+    void onUserVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.USER_ACTIVITY));
+	makeThisLinkActive(liConfessionWall);
     }
     
 

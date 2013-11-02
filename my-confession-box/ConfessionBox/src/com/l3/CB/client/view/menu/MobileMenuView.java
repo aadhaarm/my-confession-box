@@ -9,17 +9,16 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateMenuEvent;
+import com.l3.CB.client.event.confession.FilterConfessionsEvent;
 import com.l3.CB.client.presenter.MobileMenuPresenter;
-import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.ui.widgets.MenuButton;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.HelpInfo;
-import com.l3.CB.client.view.misc.PopupPanelUI;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.TO.Filters;
 
 public class MobileMenuView extends Composite implements MobileMenuPresenter.Display {
 
@@ -146,6 +145,44 @@ public class MobileMenuView extends Composite implements MobileMenuPresenter.Dis
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_TOS);
     }
 
+    @UiHandler("ancMostVoted")
+    void onMostVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_VOTED));
+    }
+    @UiHandler("ancGlobal")
+    void onGlobalFilterClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.ALL));
+    }
+    @UiHandler("ancLocal")
+    void onLocalClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.LOCALE_SPECIFIC));
+    }
+    @UiHandler("ancMostSameBoat")
+    void onMostSameBoatVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SAME_BOATS));
+    }
+    @UiHandler("ancMostLame")
+    void onMostLameVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_LAME));
+    }
+    @UiHandler("ancMostSympathy")
+    void onMostSympathyVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SYMPATHY));
+    }
+    @UiHandler("ancMostSBP")
+    void onMostSBPVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SHOULD_BE_PARDONED));
+    }
+    @UiHandler("ancMostSNBP")
+    void onMostSNBPVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.MOST_SHOULD_NOT_BE_PARDONED));
+    }
+    @UiHandler("ancUserVoted")
+    void onUserVotedClick(ClickEvent event) {
+	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.USER_ACTIVITY));
+    }
+
+    
     @Override
     public HTML setFeedItemSelected() {
 	// TODO Auto-generated method stub

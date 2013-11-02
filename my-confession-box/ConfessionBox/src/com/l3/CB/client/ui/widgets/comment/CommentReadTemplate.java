@@ -11,13 +11,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.shared.CommentFilter;
+import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.UserInfo;
@@ -122,6 +121,7 @@ public class CommentReadTemplate extends Composite {
 
 	    @Override
 	    public void onSuccess(Void result) {
+		btnSecond.addStyleName(Constants.STYLE_CLASS_BLUE_BUTTON);
 		comment.setNumOfSecond(comment.getNumOfSecond() + 1);
 		numOfSecond.setInnerText(comment.getNumOfSecond() + "");
 	    }
@@ -147,6 +147,7 @@ public class CommentReadTemplate extends Composite {
 
 	    @Override
 	    public void onSuccess(Void result) {
+		btnDislike.addStyleName(Constants.STYLE_CLASS_BLUE_BUTTON);
 		comment.setNumOfAbuseVote(comment.getNumOfAbuseVote() + 1);
 		numOfDislike.setInnerText(comment.getNumOfAbuseVote() + "");
 	    }

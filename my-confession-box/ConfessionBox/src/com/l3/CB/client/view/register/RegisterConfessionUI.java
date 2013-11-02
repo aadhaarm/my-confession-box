@@ -19,10 +19,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
+import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.presenter.CopyOfRegisterConfessionPresenter;
 import com.l3.CB.client.ui.widgets.Templates;
@@ -99,10 +101,18 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 
     @UiField
     ParagraphElement pConfirmPanel;
+    
+    @UiField
+    Button btnShowRules;
+    
+    @UiField
+    HTMLPanel divRules;
 
     public RegisterConfessionUI() {
 	initWidget(uiBinder.createAndBindUi(this));
 
+	divRules.addStyleName("hide");
+	
 	txtConfession.setupWidget(Constants.CONF_MAX_CHARS, true, "Write your confession here..");
 
 	btnDedicateConfession.getElement().setAttribute("data-uk-tooltip", "");
@@ -214,6 +224,13 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 	enableForm();
     }
 
+    @UiHandler("btnShowRules")
+    void onShowRules(ClickEvent event) {
+	divRules.removeStyleName("hide");
+	divRules.addStyleName("show");
+	btnShowRules.addStyleName("hide");
+    }
+    
     /**
      * Check is user registered - Show FB send dialog
      */

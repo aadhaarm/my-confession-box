@@ -59,13 +59,17 @@ public class MobileMenuView extends Composite implements MobileMenuPresenter.Dis
     Anchor ancPrPolicy;
     @UiField
     Anchor ancTerms;
+    @UiField
+    Anchor ancLogout;
 
     public MobileMenuView() {
 	initWidget(uiBinder.createAndBindUi(this));
+	setLogoutButton();
     }
 
     public MobileMenuView(String firstName) {
 	initWidget(uiBinder.createAndBindUi(this));
+	setLogoutButton();
     }
 
     @UiHandler("ancConfWall")
@@ -182,6 +186,24 @@ public class MobileMenuView extends Composite implements MobileMenuPresenter.Dis
 	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.USER_ACTIVITY));
     }
 
+    @UiHandler("ancLogout")
+    void onLogoutClick(ClickEvent event) {
+	CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
+	setLogoutButton();
+    }
+
+    /**
+     * Set Logout button status
+     */
+    private void setLogoutButton() {
+	if(ConfessionBox.isLoggedIn) {
+	    ancLogout.removeStyleName("hide");
+	    ancLogout.addStyleName("show");
+	} else {
+	    ancLogout.removeStyleName("show");
+	    ancLogout.addStyleName("hide");
+	}
+    }
     
     @Override
     public HTML setFeedItemSelected() {

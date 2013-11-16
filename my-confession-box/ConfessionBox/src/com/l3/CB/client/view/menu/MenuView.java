@@ -87,14 +87,18 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     Anchor ancMostSNBP;
     @UiField
     Anchor ancUserVoted;
+    @UiField
+    Anchor ancLogout;
 
     
     public MenuView() {
 	initWidget(uiBinder.createAndBindUi(this));
+	setLogoutButton();
     }
 
     public MenuView(String firstName) {
 	initWidget(uiBinder.createAndBindUi(this));
+	setLogoutButton();
     }
 
     @UiHandler("ancConfWall")
@@ -242,6 +246,26 @@ public class MenuView extends Composite implements MenuPresenter.Display {
 	ConfessionBox.eventBus.fireEvent(new FilterConfessionsEvent(Filters.USER_ACTIVITY));
 	makeThisLinkActive(liConfessionWall);
     }
+    @UiHandler("ancLogout")
+    void onLogoutClick(ClickEvent event) {
+	CommonUtils.logout(ConfessionBox.cbText.logoutInfoMessage());
+	setLogoutButton();
+    }
+
+    /**
+     * Set Logout button status
+     */
+    private void setLogoutButton() {
+	if(ConfessionBox.isLoggedIn) {
+	    ancLogout.removeStyleName("hide");
+	    ancLogout.addStyleName("show");
+	} else {
+	    ancLogout.removeStyleName("show");
+	    ancLogout.addStyleName("hide");
+	}
+    }
+
+    
     
 
     @Override

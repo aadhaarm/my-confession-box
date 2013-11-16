@@ -201,4 +201,12 @@ public class CBTextAreaUI extends Composite {
 	    richTextArea.setText(defaultValue);
 	}
     }
+
+    public void setText(String text) {
+	if(ConfessionBox.isMobile) {
+	    textArea.setText(text);
+	} else {
+	    richTextArea.setText(text);
+	}
+    }
 }

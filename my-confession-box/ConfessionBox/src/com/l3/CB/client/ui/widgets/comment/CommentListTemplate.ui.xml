@@ -5,6 +5,9 @@
 		.important {
 			font-weight: bold;
 		}
+		.handPointer {
+			cursor: pointer;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 		<h4>Comments (<span ui:field="numComments"></span>)</h4>
@@ -12,7 +15,7 @@
 		<g:HTMLPanel ui:field="hPnlBody"></g:HTMLPanel>
 
 		<p style="text-align:center">
-			<g:Anchor ui:field="ancMore">Load more comments</g:Anchor>
+			<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">More comments</g:Anchor>
 		</p>
 	</g:HTMLPanel>
 </ui:UiBinder> 

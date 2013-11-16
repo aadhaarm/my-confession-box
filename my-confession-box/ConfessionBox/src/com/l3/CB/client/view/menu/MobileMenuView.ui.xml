@@ -57,6 +57,11 @@
 				<li class="uk-parent">
 					<g:Anchor ui:field="ancInvFrnd" styleName="{style.handPointer}">Invite Friends</g:Anchor>
 				</li>
+				
+				<li class="uk-parent">
+					<g:Anchor ui:field="ancLogout" styleName="{style.handPointer}">Logout</g:Anchor>
+				</li>
+
 				<li class="uk-parent">
 					<g:Anchor ui:field="ancAbout" styleName="{style.handPointer}">About</g:Anchor>
 					<ul class="uk-nav-sub">
@@ -83,6 +88,7 @@
 						</li>
 					</ul>
 				</li>
+				
 			</ul>
 		</div>
 	</g:HTMLPanel>

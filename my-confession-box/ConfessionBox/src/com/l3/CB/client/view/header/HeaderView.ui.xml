@@ -8,7 +8,7 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<div class="tm-headerbar uk-clearfix uk-hidden-small">
-			<h1 class="tm-logo">Confesion Box</h1>
+			<h1 class="tm-logo">Confession Box</h1>
 		</div>
 	</g:HTMLPanel>
 </ui:UiBinder> 

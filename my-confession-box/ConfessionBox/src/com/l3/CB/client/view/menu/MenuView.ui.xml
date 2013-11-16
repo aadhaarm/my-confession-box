@@ -104,6 +104,9 @@
 									<li>
 										<g:Anchor styleName="{style.handPointer}" ui:field="ancTerms">Terms of service</g:Anchor>
 									</li>
+									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancLogout">Logout</g:Anchor>
+									</li>
 								</ul>
 							</div>
 						</div>

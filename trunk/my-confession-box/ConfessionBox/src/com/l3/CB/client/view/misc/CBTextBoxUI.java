@@ -115,4 +115,8 @@ public class CBTextBoxUI extends Composite {
 	    txtTitle.setText(defaultValue);
 	}
     }
+
+    public void setText(String text) {
+        txtTitle.setText(text);
+    }
 }

@@ -12,11 +12,15 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.FilterEvent;
+import com.l3.CB.client.event.FilterEventHandler;
 import com.l3.CB.client.event.URLEvent;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.event.UpdateHPEventHandler;
 import com.l3.CB.client.event.UpdateMenuEvent;
 import com.l3.CB.client.event.UpdateMenuEventHandler;
+import com.l3.CB.client.event.confession.FilterConfessionsEvent;
+import com.l3.CB.client.event.confession.FilterConfessionsEventHandler;
 import com.l3.CB.client.presenter.ConfessionFeedPresenter;
 import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
 import com.l3.CB.client.presenter.CopyOfRegisterConfessionPresenter;
@@ -42,6 +46,7 @@ import com.l3.CB.client.view.menu.MobileMenuView;
 import com.l3.CB.client.view.misc.PopupPanelUI;
 import com.l3.CB.client.view.register.RegisterConfessionUI;
 import com.l3.CB.shared.Constants;
+import com.l3.CB.shared.TO.Filters;
 
 public class ConfessionController implements Presenter, ValueChangeHandler<String> {
 
@@ -167,6 +172,14 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 		}
 	    }
 	});
+	
+	// Confession filter event
+	ConfessionBox.eventBus.addHandler(FilterConfessionsEvent.TYPE, new FilterConfessionsEventHandler() {
+	    @Override
+	    public void filter(FilterConfessionsEvent event) {
+		CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_CONFESSION_FEED + "/" + event.getFilter().toString());
+	    }
+	});
     }
 
     /**
@@ -181,14 +194,15 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	if (token != null) {
 	    CommonUtils.showApplicationLoad();	    
 	    Presenter presenter = null;
-	    if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
-		presenter = new ConfessionFeedPresenter(new ConfessionsContainer());
-		//		MenuView.selectMenuItem(1);
-		headerPresenter.showFilter();
+	    if(token.startsWith(Constants.HISTORY_ITEM_CONFESSION_FEED)) {
+		String [] strings = token.split("/");
+		if(strings != null && strings.length == 2) {
+		    presenter = new ConfessionFeedPresenter(new ConfessionsContainer(), Filters.valueOf(strings[1]));
+		} else {
+		    presenter = new ConfessionFeedPresenter(new ConfessionsContainer(), Filters.ALL);
+		}
 	    } else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FEED_WITH_ID)) {
 		presenter = new ConfessionFeedPresenter(new ConfessionsContainer(), ConfessionBox.confId);
-		//		MenuView.selectMenuItem(1);
-		headerPresenter.showFilter();
 	    } else if(token.equals(Constants.HISTORY_ITEM_ABOUT_CB)) {
 		presenter = new TextPresenter(new PopupPanelUI(ApplicationTextWidget.getAboutTitle(), ApplicationTextWidget.getAboutTextBody()));
 		CommonUtils.removeApplicationLoad();
@@ -210,26 +224,18 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    } else if(ConfessionBox.isLoggedIn) {
 		if (token.equals(Constants.HISTORY_ITEM_REGISTER_CONFESSION)) {
 		    presenter = new CopyOfRegisterConfessionPresenter(new RegisterConfessionUI());
-		    //		    MenuView.selectMenuItem(2);
 		    CommonUtils.removeApplicationLoad();
-		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_MY_CONFESSION_FEED)) {
-		    //		    MenuView.selectMenuItem(3);
 		    presenter = new MyConfessionFeedPresenter(new ConfessionsContainer());
-		    headerPresenter.hideFilter();
 		} else if(token.equals(Constants.HISTORY_ITEM_CONFESSION_FOR_ME_FEED)) {
-		    //		    MenuView.selectMenuItem(4);
 		    presenter = new ConfessionForMeFeedPresenter(new ConfessionsContainer());
-		    headerPresenter.hideFilter();
 		}
 	    } 
 	    if(presenter != null) {
 		presenter.go(container);
 	    } else {
 		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
-		//		MenuView.selectMenuItem(1);
 		presenter.go(container);
-		headerPresenter.showFilter();
 	    }
 	}
     }

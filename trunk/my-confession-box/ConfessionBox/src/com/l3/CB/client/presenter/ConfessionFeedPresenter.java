@@ -20,12 +20,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
-import com.l3.CB.client.event.FilterEvent;
-import com.l3.CB.client.event.FilterEventHandler;
-import com.l3.CB.client.event.confession.FilterConfessionsEvent;
-import com.l3.CB.client.event.confession.FilterConfessionsEventHandler;
-import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
+import com.l3.CB.client.view.confession.ConfessionsContainer;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
 import com.l3.CB.shared.TO.Filters;
@@ -81,6 +77,14 @@ public class ConfessionFeedPresenter implements Presenter {
 	} catch (Exception e) {
 	    setConfessions(false);
 	}
+	bind();
+    }
+
+    public ConfessionFeedPresenter(ConfessionsContainer confessionsContainer, Filters filter) {
+	super();
+	this.display = confessionsContainer;
+	this.filter = filter;
+	setConfessions(false);
 	bind();
     }
 
@@ -159,70 +163,6 @@ public class ConfessionFeedPresenter implements Presenter {
 	    }
 
 	});
-
-	// ON FILTER CHANGE
-	ConfessionBox.eventBus.addHandler(FilterConfessionsEvent.TYPE, new FilterConfessionsEventHandler() {
-	    
-	    @Override
-	    public void filter(FilterConfessionsEvent event) {
-		    CommonUtils.showApplicationLoad();
-		    filter = event.getFilter();
-		    if(filter != null && (filter.equals(Filters.SUBSCRIBED) || filter.equals(Filters.USER_ACTIVITY))) {
-			if(!ConfessionBox.isLoggedIn) {
-			    CommonUtils.login(0, null);
-			}
-		    }
-		    display.setFilterInfo(filter.getFilterInfoText());
-		    setConfessions(true);
-	    }
-	});
-	
-//	if(display.getConfessionFilterListBox() != null) {
-//	    display.getConfessionFilterListBox().addChangeHandler(new ChangeHandler() {
-//		@Override
-//		public void onChange(ChangeEvent event) {
-//		    CommonUtils.showApplicationLoad();
-//		    ListBox lstBoxFilter = (ListBox)event.getSource();
-//		    String selectedFilter = lstBoxFilter.getValue(lstBoxFilter.getSelectedIndex());
-//		    filter = Filters.valueOf(selectedFilter);
-//		    if(filter != null && (filter.equals(Filters.SUBSCRIBED) || filter.equals(Filters.USER_ACTIVITY))) {
-//			if(!ConfessionBox.isLoggedIn) {
-//			    CommonUtils.login(0, null);
-//			}
-//		    }
-//		    display.setFilterInfo(filter.getFilterInfoText());
-//		    setConfessions(true);
-//		}
-//	    });
-//	    //Filter Help info
-//	    display.getConfessionFilterListBoxForHelp().addFocusHandler(new FocusHandler() {
-//		@Override
-//		public void onFocus(FocusEvent event) {
-//		    if(!ConfessionBox.isMobile) {
-//			HelpInfo.showHelpInfo(HelpInfo.type.CONFESSION_FILTER);
-//		    }
-//		}
-//	    });
-//	}
-
-	// Change filter selected text
-	ConfessionBox.eventBus.addHandler(FilterEvent.TYPE, new FilterEventHandler() {
-	    @Override
-	    public void filter(FilterEvent event) {
-		display.setFilterInfo(event.getSelectedFilter().getFilterInfoText());
-		filter = event.getSelectedFilter();
-		setConfessions(true);
-	    }
-	});
-
-	// Bind REFRESH Button
-//	display.getRefreshButton().addClickHandler(new ClickHandler() {
-//	    @Override
-//	    public void onClick(ClickEvent event) {
-//		CommonUtils.showApplicationLoad();
-//		setConfessions(true);
-//	    }
-//	});
     }
 
     @Override

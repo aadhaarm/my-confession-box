@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -51,9 +52,22 @@ public class CopyOfRegisterConfessionPresenter implements Presenter {
     public CopyOfRegisterConfessionPresenter(final Display display) {
 	super();
 	this.display = display;
-
+	
+	// Check for draft on load
+	checkForDraft();
+	
+	// Save confessions draft
+	saveTimer.schedule(5000);
+	
 	bind();
     }
+
+    Timer saveTimer = new Timer() {
+	@Override
+	public void run() {
+	    saveConfessionDraft();
+	}
+    };
 
     private void bind() {
 	display.getBtnSubmit().addClickHandler(new ClickHandler() {
@@ -198,5 +212,60 @@ public class CopyOfRegisterConfessionPresenter implements Presenter {
     public void go(HasWidgets container) {
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).clear();
 	RootPanel.get(Constants.DIV_MAIN_CONTENT).add(display.asWidget());		
+    }
+
+    /**
+     * Save confession
+     */
+    private void saveConfessionDraft() {
+	// Get confession to be saved
+	final Confession confession = getConfessionToBeSaved();
+	confession.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+
+	confession.setShareAsAnyn(display.getBtnHideIdentity().getValue());
+
+	if(display.getBtnDedicateConfession() != null && display.getFriendsSuggestBox().getSelectedUser() != null) {
+	    confession.setShareToUserIDForSave(display.getFriendsSuggestBox().getSelectedUser().getId());
+	}
+
+	if(display.getBtnDedicateConfession() != null && display.getRelationSuggestBox().getSelectedRelation() != null) {
+	    confession.setShareToRelationForSave(display.getRelationSuggestBox().getSelectedRelation().getDisplayText());
+	}
+
+	ConfessionBox.confessionService.registerConfessionDraft(confession, new AsyncCallback<Void>() {
+	    @Override
+	    public void onSuccess(Void result) {
+		saveTimer.schedule(5000);
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+	    }
+	});
+    }
+    
+    /**
+     * Check for draft on-load
+     */
+    private void checkForDraft() {
+	ConfessionBox.confessionService.getConfessionDraft(ConfessionBox.getLoggedInUserInfo().getUserId(), ConfessionBox.getLoggedInUserInfo().getId(), new AsyncCallback<Confession>() {
+	    @Override
+	    public void onSuccess(Confession result) {
+		if(result != null) {
+		    
+		    display.getTxtTitle().setText(result.getConfessionTitle());
+		    display.getTxtTitle().validate();
+
+		    display.getTxtConfession().setText(result.getConfession());
+		    display.getTxtConfession().validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
+		}
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("RegisterConfessionPresenter", "onFailure", caught);
+	    }
+	});
     }
 }

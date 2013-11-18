@@ -900,7 +900,7 @@ public class CommonUtils {
 	
 	// Button SKIP
 	Button btnSkip = new Button("SKIP");
-	btnSkip.addStyleName("floatRight");
+	btnSkip.addStyleName("floatLeft");
 	fPnlBody.add(btnSkip);
 	btnSkip.addClickHandler(new ClickHandler() {
 	    @Override
@@ -917,7 +917,8 @@ public class CommonUtils {
 		return "http://www.youtube.com/embed/y7ENfTax5eA";
 	    }
 	};
-	HTML html = new HTML(Templates.TEMPLATES.youtubeVideoPlayer(safeUri, "640", "360"));
+	String width = (Window.getClientWidth() - 20) + "";
+	HTML html = new HTML(Templates.TEMPLATES.youtubeVideoPlayer(safeUri, width, "360"));
 	fPnlBody.add(html);
 
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.ButtonElement;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.ParagraphElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +26,8 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateFeedToMeEvent;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.ui.widgets.PardonPopupPanel;
+import com.l3.CB.client.ui.widgets.ShareAnchor;
+import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.client.ui.widgets.comment.AddCommentTemplate;
 import com.l3.CB.client.ui.widgets.comment.CommentListTemplate;
 import com.l3.CB.client.util.CommonUtils;
@@ -129,14 +132,37 @@ public class ConfessionView extends Composite {
     @UiField
     ParagraphElement pardonBtnBlock;
 
+    /*
+     * Like, Share, Subscribe
+     */
+    @UiField(provided = true)
+    ShareAnchor ancShare;
+    @UiField(provided = true)
+    SubscribeAnchor ancSubscribe;
+    @UiField
+    DivElement divFBLike;
+
     public ConfessionView(Confession confession, boolean showUserControls, boolean isAnyn, 
 	    boolean showExtendedDetails, boolean showPardonHelpText) {
-	initWidget(uiBinder.createAndBindUi(this));
 	this.confession = confession;
 	this.isAnyn = isAnyn;
 	this.showUserControls = showUserControls;
 	this.showExtendedDetails = showExtendedDetails;
 	this.showPardonHelpText = showPardonHelpText;
+
+	// Get confession by user info
+	confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
+	if(confessedByUserInfo != null) {
+	    confession.setFbId(confessedByUserInfo.getId());
+	}
+
+	ancShare = new ShareAnchor(confession, confessedByUserInfo);
+	ancSubscribe = new SubscribeAnchor(confession.getConfId());
+	
+	/*
+	 * Init Widget
+	 */
+	initWidget(uiBinder.createAndBindUi(this));
 
 	btnHideConfession.getElement().setAttribute("data-uk-tooltip", "");
 	btnHideIdentity.getElement().setAttribute("data-uk-tooltip", "");
@@ -171,12 +197,6 @@ public class ConfessionView extends Composite {
 	     *  Confession Title
 	     */
 	    ancConfessionTitle.setText(confession.getConfessionTitle());
-
-	    // Get confession by user info
-	    confessedByUserInfo = FacebookUtil.getUserInfo(confession.getUserDetailsJSON());
-	    if(confessedByUserInfo != null) {
-		confession.setFbId(confessedByUserInfo.getId());
-	    }
 
 	    /*
 	     * User Name
@@ -231,6 +251,13 @@ public class ConfessionView extends Composite {
 	     * Enable Pardon Button
 	     */
 	    enablePardonButton();
+
+	    /*
+	     * FB LIKE & SEND
+	     */
+	    divFBLike.setAttribute("data-href",  FacebookUtil.getActivityUrl(confession.getConfId()));
+	    CommonUtils.parseXFBMLJS(mainDiv.getElement());
+
 	}
     }
 
@@ -322,8 +349,8 @@ public class ConfessionView extends Composite {
 		btnHideConfession.addStyleName("uk-button-primary");
 	    }
 	} else {
-		btnPreview.addStyleName("hide");
-		userCtrlBtnBlock.addClassName("hide");
+	    btnPreview.addStyleName("hide");
+	    userCtrlBtnBlock.addClassName("hide");
 	}
     }
 
@@ -490,10 +517,6 @@ public class ConfessionView extends Composite {
 	}
     }
 
-    public ConfessionView(String firstName) {
-	initWidget(uiBinder.createAndBindUi(this));
-    }
-
     @UiHandler("ancMore")
     void showMore(ClickEvent event) {
 	htmlConfessionText.setHTML(confession.getConfession());
@@ -570,28 +593,38 @@ public class ConfessionView extends Composite {
 
     @UiHandler("btnSameBoat")
     void onSameBoatVote(ClickEvent event) {
-	registerVote(Activity.SAME_BOAT, spanSameBoatNum, btnSameBoat);
+	startVote(Activity.SAME_BOAT, spanSameBoatNum, btnSameBoat);
     }
     @UiHandler("btnLame")
     void onLameVote(ClickEvent event) {
-	registerVote(Activity.LAME, spanLameNum, btnLame);
+	startVote(Activity.LAME, spanLameNum, btnLame);
+    }
+
+    /**
+     * @param activity
+     * @param sEleVote
+     * @param btnVote
+     */
+    private void startVote(final Activity activity, final SpanElement sEleVote, final Button btnVote) {
+	registerVote(activity, sEleVote, btnVote);
     }
     @UiHandler("btnRepAbuse")
     void onRepAbuseVote(ClickEvent event) {
-	registerVote(Activity.ABUSE, spanRepAbuseNum, btnRepAbuse);
+	startVote(Activity.ABUSE, spanRepAbuseNum, btnRepAbuse);
     }
     @UiHandler("btnShudBePar")
     void onShudBeParVote(ClickEvent event) {
-	registerVote(Activity.SHOULD_BE_PARDONED, spanShudBeParNum, btnShudBePar);
+	startVote(Activity.SHOULD_BE_PARDONED, spanShudBeParNum, btnShudBePar);
     }
     @UiHandler("btnShudNtBePar")
     void onShudNtBeParVote(ClickEvent event) {
-	registerVote(Activity.SHOULD_NOT_BE_PARDONED, spanShudNtBeParNum, btnShudNtBePar);
+	startVote(Activity.SHOULD_NOT_BE_PARDONED, spanShudNtBeParNum, btnShudNtBePar);
     }
     @UiHandler("btnSympathy")
     void onSympathyVote(ClickEvent event) {
-	registerVote(Activity.SYMPATHY, spanSympathyNum, btnSympathy);
+	startVote(Activity.SYMPATHY, spanSympathyNum, btnSympathy);
     }
+    
     @UiHandler("btnHideIdentity") 
     void onHideIdentityClick(ClickEvent event) {
 	ConfessionBox.confessionService.changeIdentityVisibility(ConfessionBox.getLoggedInUserInfo().getUserId(), 

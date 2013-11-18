@@ -24,7 +24,7 @@ public class ShareAnchor extends FlowPanel {
 	this.setStyleName("shareAnchorBar");
 	this.confession = confession;
 	this.confessedByUserInfo = confessedByUserInfo;
-	ancShare = new Anchor("Share on FB");
+	ancShare = new Anchor("Share");
 	if(ConfessionBox.isTouchEnabled) {
 	    ancShare.setStyleName(Constants.STYLE_CLASS_SHARE_LINK_TO_BTN);
 	}

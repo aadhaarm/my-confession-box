@@ -32,7 +32,6 @@ public class CommentListTemplate extends Composite {
 
     private CommentReadTemplate commentReadTemplate = null;
 
-    
     @UiField
     SpanElement numComments;
 
@@ -123,7 +122,7 @@ public class CommentListTemplate extends Composite {
 	CommentFilter commentFilter = new CommentFilter();
 	commentFilter.setConfId(confId);
 	commentFilter.setPage(page);
-	commentFilter.setPageSize(3);
+	commentFilter.setPageSize(2);
 	return commentFilter;
     }
 

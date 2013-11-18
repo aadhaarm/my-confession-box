@@ -178,8 +178,7 @@ div.helpInfoDiv {
 
 .infoModalPopupWindow {
 	background-color: white;
-	width: 700px;
-	padding: 20px;
+	padding: 5px;
 	z-index: 1000;
 	color: #333333;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
@@ -1018,6 +1017,10 @@ main_container a:hover {
 
 .floatRight {
 	float: right;
+}
+
+.floatLeft {
+	float: left;
 }
 
 img.footerLinkImage {

@@ -6,11 +6,13 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.l3.CB.client.ConfessionBox;
+import com.l3.CB.client.event.UpdateHPEvent;
+import com.l3.CB.client.event.UpdateHPEventHandler;
 
 public class HeaderPresenter implements Presenter {
 
     public interface Display {
-	public void initializeMenuCounts();
+	public void initializeMenuCounts(Integer count);
 	public HasClickHandlers getApplnTitle();
 	public ListBox getFilterListBox();
 	Widget asWidget();
@@ -26,36 +28,19 @@ public class HeaderPresenter implements Presenter {
     }
 
     private void bind() {
-	if(!ConfessionBox.isMobile) {
-	    //TODO
-	    //	    display.getApplnTitle().addClickHandler(new ClickHandler() {
-	    //		@Override
-	    //		public void onClick(ClickEvent event) {
-	    //		    Window.Location.assign(FacebookUtil.FB_APP_URL);
-	    //		}
-	    //	    });
-	}
+	// Handle update human points event
+	ConfessionBox.eventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
+	    @Override
+	    public void updateHPContact(UpdateHPEvent event) {
+		display.initializeMenuCounts(event.getUpdatedCount());
+	    }
+	});
     }
 
     @Override
     public void go(HasWidgets container) {
-	if(ConfessionBox.isMobile) {
-	    display.initializeMenuCounts();
-	}
+	display.initializeMenuCounts(null);
 	RootPanel.get("header").clear();
 	RootPanel.get("header").add(display.asWidget());		
     }
-
-    public void showFilter() {
-	if(display.getFilterListBox() != null) {
-	    display.getFilterListBox().setVisible(true);
-	}
-    }
-
-    public void hideFilter() {
-	if(display.getFilterListBox() != null) {
-	    display.getFilterListBox().setVisible(false);
-	}
-    }
-
 }

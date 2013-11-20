@@ -917,7 +917,10 @@ public class CommonUtils {
 		return "http://www.youtube.com/embed/y7ENfTax5eA";
 	    }
 	};
-	String width = (Window.getClientWidth() - 20) + "";
+	String width = "640";
+	if(Window.getClientWidth() < 700) {
+	    width = (Window.getClientWidth() - 20) + "";
+	}
 	HTML html = new HTML(Templates.TEMPLATES.youtubeVideoPlayer(safeUri, width, "360"));
 	fPnlBody.add(html);
 

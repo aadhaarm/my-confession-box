@@ -56,6 +56,7 @@ public class ConfessionView extends Composite {
     private boolean showExtendedDetails;
     private boolean showPardonHelpText;
     private PardonPopupPanel pardonPopupPanel;
+    private boolean isSubscribed;
 
     @UiField
     HTMLPanel mainDiv;
@@ -135,10 +136,13 @@ public class ConfessionView extends Composite {
     /*
      * Like, Share, Subscribe
      */
-    @UiField(provided = true)
-    ShareAnchor ancShare;
-    @UiField(provided = true)
-    SubscribeAnchor ancSubscribe;
+
+//    @UiField(provided = true)
+//    ShareAnchor ancShare;
+
+    @UiField
+    Button btnSubscribe;
+
     @UiField
     DivElement divFBLike;
 
@@ -156,9 +160,8 @@ public class ConfessionView extends Composite {
 	    confession.setFbId(confessedByUserInfo.getId());
 	}
 
-	ancShare = new ShareAnchor(confession, confessedByUserInfo);
-	ancSubscribe = new SubscribeAnchor(confession.getConfId());
-	
+//	ancShare = new ShareAnchor(confession, confessedByUserInfo);
+
 	/*
 	 * Init Widget
 	 */
@@ -174,6 +177,7 @@ public class ConfessionView extends Composite {
 	btnShudBePar.getElement().setAttribute("data-uk-tooltip", "");
 	btnShudNtBePar.getElement().setAttribute("data-uk-tooltip", "");
 	btnSympathy.getElement().setAttribute("data-uk-tooltip", "");
+	btnSubscribe.getElement().setAttribute("data-uk-tooltip", "");
 
 	getConfessionWidgetsSetup(confession, isAnyn);
     }
@@ -253,12 +257,70 @@ public class ConfessionView extends Composite {
 	    enablePardonButton();
 
 	    /*
-	     * FB LIKE & SEND
+	     * FB LIKE
 	     */
 	    divFBLike.setAttribute("data-href",  FacebookUtil.getActivityUrl(confession.getConfId()));
 	    CommonUtils.parseXFBMLJS(mainDiv.getElement());
 
+	    /*
+	     * Subscribe
+	     */
+	    if(ConfessionBox.isLoggedIn) {
+		ConfessionBox.confessionService.isSubscribed(confession.getConfId(), ConfessionBox.getLoggedInUserInfo().getUserId(), new AsyncCallback<Boolean>() {
+		    @Override
+		    public void onSuccess(Boolean result) {
+			isSubscribed = result;
+			setSubscribeBtnState();
+		    }
+		    @Override
+		    public void onFailure(Throwable caught) {
+			Error.handleError("SubscribeAnchor", "onFailure", caught);
+		    }
+		});
+	    } else {
+		setSubscribeBtnState();
+	    }
+
+
 	}
+    }
+
+    private void setSubscribeBtnState() {
+	if(isSubscribed) {
+	    btnSubscribe.addStyleName("uk-button-primary");
+	    btnSubscribe.setTitle("Subscribed!");
+	    btnSubscribe.setText("Subscribed");
+	} else {
+	    btnSubscribe.removeStyleName("uk-button-primary");
+	    btnSubscribe.setTitle("Subscribe to recieve confession updates");
+	    btnSubscribe.setText("Subscribe");
+	}
+    }
+
+    @UiHandler("btnSubscribe")
+    void onSubscribeButtonClick(ClickEvent event) {
+	if(ConfessionBox.isLoggedIn) {
+	    registerSubscription(confession.getConfId());
+	} else {
+	    CommonUtils.login(0);
+	}
+    }
+
+    /**
+     * @param confId
+     */
+    private void registerSubscription(final Long confId) {
+	ConfessionBox.confessionService.subscribe(confId, ConfessionBox.getLoggedInUserInfo().getUserId(), new Date(), new AsyncCallback<Boolean>() {
+	    @Override
+	    public void onSuccess(Boolean result) {
+		isSubscribed = !isSubscribed;						
+		setSubscribeBtnState();
+	    }
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("SubscribeAnchor", "onFailure", caught);
+	    }
+	});
     }
 
     private void enablePardonButton() {
@@ -624,7 +686,7 @@ public class ConfessionView extends Composite {
     void onSympathyVote(ClickEvent event) {
 	startVote(Activity.SYMPATHY, spanSympathyNum, btnSympathy);
     }
-    
+
     @UiHandler("btnHideIdentity") 
     void onHideIdentityClick(ClickEvent event) {
 	ConfessionBox.confessionService.changeIdentityVisibility(ConfessionBox.getLoggedInUserInfo().getUserId(), 

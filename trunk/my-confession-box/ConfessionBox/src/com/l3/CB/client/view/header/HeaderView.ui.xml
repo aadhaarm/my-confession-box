@@ -9,6 +9,20 @@
 	<g:HTMLPanel>
 		<div class="tm-headerbar uk-clearfix uk-hidden-small">
 			<h1 class="tm-logo">Confession Box</h1>
+			<p class="uk-article-meta">Speak your heart, Live Free..</p>
+			
+			<div style="float:right; margin-right:10px;">
+				<span class="uk-text-center">
+					<span>
+						<button title="" data-uk-tooltip=""
+							class="uk-button uk-button-success uk-button-small"
+							data-cached-title="About Human Points">Human Points</button>
+					</span>
+					<span ui:field="spanHumanPtCount"
+						class="uk-badge uk-badge-success uk-badge-notification" />
+				</span>
+			</div>
 		</div>
+
 	</g:HTMLPanel>
 </ui:UiBinder> 

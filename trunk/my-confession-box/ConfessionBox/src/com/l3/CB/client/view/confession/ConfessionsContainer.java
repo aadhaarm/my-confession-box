@@ -56,10 +56,6 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 	bind();
     }
 
-    public ConfessionsContainer(String firstName) {
-	initWidget(uiBinder.createAndBindUi(this));
-    }
-
     private void bind() {
 	ConfessionBox.eventBus.addHandler(ActivityEvent.TYPE, new ActivityEventHandler() {
 	    @Override
@@ -108,6 +104,7 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 	if(confessionsThisView == null) {
 	    confessionsThisView = new HashMap<Long, ConfessionView>();
 	}
+	
 	if (confessions != null && !confessions.isEmpty()) {
 	    for (final Confession confession : confessions) {
 		if(confession != null) {
@@ -123,9 +120,11 @@ public class ConfessionsContainer extends Composite implements ConfessionFeedPre
 	else {
 	    isMoreConfessionsAvailable = false;
 	}
-	if(confessionsThisView == null || confessionsThisView.isEmpty()) {
+	
+	if(confessionsThisView.isEmpty()) {
 	    fPnlConfContainer.add(CommonUtils.getEmptyWidget(filter.getEmptyPageText()));
 	}
+	
 	CommonUtils.removeApplicationLoad();
 	fPnlConfContainer.remove(loaderImage);
     }

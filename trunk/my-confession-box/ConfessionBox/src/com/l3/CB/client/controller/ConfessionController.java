@@ -26,7 +26,6 @@ import com.l3.CB.client.presenter.ConfessionForMeFeedPresenter;
 import com.l3.CB.client.presenter.CopyOfRegisterConfessionPresenter;
 import com.l3.CB.client.presenter.FooterPresenter;
 import com.l3.CB.client.presenter.HeaderPresenter;
-import com.l3.CB.client.presenter.HumanPointPresenter;
 import com.l3.CB.client.presenter.LoginStatusPresenter;
 import com.l3.CB.client.presenter.MenuPresenter;
 import com.l3.CB.client.presenter.MobileMenuPresenter;
@@ -36,7 +35,6 @@ import com.l3.CB.client.presenter.TextPresenter;
 import com.l3.CB.client.ui.widgets.ApplicationTextWidget;
 import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
-import com.l3.CB.client.view.ConfessionFeedView;
 import com.l3.CB.client.view.FooterView;
 import com.l3.CB.client.view.HumanPointView;
 import com.l3.CB.client.view.LoginStatusView;
@@ -54,7 +52,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
      * Application variables
      */
     private static HasWidgets container;
-    private static HumanPointPresenter humanPointPresenter = null;
     private static MenuPresenter menuPresenter = null;
     private static MobileMenuPresenter mobileMenuPresenter = null;
     private static HeaderPresenter headerPresenter = null;
@@ -120,12 +117,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    loginStatusPresenter.go(container);
 	}
 
-	// Initialize Human points
-	if(ConfessionBox.isLoggedIn) {
-	    humanPointPresenter = new HumanPointPresenter(new HumanPointView());
-	    humanPointPresenter.go(container);
-	}
-
 	// Initialize Footer
 	FooterPresenter footerPresenter = new FooterPresenter(new FooterView());
 	footerPresenter.go(container);
@@ -154,14 +145,6 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
     private void bind() {
 	// Listen all history new item addition
 	History.addValueChangeHandler(this);
-
-	// Handle update human points event
-	ConfessionBox.eventBus.addHandler(UpdateHPEvent.TYPE, new UpdateHPEventHandler() {
-	    @Override
-	    public void updateHPContact(UpdateHPEvent event) {
-		humanPointPresenter.updateHumanPoints(event.getUpdatedCount());
-	    }
-	});
 
 	// Update update menu event
 	ConfessionBox.eventBus.addHandler(UpdateMenuEvent.TYPE, new UpdateMenuEventHandler() {
@@ -234,7 +217,7 @@ public class ConfessionController implements Presenter, ValueChangeHandler<Strin
 	    if(presenter != null) {
 		presenter.go(container);
 	    } else {
-		presenter = new ConfessionFeedPresenter(new ConfessionFeedView());
+		presenter = new ConfessionFeedPresenter(new ConfessionsContainer());
 		presenter.go(container);
 	    }
 	}

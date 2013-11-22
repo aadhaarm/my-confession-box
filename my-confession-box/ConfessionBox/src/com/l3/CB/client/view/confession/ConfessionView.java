@@ -392,21 +392,21 @@ public class ConfessionView extends Composite {
 
 	    if(confession.isShareAsAnyn()) {
 		btnHideIdentity.addStyleName("uk-button-success");
-		btnHideIdentity.setText("Reveal Identity");
-		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
+		btnHideIdentity.setText("Hide Identity: ON");
+//		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	    } else {
 		btnHideIdentity.removeStyleName("uk-button-success");
-		btnHideIdentity.setText("Hide Identity");
-		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
+		btnHideIdentity.setText("Hide Identity: OFF");
+//		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	    }
 
 	    if(confession.isVisibleOnPublicWall()) {
-		btnHideConfession.setText("Hide Confession");
-		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
+		btnHideConfession.setText("Hide Confession: OFF");
+//		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
 		btnHideConfession.removeStyleName("uk-button-success");
 	    } else {
-		btnHideConfession.setText("Publish Confession");
-		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
+		btnHideConfession.setText("Hide Confession: ON");
+//		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
 		btnHideConfession.addStyleName("uk-button-success");
 	    }
 	} else {

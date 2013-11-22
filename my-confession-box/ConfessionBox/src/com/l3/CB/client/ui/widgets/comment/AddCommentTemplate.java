@@ -73,12 +73,20 @@ public class AddCommentTemplate extends Composite implements HasText {
     public AddCommentTemplate() {
 	initWidget(uiBinder.createAndBindUi(this));
 	pStatusMessage.addClassName("hide");
+
+	txtComment.getElement().setAttribute("placeholder", "write a comment");
+	txtComment.getElement().setAttribute("maxlength", "800");
+
 	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");
 	btnCommentAsAnyn.getElement().setAttribute("data-uk-tooltip", "");
     }
 
     public AddCommentTemplate(Long confId) {
 	initWidget(uiBinder.createAndBindUi(this));
+
+	txtComment.getElement().setAttribute("placeholder", "write a comment");
+	txtComment.getElement().setAttribute("maxlength", "800");
+
 	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");
 	btnCommentAsAnyn.getElement().setAttribute("data-uk-tooltip", "");
 	pStatusMessage.addClassName("hide");
@@ -174,7 +182,7 @@ public class AddCommentTemplate extends Composite implements HasText {
 		    public void onSuccess(Void result) {
 			timer.cancel();
 			timer.schedule(2000);
-			
+
 			timerShowMessage.cancel();
 			pStatusMessage.addClassName("show");
 			timerShowMessage.schedule(2000);

@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.Button;
 public class CBButton extends Button {
 
     boolean value;
+    
+    String buttonText;
 
     private CBButton() {
 	super();
@@ -33,10 +35,15 @@ public class CBButton extends Button {
      * 
      */
     private void setState() {
+	if(buttonText == null) {
+	    buttonText = this.getText();
+	}
 	if(value) {
-	    addStyleName("uk-button-primary");
+	    this.setText(buttonText + ": ON");
+	    addStyleName("uk-button-success");
 	} else {
-	    removeStyleName("uk-button-primary");
+	    this.setText(buttonText + ": OFF");
+	    removeStyleName("uk-button-success");
 	}
     }
 

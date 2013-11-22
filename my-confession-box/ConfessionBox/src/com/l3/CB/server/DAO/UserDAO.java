@@ -221,13 +221,16 @@ public class UserDAO {
 
     public static int updateHumanPoints(Long userId, int points, boolean updatePoints) {
 	int updatedHumanPoints = 0;
-	UserDO userDO = ofy().load().type(UserDO.class).id(userId).get();
-	if(userDO != null) {
-	    if(updatePoints) {
-		userDO.setHumanPoints(points + userDO.getHumanPoints());
-		ofy().save().entities(userDO).now();
+	if(userId != null && userId != 0) {
+
+	    UserDO userDO = ofy().load().type(UserDO.class).id(userId).get();
+	    if(userDO != null) {
+		if(updatePoints) {
+		    userDO.setHumanPoints(points + userDO.getHumanPoints());
+		    ofy().save().entities(userDO).now();
+		}
+		updatedHumanPoints = userDO.getHumanPoints();
 	    }
-	    updatedHumanPoints = userDO.getHumanPoints();
 	}
 	return updatedHumanPoints;
 

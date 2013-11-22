@@ -53,7 +53,6 @@ public class RelationSuggestBoxUI extends Composite {
 	    }
 	} else {
 	    relationSuggestBox.removeFromParent();
-	    relationSuggestList = new ListBox();
 	    relationSuggestList.addItem("Choose relation of this person to you");
 	    for (Relations relation : Relations.values()) {
 		relationMap.put(relation.getDisplayText(), relation);
@@ -62,17 +61,12 @@ public class RelationSuggestBoxUI extends Composite {
 	}
     }
 
-    public RelationSuggestBoxUI(String firstName) {
-	initWidget(uiBinder.createAndBindUi(this));
-    }
-
     public Relations getSelectedRelation() {
-	if(relationSuggestBox != null) {
+	if(Navigator.isJavaEnabled()) {
 	    return relationMap.get(CommonUtils.checkForNull(relationSuggestBox.getValue()));
-	} else if(relationSuggestList != null) {
+	} else {
 	    return relationMap.get(CommonUtils.checkForNull(relationSuggestList.getValue(relationSuggestList.getSelectedIndex())));
 	}
-	return null;
     }
 
     public boolean validate() {

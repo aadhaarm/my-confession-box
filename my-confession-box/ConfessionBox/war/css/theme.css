@@ -4735,14 +4735,14 @@ html {
 .tm-navbar,
 .tm-footer {
   margin-top: 25px;
-  margin-bottom: 25px;
+  margin-bottom: 0px;
 }
 @media (min-width: 1220px) {
   .tm-headerbar,
   .tm-navbar,
   .tm-footer {
-    margin-top: 35px;
-    margin-bottom: 35px;
+    margin-top: 15px;
+    margin-bottom: 0px;
   }
 }
 @media (max-width: 767px) {

@@ -122,8 +122,12 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 	
 	//Hide confirm panel
 	pConfirmPanel.addClassName(CLASS_HIDE);
-	// True on Load
+	
+	// Set on Load values
 	btnDedicateConfession.setValue(true);
+	btnHideIdentity.setValue(false);
+	btnRequestPardon.setValue(false);
+	
 	// Handle Preview
 	handlePreview();
 
@@ -131,6 +135,26 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
     }
 
     private void bind() {
+	friendsSuggestBox.getFriendsSuggestBox().addSelectionHandler(new SelectionHandler<MultiWordSuggestOracle.Suggestion>() {
+	    @Override
+	    public void onSelection(SelectionEvent<Suggestion> event) {
+		handlePreview();
+	    }
+	});
+	friendsSuggestBox.getFriendsSuggestBox().addValueChangeHandler(new ValueChangeHandler<String>() {
+	    @Override
+	    public void onValueChange(ValueChangeEvent<String> event) {
+		handlePreview();		
+	    }
+	});
+	friendsSuggestBox.getFriendsSuggestList().addChangeHandler(new ChangeHandler() {
+	    @Override
+	    public void onChange(ChangeEvent event) {
+		handlePreview();
+	    }
+	});
+
+	
 	relationSuggestBox.getRelationSuggestBox().addSelectionHandler(new SelectionHandler<MultiWordSuggestOracle.Suggestion>() {
 	    @Override
 	    public void onSelection(SelectionEvent<Suggestion> event) {
@@ -154,11 +178,18 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
     public void disableForm() {
 	txtConfession.disable();
 	txtTitle.disable();
+	btnDedicateConfession.setEnabled(false);
+	btnHideIdentity.setEnabled(false);
+	btnRequestPardon.setEnabled(false);
     }
 
     public void enableForm() {
 	txtConfession.enable();
 	txtTitle.enable();
+	btnDedicateConfession.setEnabled(true);
+	btnHideIdentity.setEnabled(true);
+	btnRequestPardon.setEnabled(true);
+
     }
 
     @UiHandler("btnHideIdentity")
@@ -197,10 +228,12 @@ public class RegisterConfessionUI extends Composite implements CopyOfRegisterCon
 	boolean validateConfession = txtConfession.validate(Constants.CONF_MIN_CHARS, Constants.CONF_MAX_CHARS);
 	boolean validateFriend = false;
 	boolean validateRelation = false;
+
 	if(btnDedicateConfession.getValue()) {
 	    validateFriend = friendsSuggestBox.validate(); 
 	    validateRelation = relationSuggestBox.validate(); 
 	}
+	
 	if(validateTitle && validateConfession) {
 	    if(btnDedicateConfession.getValue()) {
 		if(validateFriend && validateRelation) {

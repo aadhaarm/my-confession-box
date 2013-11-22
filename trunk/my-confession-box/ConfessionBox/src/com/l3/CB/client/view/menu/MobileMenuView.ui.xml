@@ -66,10 +66,10 @@
 					<g:Anchor ui:field="ancAbout" styleName="{style.handPointer}">About</g:Anchor>
 					<ul class="uk-nav-sub">
 						<li>
-							<g:Anchor styleName="{style.handPointer}" ui:field="ancRulBok">CB Rule Book</g:Anchor>
+							<g:Anchor styleName="{style.handPointer}" ui:field="ancPhilosophy">The Philosophy</g:Anchor>
 						</li>
 						<li>
-							<g:Anchor styleName="{style.handPointer}" ui:field="ancPhilosophy">The Philosophy</g:Anchor>
+							<g:Anchor styleName="{style.handPointer}" ui:field="ancRulBok">CB Rule Book</g:Anchor>
 						</li>
 						<li>
 							<g:Anchor styleName="{style.handPointer}" ui:field="ancAnonymous">Anonymous confession</g:Anchor>

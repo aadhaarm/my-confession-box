@@ -4,7 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
-import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -91,10 +91,12 @@ public class CBTextBoxUI extends Composite {
 
     public void disable() {
 	txtTitle.setEnabled(false);
+	txtTitle.setReadOnly(true);
     }
 
     public void enable() {
 	txtTitle.setEnabled(true);
+	txtTitle.setReadOnly(false);
     }
 
     @UiHandler("txtTitle")
@@ -102,10 +104,11 @@ public class CBTextBoxUI extends Composite {
 	if(defaultValue.equals(txtTitle.getText())) {
 	    txtTitle.setText("");
 	}
+	updateCharsLeft();
     }
 
     @UiHandler("txtTitle")
-    void handleKeyPress(KeyPressEvent event) {
+    void handleKeyPress(KeyUpEvent event) {
 	updateCharsLeft();
     }
 
@@ -114,6 +117,8 @@ public class CBTextBoxUI extends Composite {
 	if("".equals(txtTitle.getText())) {
 	    txtTitle.setText(defaultValue);
 	}
+	updateCharsLeft();
+	validate();
     }
 
     public void setText(String text) {

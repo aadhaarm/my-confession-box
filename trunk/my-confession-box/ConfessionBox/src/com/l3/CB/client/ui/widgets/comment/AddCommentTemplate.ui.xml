@@ -22,7 +22,7 @@
 
 		<p class="uk-form-row">
 			<g:TextArea ui:field="txtComment" width="75%"
-				visibleLines="2" styleName="uk-form-large uk-form-width-large"></g:TextArea>
+				visibleLines="2" styleName="uk-form-large uk-form-width-large" />
 
 			<g:Button styleName="uk-button uk-button-large" ui:field="btnSubmit">Submit</g:Button>
 		</p>

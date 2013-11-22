@@ -64,7 +64,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Please submit your confession here. (Your confession is never shared to any one unless you want it)")
     String registerPageTitle();
 
-    @DefaultStringValue("Un-Hide your identity to the world.")
+    @DefaultStringValue("Reveal your identity to the world.")
     String pardonPopupOpenIdentityCondition();
 
     @DefaultStringValue("Get ")
@@ -85,7 +85,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Pardoned")
     String pardonedStatus();
 
-    @DefaultStringValue("Un-Hide your Identity")
+    @DefaultStringValue("Reveal your Identity")
     String pardonPopupOpenIdentityConditionView();
 
     @DefaultStringValue("Choose the confessions you want to read.")
@@ -160,16 +160,16 @@ public interface CBText extends Constants {
     @DefaultStringValue("Please enter a valid title.")
     String confessionTitleErrorMessage();
 
-    @DefaultStringValue("Un-Hide your identity to the world by clicking this.")
+    @DefaultStringValue("Reveal your identity to the world by clicking this.")
     String unHideIdentityButtonTitleUserControl();
 
     @DefaultStringValue("Hide your identity from the world by clicking this.")
     String hideIdentityButtonTitleUserControl();
 
-    @DefaultStringValue("Hide your confession from the world.")
+    @DefaultStringValue("Hide your confession from the world by clicking this.")
     String hideConfessionButtonTitleUserControl();
 
-    @DefaultStringValue("Un-Hide your confession to the world.")
+    @DefaultStringValue("Publish your confession to the world by clicking this.")
     String unhideConfessionButtonTitleUserControl();
 
     @DefaultStringValue("Type your friend's name and choose from the options")

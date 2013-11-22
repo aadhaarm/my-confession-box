@@ -18,7 +18,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,8 +25,6 @@ import com.l3.CB.client.ConfessionBox;
 import com.l3.CB.client.event.UpdateFeedToMeEvent;
 import com.l3.CB.client.event.UpdateHPEvent;
 import com.l3.CB.client.ui.widgets.PardonPopupPanel;
-import com.l3.CB.client.ui.widgets.ShareAnchor;
-import com.l3.CB.client.ui.widgets.SubscribeAnchor;
 import com.l3.CB.client.ui.widgets.comment.AddCommentTemplate;
 import com.l3.CB.client.ui.widgets.comment.CommentListTemplate;
 import com.l3.CB.client.util.CommonUtils;
@@ -71,7 +68,7 @@ public class ConfessionView extends Composite {
     SpanElement spanDateTile;
 
     @UiField
-    HTML htmlConfessionText;
+    SpanElement htmlConfessionText;
 
     @UiField
     Anchor ancMore;
@@ -137,8 +134,8 @@ public class ConfessionView extends Composite {
      * Like, Share, Subscribe
      */
 
-//    @UiField(provided = true)
-//    ShareAnchor ancShare;
+    //    @UiField(provided = true)
+    //    ShareAnchor ancShare;
 
     @UiField
     Button btnSubscribe;
@@ -160,7 +157,7 @@ public class ConfessionView extends Composite {
 	    confession.setFbId(confessedByUserInfo.getId());
 	}
 
-//	ancShare = new ShareAnchor(confession, confessedByUserInfo);
+	//	ancShare = new ShareAnchor(confession, confessedByUserInfo);
 
 	/*
 	 * Init Widget
@@ -220,7 +217,9 @@ public class ConfessionView extends Composite {
 	    /*
 	     * Confession Text
 	     */
-	    htmlConfessionText.setHTML(CommonUtils.trunkate(confession.getConfession(), 200));
+	    String text = CommonUtils.trunkate(confession.getConfession(), 200);
+	    text = text.replace("\n", "<br/>");
+	    htmlConfessionText.setInnerHTML(text);
 	    if(confession.getConfession() != null && confession.getConfession().length() < 200) {
 		ancMore.setVisible(false);
 	    }
@@ -392,11 +391,11 @@ public class ConfessionView extends Composite {
 	if(this.showUserControls) {
 
 	    if(confession.isShareAsAnyn()) {
-		btnHideIdentity.addStyleName("uk-button-primary");
-		btnHideIdentity.setText("Un-Hide Identity");
+		btnHideIdentity.addStyleName("uk-button-success");
+		btnHideIdentity.setText("Reveal Identity");
 		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	    } else {
-		btnHideIdentity.removeStyleName("uk-button-primary");
+		btnHideIdentity.removeStyleName("uk-button-success");
 		btnHideIdentity.setText("Hide Identity");
 		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	    }
@@ -404,11 +403,11 @@ public class ConfessionView extends Composite {
 	    if(confession.isVisibleOnPublicWall()) {
 		btnHideConfession.setText("Hide Confession");
 		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
-		btnHideConfession.removeStyleName("uk-button-primary");
+		btnHideConfession.removeStyleName("uk-button-success");
 	    } else {
-		btnHideConfession.setText("Un-Hide Confession");
+		btnHideConfession.setText("Publish Confession");
 		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
-		btnHideConfession.addStyleName("uk-button-primary");
+		btnHideConfession.addStyleName("uk-button-success");
 	    }
 	} else {
 	    btnPreview.addStyleName("hide");
@@ -440,11 +439,11 @@ public class ConfessionView extends Composite {
 		    switch (confessionShare.getPardonStatus()) {
 		    case PARDONED:
 			// Set Badge Text with time stamp
-			badgePardonStatus.setInnerText(ConfessionBox.cbText.pardonStatusLabel()
-				+ " "
-				+ ConfessionBox.cbText.dateTimeStampPrefix()
-				+ " "
-				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()));
+			badgePardonStatus.setInnerText(ConfessionBox.cbText.pardonStatusLabel());
+//				+ " "
+//				+ ConfessionBox.cbText.dateTimeStampPrefix()
+//				+ " "
+//				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()))
 			// Set tool-tip
 			badgePardonStatus.setTitle("Confessor has been pardoned by " 
 				+ CommonUtils.getPronoun(confession.getGender()) 
@@ -581,7 +580,9 @@ public class ConfessionView extends Composite {
 
     @UiHandler("ancMore")
     void showMore(ClickEvent event) {
-	htmlConfessionText.setHTML(confession.getConfession());
+	String text = confession.getConfession();
+	text = text.replace("\n", "<br/>");
+	htmlConfessionText.setInnerHTML(text);
 	ancMore.setVisible(false);
     }
 

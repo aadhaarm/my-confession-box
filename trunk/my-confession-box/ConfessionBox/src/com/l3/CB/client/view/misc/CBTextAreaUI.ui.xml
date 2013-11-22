@@ -8,8 +8,6 @@
 	</ui:style>
 	<g:HTMLPanel>
 		<g:TextArea ui:field="textArea" height="200px" width="100%" styleName="uk-width-1-1" />
-			
-		<g:RichTextArea ui:field="richTextArea" height="200px" width="100%" styleName="uk-width-1-1"></g:RichTextArea>
 
 		<span ui:field="spanErrorMessage" style="float:left" class="uk-article-meta"/>
 			

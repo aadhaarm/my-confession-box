@@ -27,7 +27,7 @@
 								<li>You can 'Dedicate' your confession to any of your Facebook
 									Friends. Your firend will recieve a private message on his/her
 									facebook account with your confession.</li>
-								<li>If you have confessed anonymously, noone can see your identity
+								<li>If you have confessed anonymously, no one can see your identity
 									except the one to whom you have dedicated your confession.</li>
 								<li>Your confessions are not posted on your or anyone's else's
 									Facebook wall. However, you can share or like your confessions to
@@ -47,8 +47,7 @@
 				<h4 align="center">Confession Sharing Options</h4>
 
 				<div>
-					<w:CBButton ui:field="btnHideIdentity" title="Press to confess anonymously">Hide My
-						Identity</w:CBButton>
+					<w:CBButton ui:field="btnHideIdentity" title="Press to confess anonymously">Hide My Identity</w:CBButton>
 
 					<w:CBButton ui:field="btnDedicateConfession"
 						title="Press to Dedicate your confession to someone you know">Dedicate Confession</w:CBButton>

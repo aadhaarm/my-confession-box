@@ -240,4 +240,12 @@ public class FriendsSuggestBoxUI extends Composite {
 	    imgFriend.setVisible(false);
 	}
     }
+
+    public SuggestBox getFriendsSuggestBox() {
+        return friendsSuggestBox;
+    }
+
+    public ListBox getFriendsSuggestList() {
+        return friendsSuggestList;
+    }
 }

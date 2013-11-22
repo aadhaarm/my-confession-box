@@ -48,7 +48,7 @@
 				<!-- <p> <w:ShareAnchor ui:field="ancShare" styleName="{style.handPointer}" /> </p> -->
 
 				<p>
-					<g:HTML ui:field="htmlConfessionText"></g:HTML>
+					<span ui:field="htmlConfessionText"></span>
 					<g:Anchor ui:field="ancMore" styleName="{style.handPointer}">more</g:Anchor>
 				</p>
 

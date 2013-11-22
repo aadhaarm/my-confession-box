@@ -166,7 +166,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("Hide your identity from the world by clicking this.")
     String hideIdentityButtonTitleUserControl();
 
-    @DefaultStringValue("Hide your confession from the world by clicking this.")
+    @DefaultStringValue("Hide Confession from public wall")
     String hideConfessionButtonTitleUserControl();
 
     @DefaultStringValue("Publish your confession to the world by clicking this.")

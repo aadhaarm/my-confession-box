@@ -92,12 +92,12 @@
 
 				<p ui:field="userCtrlBtnBlock">
 					<g:Button ui:field="btnHideIdentity"
-						styleName="{style.handPointer} uk-button uk-button-large" title="Hide your identity from the world.">
+						styleName="{style.handPointer} uk-button uk-button-large" title="Hide identity from the world.">
 						Hide identity
 					</g:Button>
 
 					<g:Button ui:field="btnHideConfession"
-						styleName="{style.handPointer} uk-button uk-button-large" title="Hide your confession from the world">
+						styleName="{style.handPointer} uk-button uk-button-large" title="Hide Confession from public wall">
 						Hide confession
 					</g:Button>
 				</p>

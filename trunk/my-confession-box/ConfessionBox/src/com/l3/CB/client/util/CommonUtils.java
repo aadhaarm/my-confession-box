@@ -828,7 +828,7 @@ public class CommonUtils {
 	ConfessionBox.isMobile = isMobile();
 	ConfessionBox.isTouchEnabled = isTouchEnabled();
 	if(!ConfessionBox.isMobile) {
-	    setCssLinkHref("themeCssElement", "css/cbstyle.css?v=1.4");
+	    setCssLinkHref("themeCssElement", "css/cbstyle.css?v=1.6");
 	}
     }
 

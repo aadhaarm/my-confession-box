@@ -74,7 +74,7 @@ public class AddCommentTemplate extends Composite implements HasText {
 	initWidget(uiBinder.createAndBindUi(this));
 	pStatusMessage.addClassName("hide");
 
-	txtComment.getElement().setAttribute("placeholder", "write a comment");
+	txtComment.getElement().setAttribute("placeholder", "Write a comment to the above confession");
 	txtComment.getElement().setAttribute("maxlength", "800");
 
 	btnSubmit.getElement().setAttribute("data-uk-tooltip", "");

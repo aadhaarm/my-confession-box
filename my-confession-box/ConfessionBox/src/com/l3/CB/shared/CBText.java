@@ -322,6 +322,9 @@ public interface CBText extends Constants {
     @DefaultStringValue("You need to login and provide required permissions to the Confession Box.")
     String requireLoginToBeActiveInfoMessage();
 
+    @DefaultStringValue("You need to login to participate on Confession Box.")
+    String requireLoginToBeActiveInfoMessage_2();
+    
     @DefaultStringValue("Since")
     String dateTimeStampPrefix();
 

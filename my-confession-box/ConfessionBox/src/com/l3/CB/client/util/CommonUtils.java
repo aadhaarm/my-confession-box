@@ -150,14 +150,16 @@ public class CommonUtils {
 
     public static void login(int i) {
 	String confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
+	if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage_2())) {
 
-	if(Navigator.isJavaEnabled()) {
-	    loginInFB(true, "");
-	} else {
-	    if(null != confId){
-		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+	    if(Navigator.isJavaEnabled()) {
+		loginInFB(true, "");
 	    } else {
-		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+		if(null != confId){
+		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
+		} else {
+		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
+		}
 	    }
 	}
     }
@@ -890,14 +892,14 @@ public class CommonUtils {
           link.href = url; 
         } 
     }-*/;  
- 
+
     public static PopupPanel introductionCB() {
 	final PopupPanel pPnlIntroduction = new PopupPanel(false);
 	pPnlIntroduction.setGlassEnabled(true);
 	pPnlIntroduction.setStyleName("infoModalPopupWindow");
-	
+
 	FlowPanel fPnlBody = new FlowPanel();
-	
+
 	// Button SKIP
 	Button btnSkip = new Button("SKIP");
 	btnSkip.addStyleName("floatLeft");

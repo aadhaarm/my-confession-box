@@ -47,6 +47,8 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     @UiField
     Anchor ancAbout;
     @UiField
+    Anchor ancAboutCB;
+    @UiField
     Anchor ancPhilosophy;
     @UiField
     Anchor ancAnonymous;
@@ -169,6 +171,11 @@ public class MenuView extends Composite implements MenuPresenter.Display {
     }
     @UiHandler("ancAbout")
     void onAboutClick(ClickEvent event) {
+	makeThisLinkActive(liAbout);
+	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ABOUT_CB);
+    }
+    @UiHandler("ancAboutCB")
+    void onAboutCBClick(ClickEvent event) {
 	makeThisLinkActive(liAbout);
 	CommonUtils.fireHistoryEvent(Constants.HISTORY_ITEM_ABOUT_CB);
     }

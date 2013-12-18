@@ -84,6 +84,9 @@
 							<div class="uk-width-1-1">
 								<ul class="uk-nav uk-nav-navbar">
 									<li>
+										<g:Anchor styleName="{style.handPointer}" ui:field="ancAboutCB">About Confession Box</g:Anchor>
+									</li>
+									<li>
 										<g:Anchor styleName="{style.handPointer}" ui:field="ancPhilosophy">The Philosophy</g:Anchor>
 									</li>
 									<li>

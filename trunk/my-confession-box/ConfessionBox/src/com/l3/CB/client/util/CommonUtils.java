@@ -150,18 +150,18 @@ public class CommonUtils {
 
     public static void login(int i) {
 	String confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
-	if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage_2())) {
+	//	if(Window.confirm(ConfessionBox.cbText.requireLoginToBeActiveInfoMessage_2())) {
 
-	    if(Navigator.isJavaEnabled()) {
-		loginInFB(true, "");
+	if(Navigator.isJavaEnabled()) {
+	    loginInFB(true, "");
+	} else {
+	    if(null != confId){
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
 	    } else {
-		if(null != confId){
-		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl(confId));
-		} else {
-		    CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
-		}
+		CommonUtils.redirect(FacebookUtil.getAuthorizeUrl());
 	    }
 	}
+	//	}
     }
 
     public static void login(int i, String hash) {

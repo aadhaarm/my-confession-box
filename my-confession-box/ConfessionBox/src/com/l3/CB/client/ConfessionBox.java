@@ -78,11 +78,11 @@ public class ConfessionBox implements EntryPoint {
 	// Decide whether to consider device screen to be small or large?
 	CommonUtils.setupScreen();
 	
-//	if(!isMobile) {
-//	    // Introduce App
-//	    PopupPanel pPnlIntro = CommonUtils.introductionCB();
-//	    pPnlIntro.center();
-//	}
+	if(!isMobile) {
+	    // Introduce App
+	    PopupPanel pPnlIntro = CommonUtils.introductionCB();
+	    pPnlIntro.center();
+	}
 	
 	// Application title/LOGO image
 	imgLogo = new Image(Constants.IMAGE_APPLICATION_LOGO_PATH);
@@ -112,8 +112,8 @@ public class ConfessionBox implements EntryPoint {
 	    // Login user and initialize application
 	    loginAndInitializeApplication(authCode);
 	} else {
-	    proceedToApp(confessionService, facebookService, eventBus);
-//    	    initializeUserInfo(true);
+//	    proceedToApp(confessionService, facebookService, eventBus);
+    	    initializeUserInfo(true);
 	}
     }
 

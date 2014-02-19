@@ -15,8 +15,8 @@ public class FacebookUtil {
     public static final String FB_GRAPH_URL = "https://graph.facebook.com/";
     public static final String FB_FRIENDS_URL = FB_GRAPH_URL + "me/friends?";
     public static final String FB_USER_URL = FB_GRAPH_URL + "me?";
-    public static String FB_APP_URL = "http://apps.facebook.com/fbconfessbeta/";
-    public static String APP_REDIRECT_URL = "http://v2-fbconfess.appspot.com/";
+    public static String FB_APP_URL = "https://apps.facebook.com/fbconfessbeta/";
+    public static String APP_REDIRECT_URL = "https://v2-fbconfess.appspot.com/";
 
 
     //    public static final String APPLICATION_ID = "153945264667385"; // replace with real values from Facebook app configuration

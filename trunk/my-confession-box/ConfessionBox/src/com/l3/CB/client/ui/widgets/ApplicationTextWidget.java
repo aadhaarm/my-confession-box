@@ -126,7 +126,7 @@ public class ApplicationTextWidget {
 	});
 	sPnlContent.add(close);
 
-	sPnlContent.add(new HTML("<b>PRIVACY POLICY</b>: This Privacy Policy governs the manner in which Confession Box collects, uses, maintains and discloses information collected from users (each, a \"User\") of the http://apps.facebook.com/fbconfess#privacy website (\"Site\"). This privacy policy applies to the Site and all products and services offered by Confession Box.<br/>" +
+	sPnlContent.add(new HTML("<b>PRIVACY POLICY</b>: This Privacy Policy governs the manner in which Confession Box collects, uses, maintains and discloses information collected from users (each, a \"User\") of the https://apps.facebook.com/fbconfess#privacy website (\"Site\"). This privacy policy applies to the Site and all products and services offered by Confession Box.<br/>" +
 		"<b>Personal identification information</b><br/>" +
 		"We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name. Users may, however, visit our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.<br/>" +
 		"<b>Non-personal identification information</b><br/>" +
@@ -150,7 +150,7 @@ public class ApplicationTextWidget {
 		"By using this Site, you signify your acceptance of this policy. If you do not agree to this policy, please do not use our Site. Your continued use of the Site following the posting of changes to this policy will be deemed your acceptance of those changes.<br/>" +
 		"<b>Contacting us</b><br/>" +
 		"If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us at:<br/>" +
-		"Confession Box http://apps.facebook.com/fbconfess#privacy<br/>" +
+		"Confession Box https://apps.facebook.com/fbconfess#privacy<br/>" +
 		"This document was last updated on March 03, 2013<br/>" +
 		"Privacy policy created by Generate Privacy Policy"));
 	pPnlPrivacy.add(sPnlContent);
@@ -355,7 +355,7 @@ public class ApplicationTextWidget {
     }
 
     public static String getPrivacyPolicyTextBody() {
-	return "This Privacy Policy governs the manner in which Confession Box collects, uses, maintains and discloses information collected from users (each, a \"User\") of the http://apps.facebook.com/fbconfess#privacy website (\"Site\"). This privacy policy applies to the Site and all products and services offered by Confession Box.<br/>" +
+	return "This Privacy Policy governs the manner in which Confession Box collects, uses, maintains and discloses information collected from users (each, a \"User\") of the https://apps.facebook.com/fbconfess#privacy website (\"Site\"). This privacy policy applies to the Site and all products and services offered by Confession Box.<br/>" +
 		"<b>Personal identification information</b><br/>" +
 		"We may collect personal identification information from Users in a variety of ways, including, but not limited to, when Users visit our site, register on the site, and in connection with other activities, services, features or resources we make available on our Site. Users may be asked for, as appropriate, name. Users may, however, visit our Site anonymously. We will collect personal identification information from Users only if they voluntarily submit such information to us. Users can always refuse to supply personally identification information, except that it may prevent them from engaging in certain Site related activities.<br/>" +
 		"<b>Non-personal identification information</b><br/>" +
@@ -379,7 +379,7 @@ public class ApplicationTextWidget {
 		"By using this Site, you signify your acceptance of this policy. If you do not agree to this policy, please do not use our Site. Your continued use of the Site following the posting of changes to this policy will be deemed your acceptance of those changes.<br/>" +
 		"<b>Contacting us</b><br/>" +
 		"If you have any questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us at:<br/>" +
-		"Confession Box http://apps.facebook.com/fbconfess#privacy<br/>" +
+		"Confession Box https://apps.facebook.com/fbconfess#privacy<br/>" +
 		"This document was last updated on March 03, 2013<br/>" +
 		"Privacy policy created by Generate Privacy Policy";
     }

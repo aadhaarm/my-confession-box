@@ -319,7 +319,7 @@ public interface CBText extends Constants {
     @DefaultStringValue("You are logged out now!")
     String logoutInfoMessage();
 
-    @DefaultStringValue("You need to login and provide required permissions to the Confession Box.")
+    @DefaultStringValue("Please login and provide required permissions to the Confession Box.")
     String requireLoginToBeActiveInfoMessage();
 
     @DefaultStringValue("You need to login to participate on Confession Box.")

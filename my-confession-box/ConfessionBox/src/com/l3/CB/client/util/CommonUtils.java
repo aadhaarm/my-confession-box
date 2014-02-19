@@ -902,7 +902,8 @@ public class CommonUtils {
 
 	// Button SKIP
 	Button btnSkip = new Button("SKIP");
-	btnSkip.addStyleName("floatLeft");
+	btnSkip.addStyleName("floatRight");
+	btnSkip.addStyleName("uk-button");
 	fPnlBody.add(btnSkip);
 	btnSkip.addClickHandler(new ClickHandler() {
 	    @Override

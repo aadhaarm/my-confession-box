@@ -912,11 +912,11 @@ public class CommonUtils {
 	});
 
 	// Video player
-	//<iframe width="640" height="360" src="http://www.youtube.com/embed/y7ENfTax5eA" frameborder="0" allowfullscreen></iframe>
+	//<iframe width="640" height="360" src="https://www.youtube.com/embed/y7ENfTax5eA" frameborder="0" allowfullscreen></iframe>
 	SafeUri safeUri = new SafeUri() {
 	    @Override
 	    public String asString() {
-		return "http://www.youtube.com/embed/y7ENfTax5eA";
+		return "https://www.youtube.com/embed/y7ENfTax5eA";
 	    }
 	};
 	String width = "640";

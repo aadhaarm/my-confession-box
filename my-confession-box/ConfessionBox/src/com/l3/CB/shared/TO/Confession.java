@@ -66,6 +66,8 @@ public class Confession implements Serializable {
 
     private long numOfShouldNotBePardonedVote;
 
+    private boolean isSelected;
+    
     public Confession() {
 	super();
     }
@@ -324,5 +326,13 @@ public class Confession implements Serializable {
 
     public void setOnlyDedicate(boolean onlyDedicate) {
         this.onlyDedicate = onlyDedicate;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
     }
 }

@@ -67,277 +67,66 @@ public class ConfessionBasicDAO {
 	ofy().save().entities(confessionShareDO).now();
 	confessedTo.setShareId(confessionShareDO.getShareId());
 	return confessedTo;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    ConfessionShareDO confessionShareDO = getConfessedTo(confessedTo);
-	//	    confessionShareDO.setConfId(confId);
-	//	    pm.makePersistent(confessionShareDO);
-	//	    confessedTo.setShareId(confessionShareDO.getShareId());
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while registering confession share:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
-
-    //    private static ConfessionShareDO getConfessedTo(ConfessionShare confessedTo) {
-    //	ConfessionShareDO confessionShareDO = null;
-    //	if(confessedTo != null) {
-    //	    confessionShareDO = new ConfessionShareDO();
-    //	    confessionShareDO.setUserId(confessedTo.getUserId());
-    //	    confessionShareDO.setTimeStamp(confessedTo.getTimeStamp());
-    //	    if(confessedTo.getRelation() != null) {
-    //		confessionShareDO.setRelation(confessedTo.getRelation().name());
-    //	    }
-    //	}
-    //	return confessionShareDO;
-    //    }
-
-    //    private static ConfessionDO getConfessionDO(Confession confession) {
-    //	if (confession != null) {
-    //	    ConfessionDO confessionDO = new ConfessionDO();
-    //	    confessionDO.setUserId(confession.getUserId());
-    //	    confessionDO.setShareAsAnyn(confession.isShareAsAnyn());
-    //	    confessionDO.setConfessionTitle(confession.getConfessionTitle());
-    //	    confessionDO.setConfession(new Text(confession.getConfession()));
-    //	    confessionDO.setTimeStamp(confession.getTimeStamp());
-    //	    confessionDO.setLastUpdateTimeStamp(confession.getTimeStamp());
-    //	    confessionDO.setUserIp(confession.getUserIp());
-    //	    confessionDO.setLocale(confession.getLocale());
-    //	    return confessionDO;
-    //	}
-    //	return null;
-    //    }
-
-    //    public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
-    //        int x = Random.nextInt(clazz.getEnumConstants().length);
-    //        return clazz.getEnumConstants()[x];
-    //    }    
 
     @SuppressWarnings("unchecked")
     public static List<Confession> getConfessions(int page, int pageSize, Filters filter, String locale) {
 	List<Confession> confessions = null;
 
-	com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
+	if(page == 0 && filter.equals(Filters.ALL)) {
+	    // Add 5 selected confessions
+	    com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
+	    queryOfy = queryOfy.filter("isSelected", true);
+	    queryOfy = queryOfy.offset(page * pageSize).limit(pageSize);	
 
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
-	//	    query.setOrdering("lastUpdateTimeStamp desc");
+	    confessions = new ArrayList<Confession>();
+	    for (ConfessionDO confessionDO : queryOfy) {
+		confessions.add(confessionDO.toConfessionTO());
+	    }
+	} else {
+	    com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
+	    switch (filter) {
+	    case LOCALE_SPECIFIC:
+		queryOfy = queryOfy.filter("locale", locale);
+		break;
+	    case OPEN:
+		queryOfy = queryOfy.filter("shareAsAnyn", false);
+		break;
+	    case CLOSED:
+		queryOfy = queryOfy.filter("shareAsAnyn", true);
+		break;
+	    case MOST_SAME_BOATS:
+		queryOfy = queryOfy.order("-numOfSameBoatVote");
+		break;
+	    case MOST_LAME:
+		queryOfy = queryOfy.order("-numOfLameVote");
+		break;
+	    case MOST_SYMPATHY:
+		queryOfy = queryOfy.order("-numOfSympathyVote");
+		break;
+	    case MOST_SHOULD_BE_PARDONED:
+		queryOfy = queryOfy.order("-numOfShouldBePardonedVote");
+		break;
+	    case MOST_SHOULD_NOT_BE_PARDONED:
+		queryOfy = queryOfy.order("-numOfShouldNotBePardonedVote");
+		break;
+	    case ALL:
+		queryOfy = queryOfy.order("-lastUpdateTimeStamp");
+		break;
+	    case MOST_VOTED:
+		queryOfy = queryOfy.order("-numOfTotalVote");
+		break;
+	    default:
+		queryOfy = queryOfy.order("-lastUpdateTimeStamp");
+		break;
+	    }
 
-	//	    if(filter.equals(Filters.RANDOM)) {
-	//		filter = randomEnum(Filters.class);
-	//	    }
+	    confessions = new ArrayList<Confession>();
 
-	switch (filter) {
-	case LOCALE_SPECIFIC:
-	    queryOfy = queryOfy.filter("locale", locale);
-
-	    //		query.setFilter("isVisibleOnPublicWall == status && locale == lang");
-	    //		query.declareParameters("String status" + ", "  + "String lang");
-	    //		List<ConfessionDO> resultSet1 = null;
-	    //		resultSet1 = (List<ConfessionDO>) query.execute(true, locale);
-	    //		if (resultSet1 != null && !resultSet1.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet1.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case OPEN:
-	    queryOfy = queryOfy.filter("shareAsAnyn", false);
-
-	    //		query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
-	    //		query.declareParameters("String status" + ", "  + "String closed");
-	    //		List<ConfessionDO> resultSet2 = null;
-	    //		resultSet2 = (List<ConfessionDO>) query.execute(true, false);
-	    //		if (resultSet2 != null && !resultSet2.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet2.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case CLOSED:
-	    queryOfy = queryOfy.filter("shareAsAnyn", true);
-
-	    //		query.setFilter("isVisibleOnPublicWall == status && shareAsAnyn == closed");
-	    //		query.declareParameters("String status" + ", "  + "String closed");
-	    //		List<ConfessionDO> resultSet3 = null;
-	    //		resultSet3 = (List<ConfessionDO>) query.execute(true, true);
-	    //		if (resultSet3 != null && !resultSet3.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet3.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case MOST_SAME_BOATS:
-	    queryOfy = queryOfy.order("-numOfSameBoatVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfSameBoatVote desc");					
-	    //		List<ConfessionDO> resultSet4 = null;
-	    //		resultSet4 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet4 != null && !resultSet4.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet4.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case MOST_LAME:
-	    queryOfy = queryOfy.order("-numOfLameVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfLameVote desc");					
-	    //		List<ConfessionDO> resultSet5 = null;
-	    //		resultSet5 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet5 != null && !resultSet5.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet5.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case MOST_SYMPATHY:
-	    queryOfy = queryOfy.order("-numOfSympathyVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfSympathyVote desc");					
-	    //		List<ConfessionDO> resultSet6 = null;
-	    //		resultSet6 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet6 != null && !resultSet6.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet6.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case MOST_SHOULD_BE_PARDONED:
-	    queryOfy = queryOfy.order("-numOfShouldBePardonedVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfShouldBePardonedVote desc");					
-	    //		List<ConfessionDO> resultSet7 = null;
-	    //		resultSet7 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet7 != null && !resultSet7.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet7.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-
-	case MOST_SHOULD_NOT_BE_PARDONED:
-	    queryOfy = queryOfy.order("-numOfShouldNotBePardonedVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfShouldNotBePardonedVote desc");					
-	    //		List<ConfessionDO> resultSet8 = null;
-	    //		resultSet8 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet8 != null && !resultSet8.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet8.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case ALL:
-	    queryOfy = queryOfy.order("-lastUpdateTimeStamp");
-	    //		List<ConfessionDO> resultSet9 = null;
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		resultSet9 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet9 != null && !resultSet9.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet9.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	case MOST_VOTED:
-	    queryOfy = queryOfy.order("-numOfTotalVote");
-
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		query.setOrdering("numOfTotalVote desc");					
-	    //		List<ConfessionDO> resultSet10 = null;
-	    //		resultSet10 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet10 != null && !resultSet10.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet10.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	default:
-	    queryOfy = queryOfy.order("-lastUpdateTimeStamp");
-
-	    //		List<ConfessionDO> resultSet11 = null;
-	    //		query.setFilter("isVisibleOnPublicWall == status");
-	    //		query.declareParameters("String status");
-	    //		resultSet11 = (List<ConfessionDO>) query.execute(true);
-	    //		if (resultSet11 != null && !resultSet11.isEmpty()) {
-	    //		    confessions = new ArrayList<Confession>();
-	    //		    Iterator<ConfessionDO> it = resultSet11.iterator();
-	    //		    while (it.hasNext()) {
-	    //			ConfessionDO confessionDO = it.next();
-	    //			Confession confession = confessionDO.toConfessionTO();
-	    //			confessions.add(confession);
-	    //		    }
-	    //		}
-	    break;
-	}
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confessions for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-
-	confessions = new ArrayList<Confession>();
-	queryOfy = queryOfy.offset(page * pageSize).limit(pageSize);	
-	for (ConfessionDO confessionDO : queryOfy) {
-	    confessions.add(confessionDO.toConfessionTO());
+	    queryOfy = queryOfy.offset(page * pageSize).limit(pageSize);	
+	    for (ConfessionDO confessionDO : queryOfy) {
+		confessions.add(confessionDO.toConfessionTO());
+	    }
 	}
 
 	return confessions;
@@ -864,7 +653,9 @@ public class ConfessionBasicDAO {
 	    confessionDO.setConfession(new Text(confession.getConfession()));
 	    confessionDO.setUserIp(confession.getUserIp());
 	    confessionDO.setLastUpdateTimeStamp(confession.getUpdateTimeStamp());
+	    confessionDO.setSelected(confession.isSelected());
 	    ofy().save().entities(confessionDO).now();
+
 	    confession = confessionDO.toConfessionTO();
 	}
 	return confession;

@@ -11,6 +11,7 @@ import com.l3.CB.server.utils.ServerUtils;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.Filters;
 import com.l3.CB.shared.TO.UserInfo;
@@ -236,19 +237,19 @@ public class ConfessionManager {
 	return confessions;
     }
 
-    public static void changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp) {
-	if(UserManager.validateUser(userId, fbId)) {
-	    Confession confession = ConfessionOtherDAO.changeVisibility(userId, confId, shareAnyn);
-	    PardonManager.validateIfAllConditionsMet(confId, updateTimeStamp, confession, null);
-	    CacheManager.flushConfession(confId);
+    public static void changeIdentityVisibility(ConfessionPackage confessionPackage) {
+	if(confessionPackage.isAdmin() || UserManager.validateUser(confessionPackage.getUserId(), confessionPackage.getFbId())) {
+	    Confession confession = ConfessionOtherDAO.changeVisibility(confessionPackage.getUserId(), confessionPackage.getConfId(), confessionPackage.isVisible());
+	    PardonManager.validateIfAllConditionsMet(confessionPackage.getConfId(), confessionPackage.getUpdateTimeStamp(), confession, null);
+	    CacheManager.flushConfession(confessionPackage.getConfId());
 	}
     }
 
-    public static boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp) {
-	if(UserManager.validateUser(userId, fbId)) {
-	    boolean returnVal = ConfessionBasicDAO.updateConfessionVisibility(confId, userId, isVisible);
-	    CacheManager.flushConfession(confId);
-	    updateConfessionTimeStamp(confId, updateTimeStamp);
+    public static boolean changeConfessionVisibility(ConfessionPackage confessionPackage) {
+	if(confessionPackage.isAdmin() || UserManager.validateUser(confessionPackage.getUserId(), confessionPackage.getFbId())) {
+	    boolean returnVal = ConfessionBasicDAO.updateConfessionVisibility(confessionPackage.getConfId(), confessionPackage.getUserId(), confessionPackage.isVisible());
+	    CacheManager.flushConfession(confessionPackage.getConfId());
+	    updateConfessionTimeStamp(confessionPackage.getConfId(), confessionPackage.getUpdateTimeStamp());
 	    return returnVal;
 	}
 	return false;
@@ -288,5 +289,15 @@ public class ConfessionManager {
 
     public static void updateConfessionTimeStamp(Long confId, Date updateTimeStamp) {
 	ConfessionBasicDAO.updateConfessionTimeStamp(confId, updateTimeStamp);
+    }
+
+    public static boolean selectConfession(ConfessionPackage confessionPackage) {
+	if(confessionPackage.isAdmin()) {
+	    Confession confession = ConfessionBasicDAO.getConfession(confessionPackage.getConfId());
+	    confession.setSelected(confessionPackage.isSelected());
+	    ConfessionBasicDAO.updateConfession(confession);
+	    return true;
+	}
+	return false;
     }
 }

@@ -107,6 +107,9 @@ public class ConfessionDO implements Serializable {
     @Index
     private Long numOfTotalVote;
 
+    @Index
+    private boolean isSelected = false;
+
     public Long getConfId() {
 	return confId;
     }
@@ -331,6 +334,14 @@ public class ConfessionDO implements Serializable {
 	this.onlyDedicate = onlyDedicate;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
     public Confession toConfessionTO() {
 
 	Confession confession = new Confession(this.getConfId(), this.getConfessionTitle(),
@@ -346,6 +357,8 @@ public class ConfessionDO implements Serializable {
 	confession.setNumOfSympathyVote(this.getNumOfSympathyVote());
 	confession.setUpdateTimeStamp(this.getLastUpdateTimeStamp());
 	confession.setOnlyDedicate(this.isOnlyDedicate());
+	
+	confession.setSelected(this.isSelected);
 
 	UserDO userDO = UserDAO.getUserByUserId(new UserInfo(this.getUserId()));
 	if(userDO != null) {

@@ -9,6 +9,7 @@ import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.Filters;
@@ -39,8 +40,9 @@ public interface ConfessionServiceAsync {
     void registerUserActivity(Long userId, Long confId, Activity activity, Date updateTimeStamp, AsyncCallback<Long> callback);
     void getUserActivity(Long userId, Long confId, AsyncCallback<Map<String, Long>> callback);
 
-    void changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp, AsyncCallback<Boolean> callback);
-    void changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp, AsyncCallback<Boolean> callback);
+    void changeIdentityVisibility(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
+    void changeConfessionVisibility(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
+    void selectConfession(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
     void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp, AsyncCallback<Void> callback);
 
     // Counts

@@ -16,6 +16,7 @@ import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.Filters;
@@ -61,8 +62,9 @@ public interface ConfessionService extends RemoteService {
 
     // User control and confession changes
     void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus, Date updateTimeStamp);
-    boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp);
-    boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp);
+    boolean changeIdentityVisibility(ConfessionPackage confessionPackage);
+    boolean changeConfessionVisibility(ConfessionPackage confessionPackage);
+    boolean selectConfession(ConfessionPackage confessionPackage);
     void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp);
     
     long getMyConfessionNumber(Long userId);

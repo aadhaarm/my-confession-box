@@ -14,6 +14,7 @@ import com.l3.CB.client.util.CommonUtils;
 import com.l3.CB.client.util.Error;
 import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 
 public class DeleteConfessionButton extends FlowPanel {
 
@@ -42,11 +43,14 @@ public class DeleteConfessionButton extends FlowPanel {
 		    final Image loaderImage = CommonUtils.getMeLoaderImage();
 		    add(loaderImage);
 		    
-		    ConfessionBox.confessionService.changeConfessionVisibility(
-			    ConfessionBox.getLoggedInUserInfo().getUserId(),
-			    ConfessionBox.getLoggedInUserInfo().getId(),
-			    confession.getConfId(), !isVisibleToWorld, new Date(),
-			    new AsyncCallback<Boolean>() {
+		    ConfessionPackage confessionPackagea = new ConfessionPackage();
+		    confessionPackagea.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+		    confessionPackagea.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+		    confessionPackagea.setConfId(confession.getConfId());
+		    confessionPackagea.setVisible(!isVisibleToWorld);
+		    confessionPackagea.setUpdateTimeStamp(new Date());
+		    
+		    ConfessionBox.confessionService.changeConfessionVisibility(confessionPackagea , new AsyncCallback<Boolean>() {
 				@Override
 				public void onSuccess(Boolean result) {
 				    if(result) {

@@ -102,6 +102,13 @@
 					</g:Button>
 				</p>
 
+				<p ui:field="adminCtrlBtnBlock">
+					<g:Button ui:field="btnSelectConfession"
+						styleName="{style.handPointer} uk-button uk-button-large" title="Show confession in top 5 confessions.">
+						Admin: Select Confession 
+					</g:Button>
+				</p>
+
 				<p ui:field="pardonBtnBlock">
 					<g:Button ui:field="btnPardon"
 						styleName="{style.handPointer} uk-button uk-button-large" title="Pardon">

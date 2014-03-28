@@ -33,6 +33,7 @@ import com.l3.CB.shared.Constants;
 import com.l3.CB.shared.FacebookUtil;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.PardonCondition;
 import com.l3.CB.shared.TO.PardonStatus;
@@ -126,6 +127,11 @@ public class ConfessionView extends Composite {
 
     @UiField
     ParagraphElement userCtrlBtnBlock;
+
+    @UiField
+    ParagraphElement adminCtrlBtnBlock;
+    @UiField
+    Button btnSelectConfession;
 
     @UiField
     ParagraphElement pardonBtnBlock;
@@ -393,25 +399,39 @@ public class ConfessionView extends Composite {
 	    if(confession.isShareAsAnyn()) {
 		btnHideIdentity.addStyleName("uk-button-success");
 		btnHideIdentity.setText("Hide Identity: ON");
-//		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
+		//		btnHideIdentity.setTitle(ConfessionBox.cbText.unHideIdentityButtonTitleUserControl());
 	    } else {
 		btnHideIdentity.removeStyleName("uk-button-success");
 		btnHideIdentity.setText("Hide Identity: OFF");
-//		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
+		//		btnHideIdentity.setTitle(ConfessionBox.cbText.hideIdentityButtonTitleUserControl());
 	    }
 
 	    if(confession.isVisibleOnPublicWall()) {
 		btnHideConfession.setText("Hide Confession: OFF");
-//		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
+		//		btnHideConfession.setTitle(ConfessionBox.cbText.hideConfessionButtonTitleUserControl());
 		btnHideConfession.removeStyleName("uk-button-success");
 	    } else {
 		btnHideConfession.setText("Hide Confession: ON");
-//		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
+		//		btnHideConfession.setTitle(ConfessionBox.cbText.unhideConfessionButtonTitleUserControl());
 		btnHideConfession.addStyleName("uk-button-success");
 	    }
 	} else {
 	    btnPreview.addStyleName("hide");
 	    userCtrlBtnBlock.addClassName("hide");
+	}
+
+	if(ConfessionBox.isAdmin) {
+	    if(confession.isSelected()) {
+		btnSelectConfession.setText("Admin: Select Confession : ON");
+		btnSelectConfession.addStyleName("uk-button-success");
+	    } else {
+		btnSelectConfession.setText("Admin: Select Confession : OFF");
+		btnSelectConfession.removeStyleName("uk-button-success");
+	    }
+	} else {
+	    btnSelectConfession.removeFromParent();
+	    adminCtrlBtnBlock.addClassName("hide");
+	    adminCtrlBtnBlock.removeFromParent();
 	}
     }
 
@@ -440,10 +460,10 @@ public class ConfessionView extends Composite {
 		    case PARDONED:
 			// Set Badge Text with time stamp
 			badgePardonStatus.setInnerText(ConfessionBox.cbText.pardonStatusLabel());
-//				+ " "
-//				+ ConfessionBox.cbText.dateTimeStampPrefix()
-//				+ " "
-//				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()))
+			//				+ " "
+			//				+ ConfessionBox.cbText.dateTimeStampPrefix()
+			//				+ " "
+			//				+ CommonUtils.getDateInAGOFormat(confessionShare.getTimeStamp()))
 			// Set tool-tip
 			badgePardonStatus.setTitle("Confessor has been pardoned by " 
 				+ CommonUtils.getPronoun(confession.getGender()) 
@@ -690,9 +710,16 @@ public class ConfessionView extends Composite {
 
     @UiHandler("btnHideIdentity") 
     void onHideIdentityClick(ClickEvent event) {
-	ConfessionBox.confessionService.changeIdentityVisibility(ConfessionBox.getLoggedInUserInfo().getUserId(), 
-		ConfessionBox.getLoggedInUserInfo().getId(), confession.getConfId(), 
-		!confession.isShareAsAnyn(), new Date(), new AsyncCallback<Boolean>() {
+
+	ConfessionPackage confessionPackagea = new ConfessionPackage();
+	confessionPackagea.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+	confessionPackagea.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+	confessionPackagea.setConfId(confession.getConfId());
+	confessionPackagea.setVisible(!confession.isShareAsAnyn());
+	confessionPackagea.setUpdateTimeStamp(new Date());
+	confessionPackagea.setAdmin(ConfessionBox.isAdmin);
+
+	ConfessionBox.confessionService.changeIdentityVisibility(confessionPackagea, new AsyncCallback<Boolean>() {
 	    @Override
 	    public void onSuccess(Boolean result) {
 		if(result != null) {
@@ -724,26 +751,63 @@ public class ConfessionView extends Composite {
 	    }
 	});
     }
+
+    @UiHandler("btnSelectConfession")
+    void onSelectConfession(ClickEvent clickEvent) {
+	if(ConfessionBox.isAdmin) {
+
+	    ConfessionPackage confessionPackagea = new ConfessionPackage();
+	    confessionPackagea.setConfId(confession.getConfId());
+	    confessionPackagea.setSelected(!confession.isSelected());
+	    confessionPackagea.setAdmin(ConfessionBox.isAdmin);
+	    //	    confessionPackagea.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+	    //	    confessionPackagea.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+	    //	    confessionPackagea.setVisible(!confession.isVisibleOnPublicWall());
+	    //	    confessionPackagea.setUpdateTimeStamp(new Date());
+
+	    ConfessionBox.confessionService.selectConfession(confessionPackagea, new AsyncCallback<Boolean>() {
+
+		@Override
+		public void onSuccess(Boolean result) {
+		    if(result) {
+			confession.setSelected(!confession.isSelected());
+			setupUserCtrlButtons();
+		    }
+		}
+
+		@Override
+		public void onFailure(Throwable caught) {
+		    Error.handleError("SelectConfessionButton", "onFailure", caught);
+		}
+	    });
+	}
+    }
+
     @UiHandler("btnHideConfession")
     void onHideConfessionClick(ClickEvent event) {
-	ConfessionBox.confessionService.changeConfessionVisibility(
-		ConfessionBox.getLoggedInUserInfo().getUserId(),
-		ConfessionBox.getLoggedInUserInfo().getId(),
-		confession.getConfId(), !confession.isVisibleOnPublicWall(), new Date(),
-		new AsyncCallback<Boolean>() {
-		    @Override
-		    public void onSuccess(Boolean result) {
-			if(result) {
-			    confession.setVisibleOnPublicWall(!confession.isVisibleOnPublicWall());
-			    setupUserCtrlButtons();
-			}
-		    }
 
-		    @Override
-		    public void onFailure(Throwable caught) {
-			Error.handleError("DeleteConfessionButton", "onFailure", caught);
-		    }
-		});
+	ConfessionPackage confessionPackagea = new ConfessionPackage();
+	confessionPackagea.setUserId(ConfessionBox.getLoggedInUserInfo().getUserId());
+	confessionPackagea.setFbId(ConfessionBox.getLoggedInUserInfo().getId());
+	confessionPackagea.setConfId(confession.getConfId());
+	confessionPackagea.setVisible(!confession.isVisibleOnPublicWall());
+	confessionPackagea.setUpdateTimeStamp(new Date());
+	confessionPackagea.setAdmin(ConfessionBox.isAdmin);
+
+	ConfessionBox.confessionService.changeConfessionVisibility(confessionPackagea, new AsyncCallback<Boolean>() {
+	    @Override
+	    public void onSuccess(Boolean result) {
+		if(result) {
+		    confession.setVisibleOnPublicWall(!confession.isVisibleOnPublicWall());
+		    setupUserCtrlButtons();
+		}
+	    }
+
+	    @Override
+	    public void onFailure(Throwable caught) {
+		Error.handleError("DeleteConfessionButton", "onFailure", caught);
+	    }
+	});
     }
 
     @UiHandler("btnPreview")

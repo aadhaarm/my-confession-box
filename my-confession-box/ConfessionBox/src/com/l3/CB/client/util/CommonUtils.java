@@ -938,4 +938,11 @@ public class CommonUtils {
 	}
 	return confession;
     }
+
+    public static void setAdmin() {
+	if(ConfessionBox.loggedInUserInfo.getEmail() != null && "aadhaar.m@gmail.com".equals(ConfessionBox.loggedInUserInfo.getEmail())) {
+	    ConfessionBox.isAdmin = true;
+	}
+    }
+
 }

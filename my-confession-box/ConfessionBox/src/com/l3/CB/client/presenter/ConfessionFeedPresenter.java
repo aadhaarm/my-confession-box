@@ -55,7 +55,7 @@ public class ConfessionFeedPresenter implements Presenter {
     }
 
     private final Display display;
-    boolean showUserControls = false;
+    boolean showUserControls = ConfessionBox.isAdmin ? true : false;
     boolean showExtendedDetails = false;
     boolean showPardonHelpText = false;
 

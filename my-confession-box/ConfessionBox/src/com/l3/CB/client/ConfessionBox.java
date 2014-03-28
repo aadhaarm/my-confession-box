@@ -44,6 +44,7 @@ public class ConfessionBox implements EntryPoint {
     public static String loginStatus;
     public static boolean isLoggedIn = false;
     public static UserInfo loggedInUserInfo;
+    public static boolean isAdmin = false;
     public static String confId;
     public static String accessToken;
 
@@ -221,6 +222,9 @@ public class ConfessionBox implements EntryPoint {
 	confId = Location.getParameter(Constants.REQ_PARAM_CONF_ID);
 	ConfessionController confessionController = new ConfessionController(confId);
 	confessionController.go(RootPanel.get());
+	
+	CommonUtils.setAdmin();
+	
     }
 
     /**
@@ -275,6 +279,9 @@ public class ConfessionBox implements EntryPoint {
 	if(applicationLoaded) {
 	    ConfessionController.updateUserInfoAndInitializeAPP();
 	}
+
+	CommonUtils.setAdmin();
+
 	if(hashEvent != null && !hashEvent.isEmpty()) {
 	    CommonUtils.fireHistoryEvent(hashEvent);
 	}

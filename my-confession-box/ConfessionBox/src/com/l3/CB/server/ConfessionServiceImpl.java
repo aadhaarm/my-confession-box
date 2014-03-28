@@ -17,6 +17,7 @@ import com.l3.CB.shared.CommentFilter;
 import com.l3.CB.shared.TO.Activity;
 import com.l3.CB.shared.TO.Comment;
 import com.l3.CB.shared.TO.Confession;
+import com.l3.CB.shared.TO.ConfessionPackage;
 import com.l3.CB.shared.TO.ConfessionShare;
 import com.l3.CB.shared.TO.ConfessionUpdate;
 import com.l3.CB.shared.TO.Filters;
@@ -117,16 +118,22 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements Confe
     }
 
     @Override
-    public boolean changeIdentityVisibility(Long userId, String fbId, Long confId, boolean shareAnyn, Date updateTimeStamp) {
-	ConfessionManager.changeIdentityVisibility(userId, fbId, confId, shareAnyn, updateTimeStamp);
+    public boolean changeIdentityVisibility(ConfessionPackage confessionPackage) {
+	ConfessionManager.changeIdentityVisibility(confessionPackage);
 	return true;
     }
 
     @Override
-    public boolean changeConfessionVisibility(Long userId, String fbId, Long confId, boolean isVisible, Date updateTimeStamp) {
-	return ConfessionManager.changeConfessionVisibility(userId, fbId, confId, isVisible, updateTimeStamp);
+    public boolean changeConfessionVisibility(ConfessionPackage confessionPackage) {
+	return ConfessionManager.changeConfessionVisibility(confessionPackage);
     }
 
+    @Override
+    public boolean selectConfession(ConfessionPackage confessionPackage) {
+	return ConfessionManager.selectConfession(confessionPackage);
+    }
+
+    
     @Override
     public long getMyConfessionNumber(Long userId) {
 	return ConfessionManager.getConfessionsByUserCount(userId);

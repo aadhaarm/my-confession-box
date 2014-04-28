@@ -104,8 +104,12 @@
 
 				<p ui:field="adminCtrlBtnBlock">
 					<g:Button ui:field="btnSelectConfession"
-						styleName="{style.handPointer} uk-button uk-button-large" title="Show confession in top 5 confessions.">
+						styleName="{style.handPointer} uk-button uk-button-small" title="Show confession in top 5 confessions.">
 						Admin: Select Confession 
+					</g:Button>
+					<g:Button ui:field="btnConfession_BringToTop"
+						styleName="{style.handPointer} uk-button uk-button-small" title="Bring to top.">
+						Admin: Bring to top 
 					</g:Button>
 				</p>
 

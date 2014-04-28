@@ -43,6 +43,7 @@ public interface ConfessionServiceAsync {
     void changeIdentityVisibility(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
     void changeConfessionVisibility(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
     void selectConfession(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
+    void markAsUpdatedConfession(ConfessionPackage confessionPackage, AsyncCallback<Boolean> callback);
     void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp, AsyncCallback<Void> callback);
 
     // Counts

@@ -64,8 +64,9 @@ public interface ConfessionService extends RemoteService {
     void pardonConfession(UserInfo pandonByUser, Long confId, UserInfo pardonedToUser, List<PardonCondition> pardonConditions, PardonStatus pardonStatus, Date updateTimeStamp);
     boolean changeIdentityVisibility(ConfessionPackage confessionPackage);
     boolean changeConfessionVisibility(ConfessionPackage confessionPackage);
-    boolean selectConfession(ConfessionPackage confessionPackage);
     void createConfessedToUser(Long confId, Long userId, String fbId, ConfessionShare confessionShare, Date updateTimeStamp);
+    boolean selectConfession(ConfessionPackage confessionPackage);
+    boolean markAsUpdatedConfession(ConfessionPackage confessionPackage);
     
     long getMyConfessionNumber(Long userId);
 

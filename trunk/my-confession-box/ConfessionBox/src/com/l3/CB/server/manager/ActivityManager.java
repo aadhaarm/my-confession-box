@@ -46,6 +46,9 @@ public class ActivityManager {
 	// Flush cache
 	CacheManager.flushActivityCache(userId, confId);
 	
+	// Mark confession as updated
+	ConfessionManager.updateConfessionTimeStamp(confId, new Date());
+	
 	return updatedActivityCount;
     }
 

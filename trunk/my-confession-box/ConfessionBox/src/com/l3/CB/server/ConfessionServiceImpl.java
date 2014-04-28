@@ -219,4 +219,10 @@ public class ConfessionServiceImpl extends RemoteServiceServlet implements Confe
     public void voteOnComment(CommentFilter filter) {
 	CommentManager.vote(filter);
     }
+
+    @Override
+    public boolean markAsUpdatedConfession(ConfessionPackage confessionPackage) {
+	ConfessionManager.updateConfessionTimeStamp(confessionPackage.getConfId(), new Date());
+	return true; 
+    }
 }

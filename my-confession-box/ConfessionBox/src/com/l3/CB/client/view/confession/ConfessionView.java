@@ -132,6 +132,8 @@ public class ConfessionView extends Composite {
     ParagraphElement adminCtrlBtnBlock;
     @UiField
     Button btnSelectConfession;
+    @UiField
+    Button btnConfession_BringToTop;
 
     @UiField
     ParagraphElement pardonBtnBlock;
@@ -429,7 +431,9 @@ public class ConfessionView extends Composite {
 		btnSelectConfession.removeStyleName("uk-button-success");
 	    }
 	} else {
+	    btnConfession_BringToTop.removeFromParent();
 	    btnSelectConfession.removeFromParent();
+	    
 	    adminCtrlBtnBlock.addClassName("hide");
 	    adminCtrlBtnBlock.removeFromParent();
 	}
@@ -752,6 +756,25 @@ public class ConfessionView extends Composite {
 	});
     }
 
+    @UiHandler("btnConfession_BringToTop")
+    void onAdminBringToTop(ClickEvent clickEvent) {
+	if(ConfessionBox.isAdmin) {
+	    ConfessionPackage confessionPackage = new ConfessionPackage();
+	    confessionPackage.setConfId(confession.getConfId());
+	    confessionPackage.setAdmin(ConfessionBox.isAdmin);
+	    ConfessionBox.confessionService.markAsUpdatedConfession(confessionPackage, new AsyncCallback<Boolean>() {
+	        @Override
+	        public void onSuccess(Boolean result) {
+
+	        }
+	        @Override
+	        public void onFailure(Throwable caught) {
+	            Error.handleError("BringToTopButton", "onFailure", caught);
+	        }
+	    });
+	}	
+    }
+    
     @UiHandler("btnSelectConfession")
     void onSelectConfession(ClickEvent clickEvent) {
 	if(ConfessionBox.isAdmin) {

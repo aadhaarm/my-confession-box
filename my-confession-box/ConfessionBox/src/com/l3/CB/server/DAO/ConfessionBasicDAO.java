@@ -44,21 +44,6 @@ public class ConfessionBasicDAO {
 	ofy().save().entities(confessionDO).now();
 	confession.setConfId(confessionDO.getConfId());
 	return confession;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	long confessionId = 0;
-	//	try {
-	//	    pm.makePersistent(confessionDO);
-	//	    confessionId = confessionDO.getConfId();
-	//	    confession.setConfId(confessionId);
-	//	    logger.log(Level.INFO, "Confession logged, ID:" + confessionId);
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while registering confession:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-	//	return confession;
     }
 
     public static ConfessionShare registerConfessionShare(ConfessionShare confessedTo, Long confId) {
@@ -69,21 +54,22 @@ public class ConfessionBasicDAO {
 	return confessedTo;
     }
 
-    @SuppressWarnings("unchecked")
     public static List<Confession> getConfessions(int page, int pageSize, Filters filter, String locale) {
 	List<Confession> confessions = null;
 
-	if(page == 0 && filter.equals(Filters.ALL)) {
-	    // Add 5 selected confessions
-	    com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
-	    queryOfy = queryOfy.filter("isSelected", true);
-	    queryOfy = queryOfy.offset(page * pageSize).limit(pageSize);	
-
-	    confessions = new ArrayList<Confession>();
-	    for (ConfessionDO confessionDO : queryOfy) {
-		confessions.add(confessionDO.toConfessionTO());
-	    }
-	} else {
+//	if(page == 0 && filter.equals(Filters.ALL)) {
+//	    // Add 5 selected confessions
+//	    com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
+//	    queryOfy = queryOfy.filter("isSelected", true);
+//	    queryOfy = queryOfy.offset(page * pageSize).limit(50);	
+//	    confessions = new ArrayList<Confession>();
+//	    for (ConfessionDO confessionDO : queryOfy) {
+//		confessions.add(confessionDO.toConfessionTO());
+//	    }
+//	    
+//	    Collections.shuffle(confessions);
+//	    confessions = confessions.subList(0, confessions.size() >= 5? 5:(confessions.size()-1));
+//	} else {
 	    com.googlecode.objectify.cmd.Query<ConfessionDO> queryOfy = ofy().load().type(ConfessionDO.class).filter("isVisibleOnPublicWall", Boolean.TRUE);
 	    switch (filter) {
 	    case LOCALE_SPECIFIC:
@@ -127,7 +113,7 @@ public class ConfessionBasicDAO {
 	    for (ConfessionDO confessionDO : queryOfy) {
 		confessions.add(confessionDO.toConfessionTO());
 	    }
-	}
+//	}
 
 	return confessions;
     }
@@ -143,57 +129,7 @@ public class ConfessionBasicDAO {
 	}
 
 	return confessions;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("userId == id");
-	//	    query.declareParameters("String id");
-	//	    query.setRange((page*pageSize), ((page*pageSize)+pageSize));
-	//	    query.setOrdering("lastUpdateTimeStamp desc");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		confessions = new ArrayList<Confession>();
-	//		Iterator<ConfessionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionDO confessionDO = it.next();
-	//		    Confession confession = confessionDO.toConfessionTO();
-	//		    confessions.add(confession);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confessions for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
-
-    //    private static Confession getConfession(ConfessionDO confessionDO) {
-    //	Confession confession = null;
-    //	if (confessionDO != null) {
-    //	    confession = new Confession(confessionDO.getConfId(), confessionDO.getConfessionTitle(),
-    //		    confessionDO.getConfession().getValue(), confessionDO.getTimeStamp(),
-    //		    confessionDO.getUserId(), confessionDO.isShareAsAnyn());
-    //	    confession.setVisibleOnPublicWall(confessionDO.isVisibleOnPublicWall());
-    //	    confession.setNumOfAbuseVote(confessionDO.getNumOfAbuseVote());
-    //	    confession.setNumOfLameVote(confessionDO.getNumOfLameVote());
-    //	    confession.setNumOfSameBoatVote(confessionDO.getNumOfSameBoatVote());
-    //	    confession.setNumOfShouldBePardonedVote(confessionDO.getNumOfShouldBePardonedVote());
-    //	    confession.setNumOfShouldNotBePardonedVote(confessionDO.getNumOfShouldNotBePardonedVote());
-    //	    confession.setNumOfSympathyVote(confessionDO.getNumOfSympathyVote());
-    //	    confession.setUpdateTimeStamp(confessionDO.getLastUpdateTimeStamp());
-    //
-    //	    UserDO userDO = UserDAO.getUserByUserId(new UserInfo(confessionDO.getUserId()));
-    //	    if(userDO != null) {
-    //		confession.setFbId(userDO.getFbId());
-    //		confession.setGender(userDO.getGender());
-    //	    }
-    //	}
-    //	return confession;
-    //    }
 
     public static Confession getConfession(Long confId) {
 	ConfessionDO confessionDO = ofy().load().type(ConfessionDO.class).id(confId).get();
@@ -201,29 +137,6 @@ public class ConfessionBasicDAO {
 	    return confessionDO.toConfessionTO();
 	}
 	return null;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("confId == id && isVisibleOnPublicWall == status");
-	//	    query.declareParameters("String id" + ", "  + "String status");
-	//
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId, true);
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionDO confessionDO = it.next();
-	//		    confession = confessionDO.toConfessionTO();
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confession for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-	//	return confession;
     }
 
 
@@ -244,33 +157,6 @@ public class ConfessionBasicDAO {
 	}
 
 	return confessions;
-
-	//	List<Confession> confessions = null;
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query queryGetconfId = pm.newQuery(ConfessionShareDO.class);
-	//	    queryGetconfId.setFilter("userId == id");
-	//	    queryGetconfId.declareParameters("String id");
-	//	    queryGetconfId.setRange((page*pageSize), ((page*pageSize)+pageSize));
-	//	    queryGetconfId.setOrdering("timeStamp desc");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionShareDO> result = (List<ConfessionShareDO>) queryGetconfId.execute(userId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		confessions = new ArrayList<Confession>();
-	//		Iterator<ConfessionShareDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionShareDO confessionShareDO = it.next();
-	//		    Confession confession = getConfession(confessionShareDO.getConfId());
-	//		    confessions.add(confession);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confessions for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     /**
@@ -288,29 +174,6 @@ public class ConfessionBasicDAO {
 	}	
 
 	return confessionShares;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionShareDO.class);
-	//	    query.setFilter("confId == id");
-	//	    query.declareParameters("String id");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		confessionShares = new ArrayList<ConfessionShare>();
-	//		Iterator<ConfessionShareDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionShareDO confessionShareDO = it.next();
-	//		    confessionShares.add(getConfessedShareTO(confessionShareDO, allDetails));
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confession share:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     private static ConfessionShare getConfessedShareTO(ConfessionShareDO confessionShareDO, boolean allDetails) {
@@ -370,32 +233,6 @@ public class ConfessionBasicDAO {
 	}
 
 	return isChange;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionShareDO.class);
-	//	    query.setFilter("userId == user && confId == conf");
-	//	    query.declareParameters("String user" + ", "  + "String conf");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(userId, confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionShareDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionShareDO confessionShareDO = it.next();
-	//		    if(!confessionShareDO.getPardonStatus().equals(pardonedStatus.name())){
-	//			confessionShareDO.setPardonStatus(pardonedStatus.name());
-	//			pm.makePersistent(confessionShareDO);
-	//			isChange = true;
-	//		    }
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting user from DB:" + e.getMessage());           
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     public static boolean addPardonCondition(Long userId, Long confId, List<PardonCondition> pardonConditions) {
@@ -410,32 +247,7 @@ public class ConfessionBasicDAO {
 	}
 
 	return true;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionShareDO.class);
-	//	    query.setFilter("userId == user && confId == conf");
-	//	    query.declareParameters("String user" + ", "  + "String conf");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionShareDO> result = (List<ConfessionShareDO>) query.execute(userId, confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionShareDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionShareDO confessionShare = it.next();
-	//		    confessionShare.setPardonConditionDOs(getPardonConditionsDO(userId, confId, pardonConditions));
-	//		    pm.makePersistent(confessionShare);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting user from DB:" + e.getMessage());           
-	//	    return false;
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
-
 
     private static List<PardonConditionDO> getPardonConditionsDO(Long userId, Long confId, List<PardonCondition> pardonConditions) {
 	List<PardonConditionDO> conditionDOs = null;
@@ -469,61 +281,7 @@ public class ConfessionBasicDAO {
 	}
 
 	return pardonConditions;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(PardonConditionDO.class);
-	//	    query.setFilter("confId == conf");
-	//	    query.declareParameters("String conf");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<PardonConditionDO> it = result.iterator();
-	//		pardonConditions = new ArrayList<PardonCondition>();
-	//		while (it.hasNext()) {
-	//		    PardonConditionDO pardonConditionDO = it.next();
-	//		    PardonCondition pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
-	//		    pardonCondition.setUserId(pardonConditionDO.getUserId());
-	//		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
-	//		    pardonConditions.add(pardonCondition);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while registering confession condition:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
-
-    //    public static PardonCondition getConfessionCondition(Long confId, String conditionType) {
-    //	PersistenceManager pm = PMF.get().getPersistenceManager();
-    //	PardonCondition pardonCondition = null;
-    //	try {
-    //	    Query query = pm.newQuery(PardonConditionDO.class);
-    //	    query.setFilter("condition == cond && confId == conf");
-    //	    query.declareParameters("String cond" + ", "  + "String conf");
-    //	    @SuppressWarnings("unchecked")
-    //	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(conditionType, confId);
-    //
-    //	    if (result != null && !result.isEmpty()) {
-    //		Iterator<PardonConditionDO> it = result.iterator();
-    //		while (it.hasNext()) {
-    //		    PardonConditionDO pardonConditionDO = it.next();
-    //		    pardonCondition = new PardonCondition(pardonConditionDO.getCondition(), pardonConditionDO.getCount());
-    //		    pardonCondition.setUserId(pardonConditionDO.getUserId());
-    //		    pardonCondition.setFulfil(pardonConditionDO.isFulfil());
-    //		}
-    //	    }
-    //	} catch (Exception e) {
-    //	    logger.log(Level.SEVERE, "Error while getting pardon condition:" + e.getMessage());
-    //	} finally {
-    //	    pm.close();
-    //	}
-    //	return pardonCondition;
-    //    }
-
 
     public static boolean updateConfessionCondition(Long confId, String condition, boolean isFulfill) {
 
@@ -537,30 +295,6 @@ public class ConfessionBasicDAO {
 	}
 
 	return true;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(PardonConditionDO.class);
-	//	    query.setFilter("condition == cond && confId == conf");
-	//	    query.declareParameters("String cond" + ", "  + "String conf");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<PardonConditionDO> result = (List<PardonConditionDO>) query.execute(condition, confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<PardonConditionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    PardonConditionDO pardonConditionDO = it.next();
-	//		    pardonConditionDO.setFulfil(isFulfill);
-	//		    pm.makePersistent(pardonConditionDO);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while updating confession condition:" + e.getMessage());
-	//	    return false;
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     public static boolean updateConfessionVisibility(Long confId, Long userId, boolean isVisible) {
@@ -572,79 +306,15 @@ public class ConfessionBasicDAO {
 	}
 
 	return true;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("userId == user && confId == conf");
-	//	    query.declareParameters("String user" + ", "  + "String conf");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId, confId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionDO confessionDO = it.next();
-	//		    confessionDO.setVisibleOnPublicWall(isVisible);
-	//		    pm.makePersistent(confessionDO);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while updating confession condition:" + e.getMessage());
-	//	    return false;
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     public static long getConfessionCount(Long userId) {
 	return ofy().load().type(ConfessionDO.class).filter("userId", userId).count();
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("userId == id");
-	//	    query.declareParameters("String id");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(userId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		return result.size();
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confessions count from DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-	//	return 0;
     }
 
 
     public static long getConfessionsForMeCount(Long userId) {
-
 	return ofy().load().type(ConfessionShareDO.class).filter("userId", userId).count();
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query queryGetconfId = pm.newQuery(ConfessionShareDO.class);
-	//	    queryGetconfId.setFilter("userId == id");
-	//	    queryGetconfId.declareParameters("String id");
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionShareDO> result = (List<ConfessionShareDO>) queryGetconfId.execute(userId);
-	//
-	//	    if (result != null && !result.isEmpty()) {
-	//		return result.size();
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confessions for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-	//
-	//	return 0;
     }
 
     public static Confession updateConfession(Confession confession) {
@@ -659,32 +329,6 @@ public class ConfessionBasicDAO {
 	    confession = confessionDO.toConfessionTO();
 	}
 	return confession;
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("confId == id");
-	//	    query.declareParameters("String id");
-	//
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confession.getConfId());
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionDO confessionDO = it.next();
-	//		    confessionDO.setConfession(new Text(confession.getConfession()));
-	//		    confessionDO.setUserIp(confession.getUserIp());
-	//		    confessionDO.setLastUpdateTimeStamp(confession.getUpdateTimeStamp());
-	//		    pm.makePersistent(confessionDO);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confession for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
-	//	return confession;
     }
 
     public static void updateConfessionTimeStamp(Long confId, Date updateTimeStamp) {
@@ -694,29 +338,6 @@ public class ConfessionBasicDAO {
 	    confessionDO.setLastUpdateTimeStamp(updateTimeStamp);
 	    ofy().save().entities(confessionDO).now();
 	}
-
-	//	PersistenceManager pm = PMF.get().getPersistenceManager();
-	//	try {
-	//	    Query query = pm.newQuery(ConfessionDO.class);
-	//	    query.setFilter("confId == id");
-	//	    query.declareParameters("String id");
-	//
-	//	    @SuppressWarnings("unchecked")
-	//	    List<ConfessionDO> result = (List<ConfessionDO>) query.execute(confId);
-	//	    if (result != null && !result.isEmpty()) {
-	//		Iterator<ConfessionDO> it = result.iterator();
-	//		while (it.hasNext()) {
-	//		    ConfessionDO confessionDO = it.next();
-	//		    confessionDO.setLastUpdateTimeStamp(updateTimeStamp);
-	//		    pm.makePersistent(confessionDO);
-	//		}
-	//	    }
-	//	} catch (Exception e) {
-	//	    logger.log(Level.SEVERE,
-	//		    "Error while getting confession for DB:" + e.getMessage());
-	//	} finally {
-	//	    pm.close();
-	//	}
     }
 
     public static Ref<ConfessionDO> getConfessionRef(long confId) {

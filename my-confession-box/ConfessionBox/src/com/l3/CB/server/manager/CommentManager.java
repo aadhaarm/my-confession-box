@@ -1,5 +1,6 @@
 package com.l3.CB.server.manager;
 
+import java.util.Date;
 import java.util.List;
 
 import com.l3.CB.server.DAO.CommentDAO;
@@ -34,7 +35,11 @@ public class CommentManager {
 		confessionToUser = UserManager.getUserByUserId(pardonByUserId);
 	    }
 
+	    // Mark confession as updated
+	    ConfessionManager.updateConfessionTimeStamp(comment.getConfId(), new Date());
+
 	    MailManager.sendCommentReceivedEmail(confessionToUser, confessionByUser, comment.getConfId());
+
 	}
     }
 

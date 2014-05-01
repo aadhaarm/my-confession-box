@@ -97,7 +97,11 @@ public class FacebookUtil {
 		    userInfo.setId(getJSONStringValue(jsonObject.get("id")));
 		    userInfo.setFirst_name(getJSONStringValue(jsonObject.get("first_name")));
 		    userInfo.setLast_name(getJSONStringValue(jsonObject.get("last_name")));
-		    userInfo.setLink(getJSONStringValue(jsonObject.get("link")));
+		    if(jsonObject.get("link") != null) {
+			userInfo.setLink(getJSONStringValue(jsonObject.get("link")));
+		    } else {
+			userInfo.setLink("www.facebook.com/" + userInfo.getId());
+		    }
 		    userInfo.setName(getJSONStringValue(jsonObject.get("name")));
 		    userInfo.setUsername(getJSONStringValue(jsonObject.get("username")));
 		    userInfo.setGender(getJSONStringValue(jsonObject.get("gender")));
